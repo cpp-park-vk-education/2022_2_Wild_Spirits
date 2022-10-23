@@ -4,6 +4,9 @@ project(dnd VERSION 1.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(BUILD_CLIENT "Build Client" ON)
+option(BUILD_SERVER "Build Server" ON)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -21,18 +24,25 @@ if(MSVC)
 set_target_properties(gmock gmock_main gtest gtest_main PROPERTIES FOLDER "GTest")
 endif()
 
-FetchContent_Declare(
-    libpqxx
-    GIT_REPOSITORY https://github.com/jtv/libpqxx
-    GIT_TAG 7.7.4
-    FIND_PACKAGE_ARGS NAMES libpqxx
-)
+if (${BUILD_SERVER})
+    FetchContent_Declare(
+        libpqxx
+        GIT_REPOSITORY https://github.com/jtv/libpqxx
+        GIT_TAG 7.7.4
+        FIND_PACKAGE_ARGS NAMES libpqxx
+    )
 
-option(BUILD_TEST OFF)
-FetchContent_MakeAvailable(libpqxx)
-
+    option(BUILD_TEST OFF)
+    FetchContent_MakeAvailable(libpqxx)
+endif()
+    
 set(SANITIZER_FLAGS "-fsanitize=leak,undefined,address")
-set(ERROR_FLAGS "-Wall -Wpedantic -Werror")
+set(ERROR_FLAGS "-Wall")
+if(MSVC)
+	set(ERROR_FLAGS "${ERROR_FLAGS} -W4")
+else()
+	set(ERROR_FLAGS "${ERROR_FLAGS} -Wpedantic -Werror")
+endif()
 
 option(SANITIZE ON)
 if (${SANITIZE})
@@ -51,5 +61,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_custom_target(check ${CMAKE_SOURCE_DIR}/lint.sh)
 
 add_subdirectory(common)
-add_subdirectory(server)
-# add_subdirectory(client)
+if (${BUILD_SERVER})
+    add_subdirectory(server)
+endif()
+if (${BUILD_CLIENT})
+    add_subdirectory(client)
+endif()
