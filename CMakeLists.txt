@@ -4,6 +4,8 @@ project(dnd VERSION 1.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 option(BUILD_CLIENT "Build Client" ON)
 option(BUILD_SERVER "Build Server" ON)
 
@@ -44,26 +46,26 @@ else()
 	set(ERROR_FLAGS "${ERROR_FLAGS} -Wpedantic -Werror")
 endif()
 
-option(SANITIZE ON)
+option(SANITIZE "Enable sanitizers" ON)
 if (${SANITIZE})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
 endif()
 
-option(DEBUG ON)
+option(DEBUG "Enable debug" ON)
 if (${DEBUG})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ERROR_FLAGS}")
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-add_custom_target(check ${CMAKE_SOURCE_DIR}/lint.sh)
+add_custom_target(check chmod 777 ${CMAKE_SOURCE_DIR}/lint.sh && ${CMAKE_SOURCE_DIR}/lint.sh)
 
 add_subdirectory(common)
+
 if (${BUILD_SERVER})
     add_subdirectory(server)
 endif()
+
 if (${BUILD_CLIENT})
     add_subdirectory(client)
 endif()

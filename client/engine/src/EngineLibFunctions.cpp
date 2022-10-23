@@ -1,7 +1,5 @@
 #include <iostream>
 
-
-void Draw()
-{
-	std::cout << "Hello World\n";
+void Draw() {
+    std::cout << "Hello World\n";
 }

@@ -18,4 +18,4 @@ if(MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Client/App")
 endif()
 
-add_subdirectory(test)
+add_subdirectory(tests)

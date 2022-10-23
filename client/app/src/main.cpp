@@ -2,10 +2,9 @@
 
 #include <mathlib.h>
 
-int main()
-{
-	std::cout << "Hello World!" << std::endl;
+int main() {
+    std::cout << "Hello World!" << std::endl;
 
-	std::cin.get();
-	return 0;
+    std::cin.get();
+    return 0;
 }

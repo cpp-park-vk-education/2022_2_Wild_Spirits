@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
 
-TEST(DummySuite, DummyTest) {
+TEST(Engine, Test) {
     SUCCEED();
 }
