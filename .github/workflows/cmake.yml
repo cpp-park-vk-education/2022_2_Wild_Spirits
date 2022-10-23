@@ -73,6 +73,7 @@ jobs:
         working-directory: ./build/client/app/tests
         run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 
+  server-tests:
     runs-on: ubuntu-latest
     container: reddir666/dnd-pqxx-gtest
     needs: [build]
