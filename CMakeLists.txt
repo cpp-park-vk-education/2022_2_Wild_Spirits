@@ -48,7 +48,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ERROR_FLAGS}")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# add_custom_target(check ${CMAKE_SOURCE_DIR}/lint.sh)
+add_custom_target(check ${CMAKE_SOURCE_DIR}/lint.sh)
 
 add_subdirectory(common)
 add_subdirectory(server)
