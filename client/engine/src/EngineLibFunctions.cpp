@@ -1,3 +1,5 @@
+#include "EngineLibFunctions.h"
+
 #include <iostream>
 
 void Draw() {

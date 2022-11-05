@@ -1,3 +1,4 @@
+#pragma once
 
 namespace LM {
     int Max(int V1, int V2, int V3);

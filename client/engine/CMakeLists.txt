@@ -1,16 +1,17 @@
 cmake_minimum_required(VERSION 3.24)
 project(ClientEngine VERSION 1.0)
 
-file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp" "src/*.h" "src/**/*.h")
+set(SOURCES 
+    src/EngineLibFunctions.cpp src/EngineLibFunctions.h)
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
-#add_subdirectory(vendor/glfw)
-#target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-#target_include_directories(${PROJECT_NAME} PRIVATE glfw_INCLUDE_DIRS)
+add_library(${PROJECT_NAME} STATIC)
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+add_subdirectory(tests)
 
 if(MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Client/Engine")
 endif()
-
-add_subdirectory(tests)
