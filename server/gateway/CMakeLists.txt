@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(dnd-gateway VERSION 1.0)
 
-set(SOURCE "src/main.cpp")
+set(SOURCES "src/main.cpp")
 
 add_subdirectory(tests)
 
