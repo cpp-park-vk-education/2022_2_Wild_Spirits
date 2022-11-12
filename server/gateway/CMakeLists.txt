@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(dnd-gateway VERSION 1.0)
 
-file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp" "src/*.h" "src/**/*.h")
+set(SOURCE "src/main.cpp")
 
 add_subdirectory(tests)
 
