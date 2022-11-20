@@ -11,6 +11,8 @@ class Position {
     virtual std::tuple<Tile, Tile> mapPosition() = 0;
     virtual void moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
+
+    virtual ~Position() {}
 };
 
 class TilePos : public Position {

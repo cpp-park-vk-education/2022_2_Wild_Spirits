@@ -39,8 +39,8 @@ class CharacterClass : public GameEntity {
 
 class Inventory {
  private:
-    std::unordered_map<int, Consumable> consumables_;
-    std::unordered_map<int, const Weapon*> weapons_;
+    std::unordered_map<size_t, Consumable> consumables_;
+    std::unordered_map<size_t, const Weapon*> weapons_;
  
  public:
     Inventory() = default;
@@ -79,13 +79,13 @@ class PlayerCharacter : public CharacterInstance {
 
     unsigned int spell_points_;
     unsigned int max_spell_points_;
-    std::unordered_map<int, const Spell*> spells_;
+    std::unordered_map<size_t, const Spell*> spells_;
     unsigned int level_ = 1;
 
  public:
     PlayerCharacter(Character& original, Position* pos, GameMap& map,
                     const Race& race, const CharacterClass& char_class,
-                    int money = 100, std::unordered_map<int, Item*> items = {}) :
+                    int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         CharacterInstance(original, pos, map, money, items),
         race_(&race),
         class_list_() {

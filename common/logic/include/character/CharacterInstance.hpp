@@ -20,7 +20,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
  protected:
     Character& original_;
     std::list<Buff> buffs_;
-    std::unordered_map<int, Item*> items_;
+    std::unordered_map<size_t, Item*> items_;
  
  private:
     unsigned int action_points_;
@@ -29,7 +29,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
  public:
     CharacterInstance(Character& original, Position* pos, GameMap& map,
-                      int money = 100, std::unordered_map<int, Item*> items = {}) :
+                      int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         OnLocation(pos, map),
         original_(original), items_(items), money_(money) {}
 

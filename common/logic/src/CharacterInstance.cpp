@@ -23,7 +23,7 @@ ErrorStatus CharacterInstance::trade(CharacterInstance* with, Item* give, Item* 
     return ErrorStatus::Fail;
 }
 
-SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count = 1) {
+SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count) {
     return SaleResult{};
 }
 

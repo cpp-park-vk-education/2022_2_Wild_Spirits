@@ -17,9 +17,7 @@ class OnLocation : public Position {
     OnLocation(Position* pos, GameMap& map) :
         pos_(pos), map_(map) {}
     
-//     Location& location() {
-//         return
-//     }
+    const Location& location();
 
     ~OnLocation() {
         delete pos_;
