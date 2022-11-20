@@ -4,7 +4,7 @@ GameEntity::GameEntity(std::string_view name, int image_id, const GameEntity::In
     name_(name), image_id_(image_id), info_(info) {}
 
 const std::string& GameEntity::info(const std::string& key) const {
-    return "";
+    return info_.at(key);
 }
 
 std::string& GameEntity::info(const std::string& key) {

@@ -1,0 +1,26 @@
+#pragma once
+
+class TurnBased {
+ public:
+    virtual void onTurnStart() = 0;
+};
+
+class Temporal : public TurnBased {
+ private:
+    unsigned int turns_;
+
+ public:
+    Temporal(unsigned int turns) : turns_(turns) {}
+
+    unsigned int turnsLeft() {
+        return turns_;
+    }
+
+    void reset(unsigned int turns) {
+        turns_ = turns;
+    }
+
+    void onTurnStart() override {
+        if (turns_) --turns_;
+    }
+};
