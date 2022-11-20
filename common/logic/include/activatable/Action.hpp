@@ -22,14 +22,14 @@ class Action {
     };
 
  private:
-    std::vector<Effect*> effects_;
     CastType cast_type_;
     Area* area_;
     unsigned int range_;
+    std::vector<Effect*> effects_;
 
  public:
     Action(Area* area, unsigned int range, CastType cast_type, std::vector<Effect*> effects) :
-        area_(area), range_(range), cast_type_(cast_type), effects_(effects) {}
+        cast_type_(cast_type), area_(area), range_(range), effects_(effects) {}
     
     void setCastType(CastType cast_type) {
         cast_type_ = cast_type;

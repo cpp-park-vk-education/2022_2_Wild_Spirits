@@ -1,3 +1,3 @@
 #include "Activatable.hpp"
-#include "Character.hpp"
+#include "CharacterInstance.hpp"
 #include "Armor.hpp"

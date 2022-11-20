@@ -14,6 +14,8 @@ class Area {
     }
 
     virtual bool isInArea(const Tile& tile) const = 0;
+
+    virtual ~Area() {}
 };
 
 class PointArea : public Area {

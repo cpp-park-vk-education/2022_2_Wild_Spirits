@@ -28,13 +28,13 @@ class GameEntity : public GameEntityInterface {
     GameEntity() = default;
     GameEntity(std::string_view name, int image_id, const Info& info);
 
-    virtual const std::string& info(const std::string&) const override;
+    const std::string& info(const std::string&) const override;
 
-    virtual std::string& info(const std::string&) override;
+    std::string& info(const std::string&) override;
 
-    virtual const std::string& name() const override;
-    virtual void setName(std::string_view) override;
+    const std::string& name() const override;
+    void setName(std::string_view) override;
 
-    virtual int getImageId() const override;
-    virtual void setImage(int) override;
+    int getImageId() const override;
+    void setImage(int) override;
 };
