@@ -2,7 +2,7 @@
 
 #include "GameEntity.hpp"
 
-class Item : public GameEntity {
+class Item : virtual public GameEntity {
  private:
     int cost_;
 

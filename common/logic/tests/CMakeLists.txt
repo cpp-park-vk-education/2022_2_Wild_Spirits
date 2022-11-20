@@ -5,7 +5,7 @@ enable_testing()
 
 add_executable(${PROJECT_NAME} logic-test.cpp)
 
-target_link_libraries(${PROJECT_NAME} GTest::gtest_main GTest::gmock_main)
+target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gtest_main GTest::gmock_main dnd-logic)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})

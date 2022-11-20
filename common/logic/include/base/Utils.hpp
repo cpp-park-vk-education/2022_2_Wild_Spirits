@@ -6,6 +6,10 @@ enum class ErrorStatus {
 };
 
 struct Tile {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
+
+    bool operator==(const Tile& other) const {
+        return x == other.x && y == other.y;
+    }
 };

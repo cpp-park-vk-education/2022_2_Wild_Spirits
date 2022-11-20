@@ -24,6 +24,8 @@ class Heal : public Effect {
     unsigned int amount_;
 
  public:
+    Heal(unsigned int amount) : amount_(amount) {}
+
     Result getResult(const CharacterInstance& character) const override {
         return Result{};
     }
@@ -31,10 +33,12 @@ class Heal : public Effect {
 
 class Move : public Effect {
  private:
-    int x;
-    int y;
+    int x_;
+    int y_;
 
  public:
+    Move(int x, int y) : x_(x), y_(y) {}
+
     Result getResult(const CharacterInstance& character) const override {
         return Result{};
     }
