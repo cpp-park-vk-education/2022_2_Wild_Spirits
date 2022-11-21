@@ -63,6 +63,7 @@ set(SOURCES
     src/Shader/ShaderDataType.h
 
     src/Textures/Texture2D.cpp src/Textures/Texture2D.h
+    src/Textures/TextureLoader.cpp src/Textures/TextureLoader.h
     
     src/Transform/Transform.cpp src/Transform/Transform.h
     src/Transform/Rotation.h

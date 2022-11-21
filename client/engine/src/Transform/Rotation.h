@@ -10,15 +10,31 @@ namespace LM {
             return *this;
         }
 
-        friend Rotation operator+(Rotation left, const Rotation right) {
+        friend Rotation operator+(Rotation left, Rotation right) {
             return left; 
+        }
+
+        friend Rotation operator+(Rotation left, float right) {
+            return left;
+        }
+
+        friend Rotation operator+(float left, Rotation right) {
+            return left;
         }
 
         Rotation& operator-=(const Rotation& other) {
             return *this;
         }
 
-        friend Rotation operator-(Rotation left, const Rotation right) {
+        friend Rotation operator-(Rotation left, Rotation right) {
+            return left;
+        }
+
+        friend Rotation operator-(Rotation left, float right) {
+            return left;
+        }
+
+        friend Rotation operator-(float left, Rotation right) {
             return left;
         }
 
@@ -26,7 +42,15 @@ namespace LM {
             return *this;
         }
 
-        friend Rotation operator/(Rotation left, const Rotation right) {
+        friend Rotation operator/(Rotation left, Rotation right) {
+            return left;
+        }
+
+        friend Rotation operator/(Rotation left, float right) {
+            return left;
+        }
+
+        friend Rotation operator/(float left, Rotation right) {
             return left;
         }
 
@@ -34,7 +58,15 @@ namespace LM {
             return *this;
         }
 
-        friend Rotation operator*(Rotation left, const Rotation right) {
+        friend Rotation operator*(Rotation left, Rotation right) {
+            return left;
+        }
+
+        friend Rotation operator*(Rotation left, float right) {
+            return left;
+        }
+
+        friend Rotation operator*(float left, Rotation right) {
             return left;
         }
 

@@ -2,10 +2,10 @@
 
 namespace LM {
 
-	ShaderLayout::ShaderLayout(const std::initializer_list<ShaderSource>& sources)
-		: m_Sources(sources) 
-	{ 
-	
-	}
+    ShaderLayout::ShaderLayout(const std::initializer_list<ShaderSource>& sources)
+        : m_Sources(sources) 
+    { 
+    
+    }
 
 }
