@@ -37,6 +37,16 @@ if (${BUILD_SERVER})
     option(BUILD_TEST OFF)
     FetchContent_MakeAvailable(libpqxx)
 endif()
+
+# <BOOST>
+
+find_package(Boost 1.80.0) 
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+endif()
+
+# </BOOST>
     
 set(SANITIZER_FLAGS "-fsanitize=leak,undefined,address")
 set(ERROR_FLAGS "-Wall")
@@ -56,7 +66,7 @@ if (${DEBUG})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ERROR_FLAGS}")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ERROR_FLAGS}")
 
 add_custom_target(check chmod 777 ${CMAKE_SOURCE_DIR}/lint.sh && ${CMAKE_SOURCE_DIR}/lint.sh)
 
