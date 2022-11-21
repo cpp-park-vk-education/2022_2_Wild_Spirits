@@ -7,9 +7,9 @@ class CharacterInstance;
 class Effect {
  public:
     struct Result {
-        int x;
-        int y;
-        unsigned int value;
+        int x = 0;
+        int y = 0;
+        unsigned int value = 0;
         StatBased::Stats* buff = nullptr;
 
         Result() = default;

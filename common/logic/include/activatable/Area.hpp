@@ -29,11 +29,11 @@ class PointArea : public Area {
 
 class RectangularArea : public Area {
  private:
-    unsigned int height_;
     unsigned int width_;
+    unsigned int height_;
 
  public:
-    RectangularArea(unsigned int h, unsigned int w) : height_(h), width_(w) {}
+    RectangularArea(unsigned int w, unsigned int h) : width_(w), height_(h) {}
 
     bool isInArea(const Tile& tile) const override {
         return false;
@@ -54,11 +54,11 @@ class CustomArea : public Area {
 
 class AreaFactory {
  public:
-    static Area* createArea(int height = 0, int width = 0) {
+    static Area* create(int width = 0, int height = 0) {
         return new PointArea();
     }
 
-    static Area* createArea(const std::vector<Tile>& tiles) {
+    static Area* create(const std::vector<Tile>& tiles) {
         return new CustomArea(tiles);
     }
 };

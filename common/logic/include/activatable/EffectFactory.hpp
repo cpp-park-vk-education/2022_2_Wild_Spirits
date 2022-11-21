@@ -5,19 +5,19 @@
 #include "Buff.hpp"
 
 class EffectFactory {
-    static Effect* createEffect(int amount) {
+    static Effect* create(int amount) {
         return new Heal(amount);
     }
 
-    static Effect* createEffect(int x, int y) {
+    static Effect* create(int x, int y) {
         return new Move(x, y);
     }
 
-    static Effect* createEffect(const StatBased::Stats& stats, unsigned int turns) {
+    static Effect* create(const StatBased::Stats& stats, unsigned int turns) {
         return new Buff(stats, turns);
     }
 
-    static Effect* createEffect(uint8_t damage_type, uint8_t die_type, size_t times) {
-        return new DealDamage(new Damage(damage_type, die_type, times));
+    static Effect* create(uint8_t damage_type, uint8_t die_type, size_t times) {
+        return new DealDamage(new Damage(damage_type, die_type, times), new Dice());
     }
 };

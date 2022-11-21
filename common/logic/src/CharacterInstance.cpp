@@ -87,6 +87,4 @@ void CharacterInstance::setImage(int image_id) {
     original_.setImage(image_id);
 }
 
-void CharacterInstance::onTurnStart() {
-
-}
+void CharacterInstance::onTurnStart() {}

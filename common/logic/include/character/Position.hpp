@@ -68,7 +68,7 @@ class RectangularPos : public Position {
 
 class PositionFactory {
  public:
-    static Position* createPosition(const Tile& b_left, const Tile& u_right = Tile{}) {
+    static Position* create(const Tile& b_left, const Tile& u_right = Tile{}) {
         return new RectangularPos(b_left, u_right);
     }
 };

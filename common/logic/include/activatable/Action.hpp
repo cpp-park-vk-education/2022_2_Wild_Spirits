@@ -52,7 +52,7 @@ class Action {
         effects_.erase(effects_.begin() + effect_id);
     }
 
-    Result getResult(CharacterInstance*, const Tile& tile) {
+    Result getResult(const CharacterInstance&, const Tile& tile) {
         return Result{};
     }
 

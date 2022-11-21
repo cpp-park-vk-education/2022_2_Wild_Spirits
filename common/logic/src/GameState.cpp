@@ -21,7 +21,7 @@ size_t GameStateImpl::createSpell() {
 
 size_t GameStateImpl::createArmor() {
     return 0;
-} 
+}
 
 size_t GameStateImpl::createRace() {
     return 0;
@@ -112,7 +112,7 @@ Action::Result GameLogicProcessorImpl::useActivatable(size_t actor_id, std::stri
                                                       size_t item_id, Tile target) {
     return Action::Result{};
 }
- 
+
 std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t npc_id) {
     return {};
 }

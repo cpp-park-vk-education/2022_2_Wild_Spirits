@@ -19,7 +19,7 @@ TEST_F(AreaSuite, PointAreaWorks) {
 
     ASSERT_FALSE(area.isInArea(Tile{4, 2}));
     ASSERT_FALSE(area.isInArea(Tile{5, 3}));
-};
+}
 
 
 TEST_F(AreaSuite, RectAreaWorks) {
@@ -32,7 +32,7 @@ TEST_F(AreaSuite, RectAreaWorks) {
 
     ASSERT_FALSE(area.isInArea(target_ + Tile{2, 2}));
     ASSERT_FALSE(area.isInArea(target_ - Tile{1, 3}));
-};
+}
 
 TEST_F(AreaSuite, CustomAreaWorks) {
     std::vector<Tile> tiles = {Tile{1, 2}, Tile{-1, 3}, Tile{4, 0}};
@@ -46,7 +46,7 @@ TEST_F(AreaSuite, CustomAreaWorks) {
 
     ASSERT_FALSE(area.isInArea(target_ + Tile{1, 3}));
     ASSERT_FALSE(area.isInArea(target_ - Tile{1, 0}));
-};
+}
 
 TEST(PositionSuite, TilePosAreaCheck) {
     TilePos pos(5, 7);
@@ -65,7 +65,7 @@ TEST(PositionSuite, TilePosAreaCheck) {
     c_area.setTarget(Tile{2, 8});
     ASSERT_TRUE(pos.isInArea(c_area));
     ASSERT_EQ(pos.isInArea(c_area), c_area.isInArea(pos.mapPosition().first));
-};
+}
 
 TEST(PositionSuite, RectPosAreaCheck) {
     RectangularPos pos(Tile{0, 3}, Tile{2, 1});
@@ -80,7 +80,7 @@ TEST(PositionSuite, RectPosAreaCheck) {
     RectangularArea r_area(1, 1);
     r_area.setTarget(Tile{3, 2});
     ASSERT_TRUE(pos.isInArea(r_area));
-};
+}
 
 class MockGameMap : public GameMap {
  public:
@@ -92,7 +92,7 @@ class MockGameMap : public GameMap {
     MOCK_METHOD(void, switchLocation, (size_t, size_t));
     MOCK_METHOD(Location&, currentLocation, ());
     MOCK_METHOD(size_t, currentLocationId, (), (const));
-    MOCK_METHOD(const Location&, getLocation, (size_t), (const));
+    MOCK_METHOD(const Location&, getLocation, (size_t), (const));  // cppcheck-suppress syntaxError
 };
 
 class FakeDice : public DiceInterface {
@@ -108,13 +108,13 @@ class FakeDice : public DiceInterface {
 class EffectSuite : public ::testing::Test {
  private:
     Character char_template_;
-    MockGameMap map_;
 
  protected:
+    MockGameMap map_;
     CharacterInstance character_;
 
  public:
-    EffectSuite() : character_(char_template_, PositionFactory::createPosition(Tile{1, 1}), map_) {
+    EffectSuite() : character_(char_template_, PositionFactory::create(Tile{1, 1}), map_) {
         char_template_.addResistance(0);
         char_template_.addVulnerability(1);
     }
@@ -124,13 +124,13 @@ TEST_F(EffectSuite, HealReturnsValidResult) {
     Heal heal(5);
     Effect::Result expected_result(5);
     ASSERT_EQ(heal.getResult(character_), expected_result);
-};
+}
 
 TEST_F(EffectSuite, MoveReturnsValidResult) {
     Move move(1, 3);
     Effect::Result expected_result(1, 3);
     ASSERT_EQ(move.getResult(character_), expected_result);
-};
+}
 
 TEST_F(EffectSuite, DealDamageReturnsValidResult) {
     DealDamage damage(new Damage(1, 6, 2), new FakeDice());
@@ -143,4 +143,29 @@ TEST_F(EffectSuite, DealDamageReturnsValidResult) {
     ASSERT_EQ(damage_resist.getResult(character_), expected_result_resist);
 
     ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new FakeDice()), std::exception);
-};
+}
+
+// class ActionSuite : public EffectSuite{
+//  private:
+//     Character test_enemy_;
+//  protected:
+//     std::vector<CharacterInstance> enemies_;
+//  public:
+//     ActionSuite() :
+//         EffectSuite(),
+//         enemies_() {
+//         enemies_.reserve(5);
+//         for (size_t i = 0; i < 5; ++i) {
+//             enemies_.emplace_back(test_enemy_,
+//                 PositionFactory::create(Tile{0, static_cast<int>(i)}), map_);
+//         }
+//     }
+// };
+
+// TEST_F(ActionSuite, ActionTest) {
+//     Action action(AreaFactory::create(1, 1), 3, Action::CastType::Tile,
+//         {new DealDamage(new Damage(1, 4, 2), new FakeDice()),
+//          new Move(1, 2)});
+
+    // action.getResult(character_, 0, )
+// }
