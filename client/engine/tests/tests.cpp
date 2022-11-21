@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include <EngineLibFunctions.h>
+#include <Core/Application.h>
 
 TEST(Engine, Test) {
     SUCCEED();
