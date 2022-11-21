@@ -5,6 +5,7 @@ set(SOURCES
      src/GameEntity.cpp
      src/CharacterInstance.cpp
      src/GameMap.cpp
+     src/GameState.cpp
      src/Location.cpp
      src/OnLocation.cpp
      src/TurnOrder.cpp)

@@ -5,16 +5,19 @@
 
 class ActivatableItem : public Item, public Activatable {
  public:
+    ActivatableItem() = default;
+
     ActivatableItem(std::string_view name, int image_id, const Info& info,
                     const std::vector<Action>& actions, unsigned int action_cost, 
                     unsigned int cost = 0, std::string_view scaling = "") :
-        GameEntity(name, image_id, info),
         Item(name, image_id, info, cost),
-        Activatable(name, image_id, info, actions, action_cost, scaling) {}
+        Activatable(actions, action_cost, scaling) {}
 };
 
 class Weapon : public ActivatableItem {
  public:
+    Weapon() = default;
+
     Weapon(std::string_view name, int image_id, const Info& info,
                 const std::vector<Action>& actions, unsigned int action_cost, 
                 unsigned int cost = 0, std::string_view scaling = "") :
@@ -26,6 +29,8 @@ class Consumable : public ActivatableItem {
     unsigned int uses_;
 
  public:
+    Consumable() = default;
+
     Consumable(std::string_view name, int image_id, const Info& info,
                const std::vector<Action>& actions, unsigned int action_cost, 
                unsigned int uses = 0, unsigned int cost = 0, std::string_view scaling = "") :

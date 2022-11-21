@@ -15,6 +15,7 @@ class Armor : public Item {
     Type type_;
 
  public:
+    Armor() = default;
     Armor(std::string_view name, int image_id, const Info& info, int cost, int defense, Type type) :
         Item(name, image_id, info, cost), defense_(defense), type_(type) {}
 

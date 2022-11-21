@@ -36,7 +36,7 @@ ErrorStatus GameStateImpl::addToLocation(size_t npc_id, size_t location_id, Posi
 }
 
 PlayerCharacter& GameStateImpl::getPlayerCharacter(size_t ind) {
-    return players_[ind];
+    return players_.at(ind);
 }
 
 NPC& GameStateImpl::getNPC(size_t ind) {
@@ -126,6 +126,6 @@ ErrorStatus GameLogicProcessorImpl::trade(size_t first_char, size_t second_char,
     return ErrorStatus::Fail;
 }
 
-SaleResult GameLogicProcessorImpl::buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) {
+SaleResult GameLogicProcessorImpl::buy(size_t first_char, size_t second_char, size_t item, size_t num) {
     return SaleResult{ErrorStatus::Fail};
 }

@@ -12,6 +12,7 @@
 
 class Race : public GameEntity, public WithStats {
  public:
+    Race() = default;
     Race(std::string_view name, int image_id, const Info& info, const Stats& stats) : 
         GameEntity(name, image_id, info), WithStats(stats){}
 };
@@ -19,7 +20,9 @@ class Race : public GameEntity, public WithStats {
 class CharacterClass : public GameEntity {
  private:
     std::vector<Skill> skills_;
+
  public:
+    CharacterClass() = default;
     CharacterClass(std::string_view name, int image_id, const Info& info,
                     const std::vector<Skill> skills) :
         GameEntity(name, image_id, info), skills_(skills) {}
@@ -87,8 +90,8 @@ class PlayerCharacter : public CharacterInstance {
                     const Race& race, const CharacterClass& char_class,
                     int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         CharacterInstance(original, pos, map, money, items),
-        race_(&race),
-        class_list_() {
+        class_list_(),
+        race_(&race) {
 
     }
 

@@ -6,7 +6,10 @@
 class NPC : public Character {
  private:
     std::unordered_map<int, Skill> skills_;
+
  public:
+    NPC() = default;
+
     NPC(std::string_view name, int image_id, const Info& info, unsigned int max_hp,
         int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
         unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{},

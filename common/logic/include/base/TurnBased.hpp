@@ -10,7 +10,7 @@ class Temporal : public TurnBased {
     unsigned int turns_;
 
  public:
-    Temporal(unsigned int turns) : turns_(turns) {}
+    explicit Temporal(unsigned int turns = 0) : turns_(turns) {}
 
     unsigned int turnsLeft() {
         return turns_;

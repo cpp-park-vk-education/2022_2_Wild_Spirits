@@ -1,14 +1,22 @@
 #pragma once
 
 #include "Activatable.hpp"
+#include "GameEntity.hpp"
 #include "TurnBased.hpp"
 
-class Skill : public Activatable, public Temporal {
+class Skill : public GameEntity, public Activatable, public Temporal {
  private:
     unsigned int cooldown_;
 
  public:
-    Skill();
+    Skill() = default;
+
+    Skill(std::string_view name, int image_id, const Info& info,
+          const std::vector<Action>& actions, unsigned int action_cost,
+          std::string_view scaling, unsigned int cooldown) :
+        GameEntity(name, image_id, info),
+        Activatable(actions, action_cost, scaling),
+        cooldown_(cooldown) {}
 
     unsigned int cooldown() {
         return cooldown_;

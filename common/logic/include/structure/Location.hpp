@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameEntity.hpp"
+#include "NPC_Instance.hpp"
 
 #include <unordered_map>
 
@@ -16,9 +17,10 @@ class Location : public GameEntity {
     size_t width_;
 
  public:
+    Location() = default;
+
     Location(std::string_view name, int image_id, const Info& info,
-             size_t height, size_t width) :
-        GameEntity(name, image_id, info), height_(height), width_(width) {}
+             size_t height, size_t width);
 
     void setHeight(size_t height) {
         height_ = height;

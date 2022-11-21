@@ -19,6 +19,22 @@ class OnLocation : public Position {
     
     const Location& location();
 
+    bool isInArea(Area* area) override {
+        return pos_->isInArea(area);
+    }
+
+    std::tuple<Tile, Tile> mapPosition() override {
+        return pos_->mapPosition();
+    }
+
+    void moveTo(const Tile& tile) override {
+        return pos_->moveTo(tile);
+    }
+
+    void moveBy(int x, int y) override {
+        return pos_->moveBy(x, y);
+    }
+
     ~OnLocation() {
         delete pos_;
     }

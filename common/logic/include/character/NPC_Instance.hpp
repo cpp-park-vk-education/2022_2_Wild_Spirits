@@ -9,7 +9,7 @@ class NPC_Instance : public CharacterInstance {
 
  public:
     NPC_Instance(NPC& original, Position* pos, GameMap& map,
-                 int money = 100, std::unordered_map<int, Item*> items = {}) :
+                 int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         CharacterInstance(original, pos, map, money, items) {}
 
     bool isHostile() const {

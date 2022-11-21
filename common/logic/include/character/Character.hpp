@@ -19,6 +19,8 @@ class Character : public GameEntity, public Resistible, public WithStats {
     unsigned int base_armor_class_;
 
 public:
+    Character() = default;
+
     Character(std::string_view name, int image_id, const Info& info, unsigned int max_hp,
               int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
               unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{}) :

@@ -5,7 +5,7 @@
 #include "GameEntity.hpp"
 #include "Action.hpp"
 
-class Activatable : virtual public GameEntity {
+class Activatable {
  private:
     std::vector<Action> actions_;
     Tile target;
@@ -14,10 +14,10 @@ class Activatable : virtual public GameEntity {
     std::string scaling_;
 
  public:
-    Activatable(std::string_view name, int image_id, const Info& info,
-                const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
-        GameEntity(name, image_id, info), actions_(actions), action_cost_(action_cost), scaling_(scaling) {} 
-
+    Activatable() = default;
+    Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
+        actions_(actions), action_cost_(action_cost), scaling_(scaling) {}
+    
     void addEffect(int action, Effect* effect) {
         actions_[action].addEffect(effect);
     }
