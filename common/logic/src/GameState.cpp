@@ -117,7 +117,7 @@ std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t npc_i
     return {};
 }
 
-ErrorStatus GameLogicProcessorImpl::distributeSkillPoints(size_t player_char_id, const WithStats::Stats& stats) {
+ErrorStatus GameLogicProcessorImpl::distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) {
     return ErrorStatus::Fail;
 }
 

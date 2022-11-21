@@ -5,7 +5,7 @@
 
 #include "Utils.hpp"
 
-class WithStats {
+class StatBased {
  public:
     using Stats = std::unordered_map<std::string, int>;
 
@@ -13,8 +13,8 @@ class WithStats {
     Stats stats_;
  
  public:
-    WithStats() : stats_() {}
-    WithStats(const Stats& stats) : stats_(stats) {}
+    StatBased() : stats_() {}
+    StatBased(const Stats& stats) : stats_(stats) {}
 
     int getStat(const std::string& stat) const {
         auto it = stats_.find(stat);

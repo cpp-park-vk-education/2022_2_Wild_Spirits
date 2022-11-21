@@ -10,11 +10,11 @@
 #include <list>
 #include <unordered_map>
 
-class Race : public GameEntity, public WithStats {
+class Race : public GameEntity, public StatBased {
  public:
     Race() = default;
     Race(std::string_view name, int image_id, const Info& info, const Stats& stats) : 
-        GameEntity(name, image_id, info), WithStats(stats){}
+        GameEntity(name, image_id, info), StatBased(stats){}
 };
 
 class CharacterClass : public GameEntity {

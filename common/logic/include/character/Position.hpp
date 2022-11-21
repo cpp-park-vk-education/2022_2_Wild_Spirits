@@ -3,12 +3,12 @@
 #include "Area.hpp"
 #include "Utils.hpp"
 
-#include <tuple>
+#include <utility>
 
 class Position {
  public:
-    virtual bool isInArea(Area* area) = 0;
-    virtual std::tuple<Tile, Tile> mapPosition() = 0;
+    virtual bool isInArea(const Area& area) = 0;
+    virtual std::pair<Tile, Tile> mapPosition() = 0;
     virtual void moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
@@ -21,12 +21,13 @@ class TilePos : public Position {
  
  public:
     TilePos(const Tile& tile) : pos_(tile) {}
+    TilePos(int x, int y) : pos_{x, y} {}
 
-    bool isInArea(Area* area) override {
+    bool isInArea(const Area& area) override {
         return false;
     }
 
-    std::tuple<Tile, Tile> mapPosition() override {
+    std::pair<Tile, Tile> mapPosition() override {
         return {};
     }
 
@@ -48,11 +49,11 @@ class RectangularPos : public Position {
     RectangularPos(const Tile& b_left, const Tile& u_right) :
         bottom_left_(b_left), upper_right_(u_right) {}
 
-    bool isInArea(Area* area) override {
+    bool isInArea(const Area& area) override {
         return false;
     }
 
-    std::tuple<Tile, Tile> mapPosition() override {
+    std::pair<Tile, Tile> mapPosition() override {
         return {};
     }
 
@@ -67,7 +68,7 @@ class RectangularPos : public Position {
 
 class PositionFactory {
  public:
-    Position* createPosition(const Tile& b_left, const Tile& u_right = Tile{}) {
+    static Position* createPosition(const Tile& b_left, const Tile& u_right = Tile{}) {
         return new RectangularPos(b_left, u_right);
     }
 };

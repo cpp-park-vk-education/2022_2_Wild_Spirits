@@ -2,9 +2,9 @@
 
 #include "GameEntity.hpp"
 #include "Resistible.hpp"
-#include "WithStats.hpp"
+#include "StatBased.hpp"
 
-class Character : public GameEntity, public Resistible, public WithStats {
+class Character : public GameEntity, public Resistible, public StatBased {
  protected:
     unsigned int exp_;
 
@@ -26,7 +26,7 @@ public:
               unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{}) :
         GameEntity(name, image_id, info),
         Resistible(),
-        WithStats(stats),
+        StatBased(stats),
         exp_(exp),
         max_hp_(max_hp),
         max_action_points_(ap),

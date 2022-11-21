@@ -19,7 +19,7 @@ Action::Result CharacterInstance::useActivatable(std::string_view action_type,
     return Action::Result{};
 }
 
-ErrorStatus CharacterInstance::trade(CharacterInstance* with, Item* give, Item* get) {
+ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
     return ErrorStatus::Fail;
 }
 

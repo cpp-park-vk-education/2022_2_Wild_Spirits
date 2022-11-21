@@ -1,7 +1,6 @@
 #pragma once
 
-// #include "CharacterInstance.hpp"
-#include "WithStats.hpp"
+#include "StatBased.hpp"
 
 class CharacterInstance;
 
@@ -10,8 +9,21 @@ class Effect {
     struct Result {
         int x;
         int y;
-        unsigned int hp;
-        WithStats::Stats* buff = nullptr;
+        unsigned int value;
+        StatBased::Stats* buff = nullptr;
+
+        Result() = default;
+        Result(unsigned int) {}
+        Result(int, int) {}
+        Result(StatBased::Stats*, unsigned int turns) {}
+
+        bool operator==(const Result& other) const {
+            return false;
+        }
+
+        ~Result() {
+            delete buff;
+        }
     };
 
     virtual Result getResult(const CharacterInstance& character) const = 0;

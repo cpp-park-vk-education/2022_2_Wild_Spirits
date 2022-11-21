@@ -63,10 +63,14 @@ class GameStateImpl : public GameState {
 
     Storage storage_;
     Config config_;
-    GameMap map_;
+    GameMap* map_;
 
  public:
-    GameStateImpl() = default;
+    GameStateImpl(GameMap* map) : map_(map) {}
+
+    ~GameStateImpl() {
+        delete map_;
+    }
 
     size_t createPlayerCharacter() override;
     size_t createNPC() override;
@@ -112,7 +116,7 @@ class GameLogicProcessor : public GameState {
     virtual Action::Result useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) = 0;
  
     virtual std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) = 0;
-    virtual ErrorStatus distributeSkillPoints(size_t player_char_id, const WithStats::Stats& stats) = 0;
+    virtual ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) = 0;
 
     virtual ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) = 0;
     virtual SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) = 0;
@@ -125,7 +129,7 @@ class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
     Action::Result useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) override;
  
     std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) override;
-    ErrorStatus distributeSkillPoints(size_t player_char_id, const WithStats::Stats& stats) override;
+    ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) override;
 
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;
     SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) override;

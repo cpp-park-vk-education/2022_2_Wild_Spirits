@@ -1,5 +1,7 @@
 #pragma once
 
+// #include "CharacterInstanceInterface.hpp"
+
 #include "OnLocation.hpp"
 #include "Character.hpp"
 #include "Buff.hpp"
@@ -33,15 +35,15 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
         OnLocation(pos, map),
         original_(original), items_(items), money_(money) {}
 
-    int statCheckRoll(std::string_view stat) const;
-    int statBonus(std::string_view) const;
-    int armorClass() const;
+    int statCheckRoll(std::string_view stat) const ;
+    int statBonus(std::string_view) const ;
+    int armorClass() const ;
 
     Action::Result useActivatable(std::string_view action_type,
-                                  int action_id, const std::vector<Tile>& target);
+                                  int action_id, const std::vector<Tile>& target) ;
     
-    ErrorStatus trade(CharacterInstance* with, Item* give, Item* get);
-    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count = 1);
+    ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
+    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count = 1) ;
 
     unsigned int actionPoints();
     void refreshActionPoints();
@@ -54,6 +56,8 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     bool isAlive();
     void resetHP();
     int hp();
+
+    const Character& original();
 
     const std::string& info(const std::string&) const override;
     std::string& info(const std::string&) override;

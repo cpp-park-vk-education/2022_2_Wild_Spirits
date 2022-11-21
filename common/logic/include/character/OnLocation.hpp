@@ -19,11 +19,11 @@ class OnLocation : public Position {
     
     const Location& location();
 
-    bool isInArea(Area* area) override {
+    bool isInArea(const Area& area) override {
         return pos_->isInArea(area);
     }
 
-    std::tuple<Tile, Tile> mapPosition() override {
+    std::pair<Tile, Tile> mapPosition() override {
         return pos_->mapPosition();
     }
 

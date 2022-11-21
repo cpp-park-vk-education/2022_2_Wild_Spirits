@@ -13,7 +13,7 @@ class EffectFactory {
         return new Move(x, y);
     }
 
-    static Effect* createEffect(const WithStats::Stats& stats, unsigned int turns) {
+    static Effect* createEffect(const StatBased::Stats& stats, unsigned int turns) {
         return new Buff(stats, turns);
     }
 
