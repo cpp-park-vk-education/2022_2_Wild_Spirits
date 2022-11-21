@@ -145,27 +145,28 @@ TEST_F(EffectSuite, DealDamageReturnsValidResult) {
     ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new FakeDice()), std::exception);
 }
 
-// class ActionSuite : public EffectSuite{
-//  private:
-//     Character test_enemy_;
-//  protected:
-//     std::vector<CharacterInstance> enemies_;
-//  public:
-//     ActionSuite() :
-//         EffectSuite(),
-//         enemies_() {
-//         enemies_.reserve(5);
-//         for (size_t i = 0; i < 5; ++i) {
-//             enemies_.emplace_back(test_enemy_,
-//                 PositionFactory::create(Tile{0, static_cast<int>(i)}), map_);
-//         }
-//     }
-// };
+class ActionSuite : public EffectSuite{
+ private:
+    Character test_enemy_;
+ protected:
+    std::vector<CharacterInstance> enemies_;
+ public:
+    ActionSuite() :
+        EffectSuite(),
+        enemies_() {
+        enemies_.reserve(5);
+        for (size_t i = 0; i < 5; ++i) {
+            enemies_.emplace_back(test_enemy_,
+                PositionFactory::create(Tile{0, static_cast<int>(i)}), map_);
+        }
+    }
+};
 
-// TEST_F(ActionSuite, ActionTest) {
-//     Action action(AreaFactory::create(1, 1), 3, Action::CastType::Tile,
-//         {new DealDamage(new Damage(1, 4, 2), new FakeDice()),
-//          new Move(1, 2)});
+TEST_F(ActionSuite, DISABLED_ActionTest) {
+    Action action(AreaFactory::create(1, 1), 3, Action::CastType::Tile,
+        {new DealDamage(new Damage(1, 4, 2), new FakeDice()),
+         new Move(1, 2)});
 
-    // action.getResult(character_, 0, )
-// }
+    ASSERT_EQ(action.getResult(character_, {0, 1}).serialize(),
+              Action::Result{}.serialize());
+}
