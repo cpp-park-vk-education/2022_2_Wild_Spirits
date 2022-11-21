@@ -17,12 +17,12 @@ class TurnOrder {
     TurnOrder(GameState& game, GameMap& map) :
         game_(game), map_(map) {}
     
-    void nextTurn();
+    ErrorStatus nextTurn();
 
-    void addToQueueBack(size_t char_id);
+    ErrorStatus addToQueueBack(size_t char_id);
 
-    void addToQueueFront(size_t char_id);
+    ErrorStatus addToQueueFront(size_t char_id);
 
-    void swapTurnOrder(size_t first, size_t second);
+    ErrorStatus swapTurnOrder(size_t first, size_t second);
     size_t getActiveCharacterId();
 };

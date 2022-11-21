@@ -39,7 +39,7 @@ class Storage {
         return weapons_[id];
     }
 
-    void addConsumable(int id, const Spell& spell) {
+    void addSpell(int id, const Spell& spell) {
         spells_[id] = spell;
     }
 
@@ -51,15 +51,15 @@ class Storage {
         return spells_[id];
     }
 
-    void addConsumable(int id, const Armor& armor) {
+    void addArmor(int id, const Armor& armor) {
         armor_[id] = armor;
     }
 
-    void removeConsumable(int id) {
+    void removeArmor(int id) {
         armor_.erase(id);
     }
 
-    Armor& getConsumable(int id) {
+    Armor& getArmor(int id) {
         return armor_[id];
     }
 };

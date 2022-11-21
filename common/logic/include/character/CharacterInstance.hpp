@@ -11,9 +11,9 @@
 #include <unordered_map>
 
 struct SaleResult {
+    ErrorStatus status;
     int seller_money;
     int buyer_money;
-    ErrorStatus status;
 };
 
 class CharacterInstance : public GameEntityInterface, public OnLocation, public TurnBased {
