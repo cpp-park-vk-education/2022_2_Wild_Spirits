@@ -30,7 +30,7 @@ void Action::removeEffect(size_t effect_id) {
     effects_.erase(effects_.begin() + effect_id);
 }
 
-std::vector<Action::Result> Action::getResults(const CharacterInstance&, const Tile& tile) {
+std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(const CharacterInstance&, const Tile& tile) {
     return {};
 }
 

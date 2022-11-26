@@ -38,8 +38,8 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const ;
     int armorClass() const ;
-    std::vector<Action::Result> useActivatable(std::string_view action_type,
-                                               size_t action_id, const std::vector<Tile>& target) ;
+    std::tuple<std::vector<Action::Result>, ErrorStatus> useActivatable(std::string_view action_type,
+                                               size_t action_id, const std::vector<Tile>& target);
     
     ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
     SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1) ;

@@ -14,7 +14,7 @@ int CharacterInstance::armorClass() const {
     return 0;
 }
 
-std::vector<Action::Result> CharacterInstance::useActivatable(std::string_view action_type,
+std::tuple<std::vector<Action::Result>, ErrorStatus> CharacterInstance::useActivatable(std::string_view action_type,
                                 size_t action_id, const std::vector<Tile>& target) {
     return Action().getResults(*this, {}); 
 }

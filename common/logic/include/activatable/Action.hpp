@@ -26,6 +26,15 @@ class Action {
         StatBased::Stats buff;
 
         explicit Result(size_t char_id) : char_id_(char_id) {}
+        explicit Result(size_t char_id, Tile pos, int hp, const StatBased::Stats& buff = {}) :
+            char_id_(char_id),
+            pos(pos),
+            hp(hp),
+            buff(buff) {}
+
+        size_t char_id() {
+            return char_id_;
+        }
 
         bool operator==(const Result& other) const {
             return false;
@@ -54,7 +63,7 @@ class Action {
 
     void removeEffect(size_t effect_id);
 
-    std::vector<Result> getResults(const CharacterInstance&, const Tile& tile);
+    std::tuple<std::vector<Result>, ErrorStatus> getResults(const CharacterInstance&, const Tile& tile);
 
     ~Action();
 };

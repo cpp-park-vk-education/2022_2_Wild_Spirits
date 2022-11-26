@@ -12,8 +12,10 @@ class Storage {
     std::unordered_map<size_t, T> data_;
 
  public:
+    Storage(const std::unordered_map<size_t, T>& data = {}) : data_(data) {}
+
     template <typename... Args>
-    ErrorStatus add(size_t id, Args... args) {
+    ErrorStatus add(size_t id, Args&&... args) {
         data_.try_emplace(id, args...);
         return ErrorStatus::Fail;
     }

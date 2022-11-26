@@ -12,7 +12,7 @@ class Position;
 
 class Location : public GameEntity {
  private:
-    std::unordered_map<size_t, NPC_Instance> npc_;
+    Storage<NPC_Instance> npc_;
     size_t height_;
     size_t width_;
 
@@ -38,9 +38,7 @@ class Location : public GameEntity {
         return width_;
     }
 
-    std::unordered_map<size_t, NPC_Instance>& npc() {
+    Storage<NPC_Instance>& npc() {
         return npc_;
     }
-
-    void addNPC(size_t id, const NPC& npc, GameMap& map, Position* pos);
 };

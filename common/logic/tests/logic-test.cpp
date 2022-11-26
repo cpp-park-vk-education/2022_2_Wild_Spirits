@@ -7,7 +7,9 @@
 #include "GameState.hpp"
 
 using ::testing::Return;
+using ::testing::ReturnRef;
 using ::testing::_;
+using ::testing::SizeIs;
 
 class AreaSuite : public ::testing::Test {
  protected:
@@ -90,11 +92,12 @@ class MockGameMap : public GameMap {
     MockGameMap() = default;
 
     MOCK_METHOD(void, addLocation, (size_t, const Location&), (override));
-    MOCK_METHOD(void, removeLocation, (), (override));
+    MOCK_METHOD(void, removeLocation, (size_t), (override));
     MOCK_METHOD(void, switchLocation, (size_t), (override));
     MOCK_METHOD(void, switchLocation, (size_t, size_t), (override));
     MOCK_METHOD(Location&, currentLocation, (), (override));
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
+    MOCK_METHOD(Storage<PlayerCharacter>&, players, ());
     MOCK_METHOD(const Location&, getLocation, (size_t), (const, override));  // cppcheck-suppress syntaxError
 };
 
@@ -114,7 +117,7 @@ class EffectSuite : public ::testing::Test {
 
  public:
     EffectSuite() :
-        character(char_template_, PositionFactory::create(Tile{1, 1}), map),
+        character(char_template_, PositionFactory::create(Tile{1, 2}), map),
         result(0), new_result(result) {
             char_template_.addResistance(0);
             char_template_.addVulnerability(1);
@@ -147,7 +150,7 @@ class DamageSuite : public EffectSuite {
 
 TEST_F(DamageSuite, DealDamageConsidersResists) {
     EXPECT_CALL((*dice), roll(_))
-        .WillOnce(Return(6));
+        .WillRepeatedly(Return(6));
 
     DealDamage damage_resist(new Damage(0, 6, 2), dice);
     damage_resist.updateActionResult(character, &new_result);
@@ -156,7 +159,7 @@ TEST_F(DamageSuite, DealDamageConsidersResists) {
 
 TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
     EXPECT_CALL(*dice, roll(_))
-        .WillOnce(Return(3));
+        .WillRepeatedly(Return(3));
     
     DealDamage damage(new Damage(1, 6, 2), dice);
     damage.updateActionResult(character, &new_result);
@@ -169,30 +172,55 @@ TEST(DiceSuite, ThrowsOnInvalidDice) {
     ASSERT_THROW(DealDamage(new Damage(0, -1, 2), new Dice()), InvalidDice);
 }
 
-class ActionSuite : public EffectSuite{
+class ActionSuite : public DamageSuite{
  private:
-    Character test_enemy_;
+    NPC test_enemy_;
 
  protected:
-    std::vector<CharacterInstance> enemies_;
+    Location location;
+    Action action;
 
  public:
     ActionSuite() :
-        EffectSuite(),
-        enemies_() {
-        enemies_.reserve(5);
-        for (size_t i = 0; i < 5; ++i) {
-            enemies_.emplace_back(test_enemy_,
-                PositionFactory::create(Tile{0, static_cast<int>(i)}), map);
-        }
+        DamageSuite(),
+        action(AreaFactory::create(1, 1), 3, Action::CastType::Tile, {
+            new DealDamage(new Damage(1, 4, 2), dice),
+            new Move(1, 2),
+            new Heal(3),
+            new Buff({ {"str", 2}, {"dex", -1} }, 2)
+        }) {
+            test_enemy_.setStat("str", 10);
+            test_enemy_.setStat("dex", 12);
+            for (size_t i = 0; i < 5; ++i) {
+                location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, static_cast<int>(i)}), map);
+            }
+            location.npc().add(5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
     }
 };
 
-TEST_F(ActionSuite, DISABLED_ActionTest) {
-    Action action(AreaFactory::create(1, 1), 3, Action::CastType::Tile,
-        {new DealDamage(new Damage(1, 4, 2), new MockDice()),
-         new Move(1, 2)});
+TEST_F(ActionSuite, ActionTest) {
+    EXPECT_CALL(map, currentLocation())
+        .WillRepeatedly(ReturnRef(location));
+    
+    EXPECT_CALL(*dice, roll(_))
+        .WillOnce(Return(1))
+        .WillOnce(Return(2))
+        .WillOnce(Return(3))
+        .WillOnce(Return(1))
+        .WillOnce(Return(2))
+        .WillOnce(Return(3));
 
-    // ASSERT_EQ(action.getResults(character_, {0, 1}),
-    //           Action::Result{});
+    auto [results, error_status] = action.getResults(character, Tile{2, 1});
+
+    ASSERT_EQ(error_status, ErrorStatus::Ok);
+    ASSERT_THAT(results, SizeIs(4));
+
+    std::vector<size_t> enemies_hit = {1, 2, 3, 5};
+    
+    for (size_t i = 0; i < results.size(); ++i) {
+        ASSERT_EQ(results[i], Action::Result(
+                                enemies_hit[i],
+                                Tile{1, 2}, 3 - (3 + i),
+                                { {"str", 2}, {"dex", -1} }));
+    }
 }

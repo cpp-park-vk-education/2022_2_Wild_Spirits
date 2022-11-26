@@ -3,12 +3,13 @@
 #include "Location.hpp"
 
 class GameState;
+class PlayerCharacter;
 
 class GameMap {
  public:
     virtual void addLocation(size_t id, const Location& location) = 0;
 
-    virtual void removeLocation() = 0;
+    virtual void removeLocation(size_t id) = 0;
 
     virtual void switchLocation(size_t id) = 0;
 
@@ -18,7 +19,9 @@ class GameMap {
 
     virtual size_t currentLocationId() const = 0;
 
-    virtual const Location& getLocation(size_t location_id) const = 0;
+    virtual const Location& getLocation(size_t id) const = 0;
+
+    virtual Storage<PlayerCharacter>& players() = 0;
 
     virtual ~GameMap() {}
 };
@@ -36,7 +39,7 @@ class GameMapImpl : public GameMap {
         locations_[id] = location;
     }
 
-    void removeLocation();
+    void removeLocation(size_t id);
 
     void switchLocation(size_t id);
 
@@ -50,7 +53,9 @@ class GameMapImpl : public GameMap {
         return current_location_;
     }
 
-    const Location& getLocation(size_t location_id) const {
-        return locations_.at(location_id);
+    const Location& getLocation(size_t id) const {
+        return locations_.at(id);
     }
+
+    Storage<PlayerCharacter>& players();
 };

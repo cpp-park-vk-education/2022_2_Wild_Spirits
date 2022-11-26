@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ActivatableItem.hpp"
+#include "Armor.hpp"
 #include "CharacterInstance.hpp"
 #include "Skill.hpp"
 #include "Spell.hpp"
-#include "ActivatableItem.hpp"
-#include "Armor.hpp"
+#include "Storage.hpp"
 
 #include <vector>
 #include <list>
@@ -40,49 +41,18 @@ class CharacterClass : public GameEntity {
     }
 };
 
-class Inventory {
- private:
-    std::unordered_map<size_t, Consumable> consumables_;
-    std::unordered_map<size_t, const Weapon*> weapons_;
- 
- public:
-    Inventory() = default;
-
-    void addConsumable(int id, const Consumable& consumable) {
-        consumables_[id] = consumable;
-    }
-
-    void removeConsumable(int id) {
-        consumables_.erase(id);
-    }
-
-    Consumable& getConsumable(int id) {
-        return consumables_[id];
-    }
-
-    void addSpell(int id, const Weapon& weapon) {
-        weapons_[id] = &weapon;
-    }
-
-    void removeWeapon(int id) {
-        weapons_.erase(id);
-    }
-
-    const Weapon* getWeapon(int id) {
-        return weapons_[id];
-    }
-};
-
 class PlayerCharacter : public CharacterInstance {
  private:
     std::list<const CharacterClass*> class_list_;
     const Race* race_;
     const Armor* armor_;
-    Inventory inventory_;
+    
+    Storage<const Weapon*> weapons_;
+    Storage<const Spell*> spells_;
+    Storage<Consumable> consumables_;
 
     unsigned int spell_points_;
     unsigned int max_spell_points_;
-    std::unordered_map<size_t, const Spell*> spells_;
     unsigned int level_ = 1;
 
  public:
@@ -119,19 +89,15 @@ class PlayerCharacter : public CharacterInstance {
         return armor_;
     }
 
-    void addSpell(int id, const Spell& spell) {
-        spells_[id] = &spell;
+    Storage<const Weapon*>& weapons() {
+        return weapons_;
     }
 
-    void removeSpell(int id) {
-        spells_.erase(id);
+    Storage<const Spell*>& spells() {
+        return spells_;
     }
 
-    const Spell* getSpell(int id) {
-        return spells_[id];
-    }
-
-    Inventory& inventory() {
-        return inventory_;
+    Storage<Consumable>& consumables() {
+        return consumables_;
     }
 };

@@ -12,7 +12,6 @@ class Character : public GameEntity, public Resistible, public StatBased {
     static constexpr unsigned int kDefaultActionPoints = 10;
     static constexpr unsigned int kDefaultArmorClass = 10;
 
-
  private:
     unsigned int max_hp_;
     unsigned int max_action_points_;
