@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Effect.hpp"
+#include "Exception.hpp"
 #include "Dice.hpp"
+
+#include <exception>
 
 struct DamageClass {
     uint8_t damage_type;
@@ -42,4 +45,9 @@ class DealDamage : public Effect {
         delete damage_;
         delete dice_;
     }
+};
+
+class InvalidDice : public DnD_Exception {
+ public:
+    InvalidDice(int8_t die) : DnD_Exception(("Die " + std::to_string(die) + " is not allowed").c_str()) {}
 };

@@ -6,6 +6,9 @@
 #include "Armor.hpp"
 #include "GameState.hpp"
 
+using ::testing::Return;
+using ::testing::_;
+
 class AreaSuite : public ::testing::Test {
  protected:
     Tile target_ = {5, 2};
@@ -86,30 +89,24 @@ class MockGameMap : public GameMap {
  public:
     MockGameMap() = default;
 
-    MOCK_METHOD(void, addLocation, (size_t, const Location&));
-    MOCK_METHOD(void, removeLocation, ());
-    MOCK_METHOD(void, switchLocation, (size_t));
-    MOCK_METHOD(void, switchLocation, (size_t, size_t));
-    MOCK_METHOD(Location&, currentLocation, ());
-    MOCK_METHOD(size_t, currentLocationId, (), (const));
-    MOCK_METHOD(const Location&, getLocation, (size_t), (const));  // cppcheck-suppress syntaxError
+    MOCK_METHOD(void, addLocation, (size_t, const Location&), (override));
+    MOCK_METHOD(void, removeLocation, (), (override));
+    MOCK_METHOD(void, switchLocation, (size_t), (override));
+    MOCK_METHOD(void, switchLocation, (size_t, size_t), (override));
+    MOCK_METHOD(Location&, currentLocation, (), (override));
+    MOCK_METHOD(size_t, currentLocationId, (), (const, override));
+    MOCK_METHOD(const Location&, getLocation, (size_t), (const, override));  // cppcheck-suppress syntaxError
 };
 
-class FakeDice : public DiceInterface {
-    uint8_t roll(uint8_t die) override {
-        return die;
-    }
-
-    std::vector<uint8_t> roll(uint8_t die, size_t num) override {
-        return std::vector<uint8_t>(num, die);
-    }
+class MockDice : public DiceInterface {
+ public:
+    MOCK_METHOD(uint8_t, roll, (uint8_t), (const, override));
+    MOCK_METHOD(std::vector<uint8_t>, roll, (uint8_t, size_t), (const, override));
 };
 
 class EffectSuite : public ::testing::Test {
- private:
-    Character char_template_;
-
  protected:
+    Character char_template_;
     MockGameMap map;
     CharacterInstance character;
     Action::Result result;
@@ -140,21 +137,36 @@ TEST_F(EffectSuite, MoveReturnsValidResult) {
     ASSERT_EQ(result.pos, new_result.pos + tile);
 }
 
-TEST_F(EffectSuite, DealDamageConsidersResists) {
-    DealDamage damage_resist(new Damage(0, 6, 2), new FakeDice());
+class DamageSuite : public EffectSuite {
+ protected:
+    MockDice* dice;
+
+ public:
+    DamageSuite() : dice(new MockDice()) {}
+};
+
+TEST_F(DamageSuite, DealDamageConsidersResists) {
+    EXPECT_CALL((*dice), roll(_))
+        .WillOnce(Return(6));
+
+    DealDamage damage_resist(new Damage(0, 6, 2), dice);
     damage_resist.updateActionResult(character, &new_result);
     ASSERT_EQ(result.hp - 6, new_result.hp);
 }
 
-TEST_F(EffectSuite, DealDamageConsidersVulnerabilities) {
-    DealDamage damage(new Damage(1, 6, 2), new FakeDice());
+TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
+    EXPECT_CALL(*dice, roll(_))
+        .WillOnce(Return(3));
+    
+    DealDamage damage(new Damage(1, 6, 2), dice);
     damage.updateActionResult(character, &new_result);
-    ASSERT_EQ(result.hp - 24, new_result.hp);
+    ASSERT_EQ(result.hp - 12, new_result.hp);
 }
 
-TEST(DamageSuite, ThrowsOnInvalidDice) {
-    ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new FakeDice()), std::exception);
-    ASSERT_THROW(DealDamage(new Damage(0, -1, 2), new FakeDice()), std::exception);
+TEST(DiceSuite, ThrowsOnInvalidDice) {
+    ASSERT_FALSE(Dice().isValid(-3));
+    ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new Dice()), InvalidDice);
+    ASSERT_THROW(DealDamage(new Damage(0, -1, 2), new Dice()), InvalidDice);
 }
 
 class ActionSuite : public EffectSuite{
@@ -178,7 +190,7 @@ class ActionSuite : public EffectSuite{
 
 TEST_F(ActionSuite, DISABLED_ActionTest) {
     Action action(AreaFactory::create(1, 1), 3, Action::CastType::Tile,
-        {new DealDamage(new Damage(1, 4, 2), new FakeDice()),
+        {new DealDamage(new Damage(1, 4, 2), new MockDice()),
          new Move(1, 2)});
 
     // ASSERT_EQ(action.getResults(character_, {0, 1}),
