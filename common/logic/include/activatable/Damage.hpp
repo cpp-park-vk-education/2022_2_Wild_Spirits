@@ -36,9 +36,7 @@ class DealDamage : public Effect {
  public:
     DealDamage(DamageInterface* damage, DiceInterface* dice) : damage_(damage), dice_(dice) {}
 
-    Result getResult(const CharacterInstance& character) const override {
-        return Result{};
-    }
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
 
     ~DealDamage() override {
         delete damage_;

@@ -65,9 +65,9 @@ ErrorStatus GameStateImpl::changeCharacteristic(std::string_view type, size_t id
     return ErrorStatus::Fail;
 }
 
-Action::Result GameLogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
+std::tuple<std::string, ErrorStatus> GameLogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
                                                       size_t item_id, Tile target) {
-    return Action::Result{};
+    return {};
 }
 
 std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t npc_id) {

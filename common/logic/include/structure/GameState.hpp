@@ -104,7 +104,7 @@ class GameStateImpl : public GameState {
 
 class GameLogicProcessor : public GameState {
  public:
-    virtual Action::Result useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) = 0;
+    virtual std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) = 0;
  
     virtual std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) = 0;
     virtual ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) = 0;
@@ -117,7 +117,7 @@ class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
  public:
     GameLogicProcessorImpl() = default;
 
-    Action::Result useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) override;
+    std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) override;
  
     std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) override;
     ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) override;

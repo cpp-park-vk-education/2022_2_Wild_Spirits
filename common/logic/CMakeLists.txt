@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 project(dnd-logic VERSION 1.0)
 
 set(SOURCES
+     src/Action.cpp
      src/GameEntity.cpp
      src/CharacterInstance.cpp
      src/GameMap.cpp

@@ -110,46 +110,60 @@ class EffectSuite : public ::testing::Test {
     Character char_template_;
 
  protected:
-    MockGameMap map_;
-    CharacterInstance character_;
+    MockGameMap map;
+    CharacterInstance character;
+    Action::Result result;
+    Action::Result new_result;
 
  public:
-    EffectSuite() : character_(char_template_, PositionFactory::create(Tile{1, 1}), map_) {
-        char_template_.addResistance(0);
-        char_template_.addVulnerability(1);
+    EffectSuite() :
+        character(char_template_, PositionFactory::create(Tile{1, 1}), map),
+        result(0), new_result(result) {
+            char_template_.addResistance(0);
+            char_template_.addVulnerability(1);
     }
 };
 
 TEST_F(EffectSuite, HealReturnsValidResult) {
-    Heal heal(5);
-    Effect::Result expected_result(5);
-    ASSERT_EQ(heal.getResult(character_), expected_result);
+    const unsigned int amount = 5;
+    Heal heal(amount);
+    heal.updateActionResult(character, &new_result);
+    
+    ASSERT_EQ(result.hp + amount, new_result.hp);
 }
 
 TEST_F(EffectSuite, MoveReturnsValidResult) {
+    const Tile tile = {1, 3};
     Move move(1, 3);
-    Effect::Result expected_result(1, 3);
-    ASSERT_EQ(move.getResult(character_), expected_result);
+    move.updateActionResult(character, &new_result);
+
+    ASSERT_EQ(result.pos, new_result.pos + tile);
 }
 
-TEST_F(EffectSuite, DealDamageReturnsValidResult) {
-    DealDamage damage(new Damage(1, 6, 2), new FakeDice());
-    Effect::Result expected_result(24);
-    ASSERT_EQ(damage.getResult(character_), expected_result);
-
-
+TEST_F(EffectSuite, DealDamageConsidersResists) {
     DealDamage damage_resist(new Damage(0, 6, 2), new FakeDice());
-    Effect::Result expected_result_resist(6);
-    ASSERT_EQ(damage_resist.getResult(character_), expected_result_resist);
+    damage_resist.updateActionResult(character, &new_result);
+    ASSERT_EQ(result.hp - 6, new_result.hp);
+}
 
+TEST_F(EffectSuite, DealDamageConsidersVulnerabilities) {
+    DealDamage damage(new Damage(1, 6, 2), new FakeDice());
+    damage.updateActionResult(character, &new_result);
+    ASSERT_EQ(result.hp - 24, new_result.hp);
+}
+
+TEST(DamageSuite, ThrowsOnInvalidDice) {
     ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new FakeDice()), std::exception);
+    ASSERT_THROW(DealDamage(new Damage(0, -1, 2), new FakeDice()), std::exception);
 }
 
 class ActionSuite : public EffectSuite{
  private:
     Character test_enemy_;
+
  protected:
     std::vector<CharacterInstance> enemies_;
+
  public:
     ActionSuite() :
         EffectSuite(),
@@ -157,7 +171,7 @@ class ActionSuite : public EffectSuite{
         enemies_.reserve(5);
         for (size_t i = 0; i < 5; ++i) {
             enemies_.emplace_back(test_enemy_,
-                PositionFactory::create(Tile{0, static_cast<int>(i)}), map_);
+                PositionFactory::create(Tile{0, static_cast<int>(i)}), map);
         }
     }
 };
@@ -167,6 +181,6 @@ TEST_F(ActionSuite, DISABLED_ActionTest) {
         {new DealDamage(new Damage(1, 4, 2), new FakeDice()),
          new Move(1, 2)});
 
-    ASSERT_EQ(action.getResult(character_, {0, 1}).serialize(),
-              Action::Result{}.serialize());
+    // ASSERT_EQ(action.getResults(character_, {0, 1}),
+    //           Action::Result{});
 }

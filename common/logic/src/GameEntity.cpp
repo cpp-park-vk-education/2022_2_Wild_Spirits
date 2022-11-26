@@ -1,6 +1,6 @@
 #include "GameEntity.hpp"
 
-GameEntity::GameEntity(std::string_view name, int image_id, const GameEntity::Info& info) :
+GameEntity::GameEntity(std::string_view name, size_t image_id, const GameEntity::Info& info) :
     name_(name), image_id_(image_id), info_(info) {}
 
 const std::string& GameEntity::info(const std::string& key) const {
@@ -18,10 +18,10 @@ void GameEntity::setName(std::string_view name) {
     name_ = name;
 }
 
-int GameEntity::getImageId() const {
+size_t GameEntity::getImageId() const {
     return image_id_;
 }
 
-void GameEntity::setImage(int id) {
+void GameEntity::setImage(size_t id) {
     image_id_ = id;
 }

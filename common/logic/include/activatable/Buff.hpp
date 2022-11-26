@@ -6,10 +6,6 @@
 
 class Buff : public Effect, public StatBased, public Temporal {
  public:
-    Buff(const StatBased::Stats& stats, unsigned int turns) :
-        StatBased(stats), Temporal(turns) {}
-    
-    Result getResult(const CharacterInstance& character) const override {
-        return Result{};
-    }
+    Buff(const StatBased::Stats& stats, unsigned int turns) : StatBased(stats), Temporal(turns) {}
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
 };

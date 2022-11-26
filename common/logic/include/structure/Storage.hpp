@@ -12,8 +12,8 @@ class Storage {
     std::unordered_map<size_t, T> data_;
 
  public:
-    template <typename... T>
-    ErrorStatus add(size_t id, T... args) {
+    template <typename... Args>
+    ErrorStatus add(size_t id, Args... args) {
         data_.try_emplace(id, args...);
         return ErrorStatus::Fail;
     }
@@ -25,5 +25,17 @@ class Storage {
 
     std::tuple<T&, ErrorStatus> get(size_t id) {
         return {T{}, ErrorStatus::Fail};
+    }
+
+    size_t size() const {
+        return data_.size();
+    }
+
+    auto begin() {
+        return data_.begin();
+    }
+
+    auto end() {
+        return data_.end();
     }
 };

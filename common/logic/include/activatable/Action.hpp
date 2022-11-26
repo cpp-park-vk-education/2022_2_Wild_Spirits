@@ -1,9 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <cstddef>
 
-#include "Effect.hpp"
 #include "Area.hpp"
+#include "StatBased.hpp"
+
+class Effect;
+class CharacterInstance;
 
 class Action {
  public:
@@ -12,12 +16,19 @@ class Action {
         Tile
     };
 
-    class Result {
+    struct Result {
      private:
-        std::vector<Effect::Result> results_;
+        size_t char_id_;
+
      public:
-        std::string serialize() {
-            return "";
+        Tile pos = {};
+        int hp = 0;
+        StatBased::Stats buff;
+
+        explicit Result(size_t char_id) : char_id_(char_id) {}
+
+        bool operator==(const Result& other) const {
+            return false;
         }
     };
 
@@ -28,38 +39,22 @@ class Action {
     std::vector<Effect*> effects_;
 
  public:
-    Action(Area* area, unsigned int range, CastType cast_type, std::vector<Effect*> effects) :
-        cast_type_(cast_type), area_(area), range_(range), effects_(effects) {}
+    Action() = default;
+    Action(Area* area, unsigned int range, CastType cast_type, std::vector<Effect*> effects);
+
+    void setCastType(CastType cast_type);
+
+    CastType castType();
     
-    void setCastType(CastType cast_type) {
-        cast_type_ = cast_type;
-    }
+    void setArea(Area* area);
 
-    CastType castType() {
-        return cast_type_;
-    }
+    const std::vector<Effect*>& effects() const;
 
-    void setArea(Area* area) {
-        delete area_;
-        area_ = area;
-    }
+    void addEffect(Effect* effect);
 
-    void addEffect(Effect* effect) {
-        effects_.push_back(effect);
-    }
+    void removeEffect(size_t effect_id);
 
-    void removeEffect(size_t effect_id) {
-        effects_.erase(effects_.begin() + effect_id);
-    }
+    std::vector<Result> getResults(const CharacterInstance&, const Tile& tile);
 
-    Result getResult(const CharacterInstance&, const Tile& tile) {
-        return Result{};
-    }
-
-    ~Action() {
-        delete area_;
-        for (auto effect : effects_) {
-            delete effect;
-        }
-    }
+    ~Action();
 };

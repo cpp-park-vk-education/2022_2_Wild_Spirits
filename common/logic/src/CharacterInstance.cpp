@@ -14,16 +14,16 @@ int CharacterInstance::armorClass() const {
     return 0;
 }
 
-Action::Result CharacterInstance::useActivatable(std::string_view action_type,
-                                int action_id, const std::vector<Tile>& target) {
-    return Action::Result{};
+std::vector<Action::Result> CharacterInstance::useActivatable(std::string_view action_type,
+                                size_t action_id, const std::vector<Tile>& target) {
+    return Action().getResults(*this, {}); 
 }
 
 ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
     return ErrorStatus::Fail;
 }
 
-SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count) {
+SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count) {
     return SaleResult{};
 }
 
@@ -79,11 +79,11 @@ void CharacterInstance::setName(std::string_view name) {
     original_.setName(name);
 }
 
-int CharacterInstance::getImageId() const {
+size_t CharacterInstance::getImageId() const {
     return original_.getImageId();
 }
 
-void CharacterInstance::setImage(int image_id) {
+void CharacterInstance::setImage(size_t image_id) {
     original_.setImage(image_id);
 }
 

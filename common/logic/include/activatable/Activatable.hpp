@@ -50,7 +50,7 @@ class Activatable {
         action_cost_ = action_cost;
     }
 
-    virtual Action::Result getResult(const std::vector<Tile>&) {
-        return Action::Result{};
+    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>&) {
+        return {};
     }
 };

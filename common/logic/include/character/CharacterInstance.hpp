@@ -38,12 +38,11 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const ;
     int armorClass() const ;
-
-    Action::Result useActivatable(std::string_view action_type,
-                                  int action_id, const std::vector<Tile>& target) ;
+    std::vector<Action::Result> useActivatable(std::string_view action_type,
+                                               size_t action_id, const std::vector<Tile>& target) ;
     
     ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
-    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, int item_id, size_t count = 1) ;
+    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1) ;
 
     unsigned int actionPoints();
     void refreshActionPoints();
@@ -65,8 +64,8 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     const std::string& name() const override;
     void setName(std::string_view) override;
 
-    int getImageId() const override;
+    size_t getImageId() const override;
 
-    void setImage(int image_id) override;
+    void setImage(size_t image_id) override;
     void onTurnStart() override;
 };

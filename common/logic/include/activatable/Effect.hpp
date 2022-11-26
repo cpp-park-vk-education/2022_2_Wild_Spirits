@@ -1,33 +1,12 @@
 #pragma once
 
-#include "StatBased.hpp"
+#include "Action.hpp"
 
 class CharacterInstance;
 
 class Effect {
  public:
-    struct Result {
-        int x = 0;
-        int y = 0;
-        unsigned int value = 0;
-        StatBased::Stats* buff = nullptr;
-
-        Result() = default;
-        Result(unsigned int) {}
-        Result(int, int) {}
-        Result(StatBased::Stats*, unsigned int turns) {}
-
-        bool operator==(const Result& other) const {
-            return false;
-        }
-
-        ~Result() {
-            delete buff;
-        }
-    };
-
-    virtual Result getResult(const CharacterInstance& character) const = 0;
-
+    virtual void updateActionResult(const CharacterInstance& character, Action::Result* result) const = 0;
     virtual ~Effect() {}
 };
 
@@ -37,10 +16,7 @@ class Heal : public Effect {
 
  public:
     Heal(unsigned int amount) : amount_(amount) {}
-
-    Result getResult(const CharacterInstance& character) const override {
-        return Result{};
-    }
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
 };
 
 class Move : public Effect {
@@ -50,8 +26,5 @@ class Move : public Effect {
 
  public:
     Move(int x, int y) : x_(x), y_(y) {}
-
-    Result getResult(const CharacterInstance& character) const override {
-        return Result{};
-    }
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
 };

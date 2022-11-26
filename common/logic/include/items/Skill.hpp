@@ -30,7 +30,7 @@ class Skill : public GameEntity, public Activatable, public Temporal {
         Temporal::onTurnStart();
     }
 
-    Action::Result getResult(const std::vector<Tile>& tiles) override {
-        return Activatable::getResult(tiles);
+    std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>& tiles) override {
+        return Activatable::getResults(tiles);
     }
 };

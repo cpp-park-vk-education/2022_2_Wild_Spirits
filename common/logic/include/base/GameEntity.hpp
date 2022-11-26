@@ -11,8 +11,8 @@ class GameEntityInterface {
     virtual const std::string& name() const = 0;
     virtual void setName(std::string_view) = 0;
 
-    virtual int getImageId() const = 0;
-    virtual void setImage(int) = 0;
+    virtual size_t getImageId() const = 0;
+    virtual void setImage(size_t) = 0;
 };
 
 class GameEntity : public GameEntityInterface {
@@ -21,12 +21,12 @@ class GameEntity : public GameEntityInterface {
 
  private:
     std::string name_;
-    int image_id_;
+    size_t image_id_;
     Info info_;
 
  public:
     GameEntity() = default;
-    GameEntity(std::string_view name, int image_id, const Info& info);
+    GameEntity(std::string_view name, size_t image_id, const Info& info);
 
     const std::string& info(const std::string&) const override;
 
@@ -35,6 +35,6 @@ class GameEntity : public GameEntityInterface {
     const std::string& name() const override;
     void setName(std::string_view) override;
 
-    int getImageId() const override;
-    void setImage(int) override;
+    size_t getImageId() const override;
+    void setImage(size_t) override;
 };
