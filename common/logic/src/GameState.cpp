@@ -1,70 +1,27 @@
 #include "GameState.hpp"
 
-size_t GameStateImpl::createPlayerCharacter() {
-    return 0;
+Storage<NPC>& GameStateImpl::npc() {
+    return npc_;
 }
 
-size_t GameStateImpl::createNPC() {
-    return 0;
+Storage<PlayerCharacter>& GameStateImpl::players() {
+    return players_;
 }
 
-size_t GameStateImpl::createItem() {
-    return 0;
-}
-size_t GameStateImpl::createWeapon() {
-    return 0;
+Storage<Item>& GameStateImpl::items() {
+    return items_;
 }
 
-size_t GameStateImpl::createSpell() {
-    return 0;
+Storage<Weapon>& GameStateImpl::weapons() {
+    return weapons_;
 }
 
-size_t GameStateImpl::createArmor() {
-    return 0;
+Storage<Spell>& GameStateImpl::spells() {
+    return spells_;
 }
 
-size_t GameStateImpl::createRace() {
-    return 0;
-}
-
-size_t GameStateImpl::createCharacterClass() {
-    return 0;
-}
-
-ErrorStatus GameStateImpl::addToLocation(size_t npc_id, size_t location_id, Position* pos) {
-    return ErrorStatus::Fail;
-}
-
-PlayerCharacter& GameStateImpl::getPlayerCharacter(size_t ind) {
-    return players_.at(ind);
-}
-
-NPC& GameStateImpl::getNPC(size_t ind) {
-    return npc_types_[ind];
-}
-
-Item& GameStateImpl::getItem(size_t ind) {
-    return storage_.getItem(ind);
-}
-
-Weapon& GameStateImpl::getWeapon(size_t ind) {
-    return storage_.getWeapon(ind);
-}
-
-Spell& GameStateImpl::getSpell(size_t ind) {
-    return storage_.getSpell(ind);
-}
-
-Armor& GameStateImpl::getArmor(size_t ind) {
-    return storage_.getArmor(ind);
-}
-
-Race& GameStateImpl::getRace(size_t ind) {
-    return races_[ind];
-}
-
-CharacterClass& GameStateImpl::getCharacterClass(size_t ind) {
-    return classes_[ind];
+Storage<Armor>& GameStateImpl::armor() {
+    return armor_;
 }
 
 ErrorStatus GameStateImpl::addItem(size_t char_id, std::string_view item_type, size_t item_id) {

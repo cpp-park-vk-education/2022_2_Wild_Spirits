@@ -14,25 +14,18 @@
 
 class GameState {
  public:
-    virtual size_t createPlayerCharacter() = 0;
-    virtual size_t createNPC() = 0;
-    virtual size_t createItem() = 0;
-    virtual size_t createWeapon() = 0;
-    virtual size_t createSpell() = 0;
-    virtual size_t createArmor() = 0;
-    virtual size_t createRace() = 0;
-    virtual size_t createCharacterClass() = 0;
+    virtual Storage<NPC>& npc() = 0;
+    virtual Storage<PlayerCharacter>& players() = 0;
+
+    virtual Storage<Item>& items() = 0;
+    virtual Storage<Weapon>& weapons() = 0;
+    virtual Storage<Spell>& spells() = 0;
+    virtual Storage<Armor>& armor() = 0;
+
+    virtual Storage<Race>& races() = 0;
+    virtual Storage<CharacterClass>& classes() = 0;
 
     virtual ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) = 0;
-
-    virtual PlayerCharacter& getPlayerCharacter(size_t ind) = 0;
-    virtual NPC& getNPC(size_t ind) = 0;
-    virtual Item& getItem(size_t ind) = 0;
-    virtual Weapon& getWeapon(size_t ind) = 0;
-    virtual Spell& getSpell(size_t ind) = 0;
-    virtual Armor& getArmor(size_t ind) = 0;
-    virtual Race& getRace(size_t ind) = 0;
-    virtual CharacterClass& getCharacterClass(size_t ind) = 0;
 
     virtual ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
     virtual ErrorStatus removeItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
@@ -54,14 +47,19 @@ class GameState {
 
 class GameStateImpl : public GameState {
  private:
-    std::unordered_map<size_t, PlayerCharacter> players_;
-    std::unordered_map<size_t, NPC> npc_types_;
-    std::unordered_map<size_t, CharacterClass> classes_;
-    std::unordered_map<size_t, Race> races_;
+    Storage<NPC> npc_;
+    Storage<PlayerCharacter> players_;
+
+    Storage<Item> items_;
+    Storage<Weapon> weapons_;
+    Storage<Spell> spells_;
+    Storage<Armor> armor_;
+
+    Storage<Race> races_;
+    Storage<CharacterClass> classes_;
 
     DamageTypes damage_types_;
 
-    Storage storage_;
     Config config_;
     GameMap* map_;
 
@@ -72,25 +70,18 @@ class GameStateImpl : public GameState {
         delete map_;
     }
 
-    size_t createPlayerCharacter() override;
-    size_t createNPC() override;
-    size_t createItem() override;
-    size_t createWeapon() override;
-    size_t createSpell() override;
-    size_t createArmor() override;
-    size_t createRace() override;
-    size_t createCharacterClass() override;
+    Storage<NPC>& npc() override;
+    Storage<PlayerCharacter>& players() override;
+
+    Storage<Item>& items() override;
+    Storage<Weapon>& weapons() override;
+    Storage<Spell>& spells() override;
+    Storage<Armor>& armor() override;
+
+    Storage<Race>& races() override;
+    Storage<CharacterClass>& classes() override;
 
     ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) override;
-
-    PlayerCharacter& getPlayerCharacter(size_t ind) override;
-    NPC& getNPC(size_t ind) override;
-    Item& getItem(size_t ind) override;
-    Weapon& getWeapon(size_t ind) override;
-    Spell& getSpell(size_t ind) override;
-    Armor& getArmor(size_t ind) override;
-    Race& getRace(size_t ind) override;
-    CharacterClass& getCharacterClass(size_t ind) override;
 
     ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) override;
     ErrorStatus removeItem(size_t char_id, std::string_view item_type, size_t item_id) override;
@@ -107,7 +98,7 @@ class GameStateImpl : public GameState {
     ErrorStatus moveCharacter(size_t char_id, Tile tile) override;
 
     ErrorStatus changeCharacteristic(std::string_view type, size_t id, std::string_view characteristic,
-                              const std::variant<std::string, size_t, int>& replacer);
+                                     const std::variant<std::string, size_t, int>& replacer) override;
 };
 
 

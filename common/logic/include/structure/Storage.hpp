@@ -2,64 +2,28 @@
 
 #include <unordered_map>
 #include <cstddef>
+#include <tuple>
 
-#include "ActivatableItem.hpp"
-#include "Spell.hpp"
-#include "Armor.hpp"
+#include "Utils.hpp"
 
+template <typename T>
 class Storage {
  private:
-    std::unordered_map<size_t, Item> items_;
-    std::unordered_map<size_t, Weapon> weapons_;
-    std::unordered_map<size_t, Spell> spells_;
-    std::unordered_map<size_t, Armor> armor_;
+    std::unordered_map<size_t, T> data_;
 
  public:
-    void addItem(int id, const Item& item) {
-        items_[id] = item;
+    template <typename... T>
+    ErrorStatus add(size_t id, T... args) {
+        data_.try_emplace(id, args...);
+        return ErrorStatus::Fail;
     }
 
-    void removeItem(int id) {
-        items_.erase(id);
+    ErrorStatus remove(size_t id) {
+        data_.erase(id);
+        return ErrorStatus::Fail;
     }
 
-    Item& getItem(int id) {
-        return items_[id];
-    }
-
-    void addWeapon(int id, const Weapon& weapon) {
-        weapons_[id] = weapon;
-    }
-
-    void removeWeapon(int id) {
-        weapons_.erase(id);
-    }
-
-    Weapon& getWeapon(int id) {
-        return weapons_[id];
-    }
-
-    void addSpell(int id, const Spell& spell) {
-        spells_[id] = spell;
-    }
-
-    void removeSpell(int id) {
-        spells_.erase(id);
-    }
-
-    Spell& getSpell(int id) {
-        return spells_[id];
-    }
-
-    void addArmor(int id, const Armor& armor) {
-        armor_[id] = armor;
-    }
-
-    void removeArmor(int id) {
-        armor_.erase(id);
-    }
-
-    Armor& getArmor(int id) {
-        return armor_[id];
+    std::tuple<T&, ErrorStatus> get(size_t id) {
+        return {T{}, ErrorStatus::Fail};
     }
 };
