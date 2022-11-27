@@ -50,6 +50,14 @@ class Activatable {
         action_cost_ = action_cost;
     }
 
+    const std::string& scalesBy() {
+        return scaling_;
+    }
+
+    void setScaling(const std::string& scaling) {
+        scaling_ = scaling;
+    }
+
     virtual std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>&) {
         return {};
     }

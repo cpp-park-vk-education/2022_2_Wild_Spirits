@@ -191,17 +191,22 @@ class ActionSuite : public DamageSuite{
         }) {
             test_enemy_.setStat("str", 10);
             test_enemy_.setStat("dex", 12);
-            for (size_t i = 0; i < 5; ++i) {
-                location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, static_cast<int>(i)}), map);
+            for (int i = 0; i < 5; ++i) {
+                location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
             }
             location.npc().add(5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
     }
 };
 
 TEST_F(ActionSuite, ActionTest) {
+    Storage<PlayerCharacter> players_;
+
     EXPECT_CALL(map, currentLocation())
         .WillRepeatedly(ReturnRef(location));
-    
+
+    EXPECT_CALL(map, players())
+        .WillRepeatedly(ReturnRef(players_));
+
     EXPECT_CALL(*dice, roll(_))
         .WillOnce(Return(1))
         .WillOnce(Return(2))

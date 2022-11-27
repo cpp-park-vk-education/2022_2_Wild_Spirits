@@ -12,8 +12,8 @@ class CharacterInstance;
 class Action {
  public:
     enum class CastType {
-        Self,
-        Tile
+        Tile,
+        Self
     };
 
     struct Result {
@@ -43,24 +43,33 @@ class Action {
 
  private:
     CastType cast_type_;
-    Area* area_;
+    Area* area_ = nullptr;
     unsigned int range_;
     std::vector<Effect*> effects_;
 
+    bool can_miss_ = true;
+    std::string target_scaling_ = "dex";
+
  public:
     Action() = default;
-    Action(Area* area, unsigned int range, CastType cast_type, std::vector<Effect*> effects);
+    Action(Area* area, unsigned int range, std::vector<Effect*> effects,
+           CastType cast_type = CastType::Tile, bool can_miss = true, 
+           const std::string& target_scaling = "dex");
 
     void setCastType(CastType cast_type);
+    CastType castType() const;
 
-    CastType castType();
+    void setTargetScaling(const std::string& scaling);
+    const std::string& targetScaling() const;
+
+    bool canMiss() const;
+    void toggleMissable();
     
     void setArea(Area* area);
+    const Area* area() const;
 
-    const std::vector<Effect*>& effects() const;
-
+    std::vector<Effect*>& effects();
     void addEffect(Effect* effect);
-
     void removeEffect(size_t effect_id);
 
     std::tuple<std::vector<Result>, ErrorStatus> getResults(const CharacterInstance&, const Tile& tile);
