@@ -15,6 +15,9 @@ struct DamageClass {
 class DamageInterface {
  public:
     virtual size_t calculateDamageTo(const CharacterInstance&, const DiceInterface&) const = 0;
+
+    virtual DamageInterface* clone() const = 0;
+
     virtual ~DamageInterface() {}
 };
 
@@ -25,6 +28,10 @@ class Damage : public DamageInterface {
  public:
     Damage(uint8_t damage_type, uint8_t die_type, size_t times)
         : damage_{damage_type, die_type, times} {}
+
+    DamageInterface* clone() const override {
+        return new Damage(damage_.damage_type, damage_.die_type, damage_.times);
+    }
 
     size_t calculateDamageTo(const CharacterInstance&, const DiceInterface&) const override {
         return 0;
@@ -38,6 +45,12 @@ class DealDamage : public Effect {
  
  public:
     DealDamage(DamageInterface* damage, DiceInterface* dice) : damage_(damage), dice_(dice) {}
+
+    DealDamage(const DealDamage& other) : DealDamage(other.damage_->clone(), other.dice_->clone()) {}
+
+    Effect* clone() const override {
+        return new DealDamage(*this);
+    }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
 

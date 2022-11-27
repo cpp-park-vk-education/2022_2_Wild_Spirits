@@ -16,6 +16,10 @@ class StatBased {
     StatBased() : stats_() {}
     StatBased(const Stats& stats) : stats_(stats) {}
 
+    // const Stats& stats() const {
+    //     return stats_;
+    // }
+
     int getStat(const std::string& stat) const {
         auto it = stats_.find(stat);
 

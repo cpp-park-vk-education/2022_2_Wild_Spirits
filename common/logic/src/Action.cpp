@@ -2,11 +2,53 @@
 
 #include "Effect.hpp"
 
-Action::Action(Area* area, unsigned int range, std::vector<Effect*> effects,
+#include <utility>
+
+Action::Action(Area* area, const std::vector<Effect*>& effects, unsigned int range,
                CastType cast_type, bool can_miss, const std::string& target_scaling) :
     cast_type_(cast_type), area_(area),
     range_(range), effects_(effects),
     can_miss_(can_miss), target_scaling_(target_scaling) {}
+
+Action::Action(const Action& other) :
+    cast_type_(other.cast_type_), area_(other.area_->clone()), range_(other.range_),
+    effects_(other.effects_.size()), can_miss_(other.can_miss_), target_scaling_(other.target_scaling_)
+{
+    for (size_t i = 0; i < other.effects_.size(); ++i) {
+        effects_[i] = other.effects_[0]->clone();
+    }
+}
+
+Action& Action::operator=(const Action& other) {
+    auto tmp = other;
+    swap(tmp);
+    return *this;
+}
+
+Action::Action(Action&& other) :
+     cast_type_(other.cast_type_), area_(other.area_), range_(other.range_),
+     effects_(std::move(other.effects_)), can_miss_(other.can_miss_),
+     target_scaling_(std::move(other.target_scaling_)) {
+    other.area_ = nullptr;
+    other.range_ = 0;
+    other.can_miss_ = true;
+    other.target_scaling_ = "dex";
+}
+
+Action& Action::operator=(Action&& other) {
+    auto tmp = std::move(other);
+    swap(tmp);
+    return *this;
+}
+
+void Action::swap(Action& other) {
+    std::swap(area_, other.area_);
+    std::swap(effects_, other.effects_);
+    std::swap(range_, other.range_);
+    std::swap(can_miss_, other.can_miss_);
+    std::swap(target_scaling_, other.target_scaling_);
+    std::swap(cast_type_, other.cast_type_);
+}
 
 void Action::setCastType(CastType cast_type) {
     cast_type_ = cast_type;
@@ -46,7 +88,13 @@ void Action::addEffect(Effect* effect) {
 }
 
 void Action::removeEffect(size_t effect_id) {
-    effects_.erase(effects_.begin() + effect_id);
+    if (effect_id > effects_.size()) {
+        return;
+    }
+
+    auto it = effects_.begin() + effect_id;
+    delete *it;
+    effects_.erase(it);
 }
 
 std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {

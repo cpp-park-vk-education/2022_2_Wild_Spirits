@@ -16,8 +16,9 @@ class Armor : public Item {
 
  public:
     Armor() = default;
-    Armor(std::string_view name, int image_id, const Info& info, int cost, int defense, Type type) :
-        Item(name, image_id, info, cost), defense_(defense), type_(type) {}
+    Armor(std::string_view name, int image_id, int cost,
+          int defense, Type type, const Info& info = {}) :
+        Item(name, image_id, cost, info), defense_(defense), type_(type) {}
 
     int defense() const {
         return defense_;

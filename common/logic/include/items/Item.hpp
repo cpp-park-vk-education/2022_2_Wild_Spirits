@@ -9,7 +9,7 @@ class Item : public GameEntity {
  public:
     Item() = default;
 
-    Item(std::string_view name, int image_id, const Info& info, int cost) :
+    Item(std::string_view name, int image_id, int cost, const Info& info = {}) :
         GameEntity(name, image_id, info), cost_(cost) {}
     
     int cost() const {

@@ -30,6 +30,10 @@ class Activatable {
         actions_.push_back(action);
     }
 
+    void addAction(Action&& action) {
+        actions_.push_back(std::move(action));
+    }
+
     void removeAction(size_t action) {
         actions_.erase(actions_.begin() + action);
     }
@@ -58,7 +62,7 @@ class Activatable {
         scaling_ = scaling;
     }
 
-    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>&, uint8_t dice_roll_res = 0) {
+    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>&, uint8_t dice_roll_res = 0) {
         return {};
     }
 };

@@ -105,6 +105,9 @@ class MockDice : public DiceInterface {
  public:
     MOCK_METHOD(uint8_t, roll, (uint8_t), (const, override));
     MOCK_METHOD(std::vector<uint8_t>, roll, (uint8_t, size_t), (const, override));
+    DiceInterface* clone() const override {
+        return new MockDice();
+    }
 };
 
 class EffectSuite : public ::testing::Test {
@@ -184,23 +187,21 @@ class ActionSuite : public DamageSuite{
  public:
     ActionSuite() :
         DamageSuite(),
-        action(AreaFactory::create(1, 1), 2, {
+        action(AreaFactory::create(1, 1), {
             new DealDamage(new Damage(1, 4, 2), dice),
             new Move(1, 2),
-            new Heal(3),
-            new Buff({ {"str", 2}, {"dex", -1} }, 2)
-        }) {
-            test_enemy_.setStat("str", 10);
-            test_enemy_.setStat("dex", 14);
+            new Buff({ {"str", -2}, {"dex", -1} }, 2)}, 2) {
+        test_enemy_.setStat("str", 10);
+        test_enemy_.setStat("dex", 14);
 
-            for (int i = 0; i < 5; ++i) {
-                location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
-            }
-            location.npc().add(5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
+        for (int i = 0; i < 5; ++i) {
+            location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
+        }
+        location.npc().add(5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
     }
 };
 
-TEST_F(ActionSuite, ActionTest) {
+TEST_F(ActionSuite, SingleActionTest) {
     EXPECT_CALL(map, currentLocation())
         .WillRepeatedly(ReturnRef(location));
 
@@ -219,9 +220,9 @@ TEST_F(ActionSuite, ActionTest) {
         .WillOnce(Return(1))  // enemy 1
         .WillOnce(Return(2))
         .WillOnce(Return(3))  // enemy 3
-        .WillOnce(Return(4))
+        .WillOnce(Return(2))
         .WillOnce(Return(4))  // enemy 5
-        .WillOnce(Return(4));
+        .WillOnce(Return(3));
 
     // Assume player rolled 11 when he used this action,
     // and got 2 points as a bonus from his stats, totalling 13
@@ -235,8 +236,8 @@ TEST_F(ActionSuite, ActionTest) {
     for (size_t i = 0; i < results.size(); ++i) {
         ASSERT_EQ(results[i], Action::Result(
                                 enemies_hit[i],
-                                Tile{1, 2}, 3 - (3 + i),
-                                { {"str", 2}, {"dex", -1} }));
+                                Tile{1, 2}, -2 - i,
+                                { {"str", -2}, {"dex", -1} }));
     }
 
     // Assert that cast on invalid range returns failure
@@ -244,3 +245,21 @@ TEST_F(ActionSuite, ActionTest) {
     ASSERT_EQ(error_status, ErrorStatus::Fail);
 }
 
+class ActivatableSuite : public ActionSuite {
+ protected:
+    PlayerCharacter player;
+    Action heal_action;
+
+public:
+    ActivatableSuite() :
+        ActionSuite(),
+        player(char_template_, PositionFactory::create(Tile{1, 3}), map, Race(), CharacterClass()),
+        heal_action(AreaFactory::create(), { new Heal(3) }, 0, Action::CastType::Self) {}
+};
+
+TEST_F(ActivatableSuite, PlayerSpellTest) {
+    Spell spell("", 0, {action, heal_action}, 5, "int", 2);
+    player.spells().add(0, &spell);
+
+    player.useActivatable("spell", 0, { Tile{1, 2}, player.mapPosition().first });
+}

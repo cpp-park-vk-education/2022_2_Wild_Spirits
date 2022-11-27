@@ -20,9 +20,10 @@ class Character : public GameEntity, public Resistible, public StatBased {
 public:
     Character() = default;
 
-    Character(std::string_view name, int image_id, const Info& info, unsigned int max_hp,
+    Character(std::string_view name, int image_id, unsigned int max_hp,
               int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
-              unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{}) :
+              unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{},
+              const Info& info = {}) :
         GameEntity(name, image_id, info),
         Resistible(),
         StatBased(stats),

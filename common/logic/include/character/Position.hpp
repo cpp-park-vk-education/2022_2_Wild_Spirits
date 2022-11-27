@@ -12,6 +12,8 @@ class Position {
     virtual void moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
+    virtual Position* clone() const = 0;
+
     virtual ~Position() {}
 };
 
@@ -22,6 +24,10 @@ class TilePos : public Position {
  public:
     TilePos(const Tile& tile) : pos_(tile) {}
     TilePos(int x, int y) : pos_{x, y} {}
+
+    Position* clone() const override {
+        return new TilePos(*this);
+    }
 
     bool isInArea(const Area& area) override {
         return false;
@@ -48,6 +54,10 @@ class RectangularPos : public Position {
  public:
     RectangularPos(const Tile& b_left, const Tile& u_right) :
         bottom_left_(b_left), upper_right_(u_right) {}
+
+    Position* clone() const override {
+        return new RectangularPos(*this);
+    }
 
     bool isInArea(const Area& area) override {
         return false;

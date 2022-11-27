@@ -12,7 +12,7 @@ class Temporal : public TurnBased {
  public:
     explicit Temporal(unsigned int turns = 0) : turns_(turns) {}
 
-    unsigned int turnsLeft() {
+    unsigned int turnsLeft() const {
         return turns_;
     }
 

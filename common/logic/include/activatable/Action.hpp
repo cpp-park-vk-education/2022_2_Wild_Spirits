@@ -52,8 +52,16 @@ class Action {
 
  public:
     Action() = default;
-    Action(Area* area, unsigned int range, std::vector<Effect*> effects,
-           CastType cast_type = CastType::Tile, bool can_miss = true, 
+    Action(const Action& other);
+    Action& operator=(const Action& other);
+
+    Action(Action&& other);
+    Action& operator=(Action&& other);
+
+    void swap(Action& other);
+
+    Action(Area* area, const std::vector<Effect*>& effects, unsigned int range = 0,
+           CastType cast_type = CastType::Tile, bool can_miss = true,
            const std::string& target_scaling = "dex");
 
     void setCastType(CastType cast_type);

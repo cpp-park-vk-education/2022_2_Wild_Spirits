@@ -13,6 +13,10 @@ class OnLocation : public Position {
     const GameMap& map_;
     size_t current_location_;
 
+    Position* clone() const override {
+        return new OnLocation(*this);
+    }
+
  public:
     OnLocation(Position* pos, GameMap& map) :
         pos_(pos), map_(map) {}

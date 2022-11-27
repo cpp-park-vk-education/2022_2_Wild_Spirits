@@ -7,10 +7,11 @@ class ActivatableItem : public Item, public Activatable {
  public:
     ActivatableItem() = default;
 
-    ActivatableItem(std::string_view name, int image_id, const Info& info,
-                    const std::vector<Action>& actions, unsigned int action_cost, 
-                    unsigned int cost = 0, std::string_view scaling = "") :
-        Item(name, image_id, info, cost),
+    ActivatableItem(std::string_view name, int image_id,
+                    const std::vector<Action>& actions, unsigned int action_cost = 0, 
+                    unsigned int cost = 0, std::string_view scaling = "",
+                    const Info& info = {}) :
+        Item(name, image_id, cost, info),
         Activatable(actions, action_cost, scaling) {}
 };
 
@@ -18,10 +19,10 @@ class Weapon : public ActivatableItem {
  public:
     Weapon() = default;
 
-    Weapon(std::string_view name, int image_id, const Info& info,
-                const std::vector<Action>& actions, unsigned int action_cost, 
-                unsigned int cost = 0, std::string_view scaling = "") :
-        ActivatableItem(name, image_id, info, actions, action_cost, cost, scaling) {}
+    Weapon(std::string_view name, int image_id, const std::vector<Action>& actions,
+           unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",
+           const Info& info = {}) :
+        ActivatableItem(name, image_id, actions, action_cost, cost, scaling, info) {}
 };
 
 class Consumable : public ActivatableItem {
@@ -31,10 +32,10 @@ class Consumable : public ActivatableItem {
  public:
     Consumable() = default;
 
-    Consumable(std::string_view name, int image_id, const Info& info,
-               const std::vector<Action>& actions, unsigned int action_cost, 
-               unsigned int uses = 0, unsigned int cost = 0, std::string_view scaling = "") :
-        ActivatableItem(name, image_id, info, actions, action_cost, cost, scaling),
+    Consumable(std::string_view name, int image_id, const std::vector<Action>& actions,
+               unsigned int action_cost = 0, unsigned int uses = 0, unsigned int cost = 0,
+               std::string_view scaling = "", const Info& info = {}) :
+        ActivatableItem(name, image_id, actions, action_cost, cost, scaling, info),
         uses_(uses) {}
     
     void add(unsigned int num) {
