@@ -13,6 +13,8 @@ class GameEntityInterface {
 
     virtual size_t getImageId() const = 0;
     virtual void setImage(size_t) = 0;
+
+    virtual size_t id() const = 0;
 };
 
 class GameEntity : public GameEntityInterface {
@@ -20,13 +22,16 @@ class GameEntity : public GameEntityInterface {
     using Info = std::unordered_map<std::string, std::string>;
 
  private:
+    size_t id_;
     std::string name_;
     size_t image_id_;
     Info info_;
 
  public:
     GameEntity() = default;
-    GameEntity(std::string_view name, size_t image_id, const Info& info);
+    GameEntity(size_t id, std::string_view name, size_t image_id, const Info& info);
+
+    size_t id() const override;
 
     const std::string& info(const std::string&) const override;
 

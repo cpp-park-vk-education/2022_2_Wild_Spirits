@@ -10,6 +10,8 @@
 #include <list>
 #include <unordered_map>
 
+class DiceInterface;
+
 struct SaleResult {
     ErrorStatus status;
     int seller_money;
@@ -23,27 +25,32 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     std::unordered_map<size_t, Item*> items_;
  
  private:
+    size_t id_;
     unsigned int action_points_;
     int hp_;
     int money_;
 
  public:
-    CharacterInstance(Character& original, Position* pos, GameMap& map,
+    CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
                       int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         OnLocation(pos, map),
-        original_(original), items_(items), money_(money) {}
+        original_(original), items_(items), id_(id),
+        action_points_(original.maxActionPoints()),
+        hp_(original.maxHP()), money_(money) {}
 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const ;
     int armorClass() const ;
-    std::tuple<std::vector<Action::Result>, ErrorStatus> useActivatable(std::string_view action_type,
-                                               size_t action_id, const std::vector<Tile>& target);
+    std::tuple<std::vector<ActionResult>, ErrorStatus> useActivatable(std::string_view action_type,
+                                                                        size_t action_id, const DiceInterface&,
+                                                                        const std::vector<Tile>& target);
     
     ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
     SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1) ;
 
     unsigned int actionPoints();
     void refreshActionPoints();
+    void setActionPoints(unsigned int action_points);
 
     int money();
     void gainMoney(int money);
@@ -70,4 +77,6 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     void setImage(size_t image_id) override;
     void onTurnStart() override;
+
+    size_t id() const override;
 };

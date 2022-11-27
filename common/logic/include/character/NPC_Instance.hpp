@@ -8,9 +8,9 @@ class NPC_Instance : public CharacterInstance {
     bool is_hostile_;
 
  public:
-    NPC_Instance(NPC& original, Position* pos, GameMap& map,
+    NPC_Instance(size_t id, NPC& original, Position* pos, GameMap& map,
                  int money = 100, std::unordered_map<size_t, Item*> items = {}) :
-        CharacterInstance(original, pos, map, money, items) {}
+        CharacterInstance(id, original, pos, map, money, items) {}
 
     bool isHostile() const {
         return is_hostile_;

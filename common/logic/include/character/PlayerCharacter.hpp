@@ -14,8 +14,8 @@
 class Race : public GameEntity, public StatBased {
  public:
     Race() = default;
-    Race(std::string_view name, int image_id, const Info& info, const Stats& stats) : 
-        GameEntity(name, image_id, info), StatBased(stats){}
+    Race(size_t id, std::string_view name, int image_id, const Info& info, const Stats& stats) : 
+        GameEntity(id, name, image_id, info), StatBased(stats){}
 };
 
 class CharacterClass : public GameEntity {
@@ -24,9 +24,9 @@ class CharacterClass : public GameEntity {
 
  public:
     CharacterClass() = default;
-    CharacterClass(std::string_view name, int image_id, const Info& info,
+    CharacterClass(size_t id, std::string_view name, int image_id, const Info& info,
                     const std::vector<Skill> skills) :
-        GameEntity(name, image_id, info), skills_(skills) {}
+        GameEntity(id, name, image_id, info), skills_(skills) {}
 
     void addSkill(const Skill& skill) {
         skills_.push_back(skill);
@@ -56,14 +56,12 @@ class PlayerCharacter : public CharacterInstance {
     unsigned int level_ = 1;
 
  public:
-    PlayerCharacter(Character& original, Position* pos, GameMap& map,
+    PlayerCharacter(size_t id, Character& original, Position* pos, GameMap& map,
                     const Race& race, const CharacterClass& char_class,
                     int money = 100, std::unordered_map<size_t, Item*> items = {}) :
-        CharacterInstance(original, pos, map, money, items),
+        CharacterInstance(id, original, pos, map, money, items),
         class_list_(),
-        race_(&race) {
-
-    }
+        race_(&race) {}
 
     void gainXP(unsigned int) {
 
@@ -74,18 +72,26 @@ class PlayerCharacter : public CharacterInstance {
     }
 
     void refreshSpellPoints() {
-        spell_points_ = max_spell_points_;
+        setSpellPoints(max_spell_points_);
+    }
+
+    void setSpellPoints(unsigned int spell_points) {
+        spell_points_ = spell_points;
     }
 
     void setMaxSpellPoints(unsigned int spell_points) {
         max_spell_points_ = spell_points;
     }
 
+    unsigned int spellPoints() const {
+        return spell_points_;
+    }
+
     void setArmor(const Armor& armor) {
         armor_ = &armor;
     }
 
-    const Armor* armor() {
+    const Armor* armor() const {
         return armor_;
     }
 

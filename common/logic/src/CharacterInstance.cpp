@@ -14,16 +14,17 @@ int CharacterInstance::armorClass() const {
     return 0;
 }
 
-std::tuple<std::vector<Action::Result>, ErrorStatus> CharacterInstance::useActivatable(std::string_view action_type,
-                                size_t action_id, const std::vector<Tile>& target) {
-    return Action().getResults(*this, {}); 
+std::tuple<std::vector<ActionResult>, ErrorStatus> CharacterInstance::useActivatable(
+        std::string_view action_type, size_t action_id, const DiceInterface&, const std::vector<Tile>& target) {
+    return Action().getResults(*this, {});
 }
 
 ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
     return ErrorStatus::Fail;
 }
 
-SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count) {
+SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from,
+                                      size_t item_id, size_t count) {
     return SaleResult{};
 }
 
@@ -33,6 +34,10 @@ unsigned int CharacterInstance::actionPoints() {
 
 void CharacterInstance::refreshActionPoints() {
     action_points_ = original_.maxActionPoints();
+}
+
+void CharacterInstance::setActionPoints(unsigned int action_points) {
+    action_points_ = std::min(action_points, original_.maxActionPoints());
 }
 
 int CharacterInstance::money() {
@@ -81,6 +86,10 @@ void CharacterInstance::setName(std::string_view name) {
 
 size_t CharacterInstance::getImageId() const {
     return original_.getImageId();
+}
+
+size_t CharacterInstance::id() const {
+    return id_;
 }
 
 void CharacterInstance::setImage(size_t image_id) {

@@ -1,8 +1,15 @@
 #include "Action.hpp"
 
 #include "Effect.hpp"
+#include "Buff.hpp"
 
 #include <utility>
+
+ActionResult::ActionResult(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs) :
+    char_id_(char_id),
+    pos(pos),
+    hp(hp),
+    buffs(buffs) {}
 
 Action::Action(Area* area, const std::vector<Effect*>& effects, unsigned int range,
                CastType cast_type, bool can_miss, const std::string& target_scaling) :
@@ -12,11 +19,10 @@ Action::Action(Area* area, const std::vector<Effect*>& effects, unsigned int ran
 
 Action::Action(const Action& other) :
     cast_type_(other.cast_type_), area_(other.area_->clone()), range_(other.range_),
-    effects_(other.effects_.size()), can_miss_(other.can_miss_), target_scaling_(other.target_scaling_)
-{
-    for (size_t i = 0; i < other.effects_.size(); ++i) {
-        effects_[i] = other.effects_[0]->clone();
-    }
+    effects_(other.effects_.size()), can_miss_(other.can_miss_), target_scaling_(other.target_scaling_) {
+        for (size_t i = 0; i < other.effects_.size(); ++i) {
+            effects_[i] = other.effects_[0]->clone();
+        }
 }
 
 Action& Action::operator=(const Action& other) {
@@ -97,7 +103,8 @@ void Action::removeEffect(size_t effect_id) {
     effects_.erase(it);
 }
 
-std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
+std::tuple<std::vector<ActionResult>, ErrorStatus> Action::getResults(
+        const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
     return {};
 }
 

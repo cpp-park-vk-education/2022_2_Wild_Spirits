@@ -19,8 +19,8 @@ class Location : public GameEntity {
  public:
     Location() = default;
 
-    Location(std::string_view name, int image_id, const Info& info,
-             size_t height, size_t width);
+    Location(size_t id, std::string_view name, int image_id,
+            size_t height, size_t width, const Info& info = {});
 
     void setHeight(size_t height) {
         height_ = height;

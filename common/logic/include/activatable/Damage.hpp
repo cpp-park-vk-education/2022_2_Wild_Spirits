@@ -52,7 +52,7 @@ class DealDamage : public Effect {
         return new DealDamage(*this);
     }
 
-    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override {}
+    void updateActionResult(const CharacterInstance& character, ActionResult* result) const override;
 
     ~DealDamage() override {
         delete damage_;
