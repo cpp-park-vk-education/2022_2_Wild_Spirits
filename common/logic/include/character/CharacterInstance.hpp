@@ -1,7 +1,5 @@
 #pragma once
 
-// #include "CharacterInstanceInterface.hpp"
-
 #include "OnLocation.hpp"
 #include "Character.hpp"
 #include "Buff.hpp"
@@ -55,6 +53,10 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     bool isAlive();
     void resetHP();
     int hp();
+
+    void addBuff(const Buff& buff) {
+        buffs_.push_back(buff);
+    }
 
     const Character& original();
 

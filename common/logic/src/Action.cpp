@@ -49,7 +49,7 @@ void Action::removeEffect(size_t effect_id) {
     effects_.erase(effects_.begin() + effect_id);
 }
 
-std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(const CharacterInstance&, const Tile& tile) {
+std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
     return {};
 }
 

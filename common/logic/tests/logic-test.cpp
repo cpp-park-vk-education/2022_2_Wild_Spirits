@@ -179,18 +179,20 @@ class ActionSuite : public DamageSuite{
  protected:
     Location location;
     Action action;
+    Storage<PlayerCharacter> players_;
 
  public:
     ActionSuite() :
         DamageSuite(),
-        action(AreaFactory::create(1, 1), 3, Action::CastType::Tile, {
+        action(AreaFactory::create(1, 1), 2, {
             new DealDamage(new Damage(1, 4, 2), dice),
             new Move(1, 2),
             new Heal(3),
             new Buff({ {"str", 2}, {"dex", -1} }, 2)
         }) {
             test_enemy_.setStat("str", 10);
-            test_enemy_.setStat("dex", 12);
+            test_enemy_.setStat("dex", 14);
+
             for (int i = 0; i < 5; ++i) {
                 location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
             }
@@ -199,28 +201,36 @@ class ActionSuite : public DamageSuite{
 };
 
 TEST_F(ActionSuite, ActionTest) {
-    Storage<PlayerCharacter> players_;
-
     EXPECT_CALL(map, currentLocation())
         .WillRepeatedly(ReturnRef(location));
 
     EXPECT_CALL(map, players())
         .WillRepeatedly(ReturnRef(players_));
 
-    EXPECT_CALL(*dice, roll(_))
-        .WillOnce(Return(1))
-        .WillOnce(Return(2))
-        .WillOnce(Return(3))
-        .WillOnce(Return(1))
-        .WillOnce(Return(2))
-        .WillOnce(Return(3));
+    // Add buff to npc's dex, check if it will dodge action
+    location.npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
 
-    auto [results, error_status] = action.getResults(character, Tile{2, 1});
+    // Action checks enemies dex by default,
+    // they have armor class of 10 by default, which is summed with dex bonus ((14 - 10) / 2 == 2)
+    // equaling 12
+
+    // Damage rolls
+    EXPECT_CALL(*dice, roll(4))
+        .WillOnce(Return(1))  // enemy 1
+        .WillOnce(Return(2))
+        .WillOnce(Return(3))  // enemy 3
+        .WillOnce(Return(4))
+        .WillOnce(Return(4))  // enemy 5
+        .WillOnce(Return(4));
+
+    // Assume player rolled 11 when he used this action,
+    // and got 2 points as a bonus from his stats, totalling 13
+    auto [results, error_status] = action.getResults(character, Tile{2, 1}, 13);
 
     ASSERT_EQ(error_status, ErrorStatus::Ok);
-    ASSERT_THAT(results, SizeIs(4));
+    ASSERT_THAT(results, SizeIs(3));
 
-    std::vector<size_t> enemies_hit = {1, 2, 3, 5};
+    std::vector<size_t> enemies_hit = {1, 3, 5};
     
     for (size_t i = 0; i < results.size(); ++i) {
         ASSERT_EQ(results[i], Action::Result(
@@ -228,4 +238,9 @@ TEST_F(ActionSuite, ActionTest) {
                                 Tile{1, 2}, 3 - (3 + i),
                                 { {"str", 2}, {"dex", -1} }));
     }
+
+    // Assert that cast on invalid range returns failure
+    std::tie(results, error_status) = action.getResults(character, Tile{3, 1}, 13);
+    ASSERT_EQ(error_status, ErrorStatus::Fail);
 }
+

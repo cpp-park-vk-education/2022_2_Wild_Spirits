@@ -25,8 +25,8 @@ class Storage {
         return ErrorStatus::Fail;
     }
 
-    std::tuple<T&, ErrorStatus> get(size_t id) {
-        return {T{}, ErrorStatus::Fail};
+    T& get(size_t id) {
+        return data_.find(id)->second;
     }
 
     size_t size() const {

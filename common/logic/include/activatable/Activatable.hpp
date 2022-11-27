@@ -58,7 +58,7 @@ class Activatable {
         scaling_ = scaling;
     }
 
-    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>&) {
+    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const std::vector<Tile>&, uint8_t dice_roll_res = 0) {
         return {};
     }
 };

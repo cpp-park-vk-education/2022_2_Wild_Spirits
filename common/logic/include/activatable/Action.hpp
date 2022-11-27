@@ -72,7 +72,8 @@ class Action {
     void addEffect(Effect* effect);
     void removeEffect(size_t effect_id);
 
-    std::tuple<std::vector<Result>, ErrorStatus> getResults(const CharacterInstance&, const Tile& tile);
+    std::tuple<std::vector<Result>, ErrorStatus> getResults(const CharacterInstance&,
+                                                            const Tile& tile, uint8_t dice_roll_res = 0);
 
     ~Action();
 };
