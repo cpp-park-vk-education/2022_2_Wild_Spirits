@@ -20,7 +20,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> CharacterInstance::useActiv
 }
 
 ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
-    return ErrorStatus::Fail;
+    return ErrorStatus::Fail();
 }
 
 SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from,

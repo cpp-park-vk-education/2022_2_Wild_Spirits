@@ -17,7 +17,7 @@ class DamageTypes {
     DamageTypes() = default;
 
     ErrorStatus addDamageType(const std::string& type) {
-        return ErrorStatus::Fail;
+        return ErrorStatus::Fail();
     }
 
     void removeDamageType(const std::string& type) {

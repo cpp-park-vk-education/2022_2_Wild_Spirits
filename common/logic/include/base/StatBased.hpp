@@ -36,10 +36,10 @@ class StatBased {
 
     ErrorStatus modifyStat(const std::string& stat, int value) {
         if (getStat(stat) == -1) {
-            return ErrorStatus::Fail;
+            return ErrorStatus::Fail();
         }
 
         stats_[stat] += value;
-        return ErrorStatus::Ok;
+        return ErrorStatus::Ok();
     }
 };

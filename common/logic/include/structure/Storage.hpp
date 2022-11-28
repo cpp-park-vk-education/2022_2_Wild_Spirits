@@ -18,18 +18,18 @@ class Storage {
     ErrorStatus add(size_t id, Args&&... args) {
         static_assert(!std::is_pointer<T>::value);
         data_.try_emplace(id, id, args...);
-        return ErrorStatus::Fail;
+        return ErrorStatus::Fail();
     }
 
     ErrorStatus add(T object) {
         static_assert(std::is_pointer<T>::value);
         data_.emplace(object->id(), object);
-        return ErrorStatus::Fail;
+        return ErrorStatus::Fail();
     }
 
     ErrorStatus remove(size_t id) {
         data_.erase(id);
-        return ErrorStatus::Fail;
+        return ErrorStatus::Fail();
     }
 
     T& get(size_t id) {
