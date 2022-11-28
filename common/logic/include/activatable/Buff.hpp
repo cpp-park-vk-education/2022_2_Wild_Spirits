@@ -13,5 +13,5 @@ class Buff : public Effect, public StatBased, public Temporal {
         return new Buff(*this);
     }
 
-    void updateActionResult(const CharacterInstance& character, ActionResult* result) const override;
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
 };

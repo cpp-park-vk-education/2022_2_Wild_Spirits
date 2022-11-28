@@ -14,7 +14,7 @@ int CharacterInstance::armorClass() const {
     return 0;
 }
 
-std::tuple<std::vector<ActionResult>, ErrorStatus> CharacterInstance::useActivatable(
+std::tuple<std::vector<Action::Result>, ErrorStatus> CharacterInstance::useActivatable(
         std::string_view action_type, size_t action_id, const DiceInterface&, const std::vector<Tile>& target) {
     return Action().getResults(*this, {});
 }

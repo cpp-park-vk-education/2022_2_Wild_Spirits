@@ -115,8 +115,8 @@ class EffectSuite : public ::testing::Test {
     Character char_template_;
     MockGameMap map;
     CharacterInstance character;
-    ActionResult result;
-    ActionResult new_result;
+    Action::Result result;
+    Action::Result new_result;
 
  public:
     EffectSuite() :
@@ -194,9 +194,9 @@ class ActionSuite : public DamageSuite{
         test_enemy_.setStat("dex", 14);
 
         for (int i = 0; i < 5; ++i) {
-            location.npc().add(i, i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
+            location.npc().add(i, test_enemy_, PositionFactory::create(Tile{1, i}), map);
         }
-        location.npc().add(5, 5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
+        location.npc().add(5, test_enemy_, PositionFactory::create(Tile{0, 2}), map);
 
         EXPECT_CALL(map, currentLocation())
             .WillRepeatedly(ReturnRef(location));
@@ -233,7 +233,7 @@ TEST_F(ActionSuite, SingleActionTest) {
     std::vector<size_t> enemies_hit = {1, 3, 5};
 
     for (size_t i = 0; i < results.size(); ++i) {
-        ASSERT_EQ(results[i], ActionResult(
+        ASSERT_EQ(results[i], Action::Result(
                                 enemies_hit[i],
                                 Tile{1, 2}, -2 - i,
                                 {Buff({ {"str", -2}, {"dex", -1} }, 2)}));
@@ -259,7 +259,7 @@ class ActivatableSuite : public ActionSuite {
             player.takeDamage(5);
 
             test_enemy_.setMaxHP(10);
-            for (auto& [id, enemy] : location.npc()) {
+            for (auto& [_, enemy] : location.npc()) {
                 enemy.resetHP();
             }
         }
@@ -267,7 +267,7 @@ class ActivatableSuite : public ActionSuite {
 
 TEST_F(ActivatableSuite, PlayerSpellTest) {
     Spell spell(0, "", 0, {action, heal_action}, 5, "int", 2);
-    player.spells().add(0, &spell);
+    player.spells().add(&spell);
 
     auto result_buff = Buff({ {"str", -2}, {"dex", -1} }, 2);
 
@@ -288,7 +288,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {
         .WillOnce(Return(4))  // enemy 4
         .WillOnce(Return(3));
 
-    std::vector<ActionResult> expected_results = {
+    std::vector<Action::Result> expected_results = {
         {3, Tile{4, 4}, 5, { result_buff }},
         {4, Tile{4, 3}, 3, { result_buff }},
         {player.id(), Tile{2, 2}, 8, {}}

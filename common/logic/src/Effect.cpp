@@ -4,10 +4,10 @@
 
 #include "Action.hpp"
 
-void Heal::updateActionResult(const CharacterInstance& character, ActionResult* result) const {}
+void Heal::updateActionResult(const CharacterInstance& character, Action::Result* result) const {}
 
-void Move::updateActionResult(const CharacterInstance& character, ActionResult* result) const {}
+void Move::updateActionResult(const CharacterInstance& character, Action::Result* result) const {}
 
-void DealDamage::updateActionResult(const CharacterInstance& character, ActionResult* result) const {}
+void DealDamage::updateActionResult(const CharacterInstance& character, Action::Result* result) const {}
 
-void Buff::updateActionResult(const CharacterInstance& character, ActionResult* result) const {}
+void Buff::updateActionResult(const CharacterInstance& character, Action::Result* result) const {}

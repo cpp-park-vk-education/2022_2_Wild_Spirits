@@ -5,39 +5,39 @@
 
 #include "Area.hpp"
 #include "StatBased.hpp"
-#include "Buff.hpp"
 
 class Effect;
 class CharacterInstance;
 class Buff;
 
-// TODO: Make ActionResult an inner class like before
-struct ActionResult {
-    private:
-    size_t char_id_;
-
-    public:
-    Tile pos = {};
-    int hp = 0;
-    std::vector<Buff> buffs;
-
-    explicit ActionResult(size_t char_id) : char_id_(char_id) {}
-    ActionResult(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs);
-
-    size_t char_id() const {
-        return char_id_;
-    }
-
-    bool operator==(const ActionResult& other) const {
-        return false;
-    }
-};
+// TODO: Make Action::Result an inner class like before
 
 class Action {
  public:
     enum class CastType {
         Tile,
         Self
+    };
+
+    struct Result {
+        private:
+        size_t char_id_;
+
+        public:
+        Tile pos = {};
+        int hp = 0;
+        std::vector<Buff> buffs;
+
+        explicit Result(size_t char_id);
+        Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs);
+
+        size_t char_id() const {
+            return char_id_;
+        }
+
+        bool operator==(const Result& other) const {
+            return false;
+        }
     };
 
  private:
@@ -79,7 +79,7 @@ class Action {
     void addEffect(Effect* effect);
     void removeEffect(size_t effect_id);
 
-    std::tuple<std::vector<ActionResult>, ErrorStatus> getResults(const CharacterInstance&,
+    std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const CharacterInstance&,
                                                             const Tile& tile, uint8_t dice_roll_res = 0);
 
     ~Action();

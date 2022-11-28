@@ -41,7 +41,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const ;
     int armorClass() const ;
-    std::tuple<std::vector<ActionResult>, ErrorStatus> useActivatable(std::string_view action_type,
+    std::tuple<std::vector<Action::Result>, ErrorStatus> useActivatable(std::string_view action_type,
                                                                         size_t action_id, const DiceInterface&,
                                                                         const std::vector<Tile>& target);
     

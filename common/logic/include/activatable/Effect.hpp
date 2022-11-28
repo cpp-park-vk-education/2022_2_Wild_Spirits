@@ -1,11 +1,10 @@
 #pragma once
-
-class ActionResult;
+#include "Action.hpp"
 class CharacterInstance;
 
 class Effect {
  public:
-    virtual void updateActionResult(const CharacterInstance& character, ActionResult* result) const = 0;
+    virtual void updateActionResult(const CharacterInstance& character, Action::Result* result) const = 0;
     virtual Effect* clone() const = 0;
     virtual ~Effect() {}
 };
@@ -21,7 +20,7 @@ class Heal : public Effect {
         return new Heal(amount_);
     }
 
-    void updateActionResult(const CharacterInstance& character, ActionResult* result) const override;
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
 };
 
 class Move : public Effect {
@@ -36,5 +35,5 @@ class Move : public Effect {
         return new Move(x_, y_);
     }
 
-    void updateActionResult(const CharacterInstance& character, ActionResult* result) const override;
+    void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
 };

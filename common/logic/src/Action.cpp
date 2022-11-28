@@ -5,7 +5,9 @@
 
 #include <utility>
 
-ActionResult::ActionResult(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs) :
+Action::Result::Result(size_t char_id) : char_id_(char_id) {}
+
+Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs) :
     char_id_(char_id),
     pos(pos),
     hp(hp),
@@ -103,7 +105,7 @@ void Action::removeEffect(size_t effect_id) {
     effects_.erase(it);
 }
 
-std::tuple<std::vector<ActionResult>, ErrorStatus> Action::getResults(
+std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
         const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
     return {};
 }

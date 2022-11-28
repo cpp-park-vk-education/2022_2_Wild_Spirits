@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <cstddef>
-#include <tuple>
+#include <type_traits>
 
 #include "Utils.hpp"
 
@@ -16,7 +16,14 @@ class Storage {
 
     template <typename... Args>
     ErrorStatus add(size_t id, Args&&... args) {
-        data_.try_emplace(id, args...);
+        static_assert(!std::is_pointer<T>::value);
+        data_.try_emplace(id, id, args...);
+        return ErrorStatus::Fail;
+    }
+
+    ErrorStatus add(T object) {
+        static_assert(std::is_pointer<T>::value);
+        data_.emplace(object->id(), object);
         return ErrorStatus::Fail;
     }
 

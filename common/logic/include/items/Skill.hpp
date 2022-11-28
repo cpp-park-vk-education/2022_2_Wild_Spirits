@@ -30,7 +30,7 @@ class Skill : public GameEntity, public Activatable, public Temporal {
         Temporal::onTurnStart();
     }
 
-    std::tuple<std::vector<ActionResult>, ErrorStatus> use(const std::vector<Tile>& tiles, uint8_t dice_res = 0) override {
+    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles, uint8_t dice_res = 0) override {
         return Activatable::use(tiles);
     }
 };
