@@ -3,22 +3,22 @@
 #include "GameState.hpp"
 #include "GameMap.hpp"
 
-ErrorStatus TurnOrder::nextTurn() {
+void TurnOrder::nextTurn() {}
+
+ErrorStatus TurnOrder::pushBack(size_t char_id) {
     return ErrorStatus::Fail();
 }
 
-ErrorStatus TurnOrder::addToQueueBack(size_t char_id) {
+ErrorStatus TurnOrder::pushFront(size_t char_id) {
     return ErrorStatus::Fail();
 }
 
-ErrorStatus TurnOrder::addToQueueFront(size_t char_id) {
+ErrorStatus TurnOrder::swapOrder(size_t first, size_t second) {
     return ErrorStatus::Fail();
 }
 
-ErrorStatus TurnOrder::swapTurnOrder(size_t first, size_t second) {
-    return ErrorStatus::Fail();
-}
+void TurnOrder::fillQueue() {}
 
-size_t TurnOrder::getActiveCharacterId() {
+CharacterInstance* TurnOrder::getActiveCharacter() const {
     return 0;
 }

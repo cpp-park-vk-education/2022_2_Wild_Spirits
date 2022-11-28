@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <cstddef>
+#include <functional>
 #include <type_traits>
 
 #include "Utils.hpp"
@@ -12,6 +13,8 @@ class Storage {
     std::unordered_map<size_t, T> data_;
 
  public:
+    using size_type = size_t;
+
     Storage(const std::unordered_map<size_t, T>& data = {}) : data_(data) {}
 
     template <typename... Args>
@@ -46,5 +49,11 @@ class Storage {
 
     auto end() {
         return data_.end();
+    }
+
+    void each(const std::function<void(T&)>& visit) {
+        for (auto& [_, elem] : data_) {
+            visit(elem);
+        }
     }
 };

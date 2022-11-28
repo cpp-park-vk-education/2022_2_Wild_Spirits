@@ -57,11 +57,13 @@ class PlayerCharacter : public CharacterInstance {
 
  public:
     PlayerCharacter(size_t id, Character& original, Position* pos, GameMap& map,
-                    const Race& race, const CharacterClass& char_class,
+                    const Race& race = Race(), const CharacterClass& char_class = CharacterClass(),
                     int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         CharacterInstance(id, original, pos, map, money, items),
         class_list_(),
-        race_(&race) {}
+        race_(&race) {
+            class_list_.push_back(&char_class);
+        }
 
     void gainXP(unsigned int) {
 

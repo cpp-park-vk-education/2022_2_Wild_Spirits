@@ -8,6 +8,14 @@ Storage<PlayerCharacter>& GameStateImpl::players() {
     return players_;
 }
 
+Storage<Race>& GameStateImpl::races() {
+    return races_;
+}
+
+Storage<CharacterClass>& GameStateImpl::classes() {
+    return classes_;
+}
+
 Storage<Item>& GameStateImpl::items() {
     return items_;
 }
@@ -22,6 +30,10 @@ Storage<Spell>& GameStateImpl::spells() {
 
 Storage<Armor>& GameStateImpl::armor() {
     return armor_;
+}
+
+ErrorStatus GameStateImpl::addToLocation(size_t npc_id, size_t location_id, Position* pos) {
+    return ErrorStatus::Fail();
 }
 
 ErrorStatus GameStateImpl::addItem(size_t char_id, std::string_view item_type, size_t item_id) {

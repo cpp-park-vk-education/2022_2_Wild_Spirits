@@ -3,8 +3,8 @@
 #include "Activatable.hpp"
 #include "Damage.hpp"
 #include "CharacterInstance.hpp"
-#include "Armor.hpp"
 #include "GameState.hpp"
+#include "TurnOrder.hpp"
 
 using ::testing::Return;
 using ::testing::ReturnRef;
@@ -316,4 +316,65 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {
     player.setSpellPoints(1);
     std::tie(results, error_status) = player_use_spell();
     ASSERT_FALSE(error_status.ok());
+}
+
+class TurnOrderSuite : public ::testing::Test {
+ protected:
+    MockGameMap map;
+    Location location;
+    GameStateImpl game;
+    TurnOrder queue;
+
+    NPC enemy;
+    Character player_template;
+
+ public:
+    TurnOrderSuite() : map(), location(), game(&map), queue(game, map) {
+        for (int i = 0; i < 2; ++i) {
+            location.npc().add(i, enemy, PositionFactory::create({i, i}), map);
+        }
+        game.players().add(2, player_template, PositionFactory::create({1, 2}), map);
+    }
+};
+
+TEST_F(TurnOrderSuite, BuffsDissapear) {
+    EXPECT_CALL(map, currentLocation())
+        .WillRepeatedly(ReturnRef(location));
+
+    StatBased::Stats buff_base = {{"str", 2}};
+
+    queue.fillQueue();
+    ASSERT_THAT(queue, SizeIs(3));
+
+    location.npc().each([&] (auto& npc) { npc.addBuff({buff_base, 1}); });
+    game.players().each([&] (auto& player) { player.addBuff({buff_base, 2}); });
+
+    PlayerCharacter& player = game.players().get(2);
+
+    location.npc().each([&] (auto& npc) {
+        ASSERT_THAT(npc.buffs(), SizeIs(1));
+        ASSERT_EQ(npc.buffs().front().turnsLeft(), 1);
+    });
+
+    ASSERT_THAT(player.buffs(), SizeIs(1));
+    ASSERT_EQ(player.buffs().front().turnsLeft(), 2);
+
+    // First entry should be the only player, with id == 2
+    ASSERT_EQ(queue.getActiveCharacter(), &player);
+
+    // Skip to the player's turn, check his buff
+    for (size_t i = 0; i < 3; ++i) {
+        queue.nextTurn();
+    }
+    ASSERT_EQ(player.buffs().front().turnsLeft(), 1);
+
+    // Skip to the enemy's turn, check that his buff has expired
+    queue.nextTurn();
+    ASSERT_THAT(location.npc().get(0).buffs(), SizeIs(0));
+
+    // While second enemy still has the buff
+    NPC_Instance& npc = location.npc().get(1);
+    ASSERT_EQ(queue.getActiveCharacter(), &npc);
+    ASSERT_THAT(npc.buffs(), SizeIs(1));
+    ASSERT_EQ(npc.buffs().front().turnsLeft(), 1);
 }

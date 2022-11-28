@@ -6,6 +6,7 @@
 #include "Item.hpp"
 #include "Action.hpp"
 #include "Utils.hpp"
+#include "Dice.hpp"
 
 #include <list>
 #include <unordered_map>
@@ -63,6 +64,10 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     void addBuff(const Buff& buff) {
         buffs_.push_back(buff);
+    }
+
+    const auto& buffs() const {
+        return buffs_;
     }
 
     const Character& original();
