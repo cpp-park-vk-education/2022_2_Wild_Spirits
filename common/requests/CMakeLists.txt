@@ -5,7 +5,8 @@ project(request-processor VERSION 1.0)
 
 set(SOURCES
     src/ActionCollector.cpp
-        
+    src/ActionHanler.cpp
+    src/ChangeCollector.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

@@ -19,9 +19,9 @@ private:
     PlayerCharacters players;
     Room::GameLogicProcessor& room;
 
-    bool sendDM(string);
+    bool sendDM(string request_string);
     bool sendInstance(unsigned int user_id);
-    bool broadcast(string);
+    bool broadcast(string request_string);
 public:
-
+    
 };

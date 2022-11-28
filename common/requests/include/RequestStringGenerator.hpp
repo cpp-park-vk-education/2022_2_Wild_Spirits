@@ -8,6 +8,6 @@
 class RequestStringGenerator{
 public:
 
-    std::string makeRequestString(std::unordered_map<std::string, std::string>, Client::Header);
+    std::string makeRequestString(std::unordered_map<std::string, std::string> changes, Client::Header request_header);
 
 };

@@ -12,16 +12,16 @@ class handler;
 
 class ClientConnection{
 public:
-    void SendReqeuest(string, handler);
-    void getImage(string, handler);
+    void SendReqeuest(string request, handler gateway_handler);
+    void getImage(string request, handler gateway_handler);
 };
 
 class Room{
 public:
-    void sendDM(string);
-    void broadcast(string);
+    void sendDM(string request);
+    void broadcast(string request);
     void sendImage(std::string image_id, user_id user);
-    void processRequest(user_id, string);
+    void processRequest(user_id user, string request);
 };
 
 }

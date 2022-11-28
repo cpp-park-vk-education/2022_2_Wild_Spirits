@@ -13,5 +13,5 @@ private:
     ChangeCollector& collector;
     change_queue changes_queue;
 public:
-    void load_collector(change_queue);
+    void load_collector(change_queue changes);
 };

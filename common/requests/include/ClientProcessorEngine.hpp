@@ -19,7 +19,7 @@ private:
     std::shared_ptr<ActionCollector> collector;
 public:
     std::shared_ptr<ActionHandler> handler;
-    setter_queue getSetterQueue(string);
-    string getRequestString(std::unordered_map<std::string, string>);
+    setter_queue getSetterQueue(string request);
+    string getRequestString(std::unordered_map<std::string, string> actions);
     
 };

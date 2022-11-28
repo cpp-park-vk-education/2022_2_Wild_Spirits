@@ -4,7 +4,7 @@
 
 
 namespace Client{
-    class Action;
+    class Action{};
     class GameState;
     enum Header;
 }

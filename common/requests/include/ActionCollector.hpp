@@ -7,6 +7,7 @@
 
 class ActionCollector{
 public:
+    ActionCollector();
     void add_action(std::string description, std::string params);
     std::unordered_map<std::string, std::string> flush();
 

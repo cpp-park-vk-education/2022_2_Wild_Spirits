@@ -15,5 +15,5 @@ private:
     action_queue actions;
     ActionCollector& collector;
 public:
-    string Action_string(string); 
+    string Action_string(string action_params); 
 };

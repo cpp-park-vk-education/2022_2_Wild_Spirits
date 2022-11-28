@@ -9,5 +9,5 @@ private:
     Client::GameState &gamestate;
 
 public:
-    bool makechange(std::tuple<std::string, std::string>);
+    bool makechange(std::tuple<std::string, std::string> setter_params);
 };
