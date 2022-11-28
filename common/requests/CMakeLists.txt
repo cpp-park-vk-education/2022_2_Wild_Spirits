@@ -7,6 +7,14 @@ set(SOURCES
     src/ActionCollector.cpp
     src/ActionHanler.cpp
     src/ChangeCollector.cpp
+    src/ChangeGetter.cpp
+    src/ClientProcessorEngine.cpp
+    src/ClientRequestProcessor.cpp
+    src/GameStateChanger.cpp
+    src/RequestStringGenerator.cpp
+    src/RoomProcessorEngine.cpp
+    src/RoomRequestProcessor.cpp
+    src/StringRequestParser.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
