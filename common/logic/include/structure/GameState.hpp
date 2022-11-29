@@ -23,7 +23,7 @@ class GameState {
     virtual Storage<Armor>& armor() = 0;
 
     virtual Storage<Race>& races() = 0;
-    virtual Storage<CharacterClass>& classes() = 0;
+    virtual Storage<Class>& classes() = 0;
 
     virtual ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) = 0;
 
@@ -56,7 +56,7 @@ class GameStateImpl : public GameState {
     Storage<Armor> armor_;
 
     Storage<Race> races_;
-    Storage<CharacterClass> classes_;
+    Storage<Class> classes_;
 
     DamageTypes damage_types_;
 
@@ -79,7 +79,7 @@ class GameStateImpl : public GameState {
     Storage<Armor>& armor() override;
 
     Storage<Race>& races() override;
-    Storage<CharacterClass>& classes() override;
+    Storage<Class>& classes() override;
 
     ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) override;
 

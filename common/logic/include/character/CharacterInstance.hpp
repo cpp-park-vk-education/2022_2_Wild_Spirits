@@ -1,17 +1,18 @@
 #pragma once
 
+#include "Action.hpp"
 #include "OnLocation.hpp"
 #include "Character.hpp"
 #include "Buff.hpp"
-#include "Item.hpp"
-#include "Action.hpp"
 #include "Utils.hpp"
-#include "Dice.hpp"
+#include "Storage.hpp"
 
 #include <list>
 #include <unordered_map>
 
 class DiceInterface;
+class Skill;
+class Item;
 
 struct SaleResult {
     ErrorStatus status;
@@ -23,7 +24,9 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
  protected:
     Character& original_;
     std::list<Buff> buffs_;
-    std::unordered_map<size_t, Item*> items_;
+
+    Storage<Item*> items_;
+    Storage<Skill> skills_;
  
  private:
     size_t id_;
@@ -33,18 +36,15 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
  public:
     CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
-                      int money = 100, std::unordered_map<size_t, Item*> items = {}) :
-        OnLocation(pos, map),
-        original_(original), items_(items), id_(id),
-        action_points_(original.maxActionPoints()),
-        hp_(original.maxHP()), money_(money) {}
+                      int money = 100, std::unordered_map<size_t, Item*> items = {});
 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const ;
     int armorClass() const ;
-    std::tuple<std::vector<Action::Result>, ErrorStatus> useActivatable(std::string_view action_type,
-                                                                        size_t action_id, const DiceInterface&,
-                                                                        const std::vector<Tile>& target);
+
+    virtual std::tuple<std::vector<Action::Result>, ErrorStatus>
+        use(std::string_view action_type, size_t action_id,
+                       const std::vector<Tile>& target, const DiceInterface* = nullptr);
     
     ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
     SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1) ;
@@ -62,13 +62,11 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     void resetHP();
     int hp();
 
-    void addBuff(const Buff& buff) {
-        buffs_.push_back(buff);
-    }
+    void addBuff(const Buff& buff);
+    const std::list<Buff>& buffs() const;
 
-    const auto& buffs() const {
-        return buffs_;
-    }
+    Storage<Skill>& skills();
+    Storage<Item*>& items();
 
     const Character& original();
 

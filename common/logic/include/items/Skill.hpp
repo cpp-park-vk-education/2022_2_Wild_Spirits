@@ -13,7 +13,7 @@ class Skill : public GameEntity, public Activatable, public Temporal {
 
     Skill(size_t id, std::string_view name, int image_id,
           const std::vector<Action>& actions, unsigned int action_cost,
-          std::string_view scaling, unsigned int cooldown, const Info& info = {}) :
+          unsigned int cooldown, std::string_view scaling = "", const Info& info = {}) :
         GameEntity(id, name, image_id, info),
         Activatable(actions, action_cost, scaling),
         cooldown_(cooldown) {}
@@ -30,7 +30,7 @@ class Skill : public GameEntity, public Activatable, public Temporal {
         Temporal::onTurnStart();
     }
 
-    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles, uint8_t dice_res = 0) override {
+    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles, uint8_t dice_res = 0) const override {
         return Activatable::use(tiles);
     }
 };

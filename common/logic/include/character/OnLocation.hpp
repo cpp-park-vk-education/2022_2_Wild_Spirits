@@ -14,14 +14,13 @@ class OnLocation : public Position {
     size_t current_location_;
 
     Position* clone() const override {
-        return new OnLocation(pos_->clone(), map_);
+        return new OnLocation(*this);
     }
 
  public:
-    OnLocation(Position* pos, GameMap& map) :
-        pos_(pos), map_(map) {}
-    
-    OnLocation(const OnLocation& other) = delete;
+    OnLocation(Position* pos, GameMap& map);
+
+    OnLocation(const OnLocation& other);
     OnLocation& operator=(OnLocation& other) = delete;
     
     const Location& location();

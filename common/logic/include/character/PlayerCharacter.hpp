@@ -18,13 +18,13 @@ class Race : public GameEntity, public StatBased {
         GameEntity(id, name, image_id, info), StatBased(stats){}
 };
 
-class CharacterClass : public GameEntity {
+class Class : public GameEntity {
  private:
     std::vector<Skill> skills_;
 
  public:
-    CharacterClass() = default;
-    CharacterClass(size_t id, std::string_view name, int image_id, const Info& info,
+    Class() = default;
+    Class(size_t id, std::string_view name, int image_id, const Info& info,
                     const std::vector<Skill> skills) :
         GameEntity(id, name, image_id, info), skills_(skills) {}
 
@@ -36,14 +36,14 @@ class CharacterClass : public GameEntity {
         skills_.erase(skills_.begin() + id);
     }
 
-    Skill& getSkill(int id) {
+    const Skill& getSkill(int id) const {
         return skills_[id];
     }
 };
 
 class PlayerCharacter : public CharacterInstance {
  private:
-    std::list<const CharacterClass*> class_list_;
+    Storage<const Class*> class_list_;
     const Race* race_;
     const Armor* armor_;
     
@@ -57,13 +57,26 @@ class PlayerCharacter : public CharacterInstance {
 
  public:
     PlayerCharacter(size_t id, Character& original, Position* pos, GameMap& map,
-                    const Race& race = Race(), const CharacterClass& char_class = CharacterClass(),
+                    const Class& char_class, const Race& race,
                     int money = 100, std::unordered_map<size_t, Item*> items = {}) :
         CharacterInstance(id, original, pos, map, money, items),
         class_list_(),
         race_(&race) {
-            class_list_.push_back(&char_class);
+            class_list_.add(&char_class);
         }
+
+    std::tuple<std::vector<Action::Result>, ErrorStatus> use(std::string_view action_type, size_t action_id,
+                                                             const std::vector<Tile>& target,
+                                                             const DiceInterface* dice = nullptr) override {
+        return CharacterInstance::use(action_type, action_id, target, dice);
+    }
+
+    std::tuple<std::vector<Action::Result>, ErrorStatus> useClassSkill(size_t class_id, size_t skill_id, 
+                                                                       const std::vector<Tile>& target,
+                                                                       const DiceInterface* dice = nullptr) {
+        return {};
+        // class_list_.get(class_id)->getSkill(skill_id).use(target, dice ? 0 : dice->roll(20));
+    }
 
     void gainXP(unsigned int) {
 
@@ -95,6 +108,10 @@ class PlayerCharacter : public CharacterInstance {
 
     const Armor* armor() const {
         return armor_;
+    }
+
+    auto& classes() {
+        return class_list_;
     }
 
     Storage<const Weapon*>& weapons() {

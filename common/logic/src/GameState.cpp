@@ -12,7 +12,7 @@ Storage<Race>& GameStateImpl::races() {
     return races_;
 }
 
-Storage<CharacterClass>& GameStateImpl::classes() {
+Storage<Class>& GameStateImpl::classes() {
     return classes_;
 }
 

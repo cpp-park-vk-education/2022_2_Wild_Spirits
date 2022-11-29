@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 
 #include "Activatable.hpp"
+#include "Buff.hpp"
 #include "Damage.hpp"
 #include "CharacterInstance.hpp"
 #include "GameState.hpp"
@@ -306,7 +307,7 @@ class ActivatableSuite : public ActionSuite {
  public:
     ActivatableSuite() :
         ActionSuite(),
-        player(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Race(), CharacterClass()),
+        player(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race()),
         heal_action(AreaFactory::create(), { new Heal(3) }, 0, Action::CastType::Self, false) {
             char_template_.setMaxHP(10);
             player.resetHP();
@@ -331,8 +332,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {
         .WillOnce(Return(20));
 
     auto player_use_spell = [&] {
-        return player.useActivatable("spell", 0, player_die,
-                              { Tile{4, 1}, player.mapPosition().first });
+        return player.use("spell", 0,
+                              { Tile{4, 1}, player.mapPosition().first }, &player_die);
     };
 
     // Damage rolls
@@ -372,6 +373,17 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {
     ASSERT_FALSE(error_status.ok());
 }
 
+TEST_F(ActivatableSuite, PlayerConsumableTest) {
+    player.consumables().add(0, "", 0, std::vector<Action>{ heal_action }, 1, 2);
+    auto& item = player.consumables().get(0);
+
+    player.use("consumable", 0, {player.mapPosition().first});
+    ASSERT_EQ(item.usesLeft(), 1);
+
+    player.use("consumable", 0, {player.mapPosition().first});
+    ASSERT_TRUE(item.empty());
+}
+
 class TurnOrderSuite : public ::testing::Test {
  protected:
     MockGameMap map;
@@ -381,13 +393,14 @@ class TurnOrderSuite : public ::testing::Test {
 
     NPC enemy;
     Character player_template;
+    Class char_class_;
 
  public:
     TurnOrderSuite() : map(), location(), game(&map), queue(game, map) {
         for (int i = 0; i < 2; ++i) {
             location.npc().add(i, enemy, PositionFactory::create({i, i}), map);
         }
-        game.players().add(2, player_template, PositionFactory::create({1, 2}), map);
+        game.players().add(2, player_template, PositionFactory::create({1, 2}), map, char_class_, Race());
     }
 };
 
@@ -417,9 +430,7 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {
     ASSERT_EQ(queue.getActiveCharacter(), &player);
 
     // Skip to the player's turn, check his buff
-    for (size_t i = 0; i < 3; ++i) {
-        queue.nextTurn();
-    }
+    queue.skipTurns(3);
     ASSERT_EQ(player.buffs().front().turnsLeft(), 1);
 
     // Skip to the enemy's turn, check that his buff has expired
@@ -431,4 +442,27 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {
     ASSERT_EQ(queue.getActiveCharacter(), &npc);
     ASSERT_THAT(npc.buffs(), SizeIs(1));
     ASSERT_EQ(npc.buffs().front().turnsLeft(), 1);
+}
+
+TEST_F(TurnOrderSuite, SkillsColldown) {
+    PlayerCharacter& player = game.players().get(2);
+    Skill skill(0, "", 0, {}, 2, 3);
+
+    player.skills().add(skill);
+    
+    auto& player_skill = player.skills().get(0);
+
+    ASSERT_EQ(player_skill.turnsLeft(), 0);
+    auto [results, status] = player.use("skill", 0, {});
+    ASSERT_TRUE(status.ok());
+
+    ASSERT_EQ(player_skill.turnsLeft(), player_skill.cooldown());
+    player.use("skill", 0, {});
+    ASSERT_FALSE(status.ok());
+
+    queue.skipTurns(3);
+    ASSERT_EQ(player_skill.turnsLeft(), player_skill.cooldown() - 1);
+
+    queue.skipTurns(3);
+    ASSERT_EQ(player_skill.turnsLeft(), 0);
 }

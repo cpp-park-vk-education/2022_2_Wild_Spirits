@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <unordered_map>
 #include <unordered_set>
 #include <string>
@@ -30,7 +31,7 @@ class DamageTypes {
     }
 
     const std::string& typeName(uint8_t id) const {
-        return "";
+        return types_[id];
     }
 
     static constexpr uint8_t maxNum() {

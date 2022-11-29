@@ -24,6 +24,7 @@ class TurnOrder {
         game_(game), map_(map) {}
     
     void nextTurn();
+    void skipTurns(size_t turns);
 
     ErrorStatus pushBack(size_t char_id);
     ErrorStatus pushFront(size_t char_id);

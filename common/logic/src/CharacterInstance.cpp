@@ -1,6 +1,17 @@
 #include "CharacterInstance.hpp"
 
 #include "Dice.hpp"
+#include "Buff.hpp"
+#include "Item.hpp"
+#include "Action.hpp"
+#include "Skill.hpp"
+
+CharacterInstance::CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
+                      int money, std::unordered_map<size_t, Item*> items) :
+        OnLocation(pos, map),
+        original_(original), items_(items), id_(id),
+        action_points_(original.maxActionPoints()),
+        hp_(original.maxHP()), money_(money) {}
 
 int CharacterInstance::statCheckRoll(std::string_view stat) const {
     return 0;
@@ -14,8 +25,25 @@ int CharacterInstance::armorClass() const {
     return 0;
 }
 
-std::tuple<std::vector<Action::Result>, ErrorStatus> CharacterInstance::useActivatable(
-        std::string_view action_type, size_t action_id, const DiceInterface&, const std::vector<Tile>& target) {
+const std::list<Buff>& CharacterInstance::buffs() const {
+    return buffs_;
+}
+
+void CharacterInstance::addBuff(const Buff& buff) {
+    buffs_.push_back(buff);
+}
+
+Storage<Skill>& CharacterInstance::skills() {
+    return skills_;
+}
+
+Storage<Item*>& CharacterInstance::items() {
+    return items_;
+}
+
+std::tuple<std::vector<Action::Result>, ErrorStatus>
+    CharacterInstance::use(std::string_view action_type, size_t action_id,
+                   const std::vector<Tile>& target, const DiceInterface*) {
     return Action().getResults(*this, {});
 }
 
