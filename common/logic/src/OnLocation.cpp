@@ -4,5 +4,7 @@
 #include "Location.hpp"
 
 const Location& OnLocation::location() {
-    return map_.getLocation(current_location_);
+    return map_.locations().get(current_location_);
 }
+
+void setLocation(Location& loc) {}

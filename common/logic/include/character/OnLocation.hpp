@@ -10,18 +10,22 @@ class Location;
 class OnLocation : public Position {
  private:
     Position* pos_;
-    const GameMap& map_;
+    GameMap& map_;
     size_t current_location_;
 
     Position* clone() const override {
-        return new OnLocation(*this);
+        return new OnLocation(pos_->clone(), map_);
     }
 
  public:
     OnLocation(Position* pos, GameMap& map) :
         pos_(pos), map_(map) {}
     
+    OnLocation(const OnLocation& other) = delete;
+    OnLocation& operator=(OnLocation& other) = delete;
+    
     const Location& location();
+    void setLocation(Location& loc);
 
     bool isInArea(const Area& area) override {
         return pos_->isInArea(area);

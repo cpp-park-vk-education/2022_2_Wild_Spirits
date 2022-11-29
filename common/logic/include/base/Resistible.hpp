@@ -6,8 +6,8 @@
 
 class Resistible {
  private:
-    std::bitset<DamageTypes::kDamageTypesNum> resistances_;
-    std::bitset<DamageTypes::kDamageTypesNum> vulnerabilities_;
+    std::bitset<DamageTypes::maxNum()> resistances_;
+    std::bitset<DamageTypes::maxNum()> vulnerabilities_;
 
  public:
     Resistible() = default;

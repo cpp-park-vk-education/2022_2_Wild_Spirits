@@ -28,7 +28,7 @@ class TurnOrder {
     ErrorStatus pushBack(size_t char_id);
     ErrorStatus pushFront(size_t char_id);
 
-    void fillQueue();  // Pushes all players and npc's on location to the queue
+    void fillQueue();  // Pushes all players and npc's on current location to the queue
 
     ErrorStatus swapOrder(size_t first, size_t second);
     CharacterInstance* getActiveCharacter() const;

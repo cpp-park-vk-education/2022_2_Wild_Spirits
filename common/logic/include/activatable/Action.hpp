@@ -10,8 +10,6 @@ class Effect;
 class CharacterInstance;
 class Buff;
 
-// TODO: Make Action::Result an inner class like before
-
 class Action {
  public:
     enum class CastType {

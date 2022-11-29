@@ -8,12 +8,13 @@
 
 class DamageTypes {
  private:
-    std::unordered_map<std::string, uint8_t> types_;
+    static constexpr uint8_t kDamageTypesNum = 32;
+
+    std::array<std::string, kDamageTypesNum> types_;
+    std::unordered_map<std::string, uint8_t> ids_;
     std::unordered_set<uint8_t> unused_ids_;
 
  public:
-   static constexpr uint8_t kDamageTypesNum = 32;
-
     DamageTypes() = default;
 
     ErrorStatus addDamageType(const std::string& type) {
@@ -24,7 +25,15 @@ class DamageTypes {
 
     }
 
-    uint8_t id(const std::string& type) const {
-        return 0;
+    int8_t id(const std::string& type) const {
+        return -1;
+    }
+
+    const std::string& typeName(uint8_t id) const {
+        return "";
+    }
+
+    static constexpr uint8_t maxNum() {
+        return kDamageTypesNum;
     }
 };

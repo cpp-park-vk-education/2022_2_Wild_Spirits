@@ -90,15 +90,12 @@ TEST(PositionSuite, RectPosAreaCheck) {
 class MockGameMap : public GameMap {
  public:
     MockGameMap() = default;
-
-    MOCK_METHOD(void, addLocation, (size_t, const Location&), (override));
-    MOCK_METHOD(void, removeLocation, (size_t), (override));
+    MOCK_METHOD(Storage<Location>&, locations, (), (override));
     MOCK_METHOD(void, switchLocation, (size_t), (override));
     MOCK_METHOD(void, switchLocation, (size_t, size_t), (override));
     MOCK_METHOD(Location&, currentLocation, (), (override));
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
     MOCK_METHOD(Storage<PlayerCharacter>&, players, ());
-    MOCK_METHOD(const Location&, getLocation, (size_t), (const, override));
 };
 
 class MockDice : public DiceInterface {
@@ -141,6 +138,63 @@ TEST_F(EffectSuite, MoveReturnsValidResult) {
     move.updateActionResult(character, &new_result);
 
     ASSERT_EQ(result.pos, new_result.pos + tile);
+}
+
+TEST(DiceSuite, Validation) {
+    Dice dice;
+    std::vector<uint8_t> valid_dice = {4, 6, 8, 10, 12, 20};
+
+    for (auto die : valid_dice) {
+        ASSERT_TRUE(dice.isValid(die));
+    }
+
+    ASSERT_FALSE(dice.isValid(0));
+    ASSERT_FALSE(dice.isValid(-5));
+    ASSERT_FALSE(dice.isValid(9));
+    ASSERT_FALSE(dice.isValid(3));
+}
+
+TEST(DamageTypesSuite, ItWorks) {
+    DamageTypes types;
+
+    types.addDamageType("a");
+    ASSERT_NE(types.id("a"), -1);
+    ASSERT_EQ(types.typeName(types.id("a")), "a");
+    
+    types.removeDamageType("a");
+    ASSERT_EQ(types.id("a"), -1);
+
+    for (size_t i = 0; i < DamageTypes::maxNum(); ++i) {
+        auto status = types.addDamageType("a" + std::to_string(i));
+        ASSERT_TRUE(status.ok());
+    }
+
+    auto status = types.addDamageType("b");
+    ASSERT_FALSE(status.ok());
+
+    types.removeDamageType("a4");
+
+    status = types.addDamageType("b");
+    ASSERT_TRUE(status.ok());
+}
+
+TEST(ResistibleSuite, ItWorks) {
+    Resistible res;
+    ASSERT_FALSE(res.isVulnerableTo(0));
+
+    res.addResistance(0);
+    ASSERT_TRUE(res.isResistantTo(0));
+    ASSERT_FALSE(res.isVulnerableTo(0));
+
+    res.removeResistance(0);
+    ASSERT_FALSE(res.isResistantTo(0));
+
+    ASSERT_FALSE(res.isVulnerableTo(3));
+    res.addVulnerability(3);
+    ASSERT_TRUE(res.isVulnerableTo(3));
+
+    res.removeVulnerability(3);
+    ASSERT_FALSE(res.isVulnerableTo(3));
 }
 
 class DamageSuite : public EffectSuite {

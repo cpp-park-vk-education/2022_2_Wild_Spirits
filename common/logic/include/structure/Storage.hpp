@@ -25,8 +25,11 @@ class Storage {
     }
 
     ErrorStatus add(T object) {
-        static_assert(std::is_pointer<T>::value);
-        data_.emplace(object->id(), object);
+        if constexpr (std::is_pointer<T>::value) {
+            data_.emplace(object->id(), object);
+        } else {
+            data_.emplace(object.id(), object);
+        }
         return ErrorStatus::Fail();
     }
 
