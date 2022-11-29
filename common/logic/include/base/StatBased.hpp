@@ -30,6 +30,10 @@ class StatBased {
         return it->second;
     }
 
+    int statBonus(std::string_view) const {
+        return 0;
+    }
+
     void setStat(const std::string& stat, int value) {
         stats_[stat] = value;
     }

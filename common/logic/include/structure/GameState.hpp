@@ -25,8 +25,6 @@ class GameState {
     virtual Storage<Race>& races() = 0;
     virtual Storage<Class>& classes() = 0;
 
-    virtual ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) = 0;
-
     virtual ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
     virtual ErrorStatus removeItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
 
@@ -42,7 +40,7 @@ class GameState {
     virtual ErrorStatus moveCharacter(size_t char_id, Tile tile) = 0;
 
     virtual ErrorStatus changeCharacteristic(std::string_view type, size_t id, std::string_view characteristic,
-                                      const std::variant<std::string, size_t, int>& replacer) = 0;
+                                             const std::variant<std::string, size_t, int>& replacer) = 0;
 };
 
 class GameStateImpl : public GameState {
@@ -81,9 +79,7 @@ class GameStateImpl : public GameState {
     Storage<Race>& races() override;
     Storage<Class>& classes() override;
 
-    ErrorStatus addToLocation(size_t npc_id, size_t location_id, Position* pos) override;
-
-    ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) override;
+    ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) override;  // Subject to be removed
     ErrorStatus removeItem(size_t char_id, std::string_view item_type, size_t item_id) override;
 
     ErrorStatus addAction(std::string_view item_type, size_t item_id, const Action& action) override;
@@ -101,12 +97,11 @@ class GameStateImpl : public GameState {
                                      const std::variant<std::string, size_t, int>& replacer) override;
 };
 
-
 class GameLogicProcessor : public GameState {
  public:
     virtual std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) = 0;
  
-    virtual std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) = 0;
+    virtual std::unordered_map<size_t, size_t> kill_NPC(size_t location_id, size_t npc_id) = 0;
     virtual ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) = 0;
 
     virtual ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) = 0;
@@ -119,7 +114,7 @@ class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
 
     std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type, size_t item_id, Tile target) override;
  
-    std::unordered_map<size_t, size_t> kill_NPC(size_t npc_id) override;
+    std::unordered_map<size_t, size_t> kill_NPC(size_t location_id, size_t npc_id) override;
     ErrorStatus distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) override;
 
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;

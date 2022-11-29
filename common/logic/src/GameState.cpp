@@ -32,10 +32,6 @@ Storage<Armor>& GameStateImpl::armor() {
     return armor_;
 }
 
-ErrorStatus GameStateImpl::addToLocation(size_t npc_id, size_t location_id, Position* pos) {
-    return ErrorStatus::Fail();
-}
-
 ErrorStatus GameStateImpl::addItem(size_t char_id, std::string_view item_type, size_t item_id) {
     return ErrorStatus::Fail();
 }
@@ -82,7 +78,7 @@ std::tuple<std::string, ErrorStatus> GameLogicProcessorImpl::useActivatable(size
     return {};
 }
 
-std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t npc_id) {
+std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t location_id, size_t npc_id) {
     return {};
 }
 

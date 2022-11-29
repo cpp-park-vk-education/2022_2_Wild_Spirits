@@ -9,6 +9,10 @@ class Buff : public Effect, public StatBased, public Temporal {
     Buff() : Temporal(0) {}
     Buff(const StatBased::Stats& stats, unsigned int turns) : StatBased(stats), Temporal(turns) {}
 
+    std::string info() const override {
+        return "";
+    }
+
     Effect* clone() const override {
         return new Buff(*this);
     }

@@ -39,7 +39,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
                       int money = 100, std::unordered_map<size_t, Item*> items = {});
 
     int statCheckRoll(std::string_view stat) const ;
-    int statBonus(std::string_view) const ;
+    int statBonus(std::string_view) const;
     int armorClass() const ;
 
     virtual std::tuple<std::vector<Action::Result>, ErrorStatus>

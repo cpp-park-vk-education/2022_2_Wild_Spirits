@@ -38,6 +38,10 @@ class Activatable {
         actions_.erase(actions_.begin() + action);
     }
 
+    auto& actions() {
+        return actions_;
+    }
+
     Action& action(size_t action) {
         return actions_[action];
     }

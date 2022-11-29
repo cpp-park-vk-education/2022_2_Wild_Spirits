@@ -141,6 +141,22 @@ TEST_F(EffectSuite, MoveReturnsValidResult) {
     ASSERT_EQ(result.pos, new_result.pos + tile);
 }
 
+TEST(StatTest, ValidStatBonus) {
+    StatBased stats({
+        {"dex", 12},
+        {"str", 11},
+        {"int", 9},
+        {"cha", 14},
+        {"cns", 7}
+    });
+
+    ASSERT_EQ(stats.statBonus("dex"), 1);
+    ASSERT_EQ(stats.statBonus("str"), 0);
+    ASSERT_EQ(stats.statBonus("int"), -1);
+    ASSERT_EQ(stats.statBonus("cha"), 2);
+    ASSERT_EQ(stats.statBonus("cns"), -2);
+}
+
 TEST(DiceSuite, Validation) {
     Dice dice;
     std::vector<uint8_t> valid_dice = {4, 6, 8, 10, 12, 20};
@@ -210,7 +226,7 @@ TEST_F(DamageSuite, DealDamageConsidersResists) {
     EXPECT_CALL((*dice), roll(_))
         .WillRepeatedly(Return(6));
 
-    DealDamage damage_resist(new Damage(0, 6, 2), dice);
+    DealDamage damage_resist(0, 6, 2, dice);
     damage_resist.updateActionResult(character, &new_result);
     ASSERT_EQ(result.hp - 6, new_result.hp);
 }
@@ -219,15 +235,32 @@ TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
     EXPECT_CALL(*dice, roll(_))
         .WillRepeatedly(Return(3));
 
-    DealDamage damage(new Damage(1, 6, 2), dice);
+    DealDamage damage(1, 6, 2, dice);
     damage.updateActionResult(character, &new_result);
     ASSERT_EQ(result.hp - 12, new_result.hp);
 }
 
 TEST(DiceSuite, ThrowsOnInvalidDice) {
     ASSERT_FALSE(Dice().isValid(-3));
-    ASSERT_THROW(DealDamage(new Damage(0, 7, 2), new Dice()), InvalidDice);
-    ASSERT_THROW(DealDamage(new Damage(0, -1, 2), new Dice()), InvalidDice);
+    ASSERT_THROW(DealDamage(0, 7, 2, new Dice()), InvalidDice);
+    ASSERT_THROW(DealDamage(0, -1, 2, new Dice()), InvalidDice);
+}
+
+TEST(ArmorSuite, ArmorClassDependsOnType) {
+    MockGameMap map;
+    Character player_template;
+    PlayerCharacter player(0, player_template, PositionFactory::create({0, 0}), map, Class(), Race());
+    player_template.setStat("dex", 18);  // Bonus to dex is 4
+
+    Armor armor(0, "", 0, 0, 10, Armor::Type::Light);
+    player.setArmor(armor);
+    ASSERT_EQ(player.armorClass(), 14);
+
+    armor.setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
+    ASSERT_EQ(player.armorClass(), 12);
+    
+    armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
+    ASSERT_EQ(player.armorClass(), 10);
 }
 
 class ActionSuite : public DamageSuite{
@@ -242,7 +275,7 @@ class ActionSuite : public DamageSuite{
         DamageSuite(),
         location(0, "", 0, 5, 5),
         action(AreaFactory::create(1, 1), {
-            new DealDamage(new Damage(1, 4, 2), dice),
+            new DealDamage(1, 4, 2, dice),
             new Move(1, 2),
             new Buff({ {"str", -2}, {"dex", -1} }, 2)}, 2) {
         test_enemy_.setStat("str", 10);

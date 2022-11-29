@@ -18,6 +18,6 @@ class EffectFactory {
     }
 
     static Effect* create(uint8_t damage_type, uint8_t die_type, size_t times) {
-        return new DealDamage(new Damage(damage_type, die_type, times), new Dice());
+        return new DealDamage(damage_type, die_type, times, new Dice());
     }
 };
