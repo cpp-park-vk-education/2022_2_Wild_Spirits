@@ -26,7 +26,17 @@ if(MSVC)
 set_target_properties(gmock gmock_main gtest gtest_main PROPERTIES FOLDER "GTest")
 endif()
 
+
+
+
 if (${BUILD_SERVER})
+
+    if(WIN32)
+        set(PostgreSQL_INCLUDE_DIR "C:/Program Files/PostgreSQL/15/include")
+        set(PostgreSQL_LIBRARY C:/Program Files/PostgreSQL/15/lib)
+    endif()
+
+    set(PostgreSQL_ADDITIONAL_SEARCH_PATHS ${PostgreSQL_ADDITIONAL_SEARCH_PATHS} "C:/Program Files/PostgreSQL")
     FetchContent_Declare(
         libpqxx
         GIT_REPOSITORY https://github.com/jtv/libpqxx

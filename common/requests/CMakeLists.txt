@@ -5,7 +5,7 @@ project(request-processor VERSION 1.0)
 
 set(SOURCES
     src/ActionCollector.cpp
-    src/ActionHanler.cpp
+    src/ActionHandler.cpp
     src/ChangeCollector.cpp
     src/ChangeGetter.cpp
     src/ClientProcessorEngine.cpp
