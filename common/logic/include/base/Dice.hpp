@@ -6,7 +6,7 @@
 #include <cstdint>
 
 class DiceInterface {
- protected:
+ private:
     static const inline std::set<uint8_t> valid_dice_ = {4, 6, 8, 10, 12, 20};
     
  public:
@@ -29,10 +29,6 @@ class Dice : public DiceInterface {
 
     DiceInterface* clone() const override {
         return new Dice();
-    }
-
-    bool isValid(uint8_t die) const override {
-        return valid_dice_.contains(die);
     }
 
     std::vector<uint8_t> roll(uint8_t die, size_t num) const override {

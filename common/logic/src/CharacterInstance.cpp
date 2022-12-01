@@ -33,7 +33,7 @@ void CharacterInstance::addBuff(const Buff& buff) {
     buffs_.push_back(buff);
 }
 
-Storage<Skill>& CharacterInstance::skills() {
+Storage<Skill_Instance>& CharacterInstance::skills() {
     return skills_;
 }
 

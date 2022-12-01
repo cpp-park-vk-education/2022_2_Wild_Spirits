@@ -5,7 +5,7 @@
 #include <functional>
 #include <type_traits>
 
-#include "Utils.hpp"
+#include "ErrorStatus.hpp"
 
 template <typename T>
 class Storage {

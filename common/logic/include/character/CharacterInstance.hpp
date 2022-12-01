@@ -1,17 +1,16 @@
 #pragma once
 
-#include "Action.hpp"
 #include "OnLocation.hpp"
 #include "Character.hpp"
 #include "Buff.hpp"
-#include "Utils.hpp"
+#include "ErrorStatus.hpp"
 #include "Storage.hpp"
 
 #include <list>
 #include <unordered_map>
 
 class DiceInterface;
-class Skill;
+class Skill_Instance;
 class Item;
 
 struct SaleResult {
@@ -26,7 +25,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     std::list<Buff> buffs_;
 
     Storage<Item*> items_;
-    Storage<Skill> skills_;
+    Storage<Skill_Instance> skills_;
  
  private:
     size_t id_;
@@ -65,7 +64,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     void addBuff(const Buff& buff);
     const std::list<Buff>& buffs() const;
 
-    Storage<Skill>& skills();
+    Storage<Skill_Instance>& skills();
     Storage<Item*>& items();
 
     const Character& original();

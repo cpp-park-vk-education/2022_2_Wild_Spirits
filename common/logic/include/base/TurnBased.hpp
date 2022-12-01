@@ -21,6 +21,8 @@ class Temporal : public TurnBased {
     }
 
     void onTurnStart() override {
-        if (turns_) --turns_;
+        if (turns_) {
+            --turns_;
+        }
     }
 };

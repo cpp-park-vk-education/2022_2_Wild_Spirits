@@ -4,7 +4,7 @@
 #include "GameEntity.hpp"
 #include "TurnBased.hpp"
 
-class Skill : public GameEntity, public Activatable, public Temporal {
+class Skill : public GameEntity, public Activatable {
  private:
     unsigned int cooldown_;
 
@@ -18,19 +18,36 @@ class Skill : public GameEntity, public Activatable, public Temporal {
         Activatable(actions, action_cost, scaling),
         cooldown_(cooldown) {}
 
-    unsigned int cooldown() {
+    unsigned int cooldown() const {
         return cooldown_;
     }
 
     void setCooldown(unsigned int cooldown) {
         cooldown_ = cooldown;
     }
+};
+
+class Skill_Instance : public Temporal {
+ private:
+    const Skill& original_;
+
+ public:
+    Skill_Instance(const Skill& skill) : Temporal(skill.cooldown()), original_(skill) {}
 
     void onTurnStart() override {
         Temporal::onTurnStart();
     }
 
-    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles, uint8_t dice_res = 0) const override {
-        return Activatable::use(tiles);
+    const Skill& original() const {
+        return original_;
+    }
+
+    size_t id() const {
+        return original_.id();
+    }
+
+    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles,
+                                                             uint8_t dice_res = 0) const {
+        return original_.use(tiles, dice_res);
     }
 };

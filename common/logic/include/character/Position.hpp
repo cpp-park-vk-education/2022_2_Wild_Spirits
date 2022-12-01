@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Area.hpp"
-#include "Utils.hpp"
+#include "Tile.hpp"
 
 #include <utility>
 
@@ -23,7 +23,7 @@ class TilePos : public Position {
  
  public:
     TilePos(const Tile& tile) : pos_(tile) {}
-    TilePos(int x, int y) : pos_{x, y} {}
+    TilePos(size_t x, size_t y) : pos_{x, y} {}
 
     Position* clone() const override {
         return new TilePos(*this);

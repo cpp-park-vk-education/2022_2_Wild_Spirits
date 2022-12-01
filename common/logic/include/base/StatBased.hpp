@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "Utils.hpp"
+#include "ErrorStatus.hpp"
 
 class StatBased {
  public:

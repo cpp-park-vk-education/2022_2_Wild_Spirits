@@ -3,7 +3,7 @@
 #include <deque>
 #include <cstddef>
 
-#include "Utils.hpp"
+#include "ErrorStatus.hpp"
 
 class GameMap;
 class GameState;

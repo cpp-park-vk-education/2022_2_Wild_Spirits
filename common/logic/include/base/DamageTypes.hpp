@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <string>
 
-#include "Utils.hpp"
+#include "ErrorStatus.hpp"
 
 class DamageTypes {
  private:

@@ -71,13 +71,6 @@ class PlayerCharacter : public CharacterInstance {
         return CharacterInstance::use(action_type, action_id, target, dice);
     }
 
-    std::tuple<std::vector<Action::Result>, ErrorStatus> useClassSkill(size_t class_id, size_t skill_id, 
-                                                                       const std::vector<Tile>& target,
-                                                                       const DiceInterface* dice = nullptr) {
-        return {};
-        // class_list_.get(class_id)->getSkill(skill_id).use(target, dice ? 0 : dice->roll(20));
-    }
-
     void gainXP(unsigned int) {
 
     }
