@@ -27,7 +27,7 @@ class DamageTypes {
     }
 
     int8_t id(const std::string& type) const {
-        return -1;
+        return 0;
     }
 
     const std::string& typeName(uint8_t id) const {

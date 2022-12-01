@@ -177,7 +177,7 @@ TEST(DamageTypesSuite, ItWorks) {
     types.addDamageType("a");
     ASSERT_NE(types.id("a"), -1);
     ASSERT_EQ(types.typeName(types.id("a")), "a");
-    
+
     types.removeDamageType("a");
     ASSERT_EQ(types.id("a"), -1);
 
@@ -258,7 +258,7 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
 
     armor.setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
     ASSERT_EQ(player.armorClass(), 12);
-    
+
     armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
     ASSERT_EQ(player.armorClass(), 10);
 }
@@ -482,7 +482,7 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
     Skill skill(0, "", 0, {}, 2, 3);
 
     player.skills().add(skill);
-    
+
     auto& player_skill = player.skills().get(0);
 
     ASSERT_EQ(player_skill.turnsLeft(), 0);

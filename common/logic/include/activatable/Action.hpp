@@ -36,6 +36,8 @@ class Action {
         bool operator==(const Result& other) const {
             return false;
         }
+
+        ~Result();
     };
 
  private:

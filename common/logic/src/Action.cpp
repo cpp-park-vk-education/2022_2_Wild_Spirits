@@ -13,6 +13,8 @@ Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>
     hp(hp),
     buffs(buffs) {}
 
+Action::Result::~Result() {}
+
 Action::Action(Area* area, const std::vector<Effect*>& effects, unsigned int range,
                CastType cast_type, bool can_miss, const std::string& target_scaling) :
     cast_type_(cast_type), area_(area),
