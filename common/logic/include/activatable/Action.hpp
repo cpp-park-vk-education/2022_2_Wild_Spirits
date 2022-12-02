@@ -18,10 +18,10 @@ class Action {
     };
 
     struct Result {
-        private:
+     private:
         size_t char_id_;
 
-        public:
+     public:
         Tile pos = {};
         int hp = 0;
         std::vector<Buff> buffs;

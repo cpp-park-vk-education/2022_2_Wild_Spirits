@@ -46,7 +46,8 @@ TEST(DamageTypesSuite, ItWorks) {
     ASSERT_EQ(types.id("a"), -1);
 
     for (size_t i = 0; i < DamageTypes::maxNum(); ++i) {
-        auto status = types.addDamageType("a" + std::to_string(i));
+        std::string dmg_type = "a" + std::to_string(i);
+        auto status = types.addDamageType(dmg_type);
         ASSERT_TRUE(status.ok());
     }
 
