@@ -16,7 +16,7 @@ TEST_F(EffectSuite, HealReturnsValidResult) {
     ASSERT_EQ(result.hp + amount, new_result.hp);
 }
 
-TEST_F(EffectSuite, MoveReturnsValidResult) {
+TEST_F(EffectSuite, MoveReturnsValidResult) {  // cppcheck-suppress [syntaxError]
     const Tile tile = {1, 3};
     Move move(1, 3);
     move.updateActionResult(character, &new_result);

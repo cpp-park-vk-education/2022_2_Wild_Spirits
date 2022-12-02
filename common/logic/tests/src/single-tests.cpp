@@ -22,7 +22,7 @@ TEST(StatTest, ValidStatBonus) {
     ASSERT_EQ(stats.statBonus("cns"), -2);
 }
 
-TEST(DiceSuite, Validation) {
+TEST(DiceSuite, Validation) {  // cppcheck-suppress [syntaxError]
     Dice dice;
     std::vector<uint8_t> valid_dice = {4, 6, 8, 10, 12, 20};
 

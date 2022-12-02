@@ -9,7 +9,7 @@ class AreaSuite : public ::testing::Test {
     Tile target_ = {5, 2};
 };
 
-TEST_F(AreaSuite, PointAreaWorks) {
+TEST_F(AreaSuite, PointAreaWorks) {  // cppcheck-suppress [syntaxError]
     PointArea area;
     area.setTarget(target_);
 

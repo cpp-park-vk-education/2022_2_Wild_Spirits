@@ -29,7 +29,7 @@ class TurnOrderSuite : public ::testing::Test {
     }
 };
 
-TEST_F(TurnOrderSuite, BuffsDissapear) {
+TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
     EXPECT_CALL(map, currentLocation())
         .WillRepeatedly(ReturnRef(location));
 

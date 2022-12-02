@@ -52,7 +52,7 @@ TEST_F(ActionSuite, SingleActionTest) {
     ASSERT_FALSE(error_status.ok());
 }
 
-TEST_F(ActivatableSuite, PlayerSpellTest) {
+TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     Spell spell(0, "", 0, {action, heal_action}, 5, "int", 2);
     player.spells().add(&spell);
 
