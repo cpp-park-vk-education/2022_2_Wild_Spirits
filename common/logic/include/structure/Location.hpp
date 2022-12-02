@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 
+namespace DnD {
 class NPC_Instance;
 class NPC;
 class GameMap;
@@ -42,3 +43,4 @@ class Location : public GameEntity {
         return npc_;
     }
 };
+}  // namespace DnD

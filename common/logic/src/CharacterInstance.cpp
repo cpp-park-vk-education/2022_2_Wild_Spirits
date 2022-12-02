@@ -4,6 +4,7 @@
 #include "Item.hpp"
 #include "Action.hpp"
 
+namespace DnD {
 CharacterInstance::CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
                       int money, std::unordered_map<size_t, Item*> items) :
         OnLocation(pos, map),
@@ -123,3 +124,4 @@ void CharacterInstance::setImage(size_t image_id) {
 }
 
 void CharacterInstance::onTurnStart() {}
+}  // namespace DnD

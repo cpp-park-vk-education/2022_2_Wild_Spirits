@@ -5,6 +5,7 @@
 #include "DamageTypes.hpp"
 #include "Resistible.hpp"
 
+namespace DnD {
 TEST(StatTest, ValidStatBonus) {
     StatBased stats({
         {"dex", 12},
@@ -77,3 +78,4 @@ TEST(ResistibleSuite, ItWorks) {
     res.removeVulnerability(3);
     ASSERT_FALSE(res.isVulnerableTo(3));
 }
+}  // namespace DnD

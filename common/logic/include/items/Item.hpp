@@ -2,6 +2,7 @@
 
 #include "GameEntity.hpp"
 
+namespace DnD {
 class Item : public GameEntity {
  private:
     int cost_;
@@ -20,3 +21,4 @@ class Item : public GameEntity {
         cost_ = cost;
     }
 };
+}  // namespace DnD

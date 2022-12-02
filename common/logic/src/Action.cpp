@@ -5,6 +5,7 @@
 
 #include <utility>
 
+namespace DnD {
 Action::Result::Result(size_t char_id) : char_id_(char_id) {}
 
 Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs) :
@@ -118,3 +119,4 @@ Action::~Action() {
         delete effect;
     }
 }
+}  // namespace DnD

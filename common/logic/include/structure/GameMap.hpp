@@ -2,6 +2,7 @@
 
 #include "Location.hpp"
 
+namespace DnD {
 class GameState;
 class PlayerCharacter;
 
@@ -47,3 +48,4 @@ class GameMapImpl : public GameMap {
 
     Storage<PlayerCharacter>& players();
 };
+}  // namespace DnD

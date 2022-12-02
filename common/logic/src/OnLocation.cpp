@@ -3,6 +3,7 @@
 #include "GameMap.hpp"
 #include "Location.hpp"
 
+namespace DnD {
 OnLocation::OnLocation(Position* pos, GameMap& map) :
         pos_(pos), map_(map), current_location_(map.currentLocationId()) {}
 
@@ -13,3 +14,4 @@ const Location& OnLocation::location() {
 }
 
 void setLocation(Location* loc) {}
+}  // namespace DnD

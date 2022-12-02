@@ -13,6 +13,7 @@ using ::testing::Return;
 using ::testing::_;
 using ::testing::SizeIs;
 
+namespace DnD {
 TEST_F(ActionSuite, SingleActionTest) {
     // Add buff to npc's dex, check if it will dodge action
     location.npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
@@ -131,3 +132,4 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
     armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
     ASSERT_EQ(player.armorClass(), 10);
 }
+}  // namespace DnD

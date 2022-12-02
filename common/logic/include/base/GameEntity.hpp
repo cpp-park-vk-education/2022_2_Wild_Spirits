@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 
+namespace DnD {
 class GameEntityInterface {
  public:
     virtual const std::string& info(const std::string&) const = 0;
@@ -43,3 +44,4 @@ class GameEntity : public GameEntityInterface {
     size_t getImageId() const override;
     void setImage(size_t) override;
 };
+}  // namespace DnD

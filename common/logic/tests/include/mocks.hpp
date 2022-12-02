@@ -3,6 +3,7 @@
 #include "GameMap.hpp"
 #include "Dice.hpp"
 
+namespace DnD {
 class MockGameMap : public GameMap {
  public:
     MockGameMap() = default;
@@ -22,3 +23,4 @@ class MockDice : public DiceInterface {
         return new MockDice();
     }
 };
+}  // namespace DnD

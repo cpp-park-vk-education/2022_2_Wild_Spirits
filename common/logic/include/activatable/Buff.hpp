@@ -4,6 +4,7 @@
 #include "StatBased.hpp"
 #include "TurnBased.hpp"
 
+namespace DnD {
 class Buff : public Effect, public StatBased, public Temporal {
  public:
     Buff() : Temporal(0) {}
@@ -19,3 +20,4 @@ class Buff : public Effect, public StatBased, public Temporal {
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
 };
+}  // namespace DnD

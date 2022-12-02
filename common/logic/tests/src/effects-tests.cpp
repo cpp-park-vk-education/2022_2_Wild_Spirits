@@ -7,6 +7,7 @@
 using ::testing::Return;
 using ::testing::_;
 
+namespace DnD {
 TEST_F(EffectSuite, HealReturnsValidResult) {
     const unsigned int amount = 5;
     Heal heal(amount);
@@ -46,3 +47,4 @@ TEST(DiceSuite, ThrowsOnInvalidDice) {
     ASSERT_THROW(DealDamage(0, 7, 2, new Dice()), InvalidDice);
     ASSERT_THROW(DealDamage(0, -1, 2, new Dice()), InvalidDice);
 }
+}  // namespace DnD

@@ -11,6 +11,7 @@
 #include <list>
 #include <unordered_map>
 
+namespace DnD {
 class Race : public GameEntity, public StatBased {
  public:
     Race() = default;
@@ -119,3 +120,4 @@ class PlayerCharacter : public CharacterInstance {
         return consumables_;
     }
 };
+}  // namespace DnD

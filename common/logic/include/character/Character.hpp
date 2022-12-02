@@ -4,6 +4,7 @@
 #include "Resistible.hpp"
 #include "StatBased.hpp"
 
+namespace DnD {
 class Character : public GameEntity, public Resistible, public StatBased {
  protected:
     unsigned int exp_;
@@ -56,3 +57,4 @@ public:
     
     }
 };
+}  // namespace DnD

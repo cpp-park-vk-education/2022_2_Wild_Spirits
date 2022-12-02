@@ -5,6 +5,7 @@
 
 #include "ErrorStatus.hpp"
 
+namespace DnD {
 class StatBased {
  public:
     using Stats = std::unordered_map<std::string, int>;
@@ -47,3 +48,4 @@ class StatBased {
         return ErrorStatus::Ok();
     }
 };
+}  // namespace DnD

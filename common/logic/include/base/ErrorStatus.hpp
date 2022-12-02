@@ -2,6 +2,7 @@
 
 #include <string>
 
+namespace DnD {
 class ErrorStatus {
  private:
     std::string msg_;
@@ -29,3 +30,4 @@ class ErrorStatus {
         return ErrorStatus(false, msg);
     }
 };
+}  // namespace DnD

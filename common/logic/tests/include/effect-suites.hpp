@@ -4,6 +4,7 @@
 
 #include "mocks.hpp"
 
+namespace DnD {
 class EffectSuite : public ::testing::Test {
  protected:
     Character char_template_;
@@ -28,3 +29,4 @@ class DamageSuite : public EffectSuite {
  public:
     DamageSuite() : dice(new MockDice()) {}
 };
+}  // namespace DnD

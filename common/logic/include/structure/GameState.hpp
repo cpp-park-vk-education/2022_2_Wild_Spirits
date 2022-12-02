@@ -12,6 +12,7 @@
 #include "Storage.hpp"
 #include "GameMap.hpp"
 
+namespace DnD {
 class GameState {
  public:
     virtual Storage<NPC>& npc() = 0;
@@ -122,3 +123,4 @@ class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;
     SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) override;
 };
+} // namespace DnD

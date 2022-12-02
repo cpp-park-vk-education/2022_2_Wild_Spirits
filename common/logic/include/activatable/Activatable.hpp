@@ -5,6 +5,8 @@
 #include "GameEntity.hpp"
 #include "Action.hpp"
 
+namespace DnD {
+
 class Activatable {
  private:
     std::vector<Action> actions_;
@@ -70,3 +72,4 @@ class Activatable {
         return {};
     }
 };
+}  // namespace DnD

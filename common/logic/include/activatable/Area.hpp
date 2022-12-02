@@ -4,6 +4,7 @@
 
 #include "Tile.hpp"
 
+namespace DnD {
 class Area {
  protected:
     Tile target_;
@@ -75,3 +76,4 @@ class AreaFactory {
         return new CustomArea(offsets);
     }
 };
+}  // namespace DnD

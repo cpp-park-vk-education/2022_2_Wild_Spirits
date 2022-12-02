@@ -5,6 +5,7 @@
 
 #include "ErrorStatus.hpp"
 
+namespace DnD {
 class GameMap;
 class GameState;
 class CharacterInstance;
@@ -46,3 +47,4 @@ class TurnOrder {
         return turn_order_queue_.size();
     }
 };
+} // namespace DnD

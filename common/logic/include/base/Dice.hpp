@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstdint>
 
+namespace DnD {
 class DiceInterface {
  private:
     static const inline std::set<uint8_t> valid_dice_ = {4, 6, 8, 10, 12, 20};
@@ -35,3 +36,4 @@ class Dice : public DiceInterface {
         return std::vector<uint8_t>(num);
     }
 };
+}  // namespace DnD

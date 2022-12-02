@@ -5,6 +5,7 @@
 
 #include <utility>
 
+namespace DnD {
 class Position {
  public:
     virtual bool isInArea(const Area& area) = 0;
@@ -82,3 +83,4 @@ class PositionFactory {
         return new RectangularPos(b_left, u_right);
     }
 };
+}  // namespace DnD

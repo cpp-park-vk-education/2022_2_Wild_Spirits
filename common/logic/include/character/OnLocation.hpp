@@ -4,6 +4,7 @@
 
 #include <cstddef>
 
+namespace DnD {
 class GameMap;
 class Location;
 
@@ -46,3 +47,4 @@ class OnLocation : public Position {
         delete pos_;
     }
 };
+} // namespace DnD

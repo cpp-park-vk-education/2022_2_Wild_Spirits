@@ -3,6 +3,7 @@
 #include "GameState.hpp"
 #include "GameMap.hpp"
 
+namespace DnD {
 void TurnOrder::nextTurn() {}
 
 void TurnOrder::skipTurns(size_t turns) {}
@@ -24,3 +25,4 @@ void TurnOrder::fillQueue() {}
 CharacterInstance* TurnOrder::getActiveCharacter() const {
     return 0;
 }
+}  // namespace DnD

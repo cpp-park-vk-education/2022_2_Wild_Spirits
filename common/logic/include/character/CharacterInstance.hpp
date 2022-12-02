@@ -10,6 +10,7 @@
 #include <list>
 #include <unordered_map>
 
+namespace DnD {
 class DiceInterface;
 class Item;
 
@@ -82,3 +83,4 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     size_t id() const override;
 };
+} // namespace DnD

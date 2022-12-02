@@ -1,5 +1,6 @@
 #pragma once
 
+namespace DnD {
 class TurnBased {
  public:
     virtual void onTurnStart() = 0;
@@ -26,3 +27,4 @@ class Temporal : public TurnBased {
         }
     }
 };
+}  // namespace DnD

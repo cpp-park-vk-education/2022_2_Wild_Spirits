@@ -6,6 +6,8 @@
 #include "Area.hpp"
 #include "StatBased.hpp"
 
+namespace DnD {
+
 class Effect;
 class CharacterInstance;
 class Buff;
@@ -84,3 +86,4 @@ class Action {
 
     ~Action();
 };
+}  // namespace DnD

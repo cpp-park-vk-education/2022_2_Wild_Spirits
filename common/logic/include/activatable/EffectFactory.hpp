@@ -4,6 +4,7 @@
 #include "Damage.hpp"
 #include "Buff.hpp"
 
+namespace DnD {
 class EffectFactory {
     static Effect* create(int amount) {
         return new Heal(amount);
@@ -21,3 +22,4 @@ class EffectFactory {
         return new DealDamage(damage_type, die_type, times, new Dice());
     }
 };
+}

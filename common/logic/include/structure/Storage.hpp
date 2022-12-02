@@ -7,6 +7,7 @@
 
 #include "ErrorStatus.hpp"
 
+namespace DnD {
 template <typename T>
 class Storage {
  private:
@@ -60,3 +61,4 @@ class Storage {
         }
     }
 };
+}  // namespace DnD

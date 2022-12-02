@@ -8,6 +8,7 @@
 using ::testing::ReturnRef;
 using ::testing::SizeIs;
 
+namespace DnD {
 class TurnOrderSuite : public ::testing::Test {
  protected:
     MockGameMap map;
@@ -90,3 +91,4 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
     queue.skipTurns(3);
     ASSERT_EQ(player_skill.turnsLeft(), 0);
 }
+}  // namespace DnD

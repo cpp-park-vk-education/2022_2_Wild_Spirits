@@ -1,5 +1,7 @@
 #pragma once
 #include "Action.hpp"
+
+namespace DnD {
 class CharacterInstance;
 
 class Effect {
@@ -46,3 +48,4 @@ class Move : public Effect {
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
 };
+}  // namespace DnD

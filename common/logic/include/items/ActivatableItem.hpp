@@ -3,6 +3,7 @@
 #include "Activatable.hpp"
 #include "Item.hpp"
 
+namespace DnD {
 class ActivatableItem : public Item, public Activatable {
  public:
     ActivatableItem() = default;
@@ -59,3 +60,4 @@ class Consumable : public ActivatableItem {
         return uses_ == 0;
     }
 };
+}  // namespace DnD

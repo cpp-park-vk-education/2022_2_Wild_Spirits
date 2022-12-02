@@ -3,6 +3,7 @@
 #include "Area.hpp"
 #include "Position.hpp"
 
+namespace DnD {
 class AreaSuite : public ::testing::Test {
  protected:
     Tile target_ = {5, 2};
@@ -78,3 +79,4 @@ TEST(PositionSuite, RectPosAreaCheck) {
     r_area.setTarget(Tile{3, 2});
     ASSERT_TRUE(pos.isInArea(r_area));
 }
+}  // namespace DnD

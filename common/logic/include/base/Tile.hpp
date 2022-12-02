@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+namespace DnD {
 template <typename T>
 struct Vector {
     T x = 0;
@@ -55,3 +56,4 @@ inline Tile& operator-=(Tile& tile, const Offset& offset) {
     tile = tile - offset;
     return tile;
 }
+}  // namespace DnD

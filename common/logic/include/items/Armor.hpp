@@ -2,6 +2,7 @@
 
 #include "Item.hpp"
 
+namespace DnD {
 class Armor : public Item {
  public:
     enum class Type {
@@ -36,3 +37,4 @@ class Armor : public Item {
         type_ = type;
     }
 };
+}  // namespace DnD

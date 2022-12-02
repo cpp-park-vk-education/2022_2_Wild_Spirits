@@ -4,6 +4,7 @@
 
 #include "DamageTypes.hpp"
 
+namespace DnD {
 class Resistible {
  private:
     std::bitset<DamageTypes::maxNum()> resistances_;
@@ -36,3 +37,4 @@ class Resistible {
 
     }
 };
+}  // namespace DnD

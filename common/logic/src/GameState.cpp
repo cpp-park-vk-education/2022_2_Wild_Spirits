@@ -1,5 +1,6 @@
 #include "GameState.hpp"
 
+namespace DnD {
 Storage<NPC>& GameStateImpl::npc() {
     return npc_;
 }
@@ -94,3 +95,4 @@ ErrorStatus GameLogicProcessorImpl::trade(size_t first_char, size_t second_char,
 SaleResult GameLogicProcessorImpl::buy(size_t first_char, size_t second_char, size_t item, size_t num) {
     return SaleResult{ErrorStatus::Fail()};
 }
+}  // namespace DnD

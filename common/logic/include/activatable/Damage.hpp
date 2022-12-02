@@ -6,6 +6,7 @@
 
 #include <exception>
 
+namespace DnD {
 class DealDamage : public Effect {
  private:
     uint8_t damage_type_;
@@ -36,7 +37,8 @@ class DealDamage : public Effect {
     }
 };
 
-class InvalidDice : public DnD_Exception {
+class InvalidDice : public Exception {
  public:
-    InvalidDice(int8_t die) : DnD_Exception(("Die " + std::to_string(die) + " is not allowed").c_str()) {}
+    InvalidDice(int8_t die) : Exception(("Die " + std::to_string(die) + " is not allowed").c_str()) {}
 };
+}  // namespace DnD

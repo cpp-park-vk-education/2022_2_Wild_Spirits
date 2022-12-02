@@ -2,6 +2,7 @@
 
 #include "Activatable.hpp"
 
+namespace DnD {
 class Spell : public GameEntity, public Activatable {
  private:
     unsigned int spell_cost_;
@@ -24,3 +25,4 @@ class Spell : public GameEntity, public Activatable {
         spell_cost_ = spell_cost;
     }
 };
+}  // namespace DnD

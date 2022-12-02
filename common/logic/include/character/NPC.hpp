@@ -4,6 +4,7 @@
 #include "Skill.hpp"
 #include "Storage.hpp"
 
+namespace DnD {
 class NPC : public Character {
  private:
     Storage<Skill> base_skills_;
@@ -22,3 +23,4 @@ class NPC : public Character {
         return base_skills_;
     }
 };
+}  // namespace DnD

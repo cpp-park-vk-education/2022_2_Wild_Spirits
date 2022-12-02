@@ -9,6 +9,7 @@
 #include "GameState.hpp"
 #include "TurnOrder.hpp"
 
+namespace DnD {
 class ActionSuite : public DamageSuite{
  protected:
     NPC test_enemy_;
@@ -62,3 +63,4 @@ class ActivatableSuite : public ActionSuite {
             }
         }
 };
+}  // namespace DnD

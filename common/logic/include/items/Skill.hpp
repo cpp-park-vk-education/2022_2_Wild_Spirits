@@ -4,6 +4,7 @@
 #include "GameEntity.hpp"
 #include "TurnBased.hpp"
 
+namespace DnD {
 class Skill : public GameEntity, public Activatable {
  private:
     unsigned int cooldown_;
@@ -51,3 +52,4 @@ class Skill_Instance : public Temporal {
         return original_.use(tiles, dice_res);
     }
 };
+}  // namespace DnD

@@ -3,6 +3,7 @@
 #include "CharacterInstance.hpp"
 #include "NPC.hpp"
 
+namespace DnD {
 class NPC_Instance : public CharacterInstance {
  private:
     bool is_hostile_;
@@ -30,3 +31,4 @@ class NPC_Instance : public CharacterInstance {
         is_hostile_ = false;
     }
 };
+}  // namespace DnD

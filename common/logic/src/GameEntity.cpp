@@ -1,5 +1,6 @@
 #include "GameEntity.hpp"
 
+namespace DnD {
 GameEntity::GameEntity(size_t id, std::string_view name, size_t image_id, const GameEntity::Info& info) :
     id_(id), name_(name), image_id_(image_id), info_(info) {}
 
@@ -29,3 +30,4 @@ void GameEntity::setImage(size_t id) {
 size_t GameEntity::id() const {
     return id_;
 }
+}  // namespace DnD
