@@ -1,10 +1,8 @@
 #include "CharacterInstance.hpp"
 
 #include "Dice.hpp"
-#include "Buff.hpp"
 #include "Item.hpp"
 #include "Action.hpp"
-#include "Skill.hpp"
 
 CharacterInstance::CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
                       int money, std::unordered_map<size_t, Item*> items) :

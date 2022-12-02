@@ -19,6 +19,9 @@ class DamageTypes {
     DamageTypes() = default;
 
     ErrorStatus addDamageType(const std::string& type) {
+        uint8_t id = *unused_ids_.begin();
+        ids_[type] = id;
+        types_[id] = type;
         return ErrorStatus::Fail();
     }
 

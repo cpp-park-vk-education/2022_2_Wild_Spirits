@@ -3,6 +3,7 @@
 #include "OnLocation.hpp"
 #include "Character.hpp"
 #include "Buff.hpp"
+#include "Skill.hpp"
 #include "ErrorStatus.hpp"
 #include "Storage.hpp"
 
@@ -10,7 +11,6 @@
 #include <unordered_map>
 
 class DiceInterface;
-class Skill_Instance;
 class Item;
 
 struct SaleResult {
@@ -39,14 +39,14 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const;
-    int armorClass() const ;
+    int armorClass() const;
 
     virtual std::tuple<std::vector<Action::Result>, ErrorStatus>
         use(std::string_view action_type, size_t action_id,
-                       const std::vector<Tile>& target, const DiceInterface* = nullptr);
+            const std::vector<Tile>& target, const DiceInterface* = nullptr);
     
-    ErrorStatus trade(CharacterInstance& with, Item* give, Item* get) ;
-    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1) ;
+    ErrorStatus trade(CharacterInstance& with, Item* give, Item* get);
+    SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1);
 
     unsigned int actionPoints();
     void refreshActionPoints();
