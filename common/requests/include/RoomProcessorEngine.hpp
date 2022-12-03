@@ -12,5 +12,6 @@ private:
     Room::GameLogicProcessor &game_state;
     ChangeCollector collector;
 public:
+    RoomProcessorEngine();
     void parse(string request);
 };

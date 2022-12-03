@@ -1,9 +1,9 @@
 #pragma once
 #include "client_interfaces.hpp"
 #include <deque>
+#include <string>
 #include "ActionCollector.hpp"
-
-
+#include "nlohmann/json.hpp"
 
 
 typedef std::deque<Client::Action> action_queue;
@@ -15,5 +15,6 @@ private:
     action_queue actions;
     ActionCollector& collector;
 public:
+    ActionHandler();
     string Action_string(string action_params); 
 };

@@ -17,12 +17,16 @@ set(SOURCES
     src/StringRequestParser.cpp
 )
 
+find_package(nlohmann_json 3.11.1 REQUIRED)
+
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/interfaces
+
 )
 
 

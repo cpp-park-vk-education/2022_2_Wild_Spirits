@@ -8,12 +8,13 @@
 
 class ClientSideProcessor: public RequestAcceptor, public RequestSender{
 public:
+    ClientSideProcessor();
     bool sendRequest(Client::Action action) override;
     bool acceptRequest(std::string request_string) override;
 private:
     unsigned int client_id;
     ClientProcessorEngine engine;
-    Gateway::ClientConnection* connection;
+    std::shared_ptr<Gateway::ClientConnection*> connection;
     Client::GameState& gamestate;
     GameStateChanger GameStateChanger;
     

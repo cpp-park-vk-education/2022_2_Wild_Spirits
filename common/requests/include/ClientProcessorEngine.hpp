@@ -18,6 +18,7 @@ private:
     std::shared_ptr<RequestStringParser> parser;
     std::shared_ptr<ActionCollector> collector;
 public:
+    ClientProcessorEngine();
     std::shared_ptr<ActionHandler> handler;
     setter_queue getSetterQueue(string request);
     string getRequestString(std::unordered_map<std::string, string> actions);

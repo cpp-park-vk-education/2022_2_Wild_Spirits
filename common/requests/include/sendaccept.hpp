@@ -5,10 +5,12 @@
 
 class RequestAcceptor{
 public:
+    virtual ~RequestAcceptor();
     virtual bool acceptRequest(std::string request_string);
     
 };
 
 class RequestSender{
+    virtual ~RequestSender();
     virtual bool sendRequest(Client::Action action);
 };

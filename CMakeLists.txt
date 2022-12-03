@@ -20,6 +20,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
+FetchContent_Declare(nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.1
+    FIND_PACKAGE_ARGS NAMES nlohmann_json
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)
