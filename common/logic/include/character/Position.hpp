@@ -13,7 +13,7 @@ class Position {
     virtual void moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
-    virtual Position* clone() const = 0;
+    virtual std::unique_ptr<Position> clone() const = 0;
 
     virtual ~Position() {}
 };
@@ -26,8 +26,8 @@ class TilePos : public Position {
     TilePos(const Tile& tile) : pos_(tile) {}
     TilePos(size_t x, size_t y) : pos_{x, y} {}
 
-    Position* clone() const override {
-        return new TilePos(*this);
+    std::unique_ptr<Position> clone() const override {
+        return std::make_unique<TilePos>(*this);
     }
 
     bool isInArea(const Area& area) override {
@@ -56,8 +56,8 @@ class RectangularPos : public Position {
     RectangularPos(const Tile& b_left, const Tile& u_right) :
         bottom_left_(b_left), upper_right_(u_right) {}
 
-    Position* clone() const override {
-        return new RectangularPos(*this);
+    std::unique_ptr<Position> clone() const override {
+        return std::make_unique<RectangularPos>(*this);
     }
 
     bool isInArea(const Area& area) override {
@@ -79,8 +79,8 @@ class RectangularPos : public Position {
 
 class PositionFactory {
  public:
-    static Position* create(const Tile& b_left, const Tile& u_right = Tile{}) {
-        return new RectangularPos(b_left, u_right);
+    static std::unique_ptr<Position> create(const Tile& b_left, const Tile& u_right = Tile{}) {
+        return std::make_unique<RectangularPos>(b_left, u_right);
     }
 };
 }  // namespace DnD

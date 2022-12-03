@@ -57,10 +57,10 @@ class PlayerCharacter : public CharacterInstance {
     unsigned int level_ = 1;
 
  public:
-    PlayerCharacter(size_t id, Character& original, Position* pos, GameMap& map,
+    PlayerCharacter(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                     const Class& char_class, const Race& race,
-                    int money = 100, std::unordered_map<size_t, Item*> items = {}) :
-        CharacterInstance(id, original, pos, map, money, items),
+                    int money = 100, Storage<Item*> items = {}) :
+        CharacterInstance(id, original, std::move(pos), map, money, items),
         class_list_(),
         race_(&race) {
             class_list_.add(&char_class);

@@ -19,8 +19,8 @@ class MockDice : public DiceInterface {
  public:
     MOCK_METHOD(uint8_t, roll, (uint8_t), (const, override));
     MOCK_METHOD(std::vector<uint8_t>, roll, (uint8_t, size_t), (const, override));
-    DiceInterface* clone() const override {
-        return new MockDice();
+    std::unique_ptr<DiceInterface> clone() const override {
+        return std::make_unique<MockDice>();
     }
 };
 }  // namespace DnD

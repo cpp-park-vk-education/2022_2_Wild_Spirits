@@ -13,6 +13,14 @@ class Resistible {
  public:
     Resistible() = default;
 
+    unsigned long resistInternal() const {
+        return resistances_.to_ulong();
+    }
+
+    unsigned long vulnerInternal() const {
+        return vulnerabilities_.to_ulong();
+    }
+
     bool isResistantTo(uint8_t dmg_type_id) const {
         return false;
     }

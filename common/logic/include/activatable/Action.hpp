@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <cstddef>
 
 #include "Area.hpp"
@@ -43,10 +44,13 @@ class Action {
     };
 
  private:
+    using AreaPtr = std::unique_ptr<Area>;
+    using EffectPtr = std::unique_ptr<Effect>;
+
     CastType cast_type_;
-    Area* area_ = nullptr;
+    AreaPtr area_;
     unsigned int range_;
-    std::vector<Effect*> effects_;
+    std::vector<EffectPtr> effects_;
 
     bool can_miss_ = true;
     std::string target_scaling_ = "dex";
@@ -61,7 +65,7 @@ class Action {
 
     void swap(Action& other);
 
-    Action(Area* area, const std::vector<Effect*>& effects, unsigned int range = 0,
+    Action(AreaPtr&& area, std::vector<EffectPtr>&& effects, unsigned int range = 0,
            CastType cast_type = CastType::Tile, bool can_miss = true,
            const std::string& target_scaling = "dex");
 
@@ -74,16 +78,14 @@ class Action {
     bool canMiss() const;
     void toggleMissable();
     
-    void setArea(Area* area);
-    const Area* area() const;
+    void setArea(AreaPtr&& area);
+    AreaPtr& area() const;
 
-    std::vector<Effect*>& effects();
-    void addEffect(Effect* effect);
+    std::vector<EffectPtr>& effects();
+    void addEffect(EffectPtr&& effect);
     void removeEffect(size_t effect_id);
 
     std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const CharacterInstance&,
                                                             const Tile& tile, uint8_t dice_roll_res = 0);
-
-    ~Action();
 };
 }  // namespace DnD

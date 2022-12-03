@@ -6,20 +6,20 @@
 
 namespace DnD {
 class EffectFactory {
-    static Effect* create(int amount) {
-        return new Heal(amount);
+    static std::unique_ptr<Effect> create(int amount) {
+        return std::make_unique<Heal>(amount);
     }
 
-    static Effect* create(int x, int y) {
-        return new Move(x, y);
+    static std::unique_ptr<Effect> create(int x, int y) {
+        return std::make_unique<Move>(x, y);
     }
 
-    static Effect* create(const StatBased::Stats& stats, unsigned int turns) {
-        return new Buff(stats, turns);
+    static std::unique_ptr<Effect> create(const StatBased::Stats& stats, unsigned int turns) {
+        return std::make_unique<Buff>(stats, turns);
     }
 
-    static Effect* create(uint8_t damage_type, uint8_t die_type, size_t times) {
-        return new DealDamage(damage_type, die_type, times, new Dice());
+    static std::unique_ptr<Effect> create(uint8_t damage_type, uint8_t die_type, size_t times) {
+        return std::make_unique<DealDamage>(damage_type, die_type, times, new Dice());
     }
 };
 }

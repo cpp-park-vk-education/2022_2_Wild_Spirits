@@ -1,10 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "Tile.hpp"
 
 namespace DnD {
+
 class Area {
  protected:
     Tile target_;
@@ -14,7 +16,7 @@ class Area {
         target_ = target;
     }
 
-    virtual Area* clone() const = 0;
+    virtual std::unique_ptr<Area> clone() const = 0;
     virtual bool isInArea(const Tile& tile) const = 0;
 
     virtual ~Area() {}
@@ -24,8 +26,8 @@ class PointArea : public Area {
  public:
     PointArea() = default;
 
-    Area* clone() const override {
-        return new PointArea();
+    std::unique_ptr<Area> clone() const override {
+        return std::make_unique<PointArea>();
     }
 
     bool isInArea(const Tile& tile) const override {
@@ -41,8 +43,8 @@ class RectangularArea : public Area {
  public:
     RectangularArea(size_t w, size_t h) : width_(w), height_(h) {}
 
-    Area* clone() const override {
-        return new RectangularArea(*this);
+    std::unique_ptr<Area> clone() const override {
+        return std::make_unique<RectangularArea>(*this);
     }
 
     bool isInArea(const Tile& tile) const override {
@@ -57,8 +59,8 @@ class CustomArea : public Area {
  public:
     CustomArea(const std::vector<Offset> offsets) : offsets_(offsets) {}
 
-    Area* clone() const override {
-        return new CustomArea(*this);
+    std::unique_ptr<Area> clone() const override {
+        return std::make_unique<CustomArea>(*this);
     }
 
     bool isInArea(const Tile& tile) const override {
@@ -68,12 +70,12 @@ class CustomArea : public Area {
 
 class AreaFactory {
  public:
-    static Area* create(size_t width = 0, size_t height = 0) {
-        return new PointArea();
+    static std::unique_ptr<Area> create(size_t width = 0, size_t height = 0) {
+        return std::make_unique<PointArea>();
     }
 
-    static Area* create(const std::vector<Offset>& offsets) {
-        return new CustomArea(offsets);
+    static std::unique_ptr<Area> create(const std::vector<Offset>& offsets) {
+        return std::make_unique<CustomArea>(offsets);
     }
 };
 }  // namespace DnD

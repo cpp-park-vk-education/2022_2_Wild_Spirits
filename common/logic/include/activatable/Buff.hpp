@@ -14,8 +14,8 @@ class Buff : public Effect, public StatBased, public Temporal {
         return "";
     }
 
-    Effect* clone() const override {
-        return new Buff(*this);
+    std::unique_ptr<Effect>clone() const override {
+        return std::make_unique<Buff>(*this);
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;

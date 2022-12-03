@@ -8,6 +8,7 @@
 #include "ErrorStatus.hpp"
 
 namespace DnD {
+
 class DamageTypes {
  private:
     static constexpr uint8_t kDamageTypesNum = 32;

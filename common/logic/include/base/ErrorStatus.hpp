@@ -3,6 +3,7 @@
 #include <string>
 
 namespace DnD {
+
 class ErrorStatus {
  private:
     std::string msg_;

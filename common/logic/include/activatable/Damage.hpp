@@ -5,6 +5,7 @@
 #include "Dice.hpp"
 
 #include <exception>
+#include <memory>
 
 namespace DnD {
 class DealDamage : public Effect {
@@ -13,17 +14,17 @@ class DealDamage : public Effect {
     uint8_t die_type_;
     size_t times_;
 
-    DiceInterface* dice_;
+    std::unique_ptr<DiceInterface> dice_;
  
  public:
-    DealDamage(uint8_t dmg_type, uint8_t die_type, size_t times, DiceInterface* dice) :
-        damage_type_(dmg_type), die_type_(die_type), times_(times), dice_(dice) {}
+    DealDamage(uint8_t dmg_type, uint8_t die_type, size_t times, std::unique_ptr<DiceInterface>&& dice) :
+        damage_type_(dmg_type), die_type_(die_type), times_(times), dice_(std::move(dice)) {}
 
     DealDamage(const DealDamage& other) :
         DealDamage(other.damage_type_, other.die_type_, other.times_, other.dice_->clone()) {}
 
-    Effect* clone() const override {
-        return new DealDamage(*this);
+    std::unique_ptr<Effect> clone() const override {
+        return std::make_unique<DealDamage>(*this);
     }
 
     std::string info() const override {
@@ -31,10 +32,6 @@ class DealDamage : public Effect {
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
-
-    ~DealDamage() override {
-        delete dice_;
-    }
 };
 
 class InvalidDice : public Exception {

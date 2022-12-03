@@ -1,14 +1,16 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <set>
-#include <cstdlib>
+
+#include <cstddef>
 #include <cstdint>
 
 namespace DnD {
 class DiceInterface {
  private:
-    static const inline std::set<uint8_t> valid_dice_ = {4, 6, 8, 10, 12, 20};
+    static const std::set<uint8_t> valid_dice_;
     
  public:
     virtual uint8_t roll(uint8_t die) const = 0;
@@ -18,22 +20,14 @@ class DiceInterface {
         return valid_dice_.contains(die);
     }
 
-    virtual DiceInterface* clone() const = 0;
+    virtual std::unique_ptr<DiceInterface> clone() const = 0;
     virtual ~DiceInterface() {}
 };
 
 class Dice : public DiceInterface {
  public:
-    uint8_t roll(uint8_t die) const override {
-        return 0;
-    }
-
-    DiceInterface* clone() const override {
-        return new Dice();
-    }
-
-    std::vector<uint8_t> roll(uint8_t die, size_t num) const override {
-        return std::vector<uint8_t>(num);
-    }
+    uint8_t roll(uint8_t die) const override;
+    std::unique_ptr<DiceInterface> clone() const override;
+    std::vector<uint8_t> roll(uint8_t die, size_t num) const override;
 };
 }  // namespace DnD

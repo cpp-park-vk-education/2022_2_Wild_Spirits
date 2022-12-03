@@ -1,5 +1,8 @@
 #pragma once
+
 #include "Action.hpp"
+
+#include <memory>
 
 namespace DnD {
 class CharacterInstance;
@@ -8,7 +11,7 @@ class Effect {
  public:
     virtual void updateActionResult(const CharacterInstance& character, Action::Result* result) const = 0;
     virtual std::string info() const = 0;
-    virtual Effect* clone() const = 0;
+    virtual std::unique_ptr<Effect> clone() const = 0;
     virtual ~Effect() {}
 };
 
@@ -23,8 +26,8 @@ class Heal : public Effect {
         return "";
     }
 
-    Effect* clone() const override {
-        return new Heal(amount_);
+    std::unique_ptr<Effect> clone() const override {
+        return std::make_unique<Heal>(amount_);
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
@@ -42,8 +45,8 @@ class Move : public Effect {
         return "";
     }
 
-    Effect* clone() const override {
-        return new Move(x_, y_);
+    std::unique_ptr<Effect> clone() const override {
+        return std::make_unique<Move>(x_, y_);
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;

@@ -16,12 +16,13 @@ class Storage {
  public:
     using size_type = size_t;
 
-    Storage(const std::unordered_map<size_t, T>& data = {}) : data_(data) {}
+    Storage() = default;
+    Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
 
     template <typename... Args>
     ErrorStatus add(size_t id, Args&&... args) {
         static_assert(!std::is_pointer<T>::value);
-        data_.try_emplace(id, id, args...);
+        data_.try_emplace(id, id, std::forward<Args>(args)...);
         return ErrorStatus::Fail();
     }
 

@@ -16,10 +16,10 @@ Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>
 
 Action::Result::~Result() {}
 
-Action::Action(Area* area, const std::vector<Effect*>& effects, unsigned int range,
+Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, unsigned int range,
                CastType cast_type, bool can_miss, const std::string& target_scaling) :
-    cast_type_(cast_type), area_(area),
-    range_(range), effects_(effects),
+    cast_type_(cast_type), area_(std::move(area)),
+    range_(range), effects_(std::move(effects)),
     can_miss_(can_miss), target_scaling_(target_scaling) {}
 
 Action::Action(const Action& other) :
@@ -37,7 +37,7 @@ Action& Action::operator=(const Action& other) {
 }
 
 Action::Action(Action&& other) :
-     cast_type_(other.cast_type_), area_(other.area_), range_(other.range_),
+     cast_type_(other.cast_type_), area_(std::move(other.area_)), range_(other.range_),
      effects_(std::move(other.effects_)), can_miss_(other.can_miss_),
      target_scaling_(std::move(other.target_scaling_)) {
     other.area_ = nullptr;
@@ -85,17 +85,16 @@ void Action::toggleMissable() {
     can_miss_ = (can_miss_ + 1) % 2;
 }
 
-void Action::setArea(Area* area) {
-    delete area_;
-    area_ = area;
+void Action::setArea(Action::AreaPtr&& area) {
+    area_ = std::move(area);
 }
 
-std::vector<Effect*>& Action::effects() {
+std::vector<Action::EffectPtr>& Action::effects() {
     return effects_;
 }
 
-void Action::addEffect(Effect* effect) {
-    effects_.push_back(effect);
+void Action::addEffect(Action::EffectPtr&& effect) {
+    effects_.push_back(std::move(effect));
 }
 
 void Action::removeEffect(size_t effect_id) {
@@ -103,20 +102,11 @@ void Action::removeEffect(size_t effect_id) {
         return;
     }
 
-    auto it = effects_.begin() + effect_id;
-    delete *it;
-    effects_.erase(it);
+    effects_.erase(effects_.begin() + effect_id);
 }
 
 std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
         const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
     return {};
-}
-
-Action::~Action() {
-    delete area_;
-    for (auto effect : effects_) {
-        delete effect;
-    }
 }
 }  // namespace DnD

@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 namespace DnD {
+
 class DiceInterface;
 class Item;
 
@@ -35,8 +36,8 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     int money_;
 
  public:
-    CharacterInstance(size_t id, Character& original, Position* pos, GameMap& map,
-                      int money = 100, std::unordered_map<size_t, Item*> items = {});
+    CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
+                      int money = 100, Storage<Item*> items = {});
 
     int statCheckRoll(std::string_view stat) const ;
     int statBonus(std::string_view) const;

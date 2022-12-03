@@ -20,8 +20,8 @@ class Activatable {
     Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
         actions_(actions), action_cost_(action_cost), scaling_(scaling) {}
     
-    void addEffect(int action, Effect* effect) {
-        actions_[action].addEffect(effect);
+    void addEffect(int action, std::unique_ptr<Effect>&& effect) {
+        actions_[action].addEffect(std::move(effect));
     }
 
     void removeEffect(size_t action, size_t effect) {

@@ -3,6 +3,7 @@ project(dnd-logic VERSION 1.0)
 
 set(SOURCES
      src/Action.cpp
+     src/Dice.cpp
      src/Effect.cpp
      src/GameEntity.cpp
      src/CharacterInstance.cpp

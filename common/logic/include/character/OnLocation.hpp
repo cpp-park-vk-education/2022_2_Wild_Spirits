@@ -3,23 +3,25 @@
 #include "Position.hpp"
 
 #include <cstddef>
+#include <memory>
 
 namespace DnD {
+
 class GameMap;
 class Location;
 
 class OnLocation : public Position {
  private:
-    Position* pos_;
+    std::unique_ptr<Position> pos_;
     GameMap& map_;
     size_t current_location_;
 
-    Position* clone() const override {
-        return new OnLocation(*this);
+    std::unique_ptr<Position> clone() const override {
+        return std::make_unique<OnLocation>(*this);
     }
 
  public:
-    OnLocation(Position* pos, GameMap& map);
+    OnLocation(std::unique_ptr<Position>&& pos, GameMap& map);
 
     OnLocation(const OnLocation& other);
     OnLocation& operator=(OnLocation& other) = delete;
@@ -41,10 +43,6 @@ class OnLocation : public Position {
 
     void moveBy(int x, int y) override {
         return pos_->moveBy(x, y);
-    }
-
-    ~OnLocation() {
-        delete pos_;
     }
 };
 } // namespace DnD

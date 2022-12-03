@@ -24,9 +24,9 @@ class EffectSuite : public ::testing::Test {
 
 class DamageSuite : public EffectSuite {
  protected:
-    MockDice* dice;
+    std::unique_ptr<MockDice> dice;
 
  public:
-    DamageSuite() : dice(new MockDice()) {}
+    DamageSuite() : dice(std::make_unique<MockDice>()) {}
 };
 }  // namespace DnD

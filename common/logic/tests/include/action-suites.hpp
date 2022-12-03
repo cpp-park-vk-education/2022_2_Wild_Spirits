@@ -21,10 +21,12 @@ class ActionSuite : public DamageSuite{
     ActionSuite() :
         DamageSuite(),
         location(0, "", 0, 5, 5),
-        action(AreaFactory::create(1, 1), {
-            new DealDamage(1, 4, 2, dice),
-            new Move(1, 2),
-            new Buff({ {"str", -2}, {"dex", -1} }, 2)}, 2) {
+        action(AreaFactory::create(1, 1), {}, 2)
+    {
+        action.addEffect(std::make_unique<DealDamage>(1, 4, 2, std::move(dice)));
+        action.addEffect(std::make_unique<Move>(1, 2));
+        action.addEffect(std::make_unique<Buff>(StatBased::Stats{ {"str", -2}, {"dex", -1} }, 2));
+
         test_enemy_.setStat("str", 10);
         test_enemy_.setStat("dex", 14);
 
@@ -52,15 +54,17 @@ class ActivatableSuite : public ActionSuite {
     ActivatableSuite() :
         ActionSuite(),
         player(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race()),
-        heal_action(AreaFactory::create(), { new Heal(3) }, 0, Action::CastType::Self, false) {
-            char_template_.setMaxHP(10);
-            player.resetHP();
-            player.takeDamage(5);
+        heal_action(AreaFactory::create(), {}, 0, Action::CastType::Self, false)
+    {   
+        heal_action.addEffect(std::make_unique<Heal>(3));
+        char_template_.setMaxHP(10);
+        player.resetHP();
+        player.takeDamage(5);
 
-            test_enemy_.setMaxHP(10);
-            for (auto& [_, enemy] : location.npc()) {
-                enemy.resetHP();
-            }
+        test_enemy_.setMaxHP(10);
+        for (auto& [_, enemy] : location.npc()) {
+            enemy.resetHP();
         }
+    }
 };
 }  // namespace DnD
