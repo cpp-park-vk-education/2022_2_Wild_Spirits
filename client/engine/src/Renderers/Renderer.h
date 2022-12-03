@@ -1,14 +1,19 @@
 #pragma once
 
-#include <Events/Events.h>
+#include "RendererInterface.h"
 
 namespace LM {
 
-    class Renderer {
+    class Renderer : public RendererInterface {
     public:
-        Renderer() = default;
+        Renderer();
         virtual ~Renderer() = default;
-        virtual void onEvent(Ref<Event> event) = 0;
+        virtual void onEvent(Ref<Event> event) override { }
+
+        virtual void start() override;
+
+        virtual void draw(RenderableTexture* renderable) override;
+        virtual void draw(RenderableGroupInterface* renderable) override;
     };
 
 }

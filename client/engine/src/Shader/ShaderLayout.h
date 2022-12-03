@@ -10,14 +10,14 @@ namespace LM {
     class ShaderSource {
     public:
         enum class Type {
-            VERTEX,
-            FRAGMENT,
-            GEOMETRY
+            kVertex,
+            kFragment,
+            kGeometry
         };
 
         enum class LoadType {
-            FILEPATH,
-            SOURCE
+            kFilepath,
+            kSource
         };
 
         ShaderSource(Type type, std::pair<std::string, LoadType> source)
@@ -27,8 +27,8 @@ namespace LM {
         inline LoadType getLoadType()            const { return m_LoadType; }
         inline const std::string& getSource()    const { return m_Source; }
     public:
-        static std::pair<std::string, LoadType> fromSource(std::string_view source) { return { source.data(), LoadType::SOURCE }; }
-        static std::pair<std::string, LoadType> fromFile(std::string_view file) { return { file.data(), LoadType::FILEPATH }; }
+        static std::pair<std::string, LoadType> fromSource(std::string_view source) { return { source.data(), LoadType::kSource }; }
+        static std::pair<std::string, LoadType> fromFile(std::string_view file) { return { file.data(), LoadType::kFilepath }; }
     protected:
         Type m_Type;
         LoadType m_LoadType;

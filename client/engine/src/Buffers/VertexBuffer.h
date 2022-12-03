@@ -11,7 +11,7 @@ namespace LM {
         VertexBuffer(const void* data, uint32_t size);
         ~VertexBuffer();
 
-        void bind()        const;
+        void bind()      const;
         void unbind()    const;
 
         void setData(const void* data, uint32_t size);

@@ -4,26 +4,26 @@
 #include <Events/Events.h>
 #include <Scenes/Gui/SceneGui.h>
 #include <Renderables/Gui/RenderableGui.h>
-#include <Renderables/Scene/RenderableScene.h>
-#include <Scenes/Scene/SceneScene.h>
+#include <Renderables/RenderableInterface.h>
+#include <Scenes/Scene/Scene.h>
 #include <Utils/Timer.h>
 
 namespace LM {
  
     class Layer {
     public:
-        Layer() = default;
+        Layer();
         virtual ~Layer() = default;
 
         virtual void addToGui(Ref<RenderableGui> renderable) { m_SceneGui->add(renderable); }
-        virtual void addToScene(Ref<RenderableScene> renderable) { m_SceneScene->add(renderable); }
+        virtual void addToScene(Ref<RenderableInterface> renderable) { m_SceneScene->add(renderable); }
 
-        virtual void onEvent(Ref<Event> _Event) { }
-        virtual void onUpdate(Tick tick) { }
-        virtual void render() { }
+        virtual void onEvent(Ref<Event> _Event);
+        virtual void onUpdate(Tick tick);
+        virtual void render();
     protected:
         Ref<SceneGui> m_SceneGui;
-        Ref<SceneScene> m_SceneScene;
+        Ref<Scene> m_SceneScene;
     };
 
 }

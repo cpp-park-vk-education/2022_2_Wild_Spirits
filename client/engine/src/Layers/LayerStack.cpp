@@ -7,9 +7,14 @@ namespace LM {
     }
 
     void LayerStack::popLayer(Ref<Layer> layer) {
-        auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
-        if (it != m_Layers.end()) {
+        if (auto it = std::find(m_Layers.begin(), m_Layers.end(), layer); it != m_Layers.end()) {
             m_Layers.erase(it);
+        }
+    }
+
+    void LayerStack::render() {
+        for (auto& layer : m_Layers) {
+            layer->render();
         }
     }
 

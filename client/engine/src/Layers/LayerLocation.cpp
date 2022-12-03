@@ -17,5 +17,5 @@ namespace LM {
     void LayerLocation::onUpdate(Tick tick) {
 
     }
-    
+
 }

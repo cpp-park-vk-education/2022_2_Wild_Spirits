@@ -10,8 +10,7 @@
 namespace LM
 {
 
-    class Shader
-    {
+    class Shader {
     public:
         Shader(const ShaderLayout& layout);
         ~Shader();

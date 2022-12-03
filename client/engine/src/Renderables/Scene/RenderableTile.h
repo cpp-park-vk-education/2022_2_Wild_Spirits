@@ -1,12 +1,12 @@
 #pragma once
 
-#include "RenderableSceneTexture.h"
+#include <Renderables/RenderableTexture.h>
 
 namespace LM {
 
-    class RenderableTile : public RenderableSceneTexture {
+    class RenderableTile : public RenderableTexture {
     public:
-        RenderableTile();
+        RenderableTile(Ref<Texture2D> texture) : RenderableTexture(texture) { }
         virtual ~RenderableTile() = default;
 
         virtual void onEvent(Ref<Event> event) override;

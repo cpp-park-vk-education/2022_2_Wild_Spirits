@@ -5,9 +5,9 @@
 #include <Core/Base.h>
 #include <Events/EventQueue.h>
 
-namespace LM {
+struct GLFWwindow;
 
-    using GLFWwindow = void;
+namespace LM {
 
     struct WindowProps {
         std::string title = "DND";
@@ -17,7 +17,7 @@ namespace LM {
 
     class Window {
     public:
-        Window(const WindowProps& props);
+        Window(const WindowProps& props = WindowProps());
         ~Window();
 
         uint32_t getWidth()  const { return m_Data.width; }

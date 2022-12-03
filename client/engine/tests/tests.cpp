@@ -65,25 +65,6 @@ TEST(Transform, TransformRotationMinus) {
     EXPECT_EQ(static_cast<float>(transform.rotation), 30.0f);
 }
 
-TEST(Transform, TransformRotationMinus) {
-
-    Transform transform;
-    transform.rotation = 100.0f;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 100.0f);
-
-    transform.rotation -= 10.0f;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 90.0f);
-
-    transform.rotation = transform.rotation - 10.0f;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 80.0f);
-
-    transform.rotation = 100.0f - transform.rotation;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 20.0f);
-
-    transform.rotation = Rotation(50.0f) - transform.rotation;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 30.0f);
-}
-
 TEST(Transform, TransformRotationSub) {
     Transform transform;
     transform.rotation = 100.0f;
@@ -128,8 +109,8 @@ TEST(BufferLayout, TypeTest) {
             { ShaderDataType::Float3, "a_Tangent" } });
 
     EXPECT_EQ(layout.getStride(), 44);
-    EXPECT_EQ(layout.getElements()[0], 0);
-    EXPECT_EQ(layout.getElements()[1], 12);
-    EXPECT_EQ(layout.getElements()[2], 20);
-    EXPECT_EQ(layout.getElements()[3], 32);
+    EXPECT_EQ(layout.getElements()[0].offset, 0);
+    EXPECT_EQ(layout.getElements()[1].offset, 12);
+    EXPECT_EQ(layout.getElements()[2].offset, 20);
+    EXPECT_EQ(layout.getElements()[3].offset, 32);
 }

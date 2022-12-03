@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#ifdef DEBUG
+#ifdef _DEBUG
     #if defined(WIN32)
         #define DEBUGBREAK() __debugbreak()
     #elif defined(LINUX)

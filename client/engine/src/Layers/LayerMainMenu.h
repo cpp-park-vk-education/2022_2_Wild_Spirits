@@ -9,8 +9,7 @@ namespace LM {
         LayerMainMenu();
         ~LayerMainMenu();
 
-        virtual void onEvent(Ref<Event> _Event);
-        virtual void onUpdate(Tick tick);
+        virtual void onUpdate(Tick tick) override;
     protected:
     };
 

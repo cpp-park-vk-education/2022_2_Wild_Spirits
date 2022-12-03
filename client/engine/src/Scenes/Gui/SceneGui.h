@@ -1,12 +1,19 @@
 #pragma once
 
 #include <Core/Base.h>
-#include <Scenes/Scene.h>
+#include <Scenes/SceneInterface.h>
 #include <Renderables/Gui/RenderableGui.h>
+#include <Renderers/Renderer.h>
 
 namespace LM {
 
-    class SceneGui : public Scene {
+    class SceneGui : public SceneInterface {
+    protected:
+        //struct TransformData {
+        //    glm::mat4 transform;
+        //    glm::vec2 position;
+        //    glm::vec2 size;
+        //};
     public:
         SceneGui();
         virtual ~SceneGui();
@@ -19,6 +26,10 @@ namespace LM {
         virtual void render() override;
     protected:
         Vector<Ref<RenderableGui>> m_Renderables;
+        Scope<Renderer> m_Renderer;
+
+        uint32_t m_Width = 0; 
+        uint32_t m_Height = 0;
     };
 
 }

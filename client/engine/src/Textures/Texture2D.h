@@ -54,8 +54,8 @@ namespace LM {
         struct FromFile { std::string filename; }; 
         struct FromSource { std::string source; };
     public:
-        Texture2D(FromFile file, Texture2D::MASK mask);
-        Texture2D(FromSource source, Texture2D::MASK mask);
+        Texture2D(FromFile file, MASK mask = MASK::NONE);
+        Texture2D(FromSource source, MASK mask = MASK::NONE);
         ~Texture2D();
 
         uint32_t getTextureId() const { return m_TextureId; }

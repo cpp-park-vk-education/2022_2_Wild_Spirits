@@ -9,8 +9,8 @@ namespace LM {
         LayerSettings();
         ~LayerSettings();
 
-        virtual void onEvent(Ref<Event> _Event);
-        virtual void onUpdate(Tick tick);
+        virtual void onEvent(Ref<Event> _Event) override;
+        virtual void onUpdate(Tick tick) override;
     protected:
     };
 

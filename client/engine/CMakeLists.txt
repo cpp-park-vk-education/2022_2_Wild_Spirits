@@ -17,23 +17,33 @@ set(SOURCES
     
     src/Core/Application.cpp src/Core/Application.h
     src/Core/Base.h
+    src/Core/Assert.h
     src/Core/Color.h
     src/Core/KeyCode.h src/Core/MouseCode.h
     src/Core/Window.cpp src/Core/Window.h
     
     src/Events/Events.h
-    src/Events/EventInterface.h src/Events/EventDispatcher.h src/Events/EventQueue.h
-    src/Events/EventKey.h src/Events/EventMouse.h src/Events/EventWindow.h
+    src/Events/EventInterface.h 
+    src/Events/EventKey.h
+    src/Events/EventMouse.h 
+    src/Events/EventWindow.h
+    src/Events/EventDispatcher.h 
+    src/Events/EventQueue.h
     
-    src/Layers/Layer.h
+    src/Layers/Layer.cpp src/Layers/Layer.h
     src/Layers/LayerLocation.cpp src/Layers/LayerLocation.h
     src/Layers/LayerMainMenu.cpp src/Layers/LayerMainMenu.h
     src/Layers/LayerSettings.cpp src/Layers/LayerSettings.h
     src/Layers/LayerStack.cpp src/Layers/LayerStack.h
     
+    src/Renderables/RenderableInterface.h 
     src/Renderables/Renderable.h 
+    src/Renderables/RenderableGroupInterface.cpp src/Renderables/RenderableGroupInterface.h 
+    src/Renderables/RenderableGroup.cpp src/Renderables/RenderableGroup.h 
+    src/Renderables/RenderableTexture.cpp src/Renderables/RenderableTexture.h
 
-    src/Renderables/Gui/RenderableGui.h src/Renderables/Gui/RenderableGuiAlign.h 
+    src/Renderables/Gui/RenderableGui.h 
+    src/Renderables/Gui/RenderableGuiAlign.h 
     src/Renderables/Gui/RenderableGuiGroup.cpp src/Renderables/Gui/RenderableGuiGroup.h
     src/Renderables/Gui/RenderableGuiTexture.cpp src/Renderables/Gui/RenderableGuiTexture.h
 
@@ -46,17 +56,14 @@ set(SOURCES
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomSpell.h
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomWeapon.h
 
-    src/Renderables/Scene/RenderableScene.h
-    src/Renderables/Scene/RenderableSceneTexture.cpp src/Renderables/Scene/RenderableSceneTexture.h
     src/Renderables/Scene/RenderableTile.cpp src/Renderables/Scene/RenderableTile.h
 
-    src/Renderers/Renderer.h
-    src/Renderers/Gui/RendererGui.cpp src/Renderers/Gui/RendererGui.h
-    src/Renderers/Scene/RendererScene.cpp src/Renderers/Scene/RendererScene.h
+    src/Renderers/RendererInterface.h
+    src/Renderers/Renderer.cpp src/Renderers/Renderer.h
 
-    src/Scenes/Scene.h
+    src/Scenes/SceneInterface.h
     src/Scenes/Gui/SceneGui.cpp src/Scenes/Gui/SceneGui.h
-    src/Scenes/Scene/SceneScene.cpp src/Scenes/Scene/SceneScene.h
+    src/Scenes/Scene/Scene.cpp src/Scenes/Scene/Scene.h
     
     src/Shader/Shader.cpp src/Shader/Shader.h
     src/Shader/ShaderLayout.cpp src/Shader/ShaderLayout.h
@@ -68,18 +75,47 @@ set(SOURCES
     src/Transform/Transform.cpp src/Transform/Transform.h
     src/Transform/Rotation.h
 
-    src/Utils/Timer.h)
+    src/Utils/Timer.h
+    src/Utils/ConsoleLog.cpp src/Utils/ConsoleLog.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
 add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(${PROJECT_NAME} glm)
+target_link_libraries(${PROJECT_NAME} glm glfw glew opengl32)
 
-add_subdirectory(deps/glm)
+add_definitions(-DGLEW_STATIC -D_LIB)
+
+include(FetchContent)
+
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG dd8a678a66f1967372e5a5e3deac41ebf65ee127
+)
+FetchContent_MakeAvailable(glfw)
+
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG fc8f4bb442b9540969f2f3f351c4960d91bca17a
+)
+FetchContent_MakeAvailable(glm)
+
+FetchContent_Declare(
+    glew
+    GIT_REPOSITORY https://github.com/mihaillatyshov/glew.git
+    GIT_TAG bd68b6e4b996d165451049637c1d66018f207b53
+)
+FetchContent_MakeAvailable(glew)
+
+option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
 
 if(MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Client/Engine")
+    set_target_properties(glfw PROPERTIES FOLDER "Client/Engine/deps")
+    set_target_properties(update_mappings PROPERTIES FOLDER "Client/Engine/deps")
+    set_target_properties(glew PROPERTIES FOLDER "Client/Engine/deps")
 endif()

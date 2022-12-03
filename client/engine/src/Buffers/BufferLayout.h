@@ -3,6 +3,7 @@
 #include <string>
 
 #include <Core/Base.h>
+#include <Core/Assert.h>
 #include <Shader/ShaderDataType.h>
 
 namespace LM {
@@ -15,6 +16,22 @@ namespace LM {
         { }
 
         uint32_t getComponentCount() const {
+            switch (type)
+            {
+            case ShaderDataType::Float:   return 1;
+            case ShaderDataType::Float2:  return 2;
+            case ShaderDataType::Float3:  return 3;
+            case ShaderDataType::Float4:  return 4;
+            case ShaderDataType::Mat3:    return 3;
+            case ShaderDataType::Mat4:    return 4;
+            case ShaderDataType::Int:     return 1;
+            case ShaderDataType::Int2:    return 2;
+            case ShaderDataType::Int3:    return 3;
+            case ShaderDataType::Int4:    return 4;
+            case ShaderDataType::Bool:    return 1;
+            }
+
+            CORE_ASSERT(false, "Unknown ShaderDataType!");
             return 0;
         }
 
@@ -37,7 +54,7 @@ namespace LM {
             calculateOffsetsAndStride();
         }
 
-        bool gasDivisor() const { return m_Divisor; }
+        bool hasDivisor() const { return m_Divisor; }
         uint32_t getDivisor() const { return m_Divisor; }
 
         inline uint32_t getStride() const { return m_Stride; }
@@ -50,7 +67,16 @@ namespace LM {
         Vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
         Vector<BufferElement>::const_iterator end()      const { return m_Elements.end(); }
     private:
-        void calculateOffsetsAndStride() { }
+        void calculateOffsetsAndStride() {
+            uint32_t offset = 0;
+            m_Stride = 0;
+            for (auto& element : m_Elements)
+            {
+                element.offset = offset;
+                offset += element.size;
+                m_Stride += element.size;
+            }
+        }
     private:
         Vector<BufferElement> m_Elements;
         uint32_t m_Divisor = 0;

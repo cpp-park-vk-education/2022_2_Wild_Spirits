@@ -12,7 +12,7 @@ namespace LM
         EventDispatcher(Ref<Event> event) : m_Event(event) { }
 
         template<typename T, typename F>
-        bool Dispatch(const F& func) {
+        bool dispatch(const F& func) {
             if (m_Event->getEventType() == T::getStaticType()) {
                 m_Event->Handled = func(StaticRefCast<T>(m_Event));
                 return true;
