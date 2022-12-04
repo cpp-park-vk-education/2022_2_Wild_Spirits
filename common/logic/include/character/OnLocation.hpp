@@ -29,6 +29,10 @@ class OnLocation : public Position {
     const Location& location();
     void setLocation(Location& loc);
 
+    void setPosition(std::unique_ptr<Position>&& pos) {
+        pos_ = std::move(pos);
+    }
+
     bool isInArea(const Area& area) override {
         return pos_->isInArea(area);
     }

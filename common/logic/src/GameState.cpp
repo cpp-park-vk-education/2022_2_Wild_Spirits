@@ -70,12 +70,12 @@ ErrorStatus GameStateImpl::moveCharacter(size_t char_id, Tile tile) {
 }
 
 ErrorStatus GameStateImpl::changeCharacteristic(std::string_view type, size_t id, std::string_view characteristic,
-                            const std::variant<std::string, size_t, int>& replacer) {
+                                                const std::variant<std::string, size_t, int>& replacer) {
     return ErrorStatus::Fail();
 }
 
 std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
-                                                      size_t item_id, Tile target) {
+                                                                        size_t item_id, Tile target) {
     return {};
 }
 
@@ -88,7 +88,7 @@ ErrorStatus LogicProcessorImpl::distributeSkillPoints(size_t player_char_id, con
 }
 
 ErrorStatus LogicProcessorImpl::trade(size_t first_char, size_t second_char,
-                                          size_t first_item, size_t second_item) {
+                                      size_t first_item, size_t second_item) {
     return ErrorStatus::Fail();
 }
 
