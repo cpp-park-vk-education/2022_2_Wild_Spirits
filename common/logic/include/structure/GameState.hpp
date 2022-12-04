@@ -32,11 +32,11 @@ class GameState {
     virtual ErrorStatus addAction(std::string_view item_type, size_t item_id, const Action& action) = 0;
     virtual ErrorStatus removeAction(std::string_view item_type, size_t item_id, size_t action_id) = 0;
 
-    virtual ErrorStatus addEffect(std::string_view item_type, size_t item_id, Effect* effect) = 0;
+    virtual ErrorStatus addEffect(std::string_view item_type, size_t item_id, std::unique_ptr<Effect>&& effect) = 0;
     virtual ErrorStatus removeEffect(std::string_view item_type, size_t item_id, size_t effect_id) = 0;
 
-    virtual ErrorStatus setArea(std::string_view item_type, size_t item_id, Area* area) = 0;
-    virtual ErrorStatus setPositionType(size_t char_id, Position* pos) = 0;
+    virtual ErrorStatus setArea(std::string_view item_type, size_t item_id, std::unique_ptr<Area>&& area) = 0;
+    virtual ErrorStatus setPositionType(size_t char_id, std::unique_ptr<Position>&& pos) = 0;
 
     virtual ErrorStatus moveCharacter(size_t char_id, Tile tile) = 0;
 
@@ -44,7 +44,7 @@ class GameState {
                                              const std::variant<std::string, size_t, int>& replacer) = 0;
 };
 
-class GameStateImpl : public GameState {
+class GameStateImpl : virtual public GameState {
  private:
     Storage<NPC> npc_;
     Storage<PlayerCharacter> players_;
@@ -63,6 +63,7 @@ class GameStateImpl : public GameState {
     GameMap* map_;
 
  public:
+    GameStateImpl() = default;
     GameStateImpl(GameMap* map) : map_(map) {}
 
     ~GameStateImpl() {
@@ -86,11 +87,11 @@ class GameStateImpl : public GameState {
     ErrorStatus addAction(std::string_view item_type, size_t item_id, const Action& action) override;
     ErrorStatus removeAction(std::string_view item_type, size_t item_id, size_t action_id) override;
 
-    ErrorStatus addEffect(std::string_view item_type, size_t item_id, Effect* effect) override;
+    ErrorStatus addEffect(std::string_view item_type, size_t item_id, std::unique_ptr<Effect>&& effect) override;
     ErrorStatus removeEffect(std::string_view item_type, size_t item_id, size_t effect_id) override;
 
-    ErrorStatus setArea(std::string_view item_type, size_t item_id, Area* area) override;
-    ErrorStatus setPositionType(size_t char_id, Position* pos) override;
+    ErrorStatus setArea(std::string_view item_type, size_t item_id, std::unique_ptr<Area>&& area) override;
+    ErrorStatus setPositionType(size_t char_id, std::unique_ptr<Position>&& pos) override;
 
     ErrorStatus moveCharacter(size_t char_id, Tile tile) override;
 
@@ -98,7 +99,27 @@ class GameStateImpl : public GameState {
                                      const std::variant<std::string, size_t, int>& replacer) override;
 };
 
-class GameLogicProcessor : public GameState {
+class LogicProcessor : virtual public GameState {
+ protected:
+    struct GameData {
+        size_t current_location;
+
+        std::unordered_map<std::string, size_t> damage_types;
+
+        Storage<NPC> npc;
+        Storage<PlayerCharacter> players;
+
+        Storage<Item> items;
+        Storage<Weapon> weapons;
+        Storage<Spell> spells;
+        Storage<Armor> armor;
+
+        Storage<Race> races;
+        Storage<Class> classes;
+
+        Storage<Location> locations;
+    };
+
  public:
     virtual std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
                                                                 size_t item_id, Tile target) = 0;
@@ -108,11 +129,14 @@ class GameLogicProcessor : public GameState {
 
     virtual ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) = 0;
     virtual SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) = 0;
+
+    virtual void setUpdated(GameEntityInterface& object) = 0;
+    virtual GameData getUpdatedObjs() = 0;
 };
 
-class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
+class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
  public:
-    GameLogicProcessorImpl() = default;
+    LogicProcessorImpl() = default;
 
     std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
                                                         size_t item_id, Tile target) override;
@@ -122,5 +146,8 @@ class GameLogicProcessorImpl : public GameLogicProcessor, public GameStateImpl {
 
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;
     SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) override;
+
+    void setUpdated(GameEntityInterface& object) override;
+    GameData getUpdatedObjs() override;
 };
 } // namespace DnD

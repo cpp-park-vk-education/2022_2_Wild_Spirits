@@ -12,16 +12,16 @@ class Armor : public Item {
     };
 
  private:
-    int defense_;
+    unsigned int defense_;
     Type type_;
 
  public:
     Armor() = default;
     Armor(size_t id, std::string_view name, int image_id, int cost,
-          int defense, Type type, const Info& info = {}) :
+          unsigned int defense, Type type, const Info& info = {}) :
         Item(id, name, image_id, cost, info), defense_(defense), type_(type) {}
 
-    int defense() const {
+    unsigned int defense() const {
         return defense_;
     }
 

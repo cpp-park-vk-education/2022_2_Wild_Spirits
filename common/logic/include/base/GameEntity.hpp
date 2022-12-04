@@ -5,6 +5,10 @@
 
 namespace DnD {
 class GameEntityInterface {
+ private:
+    virtual void toggleUpdated() = 0;
+    virtual bool wasUpdated() const = 0;
+
  public:
     virtual const std::string& info(const std::string&) const = 0;
     virtual std::string& info(const std::string&) = 0;
@@ -16,6 +20,8 @@ class GameEntityInterface {
     virtual void setImage(size_t) = 0;
 
     virtual size_t id() const = 0;
+
+    friend class LogicProcessorImpl;
 };
 
 class GameEntity : public GameEntityInterface {
@@ -27,6 +33,15 @@ class GameEntity : public GameEntityInterface {
     std::string name_;
     size_t image_id_;
     Info info_;
+    bool was_updated_ = false;
+
+    void toggleUpdated() override {
+        was_updated_ = !was_updated_;
+    }
+
+    bool wasUpdated() const override {
+        return was_updated_;
+    }
 
  public:
     GameEntity() = default;

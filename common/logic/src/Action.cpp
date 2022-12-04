@@ -82,7 +82,7 @@ bool Action::canMiss() const {
 }
 
 void Action::toggleMissable() {
-    can_miss_ = (can_miss_ + 1) % 2;
+    can_miss_ = !can_miss_;
 }
 
 void Action::setArea(Action::AreaPtr&& area) {

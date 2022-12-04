@@ -34,6 +34,15 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     unsigned int action_points_;
     int hp_;
     int money_;
+    bool was_updated_ = false;
+
+    void toggleUpdated() override {
+        was_updated_ = !was_updated_;
+    }
+
+    bool wasUpdated() const override {
+        return was_updated_;
+    }
 
  public:
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,

@@ -49,7 +49,7 @@ ErrorStatus GameStateImpl::removeAction(std::string_view item_type, size_t item_
     return ErrorStatus::Fail();
 }
 
-ErrorStatus GameStateImpl::addEffect(std::string_view item_type, size_t item_id, Effect* effect) {
+ErrorStatus GameStateImpl::addEffect(std::string_view item_type, size_t item_id, std::unique_ptr<Effect>&& effect) {
     return ErrorStatus::Fail();
 }
 
@@ -57,11 +57,11 @@ ErrorStatus GameStateImpl::removeEffect(std::string_view item_type, size_t item_
     return ErrorStatus::Fail();
 }
 
-ErrorStatus GameStateImpl::setArea(std::string_view item_type, size_t item_id, Area* area) {
+ErrorStatus GameStateImpl::setArea(std::string_view item_type, size_t item_id, std::unique_ptr<Area>&& area) {
     return ErrorStatus::Fail();
 }
 
-ErrorStatus GameStateImpl::setPositionType(size_t char_id, Position* pos) {
+ErrorStatus GameStateImpl::setPositionType(size_t char_id, std::unique_ptr<Position>&& pos) {
     return ErrorStatus::Fail();
 }
 
@@ -74,25 +74,35 @@ ErrorStatus GameStateImpl::changeCharacteristic(std::string_view type, size_t id
     return ErrorStatus::Fail();
 }
 
-std::tuple<std::string, ErrorStatus> GameLogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
+std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
                                                       size_t item_id, Tile target) {
     return {};
 }
 
-std::unordered_map<size_t, size_t> GameLogicProcessorImpl::kill_NPC(size_t location_id, size_t npc_id) {
+std::unordered_map<size_t, size_t> LogicProcessorImpl::kill_NPC(size_t location_id, size_t npc_id) {
     return {};
 }
 
-ErrorStatus GameLogicProcessorImpl::distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) {
+ErrorStatus LogicProcessorImpl::distributeSkillPoints(size_t player_char_id, const StatBased::Stats& stats) {
     return ErrorStatus::Fail();
 }
 
-ErrorStatus GameLogicProcessorImpl::trade(size_t first_char, size_t second_char,
+ErrorStatus LogicProcessorImpl::trade(size_t first_char, size_t second_char,
                                           size_t first_item, size_t second_item) {
     return ErrorStatus::Fail();
 }
 
-SaleResult GameLogicProcessorImpl::buy(size_t first_char, size_t second_char, size_t item, size_t num) {
+SaleResult LogicProcessorImpl::buy(size_t first_char, size_t second_char, size_t item, size_t num) {
     return SaleResult{ErrorStatus::Fail()};
+}
+
+void LogicProcessorImpl::setUpdated(GameEntityInterface& object) {
+    if (!object.wasUpdated()) {
+        object.toggleUpdated();
+    }
+}
+
+LogicProcessor::GameData LogicProcessorImpl::getUpdatedObjs() {
+    return {};
 }
 }  // namespace DnD
