@@ -1,4 +1,4 @@
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 
 namespace DnD {
 DamageTypeStorage::DamageTypeStorage() : unused_ids_(), types_() {

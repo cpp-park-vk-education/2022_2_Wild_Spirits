@@ -2,7 +2,7 @@
 
 #include "StatBased.hpp"
 #include "Dice.hpp"
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 #include "Resistible.hpp"
 
 namespace DnD {
@@ -39,8 +39,8 @@ TEST(DiceSuite, Validation) {  // cppcheck-suppress [syntaxError]
 TEST(DamageTypesSuite, ItWorks) {
     DamageTypeStorage types;
 
-    auto [id, err] = types.addDamageType("a");
-    ASSERT_TRUE(err.ok());
+    auto [id, status] = types.addDamageType("a");
+    ASSERT_TRUE(status.ok());
     ASSERT_EQ(types.typeName(id), "a");
 
     types.removeDamageType(id);
@@ -51,14 +51,14 @@ TEST(DamageTypesSuite, ItWorks) {
         ASSERT_TRUE(status.ok());
     }
 
-    auto [_, status] = types.addDamageType("b");
+    std::tie(id, status) = types.addDamageType("b");
     ASSERT_FALSE(status.ok());
 
     types.removeDamageType(0);
 
-    auto [b_id, status] = types.addDamageType("b");
+    std::tie(id, status)  = types.addDamageType("b");
     ASSERT_TRUE(status.ok());
-    ASSERT_EQ(b_id, 0);
+    ASSERT_EQ(id, 0);
 }
 
 TEST(ResistibleSuite, ItWorks) {

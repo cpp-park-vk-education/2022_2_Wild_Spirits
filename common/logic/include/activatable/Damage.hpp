@@ -7,6 +7,8 @@
 #include <exception>
 #include <memory>
 
+#include "DamageType.hpp"
+
 namespace DnD {
 class DealDamage : public Effect {
  private:

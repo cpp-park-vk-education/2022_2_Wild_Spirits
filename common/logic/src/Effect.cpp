@@ -20,7 +20,7 @@ void Move::updateActionResult(const CharacterInstance& character, Action::Result
 
 void DealDamage::updateActionResult(const CharacterInstance& character, Action::Result* result) const {
     auto roll_results = dice_->roll(die_type_, times_);
-    float damage_modifier = character.damageModifier(damage_type_);
+    float damage_modifier = character.damageModifier(damage_type_.id());
 
     result->hp -= std::accumulate(roll_results.begin(), roll_results.end(), 0) * damage_modifier;
     // TODO: Store roll results in ActionResult

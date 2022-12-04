@@ -2,7 +2,7 @@
 
 #include <bitset>
 
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 
 namespace DnD {
 class Resistible {
