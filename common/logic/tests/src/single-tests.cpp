@@ -15,6 +15,8 @@ TEST(StatTest, ValidStatBonus) {
         {"cns", 7}
     });
 
+    std::cout << -1 / 2 << '\n';
+
     ASSERT_EQ(stats.statBonus("dex"), 1);
     ASSERT_EQ(stats.statBonus("str"), 0);
     ASSERT_EQ(stats.statBonus("int"), -1);
@@ -36,29 +38,46 @@ TEST(DiceSuite, Validation) {  // cppcheck-suppress [syntaxError]
     EXPECT_FALSE(dice.isValid(3));
 }
 
-TEST(DamageTypesSuite, ItWorks) {
+TEST(DamageTypesStorageSuite, ItIsCreatedCorrectly) {
+    DamageTypeStorage types;
+    std::unordered_set<uint8_t> expected_unused;
+    for (size_t i = DamageTypeStorage::defaultNum(); i < DamageTypeStorage::maxNum(); ++i) {
+        expected_unused.insert(i);
+    }
+    ASSERT_EQ(types.unused_ids_, expected_unused);
+}
+
+TEST(DamageTypesStorageSuite, ItManagesIds) {
     DamageTypeStorage types;
 
     auto [id, status] = types.addDamageType("a");
     ASSERT_TRUE(status.ok());
-    ASSERT_EQ(types.typeName(id), "a");
 
-    types.removeDamageType(id);
-    ASSERT_EQ(types.typeName(id), "");
+    auto [name, err_status] = types.typeName(id);
+    ASSERT_TRUE(err_status.ok());
+    ASSERT_EQ(name, "a");
 
-    for (size_t i = 0; i < DamageTypeStorage::maxNum(); ++i) {
+    err_status = types.removeDamageType(id);
+    ASSERT_TRUE(err_status.ok());
+
+    auto [_, err_status2] = types.typeName(id);
+    ASSERT_FALSE(err_status2.ok());
+
+    for (size_t i = DamageTypeStorage::defaultNum(); i < DamageTypeStorage::maxNum(); ++i) {
         auto [_, status] = types.addDamageType(std::to_string(i));
         ASSERT_TRUE(status.ok());
     }
 
+    std::cout << "EMPTY: " << std::boolalpha << types.filled() << '\n';
+
     std::tie(id, status) = types.addDamageType("b");
     ASSERT_FALSE(status.ok());
 
-    types.removeDamageType(0);
+    types.removeDamageType(DamageTypeStorage::defaultNum() + 1);
 
     std::tie(id, status)  = types.addDamageType("b");
     ASSERT_TRUE(status.ok());
-    ASSERT_EQ(id, 0);
+    ASSERT_EQ(id, DamageTypeStorage::defaultNum() + 1);
 }
 
 TEST(ResistibleSuite, ItWorks) {

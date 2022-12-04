@@ -10,6 +10,11 @@
 #include "DamageType.hpp"
 
 namespace DnD {
+class InvalidDice : public Exception {
+ public:
+    InvalidDice(int8_t die) : Exception(("Die " + std::to_string(die) + " is not allowed").c_str()) {}
+};
+
 class DealDamage : public Effect {
  private:
     DamageType damage_type_;
@@ -20,7 +25,11 @@ class DealDamage : public Effect {
  
  public:
     DealDamage(const DamageType& dmg_type, uint8_t die_type, size_t times, std::unique_ptr<DiceInterface>&& dice) :
-        damage_type_(dmg_type), die_type_(die_type), times_(times), dice_(std::move(dice)) {}
+        damage_type_(dmg_type), die_type_(die_type), times_(times), dice_(std::move(dice)) {
+        if (dice_->isValid(die_type) == false) {
+            throw InvalidDice(die_type);
+        }
+    }
 
     DealDamage(const DealDamage& other) :
         DealDamage(other.damage_type_, other.die_type_, other.times_, other.dice_->clone()) {}
@@ -35,10 +44,5 @@ class DealDamage : public Effect {
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
-};
-
-class InvalidDice : public Exception {
- public:
-    InvalidDice(int8_t die) : Exception(("Die " + std::to_string(die) + " is not allowed").c_str()) {}
 };
 }  // namespace DnD

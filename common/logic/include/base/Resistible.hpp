@@ -25,27 +25,27 @@ class Resistible {
     }
 
     bool isResistantTo(uint8_t dmg_type_id) const {
-        return false;
+        return resistances_.test(dmg_type_id);
     }
 
     bool isVulnerableTo(uint8_t dmg_type_id) const {
-        return false;
+        return vulnerabilities_.test(dmg_type_id);;
+    }
+    
+    void addResistance(uint8_t dmg_type_id) {
+        resistances_.set(dmg_type_id, 1);
     }
 
     void addVulnerability(uint8_t dmg_type_id) {
-        
-    }
-
-    void addResistance(uint8_t dmg_type_id) {
-
-    }
-
-    void removeVulnerability(uint8_t dmg_type_id) {
-        
+        vulnerabilities_.set(dmg_type_id, 1);
     }
 
     void removeResistance(uint8_t dmg_type_id) {
-
+        resistances_.set(dmg_type_id, 0);
     }
+
+    void removeVulnerability(uint8_t dmg_type_id) {
+        vulnerabilities_.set(dmg_type_id, 0);
+    }    
 };
 }  // namespace DnD

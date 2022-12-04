@@ -31,19 +31,19 @@ class TilePos : public Position {
     }
 
     bool isInArea(const Area& area) override {
-        return false;
+        return area.isInArea(pos_);
     }
 
     std::pair<Tile, Tile> mapPosition() override {
-        return {};
+        return std::make_pair(pos_, Tile{});
     }
 
     void moveTo(const Tile& tile) override {
-
+        pos_ = tile;
     }
 
     void moveBy(int x, int y) override {
-
+        pos_ += Offset{x, y};
     }
 };
 
@@ -61,25 +61,39 @@ class RectangularPos : public Position {
     }
 
     bool isInArea(const Area& area) override {
+        for (size_t x = bottom_left_.x; x <= upper_right_.x; ++x) {
+            for (size_t y = bottom_left_.y; y <= upper_right_.y; ++y) {
+                if (area.isInArea(Tile{x, y})) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     std::pair<Tile, Tile> mapPosition() override {
-        return {};
+        return std::make_pair(bottom_left_, upper_right_);
     }
 
     void moveTo(const Tile& tile) override {
-
+        Tile diff = upper_right_ - bottom_left_;
+        bottom_left_ = tile;
+        upper_right_ = bottom_left_ + diff;
     }
 
     void moveBy(int x, int y) override {
-
+        Offset offset{x, y};
+        bottom_left_ += offset;
+        upper_right_ += offset;
     }
 };
 
 class PositionFactory {
  public:
     static std::unique_ptr<Position> create(const Tile& b_left, const Tile& u_right = Tile{}) {
+        if (u_right == Tile{}) {
+            return std::make_unique<TilePos>(b_left);
+        }
         return std::make_unique<RectangularPos>(b_left, u_right);
     }
 };

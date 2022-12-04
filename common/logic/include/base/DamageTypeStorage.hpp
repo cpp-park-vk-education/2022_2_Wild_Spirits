@@ -4,64 +4,56 @@
 #include <algorithm>
 #include <unordered_set>
 #include <string>
+#include <vector>
 
 #include "DamageType.hpp"
 #include "ErrorStatus.hpp"
 
+#include <gtest/gtest_prod.h>
+
 namespace DnD {
 class DamageTypeStorage {
  private:
-    static constexpr uint8_t kDamageTypesNum = 32;
+    static constexpr uint8_t kMaxTypesNum = 32;
+    static constexpr uint8_t kDefaultTypesNum = 13;
 
     std::unordered_set<uint8_t> unused_ids_;
-    std::array<std::string, kDamageTypesNum> types_;
+    std::vector<std::string> types_;
 
     static std::string MaximumDmgTypesExceeded() {
-        return "Maximum " + std::to_string(kDamageTypesNum) + " dmg types allowed";
+        return "Maximum " + std::to_string(kMaxTypesNum) + " dmg types allowed";
     }
 
  public:
     DamageTypeStorage();
 
-    std::tuple<uint8_t, ErrorStatus> addDamageType(const std::string& type) {
-        if (unused_ids_.empty()) {
-            return std::make_tuple(0, ErrorStatus::Fail(MaximumDmgTypesExceeded()));
-        }
-
-        if (std::find(types_.begin(), types_.end(), type) != types_.end()) {
-            return std::make_tuple(0, ErrorStatus::Fail("Such damage type already exists"));
-        }
-
-        uint8_t id = *unused_ids_.begin();
-        unused_ids_.erase(id);
-        types_[id] = type;
-        return std::make_tuple(id, ErrorStatus::Ok());
+    const auto& types() const {
+        return types_;
     }
 
-    ErrorStatus removeDamageType(uint8_t id) {
-        if (id > kDamageTypesNum) {
-            return ErrorStatus::IdOutOfRange();
-        }
-        
-        if (unused_ids_.contains(id)) {
-            return ErrorStatus::Fail("No such dmg type");
-        }
-
-        unused_ids_.insert(id);
-        types_[id] = "";
-        return ErrorStatus::Ok();
-    } 
-
-    const std::string& typeName(uint8_t id) const {
-        return types_[id];
+    bool filled() const {
+        return unused_ids_.empty();
     }
 
-    DamageType getDamageType(uint8_t id) const {
-        return DamageType{id, types_[id]};
+    std::tuple<uint8_t, ErrorStatus> addDamageType(const std::string& type);
+
+    ErrorStatus removeDamageType(uint8_t id);
+
+    std::tuple<std::string, ErrorStatus> typeName(uint8_t id) const;
+
+    std::tuple<DamageType, ErrorStatus> getDamageType(uint8_t id) const {
+        auto [name, status] = typeName(id);
+        return std::make_tuple(DamageType{id, name}, status);
     }
 
     static constexpr uint8_t maxNum() {
-        return kDamageTypesNum;
+        return kMaxTypesNum;
     }
+
+    static constexpr uint8_t defaultNum() {
+        return kDefaultTypesNum;
+    }
+
+    FRIEND_TEST(DamageTypesStorageSuite, ItIsCreatedCorrectly);
 };
 }  // namespace DnD

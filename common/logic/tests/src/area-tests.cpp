@@ -28,8 +28,8 @@ TEST_F(AreaSuite, RectAreaWorks) {
     ASSERT_TRUE(area.isInArea(target_ + Tile{1, 1}));
     ASSERT_TRUE(area.isInArea(target_ - Tile{1, 2}));
 
-    ASSERT_FALSE(area.isInArea(target_ + Tile{2, 2}));
-    ASSERT_FALSE(area.isInArea(target_ - Tile{1, 3}));
+    ASSERT_FALSE(area.isInArea(target_ - Tile{2, 2}));
+    ASSERT_FALSE(area.isInArea(target_ + Tile{1, 3}));
 }
 
 TEST_F(AreaSuite, CustomAreaWorks) {
@@ -66,7 +66,7 @@ TEST(PositionSuite, TilePosAreaCheck) {
 }
 
 TEST(PositionSuite, RectPosAreaCheck) {
-    RectangularPos pos(Tile{0, 3}, Tile{2, 1});
+    RectangularPos pos(Tile{0, 3}, Tile{2, 4});
 
     PointArea p_area;
     p_area.setTarget(Tile{1, 4});

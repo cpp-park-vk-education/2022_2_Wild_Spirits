@@ -4,8 +4,8 @@
 
 namespace DnD {
 
-template <typename T>
-constexpr T abs(T num) {
+template <typename T, typename = std::enable_if<std::is_integral<T>::value>>
+constexpr size_t abs(T num) {
     if constexpr (std::is_unsigned<T>::value) {
         return num;
     } else {
@@ -34,7 +34,7 @@ struct Tile {
     template <typename VectorType>
     Tile operator-(const VectorType& other) const {
         return Tile{substract_without_overflow(x, other.x),
-                    substract_without_overflow(y + other.y)};
+                    substract_without_overflow(y, other.y)};
     }
 
     template <typename VectorType>

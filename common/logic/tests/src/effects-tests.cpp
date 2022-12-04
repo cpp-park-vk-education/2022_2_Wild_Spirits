@@ -21,12 +21,12 @@ TEST_F(EffectSuite, MoveReturnsValidResult) {  // cppcheck-suppress [syntaxError
     Move move(1, 3);
     move.updateActionResult(character, &new_result);
 
-    ASSERT_EQ(result.pos, new_result.pos + tile);
+    ASSERT_EQ(result.pos + tile, new_result.pos);
 }
 
 TEST_F(DamageSuite, DealDamageConsidersResists) {
-    EXPECT_CALL((*dice), roll(_))
-        .WillRepeatedly(Return(6));
+    EXPECT_CALL((*dice), roll(_, _))
+        .WillOnce(Return(std::vector<uint8_t>{6, 6}));
 
     DealDamage damage_resist(DamageType(0), 6, 2, std::move(dice));
     damage_resist.updateActionResult(character, &new_result);
@@ -34,8 +34,8 @@ TEST_F(DamageSuite, DealDamageConsidersResists) {
 }
 
 TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
-    EXPECT_CALL(*dice, roll(_))
-        .WillRepeatedly(Return(3));
+    EXPECT_CALL(*dice, roll(_, _))
+        .WillOnce(Return(std::vector<uint8_t>{3, 3}));
 
     DealDamage damage(DamageType(1), 6, 2, std::move(dice));
     damage.updateActionResult(character, &new_result);
