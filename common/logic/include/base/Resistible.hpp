@@ -2,13 +2,13 @@
 
 #include <bitset>
 
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 
 namespace DnD {
 class Resistible {
  private:
-    std::bitset<DamageTypes::maxNum()> resistances_;
-    std::bitset<DamageTypes::maxNum()> vulnerabilities_;
+    std::bitset<DamageTypeStorage::maxNum()> resistances_;
+    std::bitset<DamageTypeStorage::maxNum()> vulnerabilities_;
 
  public:
     Resistible() = default;

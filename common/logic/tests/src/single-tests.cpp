@@ -2,7 +2,7 @@
 
 #include "StatBased.hpp"
 #include "Dice.hpp"
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 #include "Resistible.hpp"
 
 namespace DnD {
@@ -37,27 +37,28 @@ TEST(DiceSuite, Validation) {  // cppcheck-suppress [syntaxError]
 }
 
 TEST(DamageTypesSuite, ItWorks) {
-    DamageTypes types;
+    DamageTypeStorage types;
 
-    types.addDamageType("a");
-    ASSERT_NE(types.id("a"), -1);
-    ASSERT_EQ(types.typeName(types.id("a")), "a");
+    auto [id, status] = types.addDamageType("a");
+    ASSERT_TRUE(status.ok());
+    ASSERT_EQ(types.typeName(id), "a");
 
-    types.removeDamageType("a");
-    ASSERT_EQ(types.id("a"), -1);
+    types.removeDamageType(id);
+    ASSERT_EQ(types.typeName(id), "");
 
-    for (size_t i = 0; i < DamageTypes::maxNum(); ++i) {
-        auto status = types.addDamageType(std::to_string(i));
+    for (size_t i = 0; i < DamageTypeStorage::maxNum(); ++i) {
+        auto [_, status] = types.addDamageType(std::to_string(i));
         ASSERT_TRUE(status.ok());
     }
 
-    auto status = types.addDamageType("b");
+    std::tie(id, status) = types.addDamageType("b");
     ASSERT_FALSE(status.ok());
 
-    types.removeDamageType("a4");
+    types.removeDamageType(0);
 
-    status = types.addDamageType("b");
+    std::tie(id, status)  = types.addDamageType("b");
     ASSERT_TRUE(status.ok());
+    ASSERT_EQ(id, 0);
 }
 
 TEST(ResistibleSuite, ItWorks) {

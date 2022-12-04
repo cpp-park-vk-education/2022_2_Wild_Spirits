@@ -7,17 +7,19 @@
 #include <exception>
 #include <memory>
 
+#include "DamageType.hpp"
+
 namespace DnD {
 class DealDamage : public Effect {
  private:
-    uint8_t damage_type_;
+    DamageType damage_type_;
     uint8_t die_type_;
     size_t times_;
 
     std::unique_ptr<DiceInterface> dice_;
  
  public:
-    DealDamage(uint8_t dmg_type, uint8_t die_type, size_t times, std::unique_ptr<DiceInterface>&& dice) :
+    DealDamage(const DamageType& dmg_type, uint8_t die_type, size_t times, std::unique_ptr<DiceInterface>&& dice) :
         damage_type_(dmg_type), die_type_(die_type), times_(times), dice_(std::move(dice)) {}
 
     DealDamage(const DealDamage& other) :
@@ -28,7 +30,8 @@ class DealDamage : public Effect {
     }
 
     std::string info() const override {
-        return "";
+        return "Deal " + std::to_string(times_) + " * d" +
+                std::to_string(die_type_) + " in " + damage_type_.name();
     }
 
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;

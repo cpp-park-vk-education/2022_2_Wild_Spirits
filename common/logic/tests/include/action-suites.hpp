@@ -23,7 +23,7 @@ class ActionSuite : public DamageSuite{
         location(0, "", 0, 5, 5),
         action(AreaFactory::create(1, 1), {}, 2)
     {
-        action.addEffect(std::make_unique<DealDamage>(1, 4, 2, std::move(dice)));
+        action.addEffect(std::make_unique<DealDamage>(DamageType(1), 4, 2, std::move(dice)));
         action.addEffect(std::make_unique<Move>(1, 2));
         action.addEffect(std::make_unique<Buff>(StatBased::Stats{ {"str", -2}, {"dex", -1} }, 2));
 

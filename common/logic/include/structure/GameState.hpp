@@ -6,7 +6,7 @@
 #include "Tile.hpp"
 #include "PlayerCharacter.hpp"
 #include "NPC.hpp"
-#include "DamageTypes.hpp"
+#include "DamageTypeStorage.hpp"
 
 #include "Config.hpp"
 #include "Storage.hpp"
@@ -57,7 +57,7 @@ class GameStateImpl : virtual public GameState {
     Storage<Race> races_;
     Storage<Class> classes_;
 
-    DamageTypes damage_types_;
+    DamageTypeStorage damage_types_;
 
     Config config_;
     GameMap* map_;

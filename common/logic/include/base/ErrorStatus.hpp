@@ -30,5 +30,9 @@ class ErrorStatus {
     static ErrorStatus Fail(std::string_view msg = "") {
         return ErrorStatus(false, msg);
     }
+
+    static ErrorStatus IdOutOfRange() {
+        return Fail("Id out of range");
+    }
 };
 }  // namespace DnD
