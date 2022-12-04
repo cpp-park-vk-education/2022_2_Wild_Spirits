@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <cmath>
 
 #include "Tile.hpp"
 
@@ -48,7 +49,10 @@ class RectangularArea : public Area {
     }
 
     bool isInArea(const Tile& tile) const override {
-        return false;
+        return tile.x <= target_.x + width_ &&
+               tile.x >= (target_.x > width_ ? target_.x- width_ : 0) &&
+               tile.y <= target_.y + height_ &&
+               tile.y >= (target_.y > height_ ? target_.y - height_ : 0);
     }
 };
 
@@ -64,6 +68,11 @@ class CustomArea : public Area {
     }
 
     bool isInArea(const Tile& tile) const override {
+        for (auto offset : offsets_) {
+            if (tile == target_ + offset) {
+                return true;
+            }
+        }
         return false;
     }
 };
@@ -71,6 +80,9 @@ class CustomArea : public Area {
 class AreaFactory {
  public:
     static std::unique_ptr<Area> create(size_t width = 0, size_t height = 0) {
+        if (height || width) {
+            return std::make_unique<RectangularArea>(height, width);
+        }
         return std::make_unique<PointArea>();
     }
 

@@ -7,10 +7,13 @@
 namespace DnD {
 class Resistible {
  private:
-    std::bitset<DamageTypes::maxNum()> resistances_;
-    std::bitset<DamageTypes::maxNum()> vulnerabilities_;
+    std::bitset<DamageTypeStorage::maxNum()> resistances_;
+    std::bitset<DamageTypeStorage::maxNum()> vulnerabilities_;
 
  public:
+    static constexpr float kResistModifier = 0.5;
+    static constexpr float kVulnerableModifier = 2;
+
     Resistible() = default;
 
     unsigned long resistInternal() const {

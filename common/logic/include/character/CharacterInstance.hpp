@@ -78,7 +78,9 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     Storage<Skill_Instance>& skills();
     Storage<Item*>& items();
 
-    const Character& original();
+    float damageModifier(uint8_t damage_type) const;
+
+    const Character& original() const;
 
     const std::string& info(const std::string&) const override;
     std::string& info(const std::string&) override;

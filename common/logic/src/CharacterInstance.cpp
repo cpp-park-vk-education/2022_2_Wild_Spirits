@@ -55,12 +55,31 @@ SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInsta
     return SaleResult{};
 }
 
+const Character& CharacterInstance::original() const {
+    return original_;
+}
+
 unsigned int CharacterInstance::actionPoints() {
     return action_points_;
 }
 
 void CharacterInstance::refreshActionPoints() {
     action_points_ = original_.maxActionPoints();
+}
+
+float CharacterInstance::damageModifier(uint8_t damage_type) const {
+    bool resists = original_.isResistantTo(damage_type);
+    bool vulnerable = original_.isVulnerableTo(damage_type);
+
+    if (resists && !vulnerable) {
+        return Resistible::kResistModifier;
+    }
+
+    if (!resists && vulnerable) {
+        return Resistible::kVulnerableModifier;
+    }
+
+    return 1;
 }
 
 void CharacterInstance::setActionPoints(unsigned int action_points) {
