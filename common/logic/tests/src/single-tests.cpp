@@ -15,11 +15,11 @@ TEST(StatTest, ValidStatBonus) {
         {"cns", 7}
     });
 
-    ASSERT_EQ(stats.statBonus("dex"), 1);
-    ASSERT_EQ(stats.statBonus("str"), 0);
-    ASSERT_EQ(stats.statBonus("int"), -1);
-    ASSERT_EQ(stats.statBonus("cha"), 2);
-    ASSERT_EQ(stats.statBonus("cns"), -2);
+    EXPECT_EQ(stats.statBonus("dex"), 1);
+    EXPECT_EQ(stats.statBonus("str"), 0);
+    EXPECT_EQ(stats.statBonus("int"), -1);
+    EXPECT_EQ(stats.statBonus("cha"), 2);
+    EXPECT_EQ(stats.statBonus("cns"), -2);
 }
 
 TEST(DiceSuite, Validation) {  // cppcheck-suppress [syntaxError]

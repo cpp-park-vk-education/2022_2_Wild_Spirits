@@ -15,8 +15,8 @@ TEST_F(AreaSuite, PointAreaWorks) {  // cppcheck-suppress [syntaxError]
 
     ASSERT_TRUE(area.isInArea(target_));
 
-    ASSERT_FALSE(area.isInArea(Tile{4, 2}));
-    ASSERT_FALSE(area.isInArea(Tile{5, 3}));
+    EXPECT_FALSE(area.isInArea(Tile{4, 2}));
+    EXPECT_FALSE(area.isInArea(Tile{5, 3}));
 }
 
 
@@ -24,12 +24,12 @@ TEST_F(AreaSuite, RectAreaWorks) {
     RectangularArea area(1, 2);
     area.setTarget(target_);
 
-    ASSERT_TRUE(area.isInArea(target_));
-    ASSERT_TRUE(area.isInArea(target_ + Tile{1, 1}));
-    ASSERT_TRUE(area.isInArea(target_ - Tile{1, 2}));
+    EXPECT_TRUE(area.isInArea(target_));
+    EXPECT_TRUE(area.isInArea(target_ + Tile{1, 1}));
+    EXPECT_TRUE(area.isInArea(target_ - Tile{1, 2}));
 
-    ASSERT_FALSE(area.isInArea(target_ + Tile{2, 2}));
-    ASSERT_FALSE(area.isInArea(target_ - Tile{1, 3}));
+    EXPECT_FALSE(area.isInArea(target_ + Tile{2, 2}));
+    EXPECT_FALSE(area.isInArea(target_ - Tile{1, 3}));
 }
 
 TEST_F(AreaSuite, CustomAreaWorks) {
@@ -42,8 +42,8 @@ TEST_F(AreaSuite, CustomAreaWorks) {
         ASSERT_TRUE(area.isInArea(target_ + offset));
     }
 
-    ASSERT_FALSE(area.isInArea(target_ + Tile{1, 3}));
-    ASSERT_FALSE(area.isInArea(target_ - Tile{1, 0}));
+    EXPECT_FALSE(area.isInArea(target_ + Tile{1, 3}));
+    EXPECT_FALSE(area.isInArea(target_ - Tile{1, 0}));
 }
 
 TEST(PositionSuite, TilePosAreaCheck) {
@@ -52,17 +52,17 @@ TEST(PositionSuite, TilePosAreaCheck) {
     PointArea p_area;
     p_area.setTarget(pos.mapPosition().first);
     ASSERT_TRUE(pos.isInArea(p_area));
-    ASSERT_EQ(pos.isInArea(p_area), p_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(p_area), p_area.isInArea(pos.mapPosition().first));
 
     RectangularArea r_area(2, 2);
     r_area.setTarget(Tile{4, 6});
     ASSERT_TRUE(pos.isInArea(r_area));
-    ASSERT_EQ(pos.isInArea(r_area), r_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(r_area), r_area.isInArea(pos.mapPosition().first));
 
     CustomArea c_area({{1, 2}, {0, 2}, {3, -1}});
     c_area.setTarget(Tile{2, 8});
     ASSERT_TRUE(pos.isInArea(c_area));
-    ASSERT_EQ(pos.isInArea(c_area), c_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(c_area), c_area.isInArea(pos.mapPosition().first));
 }
 
 TEST(PositionSuite, RectPosAreaCheck) {
@@ -70,13 +70,13 @@ TEST(PositionSuite, RectPosAreaCheck) {
 
     PointArea p_area;
     p_area.setTarget(Tile{1, 4});
-    ASSERT_TRUE(pos.isInArea(p_area));
+    EXPECT_TRUE(pos.isInArea(p_area));
 
     p_area.setTarget(Tile{1, 2});
-    ASSERT_FALSE(pos.isInArea(p_area));
+    EXPECT_FALSE(pos.isInArea(p_area));
 
     RectangularArea r_area(1, 1);
     r_area.setTarget(Tile{3, 2});
-    ASSERT_TRUE(pos.isInArea(r_area));
+    EXPECT_TRUE(pos.isInArea(r_area));
 }
 }  // namespace DnD

@@ -89,8 +89,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     auto [results, error_status] = player_use_spell();
 
     ASSERT_TRUE(error_status.ok());
-    ASSERT_EQ(player.actionPoints(), 5);
-    ASSERT_EQ(player.spellPoints(), 3);
+    EXPECT_EQ(player.actionPoints(), 5);
+    EXPECT_EQ(player.spellPoints(), 3);
     ASSERT_EQ(results, expected_results);
 
     // Cast spell with less action points than required
@@ -124,12 +124,12 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
 
     Armor armor(0, "", 0, 0, 10, Armor::Type::Light);
     player.setArmor(armor);
-    ASSERT_EQ(player.armorClass(), 14);
+    EXPECT_EQ(player.armorClass(), 14);
 
     armor.setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
-    ASSERT_EQ(player.armorClass(), 12);
+    EXPECT_EQ(player.armorClass(), 12);
 
     armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
-    ASSERT_EQ(player.armorClass(), 10);
+    EXPECT_EQ(player.armorClass(), 10);
 }
 }  // namespace DnD
