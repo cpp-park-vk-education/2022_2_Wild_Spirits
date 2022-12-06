@@ -16,7 +16,7 @@ class GameMap {
     virtual Location& currentLocation() = 0;
     virtual size_t currentLocationId() const = 0;
 
-    virtual Storage<PlayerCharacter>& players() = 0;
+    virtual Storage<PlayerCharacter>& players() const = 0;
 
     virtual ~GameMap() {}
 };
@@ -46,6 +46,6 @@ class GameMapImpl : public GameMap {
         return current_location_;
     }
 
-    Storage<PlayerCharacter>& players();
+    Storage<PlayerCharacter>& players() const;
 };
 }  // namespace DnD

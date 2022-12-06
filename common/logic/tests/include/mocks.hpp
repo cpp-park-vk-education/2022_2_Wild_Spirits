@@ -12,7 +12,7 @@ class MockGameMap : public GameMap {
     MOCK_METHOD(void, switchLocation, (size_t, size_t), (override));
     MOCK_METHOD(Location&, currentLocation, (), (override));
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
-    MOCK_METHOD(Storage<PlayerCharacter>&, players, ());
+    MOCK_METHOD(Storage<PlayerCharacter>&, players, (), (const, override));
 };
 
 class MockDice : public DiceInterface {

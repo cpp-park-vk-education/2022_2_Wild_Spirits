@@ -2,6 +2,12 @@
 
 #include "Effect.hpp"
 #include "Buff.hpp"
+#include "Armor.hpp"
+#include "GameMap.hpp"
+
+#include "CharacterInstance.hpp"
+#include "PlayerCharacter.hpp"
+#include "Location.hpp"
 
 #include <utility>
 
@@ -14,10 +20,8 @@ Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>
     hp(hp),
     buffs(buffs) {}
 
-Action::Result::~Result() {}
-
 Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, unsigned int range,
-               CastType cast_type, bool can_miss, const std::string& target_scaling) :
+               Cast cast_type, bool can_miss, const std::string& target_scaling) :
     cast_type_(cast_type), area_(std::move(area)),
     range_(range), effects_(std::move(effects)),
     can_miss_(can_miss), target_scaling_(target_scaling) {}
@@ -40,7 +44,6 @@ Action::Action(Action&& other) :
      cast_type_(other.cast_type_), area_(std::move(other.area_)), range_(other.range_),
      effects_(std::move(other.effects_)), can_miss_(other.can_miss_),
      target_scaling_(std::move(other.target_scaling_)) {
-    other.area_ = nullptr;
     other.range_ = 0;
     other.can_miss_ = true;
     other.target_scaling_ = "dex";
@@ -61,11 +64,11 @@ void Action::swap(Action& other) {
     std::swap(cast_type_, other.cast_type_);
 }
 
-void Action::setCastType(CastType cast_type) {
+void Action::setCastType(Cast cast_type) {
     cast_type_ = cast_type;
 }
 
-Action::CastType Action::castType() const {
+Action::Cast Action::castType() const {
     return cast_type_;
 }
 
@@ -105,8 +108,42 @@ void Action::removeEffect(size_t effect_id) {
     effects_.erase(effects_.begin() + effect_id);
 }
 
+template <typename T>
+void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res) {
+    for (const auto& [_, character] : characters) {
+        if (!character.isInArea(*area_)) {
+            continue;
+        }
+
+        if (can_miss_ && target_scaling_ == Armor::kScaling) {
+            if (dice_roll_res < character.armorClass()) {
+                continue;
+            }
+        } else if (can_miss_ && dice_roll_res < character.original().stat(target_scaling_)) {
+            continue;
+        }
+
+        results->emplace_back(character.id());
+
+        for (auto& effect : effects_) {
+            effect->updateActionResult(character, &results->back());
+        }
+    }
+}
+
 std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
-        const CharacterInstance&, const Tile& tile, uint8_t dice_roll_res) {
-    return {};
+        const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) {
+    std::vector<Action::Result> results;
+
+    if (tile.distance(actor.mapPosition()[0]) > range_) {
+        return std::make_tuple(results, ErrorStatus::Fail("Out of range"));
+    }
+
+    area_->setTarget(tile);
+
+    applyEffectsTo(actor.location().npc(), &results, dice_roll_res);
+    applyEffectsTo(actor.map().players(), &results, dice_roll_res);
+
+    return std::make_tuple(results, ErrorStatus::Ok());
 }
 }  // namespace DnD

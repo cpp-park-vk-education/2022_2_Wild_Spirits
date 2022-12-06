@@ -50,19 +50,19 @@ TEST(PositionSuite, TilePosAreaCheck) {
     TilePos pos(5, 7);
 
     PointArea p_area;
-    p_area.setTarget(pos.mapPosition().first);
+    p_area.setTarget(pos.mapPosition()[0]);
     ASSERT_TRUE(pos.isInArea(p_area));
-    EXPECT_EQ(pos.isInArea(p_area), p_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(p_area), p_area.isInArea(pos.mapPosition()[0]));
 
     RectangularArea r_area(2, 2);
     r_area.setTarget(Tile{4, 6});
     ASSERT_TRUE(pos.isInArea(r_area));
-    EXPECT_EQ(pos.isInArea(r_area), r_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(r_area), r_area.isInArea(pos.mapPosition()[0]));
 
     CustomArea c_area({{1, 2}, {0, 2}, {3, -1}});
     c_area.setTarget(Tile{2, 8});
     ASSERT_TRUE(pos.isInArea(c_area));
-    EXPECT_EQ(pos.isInArea(c_area), c_area.isInArea(pos.mapPosition().first));
+    EXPECT_EQ(pos.isInArea(c_area), c_area.isInArea(pos.mapPosition()[0]));
 }
 
 TEST(PositionSuite, RectPosAreaCheck) {

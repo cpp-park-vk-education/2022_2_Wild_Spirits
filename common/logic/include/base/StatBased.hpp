@@ -25,7 +25,7 @@ class StatBased {
         return stats_;
     }
 
-    int8_t getStat(const std::string& stat) const {
+    int8_t stat(const std::string& stat) const {
         auto it = stats_.find(stat);
         if (it == stats_.end()) {
             return kDefaultStat;
@@ -33,18 +33,18 @@ class StatBased {
         return it->second;
     }
 
-    int8_t statBonus(const std::string& stat) const {
-        int8_t value = getStat(stat);
+    int8_t statBonus(const std::string& stat_name) const {
+        int8_t value = stat(stat_name);
         return std::floor((value - 10) / 2.0);
     }
 
-    void setStat(const std::string& stat, int8_t value) {
-        stats_[stat] = value;
+    void setStat(const std::string& stat_name, int8_t value) {
+        stats_[stat_name] = value;
     }
 
-    void modifyStat(const std::string& stat, int8_t value) {
-        int8_t init_value = getStat(stat);
-        stats_[stat] = init_value + value;
+    void modifyStat(const std::string& stat_name, int8_t value) {
+        int8_t init_value = stat(stat_name);
+        stats_[stat_name] = init_value + value;
     }
 };
 }  // namespace DnD

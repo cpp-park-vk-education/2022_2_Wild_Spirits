@@ -21,7 +21,7 @@ struct Tile {
         return x == other.x && y == other.y;
     }
 
-    size_t distance(const Tile& other) {
+    size_t distance(const Tile& other) const {
         return 0;
     }
 

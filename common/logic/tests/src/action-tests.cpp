@@ -65,7 +65,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 
     auto player_use_spell = [&] {
         return player.use("spell", 0,
-                              { Tile{4, 1}, player.mapPosition().first }, &player_die);
+                              { Tile{4, 1}, player.mapPosition()[0] }, &player_die);
     };
 
     // Damage rolls
@@ -109,10 +109,10 @@ TEST_F(ActivatableSuite, PlayerConsumableTest) {
     player.consumables().add(0, "", 0, std::vector<Action>{ heal_action }, 1, 2);
     auto& item = player.consumables().get(0);
 
-    player.use("consumable", 0, {player.mapPosition().first});
+    player.use("consumable", 0, { player.mapPosition()[0] });
     ASSERT_EQ(item.usesLeft(), 1);
 
-    player.use("consumable", 0, {player.mapPosition().first});
+    player.use("consumable", 0, { player.mapPosition()[0] });
     ASSERT_TRUE(item.empty());
 }
 

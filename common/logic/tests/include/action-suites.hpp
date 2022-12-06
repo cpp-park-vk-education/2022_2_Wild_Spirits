@@ -54,7 +54,7 @@ class ActivatableSuite : public ActionSuite {
     ActivatableSuite() :
         ActionSuite(),
         player(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race()),
-        heal_action(AreaFactory::create(), {}, 0, Action::CastType::Self, false)
+        heal_action(AreaFactory::create(), {}, 0, Action::Cast::Self, false)
     {   
         heal_action.addEffect(std::make_unique<Heal>(3));
         char_template_.setMaxHP(10);

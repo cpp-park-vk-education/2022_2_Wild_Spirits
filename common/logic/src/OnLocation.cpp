@@ -9,9 +9,11 @@ OnLocation::OnLocation(std::unique_ptr<Position>&& pos, GameMap& map) :
 
 OnLocation::OnLocation(const OnLocation& other) : OnLocation(other.pos_->clone(), other.map_) {}
 
-const Location& OnLocation::location() {
+Location& OnLocation::location() const {
     return map_.locations().get(current_location_);
 }
 
-void setLocation(Location* loc) {}
+void OnLocation::setLocation(Location& loc) {
+    current_location_ = loc.id();
+}
 }  // namespace DnD

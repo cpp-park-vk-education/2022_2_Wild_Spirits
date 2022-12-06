@@ -26,18 +26,18 @@ class OnLocation : public Position {
     OnLocation(const OnLocation& other);
     OnLocation& operator=(OnLocation& other) = delete;
     
-    const Location& location();
-    void setLocation(Location& loc);
+    Location& location() const;
+    virtual void setLocation(Location& loc);
 
     void setPosition(std::unique_ptr<Position>&& pos) {
         pos_ = std::move(pos);
     }
 
-    bool isInArea(const Area& area) override {
+    bool isInArea(const Area& area) const override {
         return pos_->isInArea(area);
     }
 
-    std::pair<Tile, Tile> mapPosition() override {
+    std::array<Tile, 2> mapPosition() const override {
         return pos_->mapPosition();
     }
 
@@ -47,6 +47,10 @@ class OnLocation : public Position {
 
     void moveBy(int x, int y) override {
         return pos_->moveBy(x, y);
+    }
+
+    const GameMap& map() const {
+        return map_;
     }
 };
 } // namespace DnD

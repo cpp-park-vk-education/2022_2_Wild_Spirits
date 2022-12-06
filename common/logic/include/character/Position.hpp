@@ -3,13 +3,13 @@
 #include "Area.hpp"
 #include "Tile.hpp"
 
-#include <utility>
+#include <array>
 
 namespace DnD {
 class Position {
  public:
-    virtual bool isInArea(const Area& area) = 0;
-    virtual std::pair<Tile, Tile> mapPosition() = 0;
+    virtual bool isInArea(const Area& area) const = 0;
+    virtual std::array<Tile, 2> mapPosition() const = 0;
     virtual void moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
@@ -30,12 +30,12 @@ class TilePos : public Position {
         return std::make_unique<TilePos>(*this);
     }
 
-    bool isInArea(const Area& area) override {
+    bool isInArea(const Area& area) const override {
         return area.isInArea(pos_);
     }
 
-    std::pair<Tile, Tile> mapPosition() override {
-        return std::make_pair(pos_, Tile{});
+    std::array<Tile, 2> mapPosition() const override {
+        return std::array<Tile, 2>{pos_, Tile{}};
     }
 
     void moveTo(const Tile& tile) override {
@@ -60,7 +60,7 @@ class RectangularPos : public Position {
         return std::make_unique<RectangularPos>(*this);
     }
 
-    bool isInArea(const Area& area) override {
+    bool isInArea(const Area& area) const override {
         for (size_t x = bottom_left_.x; x <= upper_right_.x; ++x) {
             for (size_t y = bottom_left_.y; y <= upper_right_.y; ++y) {
                 if (area.isInArea(Tile{x, y})) {
@@ -71,8 +71,8 @@ class RectangularPos : public Position {
         return false;
     }
 
-    std::pair<Tile, Tile> mapPosition() override {
-        return std::make_pair(bottom_left_, upper_right_);
+    std::array<Tile, 2> mapPosition() const override {
+        return std::array<Tile, 2>{bottom_left_, upper_right_};
     }
 
     void moveTo(const Tile& tile) override {

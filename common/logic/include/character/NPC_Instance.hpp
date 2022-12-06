@@ -30,5 +30,7 @@ class NPC_Instance : public CharacterInstance {
     void makeFriendly() {
         is_hostile_ = false;
     }
+
+    void setLocation(Location& loc) override;
 };
 }  // namespace DnD
