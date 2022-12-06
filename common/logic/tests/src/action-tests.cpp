@@ -122,14 +122,14 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
     PlayerCharacter player(0, player_template, PositionFactory::create({0, 0}), map, Class(), Race());
     player_template.setStat("dex", 18);  // Bonus to dex is 4
 
-    Armor armor(0, "", 0, 0, 10, Armor::Type::Light);
+    Armor armor(0, "", 0, 0, 11, Armor::Type::Light);
     player.setArmor(armor);
-    EXPECT_EQ(player.armorClass(), 14);
+    EXPECT_EQ(player.armorClass(), 15);
 
     armor.setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
-    EXPECT_EQ(player.armorClass(), 12);
+    EXPECT_EQ(player.armorClass(), 13);
 
     armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
-    EXPECT_EQ(player.armorClass(), 10);
+    EXPECT_EQ(player.armorClass(), 11);
 }
 }  // namespace DnD

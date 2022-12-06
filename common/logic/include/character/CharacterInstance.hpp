@@ -48,9 +48,9 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                       int money = 100, Storage<Item*> items = {});
 
-    int statCheckRoll(std::string_view stat) const ;
-    int statBonus(std::string_view) const;
-    int armorClass() const;
+    int statCheckRoll(const std::string& stat, const DiceInterface& dice) const;
+    int8_t statBonus(const std::string& stat) const;
+    virtual int armorClass() const;
 
     virtual std::tuple<std::vector<Action::Result>, ErrorStatus>
         use(std::string_view action_type, size_t action_id,
@@ -82,11 +82,11 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     const Character& original() const;
 
-    const std::string& info(const std::string&) const override;
+    const Info& info() const override;
     std::string& info(const std::string&) override;
 
     const std::string& name() const override;
-    void setName(std::string_view) override;
+    void setName(std::string_view stat) override;
 
     size_t getImageId() const override;
 

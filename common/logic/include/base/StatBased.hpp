@@ -16,7 +16,6 @@ class StatBased {
     Stats stats_;
 
     static constexpr int8_t kDefaultStat = 10;
-    // static constexpr int8_t kDefaultStat = 10;
  
  public:
     StatBased() : stats_() {}
@@ -39,11 +38,11 @@ class StatBased {
         return std::floor((value - 10) / 2.0);
     }
 
-    void setStat(const std::string& stat, int value) {
+    void setStat(const std::string& stat, int8_t value) {
         stats_[stat] = value;
     }
 
-    void modifyStat(const std::string& stat, int value) {
+    void modifyStat(const std::string& stat, int8_t value) {
         int8_t init_value = getStat(stat);
         stats_[stat] = init_value + value;
     }

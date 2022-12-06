@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <set>
+#include <random>
 
 #include <cstddef>
 #include <cstdint>
@@ -25,7 +26,12 @@ class DiceInterface {
 };
 
 class Dice : public DiceInterface {
+ private:
+    static std::mt19937 gen_;
+
  public:
+    static constexpr uint8_t D20 = 20;
+
     uint8_t roll(uint8_t die) const override;
     std::unique_ptr<DiceInterface> clone() const override;
     std::vector<uint8_t> roll(uint8_t die, size_t num) const override;

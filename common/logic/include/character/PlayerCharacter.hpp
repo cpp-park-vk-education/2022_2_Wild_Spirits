@@ -104,6 +104,23 @@ class PlayerCharacter : public CharacterInstance {
         return armor_;
     }
 
+    int armorClass() const override {
+        if (!armor_) {
+            return original_.baseArmorClass();
+        }
+
+        int base = armor_->defense();
+
+        switch (armor_->armorType()) {
+            case Armor::Type::Light:
+                return base + statBonus(Armor::kScaling);
+            case Armor::Type::Medium:
+                return base + std::min(Armor::kMaxBonus, statBonus(Armor::kScaling));
+            default:
+                return base;
+        }
+    }
+
     auto& classes() {
         return class_list_;
     }

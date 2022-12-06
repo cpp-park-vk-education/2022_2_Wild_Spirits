@@ -7,16 +7,17 @@
 namespace DnD {
 class Character : public GameEntity, public Resistible, public StatBased {
  protected:
-    unsigned int exp_;
-
-    static constexpr int kDefaultExp = 500;
+    static constexpr unsigned int kDefaultExp = 500;
     static constexpr unsigned int kDefaultActionPoints = 10;
     static constexpr unsigned int kDefaultArmorClass = 10;
+    static constexpr unsigned int kDefaultMaxHP = 10;
+
+    unsigned int exp_ = kDefaultExp;
 
  private:
-    unsigned int max_hp_;
-    unsigned int max_action_points_;
-    unsigned int base_armor_class_;
+    unsigned int max_hp_ = kDefaultMaxHP;
+    unsigned int max_action_points_ = kDefaultActionPoints;
+    unsigned int base_armor_class_ = kDefaultArmorClass;
 
 public:
     Character() = default;
@@ -34,27 +35,27 @@ public:
         base_armor_class_(ac) {}
     
     unsigned int maxActionPoints() const {
-        return 0;
+        return max_action_points_;
     }
 
     void setMaxActionPoints(unsigned int max_ap) {
-
+        max_action_points_ = max_ap;
     }
 
     unsigned int maxHP() {
-        return 0;
+        return max_hp_;
     }
 
-    void setMaxHP(unsigned int max_ap) {
-
+    void setMaxHP(unsigned int max_hp) {
+        max_hp_ = max_hp;
     }
 
     unsigned int baseArmorClass() const {
-        return 0;
+        return base_armor_class_;
     }
 
-    void setBaseArmorClass(unsigned int) {
-    
+    void setBaseArmorClass(unsigned int armor_class) {
+        base_armor_class_ = armor_class;
     }
 };
 }  // namespace DnD

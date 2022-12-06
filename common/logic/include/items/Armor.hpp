@@ -5,6 +5,9 @@
 namespace DnD {
 class Armor : public Item {
  public:
+    static constexpr const char* kScaling = "dex";
+    static constexpr int8_t kMaxBonus = 2;
+
     enum class Type {
         Light,
         Medium,

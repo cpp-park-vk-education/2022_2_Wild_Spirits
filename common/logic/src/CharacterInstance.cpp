@@ -12,16 +12,16 @@ CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique
         action_points_(original.maxActionPoints()),
         hp_(original.maxHP()), money_(money) {}
 
-int CharacterInstance::statCheckRoll(std::string_view stat) const {
-    return 0;
+int CharacterInstance::statCheckRoll(const std::string& stat, const DiceInterface& dice) const {
+    return dice.roll(Dice::D20) + statBonus(stat);
 }
 
-int CharacterInstance::statBonus(std::string_view) const {
-    return 0;
+int8_t CharacterInstance::statBonus(const std::string& stat) const {
+    return original_.statBonus(stat);
 }
 
 int CharacterInstance::armorClass() const {
-    return 0;
+    return original_.baseArmorClass();
 }
 
 const std::list<Buff>& CharacterInstance::buffs() const {
@@ -114,8 +114,8 @@ int CharacterInstance::hp() {
     return hp_;
 }
 
-const std::string& CharacterInstance::info(const std::string& key) const {
-    return original_.info(key);
+const GameEntity::Info& CharacterInstance::info() const {
+    return original_.info();
 }
 
 std::string& CharacterInstance::info(const std::string& key) {

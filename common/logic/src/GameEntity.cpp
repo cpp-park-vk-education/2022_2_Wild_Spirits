@@ -4,12 +4,12 @@ namespace DnD {
 GameEntity::GameEntity(size_t id, std::string_view name, size_t image_id, const GameEntity::Info& info) :
     id_(id), name_(name), image_id_(image_id), info_(info) {}
 
-const std::string& GameEntity::info(const std::string& key) const {
-    return info_.at(key);
-}
-
 std::string& GameEntity::info(const std::string& key) {
     return info_[key];
+}
+
+const GameEntity::Info& GameEntity::info() const {
+    return info_;
 }
 
 const std::string& GameEntity::name() const {

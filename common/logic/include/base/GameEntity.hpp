@@ -5,13 +5,16 @@
 
 namespace DnD {
 class GameEntityInterface {
+ protected:
+    using Info = std::unordered_map<std::string, std::string>;
+
  private:
     virtual void toggleUpdated() = 0;
     virtual bool wasUpdated() const = 0;
 
  public:
-    virtual const std::string& info(const std::string&) const = 0;
     virtual std::string& info(const std::string&) = 0;
+    virtual const Info& info() const = 0;
 
     virtual const std::string& name() const = 0;
     virtual void setName(std::string_view) = 0;
@@ -25,9 +28,6 @@ class GameEntityInterface {
 };
 
 class GameEntity : public GameEntityInterface {
- public:
-    using Info = std::unordered_map<std::string, std::string>;
-
  private:
     size_t id_;
     std::string name_;
@@ -49,9 +49,8 @@ class GameEntity : public GameEntityInterface {
 
     size_t id() const override;
 
-    const std::string& info(const std::string&) const override;
-
     std::string& info(const std::string&) override;
+    const Info& info() const override;
 
     const std::string& name() const override;
     void setName(std::string_view) override;
