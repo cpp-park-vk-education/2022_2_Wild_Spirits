@@ -15,7 +15,7 @@ private:
     void load_collector(change_queue changes);
 
 public:
-    ChangeGetter();
+    ChangeGetter(ChangeCollector &collector, Room::GameLogicProcessor &gameState);
 
     void load_collector(string change);
 };

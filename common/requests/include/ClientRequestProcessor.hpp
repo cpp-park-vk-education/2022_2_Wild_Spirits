@@ -8,7 +8,7 @@
 
 class ClientSideProcessor: public RequestAcceptor, public RequestSender{
 public:
-    ClientSideProcessor();
+    ClientSideProcessor(Client::GameState &gamestate);
     bool sendRequest(Client::Action action) override;
     bool acceptRequest(std::string request_string) override;
 private:

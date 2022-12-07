@@ -24,5 +24,5 @@ private:
     bool sendInstance(unsigned int user_id);
     bool broadcast(string request_string);
 public:
-    RoomSideProcessor();
+    RoomSideProcessor(Room::GameLogicProcessor &room);
 };

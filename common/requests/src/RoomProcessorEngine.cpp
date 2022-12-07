@@ -5,6 +5,7 @@ void RoomProcessorEngine::parse(string request){
     
 }
 
-RoomProcessorEngine::RoomProcessorEngine() {
+RoomProcessorEngine::RoomProcessorEngine(Room::GameLogicProcessor &gameState) : game_state(gameState) {
 
 }
+

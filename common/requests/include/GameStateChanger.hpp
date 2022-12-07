@@ -13,6 +13,6 @@ private:
     Client::GameState &gamestate;
 
 public:
-    GameStateChanger();
+    GameStateChanger(Client::GameState &gamestate);
     bool makechange(std::tuple<std::string, std::string> setter_params);
 };

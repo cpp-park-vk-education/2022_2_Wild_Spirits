@@ -4,6 +4,6 @@ bool GameStateChanger::makechange(std::tuple<std::string, std::string> setter_pa
     
 }
 
-GameStateChanger::GameStateChanger() {
+GameStateChanger::GameStateChanger(Client::GameState &gamestate) : gamestate(gamestate) {
 
 }

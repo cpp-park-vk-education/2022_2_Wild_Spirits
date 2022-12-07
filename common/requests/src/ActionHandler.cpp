@@ -5,6 +5,6 @@ string ActionHandler::Action_string(string action_params){
     
 }
 
-ActionHandler::ActionHandler() {
+ActionHandler::ActionHandler(ActionCollector &collector) : collector(collector) {
 
 }

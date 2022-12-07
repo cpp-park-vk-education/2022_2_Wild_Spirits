@@ -25,6 +25,6 @@ bool RoomSideProcessor::broadcast(string request_string){
 
 }
 
-RoomSideProcessor::RoomSideProcessor(){
+RoomSideProcessor::RoomSideProcessor(Room::GameLogicProcessor &room) : engine(), room(room) {
 
 }
