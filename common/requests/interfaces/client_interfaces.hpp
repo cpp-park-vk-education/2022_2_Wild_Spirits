@@ -6,5 +6,11 @@
 namespace Client{
     class Action{};
     class GameState;
-    enum Header;
+    enum Header{
+        action,
+        img_request,
+        room_changes,
+        dm_changes,
+        apply_request
+        };
 }
