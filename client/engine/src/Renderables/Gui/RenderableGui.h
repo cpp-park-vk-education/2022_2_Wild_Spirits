@@ -1,24 +1,48 @@
 #pragma once
 
-#include <Renderables/RenderableInterface.h>
+#include <glm/gtx/transform.hpp>
+
+#include <Events/Events.h>
+#include <Utils/Timer.h>
 #include "RenderableGuiAlign.h"
 
 namespace LM {
 
-    class RenderableGui : virtual public RenderableInterface {
+    class RendererInterface;
+
+    struct RenderableGuiProps {
+        RenderableGuiAlign align = RenderableGuiAlign();
+        glm::vec2 position = glm::vec2(0.0f, 0.0f);
+    };
+
+    class RenderableGui {
     public:
-        RenderableGui() = default;
+        RenderableGui(const RenderableGuiProps& props = {});
         virtual ~RenderableGui() = default;
 
-        RenderableGuiAlight getAlight() const { return m_Align; }
-        void setAlight(RenderableGuiAlight align) { m_Align = align; }
+        RenderableGuiAlign getAlight() const { return m_Align; }
+        void setAlight(RenderableGuiAlign align) { m_Align = align; }
+        
+        glm::vec2 getPosition() const { return m_Position; }
+        void setPosition(const glm::vec2& position) { m_Position = position; }
 
-        virtual glm::uvec2 getSize() const = 0;
-        virtual void rebuid(glm::uvec2 size) {
+        virtual void rebuid(glm::uvec2 size);
 
-        };
+        virtual void onEvent(Ref<Event> event);
+        virtual void onUpdate(Tick tick) { }
+
+        virtual void drawDecorator(RendererInterface* renderer);
+
+        virtual void draw(RendererInterface* renderer) = 0;
+        virtual glm::vec2 getSize() const = 0;
     protected:
-        RenderableGuiAlight m_Align;
+        float calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const;
+    protected:
+        RenderableGuiAlign m_Align;
+        glm::vec2 m_AlignPosition;
+        glm::vec2 m_Position;
+
+        bool m_IsHovered = false;
     };
 
 }

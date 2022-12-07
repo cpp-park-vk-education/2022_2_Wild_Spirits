@@ -42,7 +42,7 @@ set(SOURCES
     src/Renderables/RenderableGroup.cpp src/Renderables/RenderableGroup.h 
     src/Renderables/RenderableTexture.cpp src/Renderables/RenderableTexture.h
 
-    src/Renderables/Gui/RenderableGui.h 
+    src/Renderables/Gui/RenderableGui.cpp src/Renderables/Gui/RenderableGui.h 
     src/Renderables/Gui/RenderableGuiAlign.h 
     src/Renderables/Gui/RenderableGuiGroup.cpp src/Renderables/Gui/RenderableGuiGroup.h
     src/Renderables/Gui/RenderableGuiTexture.cpp src/Renderables/Gui/RenderableGuiTexture.h
@@ -71,6 +71,8 @@ set(SOURCES
 
     src/Textures/Texture2D.cpp src/Textures/Texture2D.h
     src/Textures/TextureLoader.cpp src/Textures/TextureLoader.h
+    src/Textures/stb_image.h
+    src/Textures/CalcTextureParameters.cpp src/Textures/CalcTextureParameters.h
     
     src/Transform/Transform.cpp src/Transform/Transform.h
     src/Transform/Rotation.h

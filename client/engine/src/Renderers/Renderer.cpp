@@ -12,28 +12,34 @@ namespace LM {
     Renderer::Renderer() {
         m_Transforms.push_back(glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)));
         m_Shader = CreateScope<Shader>(ShaderLayout({
-            { ShaderSource::Type::kVertex, ShaderSource::fromFile("./res/Shaders/Simple.vert") },
-            { ShaderSource::Type::kFragment, ShaderSource::fromFile("./res/Shaders/Simple.frag") } }));
+            { ShaderSource::Type::kVertex, ShaderSource::fromFile("./ClientRes/Shaders/Simple.vert") },
+            { ShaderSource::Type::kFragment, ShaderSource::fromFile("./ClientRes/Shaders/Simple.frag") } }));
     }
 
-    void Renderer::start() {
+    void Renderer::start(glm::uvec2 windowSize, glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {
         m_Shader->enable();
+        glViewport(0, 0, windowSize.x, windowSize.y);
+        m_Shader->setUniformMat4("u_ProjectionMatrix", projectionMatrix);
+        m_Shader->setUniformMat4("u_ViewMatrix", viewMatrix);
+    }
+
+
+    void Renderer::pushTransform(const glm::mat4 transform) {
+        m_Transforms.push_back(transform * m_Transforms[m_Transforms.size() - 1]);
+    }
+
+    void Renderer::popTransform() {
+        m_Transforms.pop_back();
     }
 
     void Renderer::draw(RenderableTexture* renderable) {
-        //m_Shader->setUniform1f();
-        //renderable->getTransform();
+        m_Shader->setUniformMat4("u_Transform", m_Transforms[m_Transforms.size() - 1] * renderable->getTransform().getMatrix());
         renderable->getVertexArray()->bind();
-        renderable->getIndexBuffer()->bind();
-        //glBegin(GL_TRIANGLES);
-        //glColor3f(1.0f, 1.0f, 1.0f);
-        //glVertex2f(0.0f, 0.0f);
-        //glVertex2f(0.0f, 1.0f);
-        //glVertex2f(1.0f, 1.0f);
-        //glEnd();
-        if (renderable->getIndexBuffer()->getCount())
+        //renderable->getVertexArray()->getIndexBuffer()->bind();
+        renderable->getTexture()->bind(0);
+        if (renderable->getVertexArray()->getIndexBuffer()->getCount())
         {
-            glDrawElements(GL_TRIANGLES, renderable->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, NULL);
+            glDrawElements(GL_TRIANGLES, renderable->getVertexArray()->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, NULL);
         }
     }
 

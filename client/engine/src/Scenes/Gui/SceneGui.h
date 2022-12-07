@@ -23,6 +23,7 @@ namespace LM {
         void rebuild();
 
         virtual void onEvent(Ref<Event> event) override;
+        virtual void onUpdate(Tick tick) override;
         virtual void render() override;
     protected:
         Vector<Ref<RenderableGui>> m_Renderables;

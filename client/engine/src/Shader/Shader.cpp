@@ -97,9 +97,9 @@ namespace LM {
     uint32_t Shader::getType(ShaderSource::Type type) {
         switch (type)
         {
-            case ShaderSource::Type::kVertex:	return GL_VERTEX_SHADER;
-            case ShaderSource::Type::kFragment:	return GL_FRAGMENT_SHADER;
-            case ShaderSource::Type::kGeometry:	return GL_GEOMETRY_SHADER;
+            case ShaderSource::Type::kVertex:   return GL_VERTEX_SHADER;
+            case ShaderSource::Type::kFragment: return GL_FRAGMENT_SHADER;
+            case ShaderSource::Type::kGeometry: return GL_GEOMETRY_SHADER;
         }
         return 0;
     }
@@ -107,9 +107,9 @@ namespace LM {
     std::string Shader::getName(ShaderSource::Type type) {
         switch (type)
         {
-        case ShaderSource::Type::kVertex:	return "Vertex";
-        case ShaderSource::Type::kFragment:	return "Fragment";
-        case ShaderSource::Type::kGeometry:	return "Geometry";
+            case ShaderSource::Type::kVertex:   return "Vertex";
+            case ShaderSource::Type::kFragment: return "Fragment";
+            case ShaderSource::Type::kGeometry: return "Geometry";
         }
         return "None";
     }

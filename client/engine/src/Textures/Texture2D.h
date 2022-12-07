@@ -53,27 +53,26 @@ namespace LM {
         };
         struct FromFile { std::string filename; }; 
         struct FromSource { std::string source; };
+        struct FromData { uint8_t* data; uint32_t width; uint32_t height; };
     public:
         Texture2D(FromFile file, MASK mask = MASK::NONE);
         Texture2D(FromSource source, MASK mask = MASK::NONE);
+        Texture2D(FromData data, MASK mask = MASK::NONE);
         ~Texture2D();
 
         uint32_t getTextureId() const { return m_TextureId; }
         glm::uvec2 getSize() const { return glm::uvec2(m_Width, m_Height); }
 
-
         void bind(uint32_t slotId);
         void unbind();
     private:
-        void load();
+        void load(const uint8_t* const data, uint32_t width, uint32_t height);
         void loadOnError();
     private:
-        std::string m_FileName;
         MASK m_Mask;
         uint32_t m_Width;
         uint32_t m_Height;
         uint32_t m_TextureId = 0;
     };
-
 
 }

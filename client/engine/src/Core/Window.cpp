@@ -53,9 +53,11 @@ namespace LM {
         : m_Data(props)
     {
         init();
+#ifdef _DEBUG
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(message_callback, nullptr);
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+#endif
     }
 
     Window::~Window() {
@@ -134,10 +136,10 @@ namespace LM {
     void Window::setCallbacks() {
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* _Window, int _Width, int _Height) 
         {
-        	WindowData* Data = (WindowData*)glfwGetWindowUserPointer(_Window);
-        	Data->width = _Width;
-        	Data->height = _Height;
-        	Data->eventQueue->add(CreateRef<WindowResizeEvent>(_Width, _Height));
+            WindowData* Data = (WindowData*)glfwGetWindowUserPointer(_Window);
+            Data->width = _Width;
+            Data->height = _Height;
+            Data->eventQueue->add(CreateRef<WindowResizeEvent>(_Width, _Height));
         });
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* _Window) {
@@ -175,7 +177,6 @@ namespace LM {
 
         glfwSetCursorPosCallback(m_Window, [](GLFWwindow* _Window, double _PosX, double _PosY) {
             WindowData* Data = (WindowData*)glfwGetWindowUserPointer(_Window);
-            LOGI("Data: ", Data, " ", _PosX, " ", _PosY);
             Data->eventQueue->add(CreateRef<MouseMovedEvent>((float)_PosX, (float)_PosY));
         });
     }

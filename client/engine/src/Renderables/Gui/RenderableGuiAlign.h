@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    struct RenderableGuiAlight {
+    struct RenderableGuiAlign {
         enum class Align : uint8_t
         {
             kStart = 0,
@@ -12,8 +12,8 @@ namespace LM {
             kEnd,
         };
 
-        Align vertical = Align::kStart;
         Align horizontal = Align::kStart;
+        Align vertical = Align::kStart;
     };
 
 }

@@ -9,8 +9,8 @@ namespace LM {
         struct FromFile { std::string filename; };
         struct FromSource { std::string source; };
     public:
-        TextureLoader(TextureLoader::FromFile file);
-        TextureLoader(TextureLoader::FromSource source);
+        TextureLoader(FromFile file);
+        TextureLoader(FromSource source);
         ~TextureLoader();
 
         inline uint32_t getWidht() const { return m_Width; }
@@ -20,9 +20,9 @@ namespace LM {
 
         bool isOk() const { return m_Data; }
     protected:
-        uint32_t m_Width;
-        uint32_t m_Height;
-        uint32_t m_Channels;
+        int m_Width;
+        int m_Height;
+        int m_Channels;
         uint8_t* m_Data;
     };
 

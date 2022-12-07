@@ -19,6 +19,8 @@ namespace LM {
 
     void Layer::onUpdate(Tick tick) {
         m_SceneGui->rebuild();
+        m_SceneGui->onUpdate(tick);
+        m_SceneScene->onUpdate(tick);
     }
 
 }

@@ -70,7 +70,9 @@ namespace LM {
             return left;
         }
 
-        operator float() { return m_Angle; }
+        operator float() const { return m_Angle; }
+
+        float operator()() const { return m_Angle; }
     private:
         float m_Angle;
     };

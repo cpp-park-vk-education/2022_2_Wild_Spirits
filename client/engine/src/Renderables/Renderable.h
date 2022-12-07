@@ -5,15 +5,17 @@
 
 namespace LM {
 
-    class Renderable : virtual public RenderableInterface {
+    class Renderable : public RenderableInterface {
     public:
         struct Vertex
         {
-            glm::vec3 Position;
-            glm::vec2 TexCoord;
+            glm::vec3 position;
+            glm::vec2 texCoord;
         };
     public:
-        Renderable(Transform transform = Transform(), const Color& color = Color(1.0f)) : RenderableInterface(transform, color) { }
+        Renderable(Transform transform = Transform(), const Color& color = Color(1.0f)) 
+            : RenderableInterface(transform, color) { }
+
         virtual ~Renderable() = default;
     };
 

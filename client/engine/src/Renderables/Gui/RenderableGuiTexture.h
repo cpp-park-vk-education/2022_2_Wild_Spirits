@@ -7,12 +7,24 @@
 
 namespace LM {
 
-    class RenderableGuiTexture : public RenderableGui, public RenderableTexture {
+    class RenderableGuiTexture : public RenderableGui {
     public:
-        RenderableGuiTexture(Ref<Texture2D> texture);
+        RenderableGuiTexture(const RenderableTextureProps& propsTexture, const RenderableGuiProps& propsGui = {});
         virtual ~RenderableGuiTexture() = default;
 
-        virtual glm::uvec2 getSize() const override { return m_Texture->getSize(); }
+        void setTransform(const Transform& transform) { m_Renderable->setTransform(transform); }
+        void setColor(const Color& color) { m_Renderable->setColor(color); }
+        
+        virtual void onUpdate(Tick tick) override;
+
+        virtual glm::vec2 getSize() const override { 
+            glm::uvec2 texSize = m_Renderable->getTexture()->getSize();
+            glm::vec2 renderableSize = m_Renderable->getTransform().scale;
+            return glm::vec2(renderableSize.x * texSize.x, renderableSize.y * texSize.y);
+        }
+        virtual void draw(RendererInterface* renderer) override;
+    protected:
+        Scope<RenderableTexture> m_Renderable;
     };
 
 }

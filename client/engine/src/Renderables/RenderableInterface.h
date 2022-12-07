@@ -4,6 +4,7 @@
 #include <Events/Events.h>
 #include <Utils/Timer.h>
 #include <Core/Color.h>
+#include <Utils/ConsoleLog.h>
 
 namespace LM {
 

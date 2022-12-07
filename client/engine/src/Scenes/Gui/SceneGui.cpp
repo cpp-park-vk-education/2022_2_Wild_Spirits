@@ -1,5 +1,7 @@
 #include "SceneGui.h"
 
+#include <glm/gtx/transform.hpp>
+
 #include <Core/Application.h>
 #include <Utils/ConsoleLog.h>
 #include <Renderers/Renderer.h>
@@ -19,7 +21,10 @@ namespace LM {
 
     void SceneGui::rebuild() {
         //m_Transforms.push_back({ glm::mat4(), glm::vec2(0.0f, 0.0f), glm::vec2(m_Width, m_Height) });
-
+        for (auto& renderable : m_Renderables)
+        {
+            renderable->rebuid(glm::uvec2(m_Width, m_Height));
+        }
     }
 
     void SceneGui::onEvent(Ref<Event> event) {
@@ -30,13 +35,37 @@ namespace LM {
             m_Height = event->getHeight();
             return false;
         });
+
+        bool isMouseMovedEvent = false;
+        dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
+            isMouseMovedEvent = true;
+        LOGI("FIX  ", e->toString());
+        for (auto& renderable : m_Renderables) {
+            Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX(), m_Height - e->getY());
+            renderable->onEvent(newEvent);
+        }
+        return false;
+        });
+        if (isMouseMovedEvent) { return; }
+
+        for (auto& el : m_Renderables) {
+            el->onEvent(event);
+        }
     }
 
+    void SceneGui::onUpdate(Tick tick) {
+        for (auto& el : m_Renderables) {
+            el->onUpdate(tick);
+        }
+    }
+
+
     void SceneGui::render() {
-        m_Renderer->start();
+        glm::mat4 viewMatrix = glm::ortho(0.0f, static_cast<float>(m_Width), 0.0f, static_cast<float>(m_Height));
+        m_Renderer->start(glm::uvec2(m_Width, m_Height), glm::mat4(1.0f), viewMatrix);
         for (auto& el : m_Renderables)
         {
-            el->draw(m_Renderer.get());
+            el->drawDecorator(m_Renderer.get());
         }
     }
 
