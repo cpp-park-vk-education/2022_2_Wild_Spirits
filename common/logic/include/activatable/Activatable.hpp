@@ -15,6 +15,15 @@ class Activatable {
     unsigned int action_cost_;
     std::string scaling_;
 
+public:
+    struct Result {
+        size_t action_points;
+        size_t resource_spent = 0;  // Consumable uses or spell points
+        Storage<Action::Result> results;
+
+        Result() = default;
+    };
+
  public:
     Activatable() = default;
     Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
@@ -68,8 +77,6 @@ class Activatable {
         scaling_ = scaling;
     }
 
-    virtual std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>&, uint8_t dice_roll_res = 0) const {
-        return {};
-    }
+    virtual std::tuple<Result, ErrorStatus> use(const std::vector<Tile>&, uint8_t dice_roll_res = 0) const;
 };
 }  // namespace DnD

@@ -2,19 +2,20 @@ cmake_minimum_required(VERSION 3.24)
 project(dnd-logic VERSION 1.0)
 
 set(SOURCES
-     src/Action.cpp
-     src/DamageTypeStorage.cpp
-     src/Dice.cpp
-     src/Effect.cpp
-     src/GameEntity.cpp
-     src/CharacterInstance.cpp
-     src/PlayerCharacter.cpp
-     src/NPC_Instance.cpp
-     src/GameMap.cpp
-     src/GameState.cpp
-     src/Location.cpp
-     src/OnLocation.cpp
-     src/TurnOrder.cpp)
+     src/activatable/Action.cpp
+     src/activatable/Activatable.cpp
+     src/activatable/Effect.cpp
+     src/base/Dice.cpp
+     src/base/GameEntity.cpp
+     src/character/OnLocation.cpp
+     src/character/CharacterInstance.cpp
+     src/character/PlayerCharacter.cpp
+     src/character/NPC_Instance.cpp
+     src/structure/GameMap.cpp
+     src/structure/GameState.cpp
+     src/structure/Location.cpp
+     src/structure/DamageTypeStorage.cpp
+     src/structure/TurnOrder.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 

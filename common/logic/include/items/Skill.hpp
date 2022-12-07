@@ -47,7 +47,7 @@ class Skill_Instance : public Temporal {
         return original_.id();
     }
 
-    std::tuple<std::vector<Action::Result>, ErrorStatus> use(const std::vector<Tile>& tiles,
+    std::tuple<Activatable::Result, ErrorStatus> use(const std::vector<Tile>& tiles,
                                                              uint8_t dice_res = 0) const {
         return original_.use(tiles, dice_res);
     }

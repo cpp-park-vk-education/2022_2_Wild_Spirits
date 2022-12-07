@@ -150,7 +150,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
     std::vector<Action::Result> results;
 
     if (tile.distance(actor.mapPosition()[0]) > range_) {
-        return std::make_tuple(results, ErrorStatus::Fail("Out of range"));
+        return std::make_tuple(results, ErrorStatus::INVALID_CAST_RANGE);
     }
 
     area_->setTarget(tile);
@@ -158,6 +158,6 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
     applyEffectsTo(actor.location().npc(), &results, dice_roll_res);
     applyEffectsTo(actor.map().players(), &results, dice_roll_res);
 
-    return std::make_tuple(results, ErrorStatus::Ok());
+    return std::make_tuple(results, ErrorStatus::OK);
 }
 }  // namespace DnD

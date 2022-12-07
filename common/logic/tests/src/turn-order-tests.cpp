@@ -79,11 +79,11 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
 
     ASSERT_EQ(player_skill.turnsLeft(), 0);
     auto [results, status] = player.use("skill", 0, {});
-    ASSERT_TRUE(status.ok());
+    ASSERT_EQ(status, ErrorStatus::OK);
 
     ASSERT_EQ(player_skill.turnsLeft(), player_skill.original().cooldown());
     player.use("skill", 0, {});
-    ASSERT_FALSE(status.ok());
+    ASSERT_NE(status, ErrorStatus::OK);
 
     queue.skipTurns(3);
     ASSERT_EQ(player_skill.turnsLeft(), player_skill.original().cooldown() - 1);

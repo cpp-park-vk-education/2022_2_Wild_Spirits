@@ -18,11 +18,11 @@ DamageTypeStorage::DamageTypeStorage() : unused_ids_(),
 
 std::tuple<uint8_t, ErrorStatus> DamageTypeStorage::addDamageType(const std::string& type) {
     if (unused_ids_.empty()) {
-        return std::make_tuple(0, ErrorStatus::Fail(MaximumDmgTypesExceeded()));
+        return std::make_tuple(0, ErrorStatus::MAXIMUM_DMG_TYPES_EXCEEDED);
     }
 
     if (std::find(types_.begin(), types_.end(), type) != types_.end()) {
-        return std::make_tuple(0, ErrorStatus::Fail("Such damage type already exists"));
+        return std::make_tuple(0, ErrorStatus::ALREADY_EXISTS);
     }
 
     uint8_t id = *unused_ids_.begin();
@@ -32,30 +32,30 @@ std::tuple<uint8_t, ErrorStatus> DamageTypeStorage::addDamageType(const std::str
         types_.resize(id + 1);
     }
     types_[id] = type;
-    return std::make_tuple(id, ErrorStatus::Ok());
+    return std::make_tuple(id, ErrorStatus::OK);
 }
 
 ErrorStatus DamageTypeStorage::removeDamageType(uint8_t id) {
     if (id > types_.size()) {
-        return ErrorStatus::IdOutOfRange();
+        return ErrorStatus::OUT_OF_RANGE;
     }
 
     if (unused_ids_.contains(id)) {
-        return ErrorStatus::Fail("No such dmg type");
+        return ErrorStatus::NO_SUCH_ITEM;
     }
 
     unused_ids_.insert(id);
     types_[id] = "";
-    return ErrorStatus::Ok();
+    return ErrorStatus::OK;
 }
 
 std::tuple<std::string, ErrorStatus> DamageTypeStorage::typeName(uint8_t id) const {
     if (id > types_.size()) {
-        return std::make_tuple("", ErrorStatus::IdOutOfRange());
+        return std::make_tuple("", ErrorStatus::OUT_OF_RANGE);
     }
     if (unused_ids_.contains(id)) {
-        return std::make_tuple("", ErrorStatus::Fail("No such dmg type"));
+        return std::make_tuple("", ErrorStatus::NO_SUCH_ITEM);
     }
-    return std::make_tuple(types_[id], ErrorStatus::Ok());
+    return std::make_tuple(types_[id], ErrorStatus::OK);
 }
 }  // namespace DnD

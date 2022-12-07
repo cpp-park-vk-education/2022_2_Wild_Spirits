@@ -7,8 +7,7 @@
 namespace DnD {
 NPC_Instance::NPC_Instance(size_t id, NPC& original, std::unique_ptr<Position>&& pos,
                            GameMap& map, int money, Storage<Item*> items) :
-    CharacterInstance(id, original, std::move(pos), map, money, items)
-{
+        CharacterInstance(id, original, std::move(pos), map, money, items) {
     for (const auto& [_, skill] : original.baseSkills()) {
         skills_.add(skill);
     }

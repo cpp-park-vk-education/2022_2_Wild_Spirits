@@ -19,7 +19,6 @@ TEST_F(AreaSuite, PointAreaWorks) {  // cppcheck-suppress [syntaxError]
     EXPECT_FALSE(area.isInArea(Tile{5, 3}));
 }
 
-
 TEST_F(AreaSuite, RectAreaWorks) {
     RectangularArea area(1, 2);
     area.setTarget(target_);

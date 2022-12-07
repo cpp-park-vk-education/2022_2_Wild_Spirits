@@ -41,7 +41,7 @@ class Action {
         explicit Result(size_t char_id);
         Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs);
 
-        size_t char_id() const {
+        size_t id() const {
             return char_id_;
         }
 

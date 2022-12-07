@@ -7,8 +7,17 @@
 #include <type_traits>
 
 #include "ErrorStatus.hpp"
+#include "Exception.hpp"
 
 namespace DnD {
+
+template <typename T>
+concept Identifiable = requires(T obj) {
+    { obj.id() } -> std::unsigned_integral;
+} || requires(T obj) {
+    { obj->id() } -> std::unsigned_integral;
+};
+
 template <typename T>
 class Storage {
  private:
@@ -24,26 +33,33 @@ class Storage {
     template <typename... Args>
     ErrorStatus add(size_t id, Args&&... args) {
         static_assert(!std::is_pointer<T>::value);
-        data_.try_emplace(id, id, std::forward<Args>(args)...);
-        return ErrorStatus::Fail();
+        auto [_, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
+        return inserted ? ErrorStatus::OK : ErrorStatus::ALREADY_EXISTS;
     }
 
     ErrorStatus add(T object) {
+        std::pair<typename decltype(data_)::iterator, bool> result;
+    
         if constexpr (std::is_pointer<T>::value) {
-            data_.emplace(object->id(), object);
+            result = data_.emplace(object->id(), object);
         } else {
-            data_.emplace(object.id(), object);
+            result =  data_.emplace(object.id(), object);
         }
-        return ErrorStatus::Fail();
+
+        return result.second ? ErrorStatus::OK : ErrorStatus::ALREADY_EXISTS;
     }
 
     ErrorStatus remove(size_t id) {
-        data_.erase(id);
-        return ErrorStatus::Fail();
+        auto erased = data_.erase(id);
+        return erased ? ErrorStatus::OK : ErrorStatus::NO_SUCH_ITEM;
     }
 
     T& get(size_t id) {
-        return data_.find(id)->second;
+        auto it = data_.find(id);
+        if (it == data_.end()) {
+            throw OutOfRange();
+        }
+        return it->second;
     }
 
     size_t size() const {

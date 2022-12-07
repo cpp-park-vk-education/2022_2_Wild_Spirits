@@ -49,32 +49,30 @@ TEST(DamageTypesStorageSuite, ItManagesIds) {
     DamageTypeStorage types;
 
     auto [id, status] = types.addDamageType("a");
-    ASSERT_TRUE(status.ok());
+    ASSERT_EQ(status, ErrorStatus::OK);
 
     auto [name, err_status] = types.typeName(id);
-    ASSERT_TRUE(err_status.ok());
+    ASSERT_EQ(err_status, ErrorStatus::OK);
     ASSERT_EQ(name, "a");
 
     err_status = types.removeDamageType(id);
-    ASSERT_TRUE(err_status.ok());
+    ASSERT_EQ(err_status, ErrorStatus::OK);
 
     auto [_, err_status2] = types.typeName(id);
-    ASSERT_FALSE(err_status2.ok());
+    ASSERT_EQ(err_status2, ErrorStatus::NO_SUCH_ITEM);
 
     for (size_t i = DamageTypeStorage::defaultNum(); i < DamageTypeStorage::maxNum(); ++i) {
         auto [_, status] = types.addDamageType(std::to_string(i));
-        ASSERT_TRUE(status.ok());
+        ASSERT_EQ(status, ErrorStatus::OK);
     }
 
-    std::cout << "EMPTY: " << std::boolalpha << types.filled() << '\n';
-
     std::tie(id, status) = types.addDamageType("b");
-    ASSERT_FALSE(status.ok());
+    ASSERT_EQ(status, ErrorStatus::MAXIMUM_DMG_TYPES_EXCEEDED);
 
     types.removeDamageType(DamageTypeStorage::defaultNum() + 1);
 
     std::tie(id, status)  = types.addDamageType("b");
-    ASSERT_TRUE(status.ok());
+    ASSERT_EQ(status, ErrorStatus::OK);
     ASSERT_EQ(id, DamageTypeStorage::defaultNum() + 1);
 }
 

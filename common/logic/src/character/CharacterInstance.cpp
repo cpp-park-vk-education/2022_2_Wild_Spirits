@@ -17,13 +17,10 @@ int CharacterInstance::statCheckRoll(const std::string& stat, const DiceInterfac
 }
 
 int CharacterInstance::buffToStat(const std::string& stat) const {
-    int res = 0;
-    for (const auto& buff : buffs_) {
-        if (buff.hasStat(stat)) {
-            res += buff.stat(stat);
-        }
-    }
-    return res;
+    return std::accumulate(buffs_.begin(), buffs_.end(), 0,
+        [&stat] (int res, const Buff& buff) {
+            return buff.hasStat(stat) ? res + buff.stat(stat) : res;
+    });
 }
 
 int CharacterInstance::statTotal(const std::string& stat_name) const {
@@ -61,7 +58,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus>
 }
 
 ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
-    return ErrorStatus::Fail();
+    return ErrorStatus::UNKNOWN_ERROR;
 }
 
 SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInstance& from,

@@ -20,10 +20,6 @@ class DamageTypeStorage {
     std::unordered_set<uint8_t> unused_ids_;
     std::vector<std::string> types_;
 
-    static std::string MaximumDmgTypesExceeded() {
-        return "Maximum " + std::to_string(kMaxTypesNum) + " dmg types allowed";
-    }
-
  public:
     DamageTypeStorage();
 

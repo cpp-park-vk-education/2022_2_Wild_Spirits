@@ -32,7 +32,7 @@ TEST_F(ActionSuite, SingleActionTest) {
     // and got 2 points as a bonus from his stats, totalling 13
     auto [results, error_status] = action.getResults(*character, Tile{2, 1}, 13);
 
-    ASSERT_TRUE(error_status.ok());
+    ASSERT_EQ(error_status, ErrorStatus::OK);
     ASSERT_THAT(results, SizeIs(3));
 
     std::vector<size_t> enemies_hit = {1, 3, 5};
@@ -46,7 +46,7 @@ TEST_F(ActionSuite, SingleActionTest) {
 
     // Assert that cast on invalid range returns failure
     std::tie(results, error_status) = action.getResults(*character, Tile{3, 1}, 13);
-    ASSERT_FALSE(error_status.ok());
+    ASSERT_EQ(error_status, ErrorStatus::INVALID_CAST_RANGE);
 }
 
 TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
@@ -85,7 +85,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 
     auto [results, error_status] = player_use_spell();
 
-    ASSERT_TRUE(error_status.ok());
+    ASSERT_EQ(error_status, ErrorStatus::OK);
     EXPECT_EQ(player.actionPoints(), 5);
     EXPECT_EQ(player.spellPoints(), 3);
     ASSERT_EQ(results, expected_results);
@@ -93,13 +93,13 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     // Cast spell with less action points than required
     player.setActionPoints(4);
     std::tie(results, error_status) = player_use_spell();
-    ASSERT_FALSE(error_status.ok());
+    ASSERT_EQ(error_status, ErrorStatus::NO_ACTION_POINTS);
 
     // Cast spell with less spell points than required
     player.setActionPoints(6);
     player.setSpellPoints(1);
     std::tie(results, error_status) = player_use_spell();
-    ASSERT_FALSE(error_status.ok());
+    ASSERT_EQ(error_status, ErrorStatus::NO_SPELL_POINTS);
 }
 
 TEST_F(ActivatableSuite, PlayerConsumableTest) {
