@@ -17,6 +17,7 @@ class GameState {
  public:
     virtual Storage<NPC>& npc() = 0;
     virtual Storage<PlayerCharacter>& players() = 0;
+    virtual Storage<CharacterInstance*>& allCharacters() = 0;
 
     virtual Storage<Item>& items() = 0;
     virtual Storage<Weapon>& weapons() = 0;
@@ -48,6 +49,7 @@ class GameStateImpl : virtual public GameState {
  private:
     Storage<NPC> npc_;
     Storage<PlayerCharacter> players_;
+    Storage<CharacterInstance*> all_characters_;
 
     Storage<Item> items_;
     Storage<Weapon> weapons_;
@@ -72,6 +74,7 @@ class GameStateImpl : virtual public GameState {
 
     Storage<NPC>& npc() override;
     Storage<PlayerCharacter>& players() override;
+    Storage<CharacterInstance*>& allCharacters() override;
 
     Storage<Item>& items() override;
     Storage<Weapon>& weapons() override;

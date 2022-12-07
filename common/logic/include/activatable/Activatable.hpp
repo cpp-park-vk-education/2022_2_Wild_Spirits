@@ -20,6 +20,7 @@ public:
         size_t action_points;
         size_t resource_spent = 0;  // Consumable uses or spell points
         Storage<Action::Result> results;
+        // std::unordered_map<size_t, Action::Result> results;
 
         Result() = default;
     };

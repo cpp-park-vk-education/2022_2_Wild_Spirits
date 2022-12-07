@@ -3,6 +3,7 @@
 #include "Dice.hpp"
 #include "Item.hpp"
 #include "Action.hpp"
+#include "GameMap.hpp"
 
 namespace DnD {
 CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
@@ -10,7 +11,9 @@ CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique
         OnLocation(std::move(pos), map),
         original_(original), items_(items), id_(id),
         action_points_(original.maxActionPoints()),
-        hp_(original.maxHP()), money_(money) {}
+        hp_(original.maxHP()), money_(money) {
+    map.allCharacters().add(this);
+}
 
 int CharacterInstance::statCheckRoll(const std::string& stat, const DiceInterface& dice) const {
     return dice.roll(Dice::D20) + statBonus(stat);

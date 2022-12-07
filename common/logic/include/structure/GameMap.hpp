@@ -5,6 +5,7 @@
 namespace DnD {
 class GameState;
 class PlayerCharacter;
+class CharacterInstance;
 
 class GameMap {
  public:
@@ -17,6 +18,7 @@ class GameMap {
     virtual size_t currentLocationId() const = 0;
 
     virtual Storage<PlayerCharacter>& players() const = 0;
+    virtual Storage<CharacterInstance*>& allCharacters() const = 0;
 
     virtual ~GameMap() {}
 };
@@ -34,18 +36,19 @@ class GameMapImpl : public GameMap {
         return locations_;
     }
 
-    void switchLocation(size_t id);
+    void switchLocation(size_t id) override;
 
-    void switchLocation(size_t char_id, size_t id);
+    void switchLocation(size_t char_id, size_t id) override;
 
-    Location& currentLocation() {
+    Location& currentLocation() override {
         return locations_.get(current_location_);
     }
 
-    size_t currentLocationId() const {
+    size_t currentLocationId() const override{
         return current_location_;
     }
 
-    Storage<PlayerCharacter>& players() const;
+    Storage<PlayerCharacter>& players() const override;
+    Storage<CharacterInstance*>& allCharacters() const override;
 };
 }  // namespace DnD

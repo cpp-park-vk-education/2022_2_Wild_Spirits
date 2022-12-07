@@ -42,6 +42,7 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
     game.players().each([&] (auto& player) { player.addBuff({buff_base, 2}); });
 
     PlayerCharacter& player = game.players().get(2);
+    std::cout << player.id();
 
     location.npc().each([&] (auto& npc) {
         ASSERT_THAT(npc.buffs(), SizeIs(1));

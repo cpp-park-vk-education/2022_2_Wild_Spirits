@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include <memory>
 #include <cstddef>
 
@@ -36,10 +37,10 @@ class Action {
      public:
         Tile pos = {};
         int hp = 0;
-        std::vector<Buff> buffs;
+        std::list<Buff> buffs;
 
         explicit Result(size_t char_id);
-        Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs);
+        Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs);
 
         size_t id() const {
             return char_id_;
@@ -65,7 +66,7 @@ class Action {
     std::string target_scaling_ = Armor::kScaling;
     
     template <typename T>
-    void applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0);
+    void applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0) const;
 
  public:
     Action() = default;
@@ -99,6 +100,6 @@ class Action {
     void removeEffect(size_t effect_id);
 
     std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const CharacterInstance&,
-                                                            const Tile& tile, uint8_t dice_roll_res = 0);
+                                                            const Tile& tile, uint8_t dice_roll_res = 0) const;
 };
 }  // namespace DnD

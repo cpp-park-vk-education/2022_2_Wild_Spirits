@@ -15,7 +15,7 @@
 namespace DnD {
 Action::Result::Result(size_t char_id) : char_id_(char_id) {}
 
-Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>& buffs) :
+Action::Result::Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs) :
     char_id_(char_id),
     pos(pos),
     hp(hp),
@@ -123,7 +123,7 @@ void Action::removeEffect(size_t effect_id) {
 }
 
 template <typename T>
-void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res) {
+void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res) const {
     for (const auto& [_, character] : characters) {
         if (!character.isInArea(*area_)) {
             continue;
@@ -146,7 +146,7 @@ void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>*
 }
 
 std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
-        const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) {
+        const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) const {
     std::vector<Action::Result> results;
 
     if (tile.distance(actor.mapPosition()[0]) > range_) {

@@ -10,15 +10,15 @@
 #include "Exception.hpp"
 
 namespace DnD {
-
+class PlayerCharacter;
 template <typename T>
-concept Identifiable = requires(T obj) {
+concept Identifiable = requires(T&& obj) {
     { obj.id() } -> std::unsigned_integral;
-} || requires(T obj) {
+} || requires(T&& obj) {
     { obj->id() } -> std::unsigned_integral;
-};
+} || std::is_same<T, PlayerCharacter>::value;
 
-template <typename T>
+template <Identifiable T>
 class Storage {
  private:
     std::map<size_t, T> data_;
@@ -60,6 +60,14 @@ class Storage {
             throw OutOfRange();
         }
         return it->second;
+    }
+
+    std::tuple<T*, ErrorStatus> safeGet(size_t id) noexcept {
+        auto it = data_.find(id);
+        if (it == data_.end()) {
+            return std::make_tuple(nullptr, ErrorStatus::NO_SUCH_ITEM);
+        }
+        return std::make_tuple(&it->second, ErrorStatus::OK);
     }
 
     size_t size() const {

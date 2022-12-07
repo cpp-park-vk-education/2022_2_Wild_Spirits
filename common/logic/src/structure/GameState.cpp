@@ -9,6 +9,10 @@ Storage<PlayerCharacter>& GameStateImpl::players() {
     return players_;
 }
 
+Storage<CharacterInstance*>& GameStateImpl::allCharacters() {
+    return all_characters_;
+}
+
 Storage<Race>& GameStateImpl::races() {
     return races_;
 }
