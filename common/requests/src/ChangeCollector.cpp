@@ -9,9 +9,7 @@ ChangeCollector::ChangeCollector() {
 }
 
 std::unordered_map<string, string> ChangeCollector::flush() {
-    
+    return changed_fields;
 }
 
-std::unordered_map<string, string> flush(){
-    
-}
+
