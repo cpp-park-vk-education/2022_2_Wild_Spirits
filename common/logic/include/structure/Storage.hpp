@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <map>
 #include <cstddef>
 #include <functional>
 #include <type_traits>
@@ -11,13 +12,14 @@ namespace DnD {
 template <typename T>
 class Storage {
  private:
-    std::unordered_map<size_t, T> data_;
+    std::map<size_t, T> data_;
 
  public:
     using size_type = size_t;
 
     Storage() = default;
-    Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
+    // Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
+    Storage(const std::map<size_t, T>& data) : data_(data) {}
 
     template <typename... Args>
     ErrorStatus add(size_t id, Args&&... args) {

@@ -21,6 +21,12 @@ class Buff : public Effect, public StatBased, public Temporal {
         return std::make_unique<Buff>(*this);
     }
 
+    bool operator==(const Buff& other) const {
+        return stats() == other.stats() && turnsLeft() == other.turnsLeft();
+    }
+
     void updateActionResult(const CharacterInstance& character, Action::Result* result) const override;
+
+    friend std::ostream& operator<<(std::ostream& out, const Buff& buff);
 };
 }  // namespace DnD

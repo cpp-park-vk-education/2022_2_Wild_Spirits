@@ -16,6 +16,10 @@ class StatBased {
     Stats stats_;
 
     static constexpr int8_t kDefaultStat = 10;
+    
+    static int calculateStatBonus(unsigned int value) {
+        return std::floor((value - 10) / 2.0);
+    }
  
  public:
     StatBased() : stats_() {}
@@ -33,9 +37,12 @@ class StatBased {
         return it->second;
     }
 
+    bool hasStat(const std::string& stat_name) const {
+        return stats_.find(stat_name) != stats_.end();
+    }
+
     int8_t statBonus(const std::string& stat_name) const {
-        int8_t value = stat(stat_name);
-        return std::floor((value - 10) / 2.0);
+        return calculateStatBonus(stat(stat_name));
     }
 
     void setStat(const std::string& stat_name, int8_t value) {
@@ -46,5 +53,7 @@ class StatBased {
         int8_t init_value = stat(stat_name);
         stats_[stat_name] = init_value + value;
     }
+
+    friend class CharacterInstance;
 };
 }  // namespace DnD

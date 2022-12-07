@@ -13,6 +13,16 @@ constexpr size_t abs(T num) {
     }
 }
 
+template <typename T>
+constexpr T min(T a, T b) {
+    return a < b ? a : b;
+}
+
+template <typename T>
+constexpr T max(T a, T b) {
+    return a > b ? a : b;
+}
+
 struct Tile {
     size_t x = 0;
     size_t y = 0;
@@ -22,7 +32,8 @@ struct Tile {
     }
 
     size_t distance(const Tile& other) const {
-        return 0;
+        return max(x, other.x) - min(x, other.x) +
+               max(y, other.y) - min(y, other.y);
     }
 
     template <typename VectorType>

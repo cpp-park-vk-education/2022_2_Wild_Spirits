@@ -29,6 +29,10 @@ class Class : public GameEntity {
                     const std::vector<Skill> skills) :
         GameEntity(id, name, image_id, info), skills_(skills) {}
 
+    auto& skills() const {
+        return skills_;
+    }
+
     void addSkill(const Skill& skill) {
         skills_.push_back(skill);
     }
@@ -59,12 +63,7 @@ class PlayerCharacter : public CharacterInstance {
  public:
     PlayerCharacter(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                     const Class& char_class, const Race& race,
-                    int money = 100, Storage<Item*> items = {}) :
-        CharacterInstance(id, original, std::move(pos), map, money, items),
-        class_list_(),
-        race_(&race) {
-            class_list_.add(&char_class);
-        }
+                    int money = 100, Storage<Item*> items = {});
 
     std::tuple<std::vector<Action::Result>, ErrorStatus> use(std::string_view action_type, size_t action_id,
                                                              const std::vector<Tile>& target,

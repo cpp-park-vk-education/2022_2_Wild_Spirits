@@ -16,24 +16,21 @@ using ::testing::SizeIs;
 namespace DnD {
 TEST_F(ActionSuite, SingleActionTest) {
     // Add buff to npc's dex, check if it will dodge action
-    location.npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
+    locations.get(0).npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
 
     // Action checks enemies dex by default,
     // they have armor class of 10 by default, which is summed with dex bonus ((14 - 10) / 2 == 2)
     // equaling 12
 
     // Damage rolls
-    EXPECT_CALL(*dice, roll(4))
-        .WillOnce(Return(1))  // enemy 1
-        .WillOnce(Return(2))
-        .WillOnce(Return(3))  // enemy 3
-        .WillOnce(Return(2))
-        .WillOnce(Return(4))  // enemy 5
-        .WillOnce(Return(3));
+    EXPECT_CALL(*dice_ptr, roll(4, 2))
+        .WillOnce(Return(std::vector<uint8_t>{1, 2}))  // enemy 1
+        .WillOnce(Return(std::vector<uint8_t>{3, 2}))  // enemy 3
+        .WillOnce(Return(std::vector<uint8_t>{4, 3}));  // enemy 5
 
     // Assume player rolled 11 when he used this action,
     // and got 2 points as a bonus from his stats, totalling 13
-    auto [results, error_status] = action.getResults(character, Tile{2, 1}, 13);
+    auto [results, error_status] = action.getResults(*character, Tile{2, 1}, 13);
 
     ASSERT_TRUE(error_status.ok());
     ASSERT_THAT(results, SizeIs(3));
@@ -41,14 +38,14 @@ TEST_F(ActionSuite, SingleActionTest) {
     std::vector<size_t> enemies_hit = {1, 3, 5};
 
     for (size_t i = 0; i < results.size(); ++i) {
-        ASSERT_EQ(results[i], Action::Result(
+        EXPECT_EQ(results[i], Action::Result(
                                 enemies_hit[i],
-                                Tile{1, 2}, -2 - i,
+                                Tile{1, 2}, -2 - enemies_hit[i],
                                 {Buff({ {"str", -2}, {"dex", -1} }, 2)}));
     }
 
     // Assert that cast on invalid range returns failure
-    std::tie(results, error_status) = action.getResults(character, Tile{3, 1}, 13);
+    std::tie(results, error_status) = action.getResults(*character, Tile{3, 1}, 13);
     ASSERT_FALSE(error_status.ok());
 }
 

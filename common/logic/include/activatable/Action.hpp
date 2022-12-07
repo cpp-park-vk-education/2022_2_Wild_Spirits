@@ -45,9 +45,9 @@ class Action {
             return char_id_;
         }
 
-        bool operator==(const Result& other) const {
-            return false;
-        }
+        bool operator==(const Result& other) const;
+
+        friend std::ostream& operator<<(std::ostream& out, const Result& result);
     };
 
  private:

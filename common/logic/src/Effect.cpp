@@ -34,8 +34,16 @@ std::string Buff::statsToStr() const {
     std::stringstream out;
     out << std::showpos;
     for (const auto& [stat, value] : stats()) {
-        out << stat << ": " << value << '\n';
+        out << stat << ": " << static_cast<int>(value) << '\n';
     }
     return out.str();
+}
+
+std::ostream& operator<<(std::ostream& out, const Buff& buff) {
+    out << "{ turns: " << buff.turnsLeft() << ", { ";
+    for (const auto& [stat, value] : buff.stats()) {
+        out << stat << ": " << static_cast<int>(value) << ", ";
+    }
+    return out << "} }";
 }
 }  // namespace DnD

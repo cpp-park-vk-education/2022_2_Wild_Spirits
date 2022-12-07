@@ -11,7 +11,7 @@ namespace DnD {
 TEST_F(EffectSuite, HealReturnsValidResult) {
     const unsigned int amount = 5;
     Heal heal(amount);
-    heal.updateActionResult(character, &new_result);
+    heal.updateActionResult(*character, &new_result);
 
     ASSERT_EQ(result.hp + amount, new_result.hp);
 }
@@ -19,7 +19,7 @@ TEST_F(EffectSuite, HealReturnsValidResult) {
 TEST_F(EffectSuite, MoveReturnsValidResult) {  // cppcheck-suppress [syntaxError]
     const Tile tile = {1, 3};
     Move move(1, 3);
-    move.updateActionResult(character, &new_result);
+    move.updateActionResult(*character, &new_result);
 
     ASSERT_EQ(result.pos + tile, new_result.pos);
 }
@@ -29,7 +29,7 @@ TEST_F(DamageSuite, DealDamageConsidersResists) {
         .WillOnce(Return(std::vector<uint8_t>{6, 6}));
 
     DealDamage damage_resist(DamageType(0), 6, 2, std::move(dice));
-    damage_resist.updateActionResult(character, &new_result);
+    damage_resist.updateActionResult(*character, &new_result);
     ASSERT_EQ(result.hp - 6, new_result.hp);
 }
 
@@ -38,7 +38,7 @@ TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
         .WillOnce(Return(std::vector<uint8_t>{3, 3}));
 
     DealDamage damage(DamageType(1), 6, 2, std::move(dice));
-    damage.updateActionResult(character, &new_result);
+    damage.updateActionResult(*character, &new_result);
     ASSERT_EQ(result.hp - 12, new_result.hp);
 }
 

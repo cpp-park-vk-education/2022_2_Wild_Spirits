@@ -16,12 +16,26 @@ int CharacterInstance::statCheckRoll(const std::string& stat, const DiceInterfac
     return dice.roll(Dice::D20) + statBonus(stat);
 }
 
+int CharacterInstance::buffToStat(const std::string& stat) const {
+    int res = 0;
+    for (const auto& buff : buffs_) {
+        if (buff.hasStat(stat)) {
+            res += buff.stat(stat);
+        }
+    }
+    return res;
+}
+
+int CharacterInstance::statTotal(const std::string& stat_name) const {
+    return original_.stat(stat_name) + buffToStat(stat_name);
+}
+
 int8_t CharacterInstance::statBonus(const std::string& stat) const {
-    return original_.statBonus(stat);
+    return StatBased::calculateStatBonus(statTotal(stat));
 }
 
 int CharacterInstance::armorClass() const {
-    return original_.baseArmorClass();
+    return original_.baseArmorClass() + statBonus(Armor::kScaling);
 }
 
 const std::list<Buff>& CharacterInstance::buffs() const {

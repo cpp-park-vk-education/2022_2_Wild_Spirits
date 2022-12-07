@@ -9,9 +9,8 @@ class NPC_Instance : public CharacterInstance {
     bool is_hostile_;
 
  public:
-    NPC_Instance(size_t id, NPC& original, std::unique_ptr<Position>&& pos, GameMap& map,
-                 int money = 100, Storage<Item*> items = {}) :
-        CharacterInstance(id, original, std::move(pos), map, money, items) {}
+    NPC_Instance(size_t id, NPC& original, std::unique_ptr<Position>&& pos,
+                 GameMap& map, int money = 100, Storage<Item*> items = {});
 
     std::tuple<std::vector<Action::Result>, ErrorStatus>
         use(std::string_view action_type, size_t action_id,

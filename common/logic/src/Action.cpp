@@ -10,6 +10,7 @@
 #include "Location.hpp"
 
 #include <utility>
+#include <tuple>
 
 namespace DnD {
 Action::Result::Result(size_t char_id) : char_id_(char_id) {}
@@ -19,6 +20,19 @@ Action::Result::Result(size_t char_id, Tile pos, int hp, const std::vector<Buff>
     pos(pos),
     hp(hp),
     buffs(buffs) {}
+
+bool Action::Result::operator==(const Result& other) const {
+    return std::tie(char_id_, pos, hp, buffs) == std::tie(other.char_id_, other.pos, other.hp, other.buffs);
+}
+
+std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
+    out << "{ Id: " << result.char_id_ << ", Pos: {" << result.pos.x << ", " << result.pos.y
+               << "}, Health: " << result.hp << ", Buffs: { ";
+    for (auto& buff : result.buffs) {
+        out << buff;
+    }
+    return out << "} }";
+}
 
 Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, unsigned int range,
                Cast cast_type, bool can_miss, const std::string& target_scaling) :

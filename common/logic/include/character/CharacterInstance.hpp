@@ -47,7 +47,9 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
  public:
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                       int money = 100, Storage<Item*> items = {});
-
+    
+    int buffToStat(const std::string& stat) const;
+    int statTotal(const std::string& stat) const;
     int statCheckRoll(const std::string& stat, const DiceInterface& dice) const;
     int8_t statBonus(const std::string& stat) const;
     virtual int armorClass() const;

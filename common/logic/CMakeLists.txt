@@ -8,6 +8,7 @@ set(SOURCES
      src/Effect.cpp
      src/GameEntity.cpp
      src/CharacterInstance.cpp
+     src/PlayerCharacter.cpp
      src/NPC_Instance.cpp
      src/GameMap.cpp
      src/GameState.cpp
