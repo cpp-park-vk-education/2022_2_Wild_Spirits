@@ -2,11 +2,11 @@
 
 
 std::string PlayerCharacters::getPlayerName(unsigned int id){
-
+    return player_table[id];
 }
 
 unsigned int PlayerCharacters::getUserId(std::string player_name){
-
+    return id_table[player_name];
 }
 
 PlayerCharacters::PlayerCharacters() {
@@ -14,15 +14,24 @@ PlayerCharacters::PlayerCharacters() {
 }
 
 bool RoomSideProcessor::sendDM(string request_string){
+    bool state = true;
 
+
+    return state;
 }
 
 bool RoomSideProcessor::sendInstance(unsigned int user_id){
+    bool state = true;
 
+
+    return state;
 }
 
 bool RoomSideProcessor::broadcast(string request_string){
+    bool state = true;
 
+
+    return state;
 }
 
 RoomSideProcessor::RoomSideProcessor(Room::GameLogicProcessor &room) : engine(), room(room) {

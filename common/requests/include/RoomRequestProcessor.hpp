@@ -5,6 +5,7 @@
 class PlayerCharacters{
 private:
     std::unordered_map<unsigned int, std::string> player_table;
+    std::unordered_map<std::string, std::size_t> id_table;
 public:
     PlayerCharacters();
     std::string getPlayerName(unsigned int id);
