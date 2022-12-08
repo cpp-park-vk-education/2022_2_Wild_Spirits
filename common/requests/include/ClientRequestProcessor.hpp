@@ -16,7 +16,7 @@ private:
     ClientProcessorEngine engine;
     std::shared_ptr<Gateway::ClientConnection*> connection;
     Client::GameState& gamestate;
-    GameStateChanger GameStateChanger;
+    GameStateChanger changer;
     
     bool SendChangesRequest(Client::Action action);
     bool ApplyChanges(queue changes_queue);

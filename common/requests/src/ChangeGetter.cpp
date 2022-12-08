@@ -4,8 +4,7 @@ void ChangeGetter::load_collector(change_queue changes){
 
 }
 
-ChangeGetter::ChangeGetter(ChangeCollector &collector, Room::GameLogicProcessor &gameState)
-        : game_state(gameState), collector(collector) {
+ChangeGetter::ChangeGetter(ChangeCollector &collector, Room::GameLogicProcessor &gameState): game_state(gameState), collector(collector) {
 
 }
 

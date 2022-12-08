@@ -16,6 +16,6 @@ bool ClientSideProcessor::sendRequest(Client::Action action){
 }
 
 ClientSideProcessor::ClientSideProcessor(Client::GameState &gamestate) : gamestate(gamestate),
-                                                                         GameStateChanger(gamestate) {
+                                                                         changer(gamestate) {
 
 }

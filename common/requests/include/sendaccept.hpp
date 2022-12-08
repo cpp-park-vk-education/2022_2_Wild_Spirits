@@ -11,6 +11,7 @@ public:
 };
 
 class RequestSender{
+public:
     virtual ~RequestSender();
     virtual bool sendRequest(Client::Action action);
 };
