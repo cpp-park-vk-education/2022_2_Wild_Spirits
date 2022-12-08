@@ -60,14 +60,17 @@ class PlayerCharacter : public CharacterInstance {
     unsigned int max_spell_points_;
     unsigned int level_ = 1;
 
+ protected:
+    const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id) override;
+
  public:
     PlayerCharacter(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                     const Class& char_class, const Race& race,
                     int money = 100, Storage<Item*> items = {});
 
-    std::tuple<std::vector<Action::Result>, ErrorStatus> use(std::string_view action_type, size_t action_id,
-                                                             const std::vector<Tile>& target,
-                                                             const DiceInterface* dice = nullptr) override {
+    std::tuple<Activatable::Result, ErrorStatus> use(std::string_view action_type, size_t action_id,
+                                                     const std::vector<Tile>& target,
+                                                     const DiceInterface* dice = nullptr) override {
         return CharacterInstance::use(action_type, action_id, target, dice);
     }
 

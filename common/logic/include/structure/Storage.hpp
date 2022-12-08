@@ -1,52 +1,54 @@
 #pragma once
 
-#include <unordered_map>
 #include <map>
 #include <cstddef>
 #include <functional>
 #include <type_traits>
+#include <iterator>
 
 #include "ErrorStatus.hpp"
 #include "Exception.hpp"
 
 namespace DnD {
-class PlayerCharacter;
 template <typename T>
-concept Identifiable = requires(T&& obj) {
-    { obj.id() } -> std::unsigned_integral;
-} || requires(T&& obj) {
-    { obj->id() } -> std::unsigned_integral;
-} || std::is_same<T, PlayerCharacter>::value;
-
-template <Identifiable T>
 class Storage {
  private:
-    std::map<size_t, T> data_;
+    std::unordered_map<size_t, T> data_;
 
  public:
     using size_type = size_t;
+    using iterator = typename decltype(data_)::iterator;
 
     Storage() = default;
-    // Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
-    Storage(const std::map<size_t, T>& data) : data_(data) {}
-
-    template <typename... Args>
-    ErrorStatus add(size_t id, Args&&... args) {
-        static_assert(!std::is_pointer<T>::value);
-        auto [_, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
-        return inserted ? ErrorStatus::OK : ErrorStatus::ALREADY_EXISTS;
+    Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
+    
+    template <std::forward_iterator Iter>
+    Storage(Iter begin, Iter end) {
+        for (auto it = begin; it != end; it = std::next(it)) {
+            add(*it);
+        }
     }
 
-    ErrorStatus add(T object) {
-        std::pair<typename decltype(data_)::iterator, bool> result;
+    template <typename... Args>
+    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) {
+        static_assert(!std::is_pointer<T>::value);
+        auto [it, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
+        return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
+                          std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
+    }
+
+    std::tuple<T*, ErrorStatus> add(const T& object) {
+        std::pair<iterator, bool> result;
     
         if constexpr (std::is_pointer<T>::value) {
             result = data_.emplace(object->id(), object);
         } else {
             result =  data_.emplace(object.id(), object);
         }
-
-        return result.second ? ErrorStatus::OK : ErrorStatus::ALREADY_EXISTS;
+        
+        auto& [iter, inserted] = result;
+        return inserted ? std::make_tuple(&iter->second, ErrorStatus::OK) :
+                          std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
     ErrorStatus remove(size_t id) {
@@ -62,23 +64,31 @@ class Storage {
         return it->second;
     }
 
-    std::tuple<T*, ErrorStatus> safeGet(size_t id) noexcept {
+    T safeGet(size_t id) noexcept requires std::is_pointer_v<T> {
         auto it = data_.find(id);
         if (it == data_.end()) {
-            return std::make_tuple(nullptr, ErrorStatus::NO_SUCH_ITEM);
+            return nullptr;
         }
-        return std::make_tuple(&it->second, ErrorStatus::OK);
+        return it->second;
+    }
+    
+    T* safeGet(size_t id) noexcept {
+        auto it = data_.find(id);
+        if (it == data_.end()) {
+            return nullptr;
+        }
+        return &it->second;
     }
 
     size_t size() const {
         return data_.size();
     }
 
-    auto begin() {
+    iterator begin() {
         return data_.begin();
     }
 
-    auto end() {
+    iterator end() {
         return data_.end();
     }
 
@@ -86,6 +96,10 @@ class Storage {
         for (auto& [_, elem] : data_) {
             visit(elem);
         }
+    }
+
+    bool operator==(const Storage& other) const {
+        return data_ == other.data_;
     }
 };
 }  // namespace DnD

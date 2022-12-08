@@ -24,9 +24,9 @@ TEST_F(ActionSuite, SingleActionTest) {
 
     // Damage rolls
     EXPECT_CALL(*dice_ptr, roll(4, 2))
-        .WillOnce(Return(std::vector<uint8_t>{1, 2}))  // enemy 1
-        .WillOnce(Return(std::vector<uint8_t>{3, 2}))  // enemy 3
-        .WillOnce(Return(std::vector<uint8_t>{4, 3}));  // enemy 5
+        .WillOnce(Return(std::vector<uint8_t>{1, 2}))
+        .WillOnce(Return(std::vector<uint8_t>{3, 2}))
+        .WillOnce(Return(std::vector<uint8_t>{4, 3}));
 
     // Assume player rolled 11 when he used this action,
     // and got 2 points as a bonus from his stats, totalling 13
@@ -35,14 +35,24 @@ TEST_F(ActionSuite, SingleActionTest) {
     ASSERT_EQ(error_status, ErrorStatus::OK);
     ASSERT_THAT(results, SizeIs(3));
 
-    std::vector<size_t> enemies_hit = {1, 3, 5};
+    std::set<size_t> enemies_hit = {1, 3, 5};
+    std::vector<int> expected_hp_loss = {-3, -5, -7};
 
-    for (size_t i = 0; i < results.size(); ++i) {
-        EXPECT_EQ(results[i], Action::Result(
-                                enemies_hit[i],
-                                Tile{1, 2}, -2 - enemies_hit[i],
-                                {Buff({ {"str", -2}, {"dex", -1} }, 2)}));
+    std::vector<Action::Result> expected_results;
+    expected_results.reserve(results.size());
+
+    auto& location = locations.get(0);
+    size_t i = 0;
+    for (const auto& [_, npc] : location.npc()) {
+        if (enemies_hit.contains(npc.id())) {
+             expected_results.emplace_back(npc.id(),
+                                      Tile{1, 2}, expected_hp_loss[i],
+                                      std::list<Buff>{Buff({ {"str", -2}, {"dex", -1} }, 2)});
+            ++i;
+        }
     }
+
+    EXPECT_EQ(results, expected_results);
 
     // Assert that cast on invalid range returns failure
     std::tie(results, error_status) = action.getResults(*character, Tile{3, 1}, 13);
@@ -66,22 +76,22 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     };
 
     // Damage rolls
-    EXPECT_CALL(*dice, roll(4))
-        .WillOnce(Return(3))  // enemy 3
-        .WillOnce(Return(2))
-        .WillOnce(Return(4))  // enemy 4
-        .WillOnce(Return(3));
-
-    std::vector<Action::Result> expected_results = {
-        {3, Tile{4, 4}, 5, { result_buff }},
-        {4, Tile{4, 3}, 3, { result_buff }},
-        {player.id(), Tile{2, 2}, 8, {}}
-    };
+    EXPECT_CALL(*dice_ptr, roll(4, 2))
+        .WillOnce(Return(std::vector<uint8_t>{3, 2}))
+        .WillOnce(Return(std::vector<uint8_t>{4, 3}));
 
     player.setMaxSpellPoints(5);
     player.refreshSpellPoints();
+
     char_template_.setMaxActionPoints(10);
     player.refreshActionPoints();
+
+    Activatable::Result expected_results = {
+        5, 2,
+        std::vector<Action::Result>{{3, Tile{4, 4}, 5, { result_buff }},
+                                    {4, Tile{4, 3}, 3, { result_buff }},
+                                    {player.id(), Tile{2, 2}, 8, {}}}
+    };
 
     auto [results, error_status] = player_use_spell();
 
@@ -115,6 +125,11 @@ TEST_F(ActivatableSuite, PlayerConsumableTest) {
 
 TEST(ArmorSuite, ArmorClassDependsOnType) {
     MockGameMap map;
+    Storage<CharacterInstance*> characters;
+
+    EXPECT_CALL(map, allCharacters())
+        .WillRepeatedly(::testing::ReturnRef(characters));
+
     Character player_template;
     PlayerCharacter player(0, player_template, PositionFactory::create({0, 0}), map, Class(), Race());
     player_template.setStat("dex", 18);  // Bonus to dex is 4

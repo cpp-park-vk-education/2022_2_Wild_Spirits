@@ -5,7 +5,7 @@
 #include "TurnBased.hpp"
 
 namespace DnD {
-class Buff : public Effect, public StatBased, public Temporal {
+class Buff : public Effect, public StatBased, public Temporal<TurnEnd> {
  private:
     std::string statsToStr() const;
 

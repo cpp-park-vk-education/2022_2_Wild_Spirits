@@ -13,15 +13,16 @@ class CharacterInstance;
 class TurnOrder {
  private:
     size_t current_turn_;
-    std::deque<CharacterInstance*> turn_order_queue_;
+    std::deque<CharacterInstance*> queue_;
     GameState& game_;
     GameMap& map_;
  
  public:
     using size_type = size_t;
+    using iterator = typename decltype(queue_)::iterator;
 
     TurnOrder(GameState& game, GameMap& map) :
-        current_turn_(0), turn_order_queue_(),
+        current_turn_(0), queue_(),
         game_(game), map_(map) {}
     
     void nextTurn();
@@ -34,17 +35,18 @@ class TurnOrder {
 
     ErrorStatus swapOrder(size_t first, size_t second);
     CharacterInstance* getActiveCharacter() const;
+    size_t getActiveCharacterId() const;
 
     auto begin() {
-        return turn_order_queue_.begin();
+        return queue_.begin();
     }
 
     auto end() {
-        return turn_order_queue_.end();
+        return queue_.end();
     }
 
     size_t size() const {
-        return turn_order_queue_.size();
+        return queue_.size();
     }
 };
 } // namespace DnD

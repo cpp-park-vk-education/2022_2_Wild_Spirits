@@ -25,6 +25,18 @@ bool Action::Result::operator==(const Result& other) const {
     return std::tie(char_id_, pos, hp, buffs) == std::tie(other.char_id_, other.pos, other.hp, other.buffs);
 }
 
+Action::Result& Action::Result::operator+=(Result&& other) {
+    if (char_id_ != other.char_id_) {
+        return *this;
+    }
+
+    pos += other.pos;
+    hp += other.hp;
+
+    buffs.splice(buffs.begin(), other.buffs);
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
     out << "{ Id: " << result.char_id_ << ", Pos: {" << result.pos.x << ", " << result.pos.y
                << "}, Health: " << result.hp << ", Buffs: { ";
@@ -60,7 +72,7 @@ Action::Action(Action&& other) :
      target_scaling_(std::move(other.target_scaling_)) {
     other.range_ = 0;
     other.can_miss_ = true;
-    other.target_scaling_ = "dex";
+    other.target_scaling_ = Armor::kScaling;
 }
 
 Action& Action::operator=(Action&& other) {
@@ -149,7 +161,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
         const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) const {
     std::vector<Action::Result> results;
 
-    if (tile.distance(actor.mapPosition()[0]) > range_) {
+    if (cast_type_ != Cast::Self && tile.distance(actor.mapPosition()[0]) > range_) {
         return std::make_tuple(results, ErrorStatus::INVALID_CAST_RANGE);
     }
 

@@ -8,6 +8,7 @@ namespace DnD {
 class EffectSuite : public ::testing::Test {
  protected:
     Character char_template_;
+    Storage<CharacterInstance*> all_characters;
     MockGameMap map;
     std::unique_ptr<CharacterInstance> character;
     Action::Result result;
@@ -18,8 +19,14 @@ class EffectSuite : public ::testing::Test {
         character(),
         result(0), new_result(result)
     {
+        using ::testing::Return;
+        using ::testing::ReturnRef;
+
         EXPECT_CALL(map, currentLocationId())
-            .WillRepeatedly(::testing::Return(0));
+            .WillRepeatedly(Return(0));
+        
+        EXPECT_CALL(map, allCharacters())
+            .WillRepeatedly(ReturnRef(all_characters));
 
         character = std::make_unique<CharacterInstance>(7, char_template_,
                                         PositionFactory::create(Tile{1, 2}), map);

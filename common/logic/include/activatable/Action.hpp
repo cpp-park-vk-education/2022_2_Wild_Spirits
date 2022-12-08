@@ -47,6 +47,7 @@ class Action {
         }
 
         bool operator==(const Result& other) const;
+        Result& operator+=(Result&& other);
 
         friend std::ostream& operator<<(std::ostream& out, const Result& result);
     };

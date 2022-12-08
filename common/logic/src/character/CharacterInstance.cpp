@@ -15,6 +15,10 @@ CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique
     map.allCharacters().add(this);
 }
 
+CharacterInstance::~CharacterInstance() {
+    map().allCharacters().remove(id_);
+}
+
 int CharacterInstance::statCheckRoll(const std::string& stat, const DiceInterface& dice) const {
     return dice.roll(Dice::D20) + statBonus(stat);
 }
@@ -54,10 +58,23 @@ Storage<Item*>& CharacterInstance::items() {
     return items_;
 }
 
-std::tuple<std::vector<Action::Result>, ErrorStatus>
+const ActivatableInterface* CharacterInstance::chooseActivatable(std::string_view action_type, size_t action_id) {
+    if (action_type == "skill") {
+        return skills_.safeGet(action_id);
+    }
+    return nullptr;
+}
+
+std::tuple<Activatable::Result, ErrorStatus>
     CharacterInstance::use(std::string_view action_type, size_t action_id,
-                   const std::vector<Tile>& target, const DiceInterface*) {
-    return Action().getResults(*this, {});
+                           const std::vector<Tile>& target, const DiceInterface* dice) {
+    auto activatable = chooseActivatable(action_type, action_id);
+    if (activatable == nullptr) {
+        return std::make_tuple(Activatable::Result{}, ErrorStatus::NO_SUCH_ITEM);
+    }
+
+    uint8_t dice_roll_res = dice ? statCheckRoll(activatable->scalesBy(), *dice) : 0;
+    return activatable->use(this, target, dice_roll_res);
 }
 
 ErrorStatus CharacterInstance::trade(CharacterInstance& with, Item* give, Item* get) {
@@ -156,5 +173,21 @@ void CharacterInstance::setImage(size_t image_id) {
     original_.setImage(image_id);
 }
 
-void CharacterInstance::onTurnStart() {}
+void CharacterInstance::onTurnStart() {
+    refreshActionPoints();
+    for (auto& [_, skill] : skills_) {
+        skill.onTurnStart();
+    }
+}
+
+void CharacterInstance::onTurnEnd() {
+    for (auto it = buffs_.begin(); it != buffs_.end();) {
+        auto next = std::next(it);
+        it->onTurnEnd();
+        if (it->turnsLeft() == 0) {
+            buffs_.erase(it);
+        }
+        it = next;
+    }
+}
 }  // namespace DnD

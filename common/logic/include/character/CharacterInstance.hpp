@@ -16,7 +16,7 @@ class DiceInterface;
 class Item;
 
 struct SaleResult {
-    ErrorStatus status;
+    ErrorStatus status = ErrorStatus::UNKNOWN_ERROR;
     int seller_money;
     int buyer_money;
 };
@@ -43,10 +43,14 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     bool wasUpdated() const override {
         return was_updated_;
     }
+ protected:
+    virtual const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id);
 
  public:
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
                       int money = 100, Storage<Item*> items = {});
+
+    virtual ~CharacterInstance();
     
     int buffToStat(const std::string& stat) const;
     int statTotal(const std::string& stat) const;
@@ -54,7 +58,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     int8_t statBonus(const std::string& stat) const;
     virtual int armorClass() const;
 
-    virtual std::tuple<std::vector<Action::Result>, ErrorStatus>
+    virtual std::tuple<Activatable::Result, ErrorStatus>
         use(std::string_view action_type, size_t action_id,
             const std::vector<Tile>& target, const DiceInterface* = nullptr);
     
@@ -93,7 +97,9 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     size_t getImageId() const override;
 
     void setImage(size_t image_id) override;
+
     void onTurnStart() override;
+    void onTurnEnd() override;
 
     size_t id() const override;
 };

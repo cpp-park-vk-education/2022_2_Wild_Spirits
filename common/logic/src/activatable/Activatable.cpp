@@ -3,22 +3,39 @@
 #include "CharacterInstance.hpp"
 #include "GameMap.hpp"
 
+#include <algorithm>
+#include <iterator>
+
 namespace DnD {
-std::tuple<Activatable::Result, ErrorStatus> Activatable::use(const std::vector<Tile>& tiles,
+Activatable::Result::Result(int ap, unsigned int resource, const std::vector<Action::Result>& input_results) :
+    action_points(ap), resource_spent(resource),
+    results(input_results.begin(), input_results.end()) {}
+
+bool Activatable::Result::operator==(const Result& other) const {
+    return std::tie(action_points, resource_spent, results) ==
+           std::tie(other.action_points, other.resource_spent, other.results);
+}
+
+std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance* actor,
+                                                              const std::vector<Tile>& tiles,
                                                               uint8_t dice_roll_res) const {
     Result result;
-    result.action_points = actor_->actionPoints() - action_cost_;
+    if (actor == nullptr) {
+        return std::make_tuple(result, ErrorStatus::NO_ACTOR_SET);
+    }
+
+    result.action_points = actor->actionPoints() - action_cost_;
 
     if (result.action_points < 0) {
         return std::make_tuple(result, ErrorStatus::NO_ACTION_POINTS);
     }
 
     if (tiles.size() != actions_.size()) {
-        return std::make_tuple(result, ErrorStatus::NOT_ENOUGH_TARGETS);
+        return std::make_tuple(result, ErrorStatus::INVALID_TARGET_NUM);
     }
 
     for (size_t i = 0; i < tiles.size(); ++i) {
-        auto [results, status] = actions_[i].getResults(*actor_, tiles[i], dice_roll_res);
+        auto [results, status] = actions_[i].getResults(*actor, tiles[i], dice_roll_res);
 
         if (status != ErrorStatus::OK) {
             return std::make_tuple(result, status);
@@ -26,16 +43,19 @@ std::tuple<Activatable::Result, ErrorStatus> Activatable::use(const std::vector<
 
         for (auto& action_result : results) {
             size_t char_id = action_result.id();
-            CharacterInstance* target_character = actor_->map().allCharacters().get(char_id);
+            CharacterInstance* target_character = actor->map().allCharacters().get(char_id);
 
-            auto [res_to_update, status] = result.results.safeGet(char_id);
+            auto res_to_update = result.results.safeGet(char_id);
 
-            if (status == ErrorStatus::NO_SUCH_ITEM) {
-                *res_to_update = Action::Result(char_id,
-                                                target_character->mapPosition()[0],
-                                                target_character->hp(),
-                                                target_character->buffs());
+            if (res_to_update == nullptr) {
+                ErrorStatus status;
+                std::tie(res_to_update, status) = result.results.add(char_id,
+                                                    target_character->mapPosition()[0],
+                                                    target_character->hp(),
+                                                    target_character->buffs());
             }
+
+            *res_to_update += std::move(action_result);
         }
     }
 

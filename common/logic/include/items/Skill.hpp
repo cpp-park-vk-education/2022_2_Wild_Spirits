@@ -28,16 +28,12 @@ class Skill : public GameEntity, public Activatable {
     }
 };
 
-class Skill_Instance : public Temporal {
+class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
  private:
     const Skill& original_;
 
  public:
-    Skill_Instance(const Skill& skill) : Temporal(skill.cooldown()), original_(skill) {}
-
-    void onTurnStart() override {
-        Temporal::onTurnStart();
-    }
+    Skill_Instance(const Skill& skill) : Temporal<TurnStart>(0), original_(skill) {}
 
     const Skill& original() const {
         return original_;
@@ -47,9 +43,21 @@ class Skill_Instance : public Temporal {
         return original_.id();
     }
 
-    std::tuple<Activatable::Result, ErrorStatus> use(const std::vector<Tile>& tiles,
-                                                             uint8_t dice_res = 0) const {
-        return original_.use(tiles, dice_res);
+    unsigned int activateCost() const override {
+        return original_.activateCost();
+    }
+
+    const std::string& scalesBy() const override {
+        return original_.scalesBy();
+    }
+
+    std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& tiles,
+                                        uint8_t dice_roll_res = 0) const override {
+        if (turnsLeft() != 0) {
+            return std::make_tuple(Result{}, ErrorStatus::SKILL_ON_COOLDOWN);
+        }
+        const_cast<Skill_Instance*>(this)->reset(original_.cooldown());
+        return original_.use(actor, tiles, dice_roll_res);
     }
 };
 }  // namespace DnD

@@ -68,10 +68,6 @@ class GameStateImpl : virtual public GameState {
     GameStateImpl() = default;
     GameStateImpl(GameMap* map) : map_(map) {}
 
-    ~GameStateImpl() {
-        delete map_;
-    }
-
     Storage<NPC>& npc() override;
     Storage<PlayerCharacter>& players() override;
     Storage<CharacterInstance*>& allCharacters() override;

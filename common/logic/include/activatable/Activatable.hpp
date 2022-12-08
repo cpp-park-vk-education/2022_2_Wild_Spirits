@@ -7,23 +7,33 @@
 
 namespace DnD {
 
-class Activatable {
+class ActivatableInterface {
+ public:
+    struct Result {
+        int action_points;
+        unsigned int resource_spent = 0;  // Consumable uses or spell points
+        Storage<Action::Result> results;
+
+        Result() = default;
+        Result(int ap, unsigned int  resource, const std::vector<Action::Result>& result);
+
+        bool operator==(const Result& other) const;
+    };
+
+    virtual unsigned int activateCost() const = 0;
+
+    virtual const std::string& scalesBy() const = 0;
+
+    virtual std::tuple<Result, ErrorStatus> use(CharacterInstance*, const std::vector<Tile>&,
+                                                uint8_t dice_roll_res = 0) const = 0;
+};
+
+class Activatable : public ActivatableInterface {
  private:
     std::vector<Action> actions_;
     Tile target;
-    CharacterInstance* actor_;
     unsigned int action_cost_;
     std::string scaling_;
-
-public:
-    struct Result {
-        size_t action_points;
-        size_t resource_spent = 0;  // Consumable uses or spell points
-        Storage<Action::Result> results;
-        // std::unordered_map<size_t, Action::Result> results;
-
-        Result() = default;
-    };
 
  public:
     Activatable() = default;
@@ -50,7 +60,7 @@ public:
         actions_.erase(actions_.begin() + action);
     }
 
-    auto& actions() {
+    std::vector<Action>& actions() {
         return actions_;
     }
 
@@ -58,11 +68,7 @@ public:
         return actions_[action];
     }
 
-    void setActor(CharacterInstance* actor) {
-        actor_ = actor;
-    }
-
-    unsigned int activateCost() {
+    unsigned int activateCost() const override{
         return action_cost_;
     }
 
@@ -70,7 +76,7 @@ public:
         action_cost_ = action_cost;
     }
 
-    const std::string& scalesBy() {
+    const std::string& scalesBy() const override {
         return scaling_;
     }
 
@@ -78,6 +84,7 @@ public:
         scaling_ = scaling;
     }
 
-    virtual std::tuple<Result, ErrorStatus> use(const std::vector<Tile>&, uint8_t dice_roll_res = 0) const;
+    std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>&,
+                                                uint8_t dice_roll_res = 0) const override;
 };
 }  // namespace DnD
