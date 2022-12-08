@@ -10,7 +10,7 @@ namespace DnD {
 class ActivatableInterface {
  public:
     struct Result {
-        int action_points;
+        int action_points = 0;
         unsigned int resource_spent = 0;  // Consumable uses or spell points
         Storage<Action::Result> results;
 
