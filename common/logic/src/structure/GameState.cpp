@@ -25,6 +25,10 @@ Storage<Item>& GameStateImpl::items() {
     return items_;
 }
 
+Storage<ActivatableItem>& GameStateImpl::activatableItems() {
+    return activatables_;
+}
+
 Storage<Weapon>& GameStateImpl::weapons() {
     return weapons_;
 }

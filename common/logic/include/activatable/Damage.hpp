@@ -34,6 +34,9 @@ class DealDamage : public Effect {
     DealDamage(const DealDamage& other) :
         DealDamage(other.damage_type_, other.die_type_, other.times_, other.dice_->clone()) {}
 
+    DealDamage(DealDamage&& other) :
+        DealDamage(other.damage_type_, other.die_type_, other.times_, std::move(other.dice_)) {}
+
     std::unique_ptr<Effect> clone() const override {
         return std::make_unique<DealDamage>(*this);
     }

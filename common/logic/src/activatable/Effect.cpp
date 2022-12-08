@@ -27,7 +27,7 @@ void DealDamage::updateActionResult(const CharacterInstance& character, Action::
 }
 
 void Buff::updateActionResult(const CharacterInstance&, Action::Result* result) const {
-    result->buffs.push_back(*this);
+    result->buffs.push_front(*this);
 }
 
 std::string Buff::statsToStr() const {

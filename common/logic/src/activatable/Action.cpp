@@ -33,7 +33,7 @@ Action::Result& Action::Result::operator+=(Result&& other) {
     pos += other.pos;
     hp += other.hp;
 
-    buffs.splice(buffs.begin(), other.buffs);
+    buffs.splice(buffs.end(), other.buffs);
     return *this;
 }
 
@@ -46,14 +46,15 @@ std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
     return out << "} }";
 }
 
-Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, unsigned int range,
-               Cast cast_type, bool can_miss, const std::string& target_scaling) :
-    cast_type_(cast_type), area_(std::move(area)),
+Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, Target target_type,
+               unsigned int range, Cast cast_type, bool can_miss, const std::string& target_scaling) :
+    cast_type_(cast_type), target_type_(target_type), area_(std::move(area)),
     range_(range), effects_(std::move(effects)),
     can_miss_(can_miss), target_scaling_(target_scaling) {}
 
 Action::Action(const Action& other) :
-    cast_type_(other.cast_type_), area_(other.area_->clone()), range_(other.range_),
+    cast_type_(other.cast_type_), target_type_(other.target_type_),
+    area_(other.area_->clone()), range_(other.range_),
     effects_(other.effects_.size()), can_miss_(other.can_miss_), target_scaling_(other.target_scaling_) {
         for (size_t i = 0; i < other.effects_.size(); ++i) {
             effects_[i] = other.effects_[0]->clone();
@@ -67,7 +68,8 @@ Action& Action::operator=(const Action& other) {
 }
 
 Action::Action(Action&& other) :
-     cast_type_(other.cast_type_), area_(std::move(other.area_)), range_(other.range_),
+     cast_type_(other.cast_type_), target_type_(other.target_type_),
+     area_(std::move(other.area_)), range_(other.range_),
      effects_(std::move(other.effects_)), can_miss_(other.can_miss_),
      target_scaling_(std::move(other.target_scaling_)) {
     other.range_ = 0;
@@ -88,6 +90,7 @@ void Action::swap(Action& other) {
     std::swap(can_miss_, other.can_miss_);
     std::swap(target_scaling_, other.target_scaling_);
     std::swap(cast_type_, other.cast_type_);
+    std::swap(target_type_, other.target_type_);
 }
 
 void Action::setCastType(Cast cast_type) {
@@ -96,6 +99,14 @@ void Action::setCastType(Cast cast_type) {
 
 Action::Cast Action::castType() const {
     return cast_type_;
+}
+
+void Action::setTargetType(Target target_type) {
+    target_type_ = target_type;
+}
+
+Action::Target Action::targetType() const {
+    return target_type_;
 }
 
 void Action::setTargetScaling(const std::string& scaling) {
@@ -135,9 +146,10 @@ void Action::removeEffect(size_t effect_id) {
 }
 
 template <typename T>
-void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res) const {
+void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results,
+                            uint8_t dice_roll_res, std::function<bool(const CharacterInstance&)> predicate) const {
     for (const auto& [_, character] : characters) {
-        if (!character.isInArea(*area_)) {
+        if (!predicate(character) || !character.isInArea(*area_)) {
             continue;
         }
 
@@ -167,8 +179,17 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
 
     area_->setTarget(tile);
 
-    applyEffectsTo(actor.location().npc(), &results, dice_roll_res);
-    applyEffectsTo(actor.map().players(), &results, dice_roll_res);
+    if (target_type_ == Target::Allies || target_type_ == Target::Both) {
+        applyEffectsTo(actor.map().players(), &results, dice_roll_res);
+
+        applyEffectsTo(actor.location().npc(), &results, dice_roll_res,
+            [] (const auto& character) { return !character.isHostile(); });
+    }
+
+    if (target_type_ == Target::Enemies || target_type_ == Target::Both) {
+        applyEffectsTo(actor.location().npc(), &results, dice_roll_res,
+            [] (const auto& character) { return character.isHostile(); });
+    }
 
     return std::make_tuple(results, ErrorStatus::OK);
 }

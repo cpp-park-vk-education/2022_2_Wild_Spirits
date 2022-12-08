@@ -18,6 +18,7 @@ class ActivatableInterface {
         Result(int ap, unsigned int  resource, const std::vector<Action::Result>& result);
 
         bool operator==(const Result& other) const;
+        friend std::ostream& operator<<(std::ostream& out, const Result& other);
     };
 
     virtual unsigned int activateCost() const = 0;
@@ -37,8 +38,12 @@ class Activatable : public ActivatableInterface {
 
  public:
     Activatable() = default;
+
     Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
         actions_(actions), action_cost_(action_cost), scaling_(scaling) {}
+
+    Activatable(std::vector<Action>&& actions, unsigned int action_cost, std::string_view scaling) :
+        actions_(std::move(actions)), action_cost_(action_cost), scaling_(scaling) {}
     
     void addEffect(int action, std::unique_ptr<Effect>&& effect) {
         actions_[action].addEffect(std::move(effect));

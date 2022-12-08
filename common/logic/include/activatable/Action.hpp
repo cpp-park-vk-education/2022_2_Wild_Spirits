@@ -6,7 +6,6 @@
 #include <cstddef>
 
 #include "Area.hpp"
-// #include "Effect.hpp"
 #include "Armor.hpp"
 #include "Storage.hpp"
 #include "StatBased.hpp"
@@ -24,11 +23,11 @@ class Action {
         Self
     };
 
-    // enum class Target {
-    //     Enemies,
-    //     Allies,
-    //     Both
-    // };
+    enum class Target {
+        Both,
+        Enemies,
+        Allies
+    };
 
     struct Result {
      private:
@@ -57,7 +56,7 @@ class Action {
     using EffectPtr = std::unique_ptr<Effect>;
 
     Cast cast_type_;
-    // Target target_type_;
+    Target target_type_;
 
     AreaPtr area_;
     unsigned int range_;
@@ -67,7 +66,8 @@ class Action {
     std::string target_scaling_ = Armor::kScaling;
     
     template <typename T>
-    void applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0) const;
+    void applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0,
+                    std::function<bool(const CharacterInstance&)> predicate = [] (const auto&) { return true; }) const;
 
  public:
     Action() = default;
@@ -79,13 +79,16 @@ class Action {
 
     void swap(Action& other);
 
-    Action(AreaPtr&& area, std::vector<EffectPtr>&& effects, unsigned int range = 0,
-        //    Target target_type = Target::Both,
+    Action(AreaPtr&& area, std::vector<EffectPtr>&& effects,
+           Target target_type = Target::Both, unsigned int range = 0,
            Cast cast_type = Cast::Tile, bool can_miss = true,
            const std::string& target_scaling = "dex");
 
     void setCastType(Cast cast_type);
     Cast castType() const;
+
+    void setTargetType(Target cast_type);
+    Target targetType() const;
 
     void setTargetScaling(const std::string& scaling);
     const std::string& targetScaling() const;

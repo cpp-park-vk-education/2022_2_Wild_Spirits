@@ -34,6 +34,10 @@ public:
         max_action_points_(ap),
         base_armor_class_(ac) {}
     
+    unsigned int exp() const {
+        return exp_;
+    }
+
     unsigned int maxActionPoints() const {
         return max_action_points_;
     }

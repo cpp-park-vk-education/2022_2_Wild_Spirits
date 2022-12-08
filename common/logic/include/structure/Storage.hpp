@@ -18,6 +18,7 @@ class Storage {
  public:
     using size_type = size_t;
     using iterator = typename decltype(data_)::iterator;
+    using const_iterator = typename decltype(data_)::const_iterator;
 
     Storage() = default;
     Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
@@ -92,6 +93,14 @@ class Storage {
         return data_.end();
     }
 
+    const_iterator begin() const {
+        return data_.cbegin();
+    }
+
+    const_iterator end() const {
+        return data_.cend();
+    }
+
     void each(const std::function<void(T&)>& visit) {
         for (auto& [_, elem] : data_) {
             visit(elem);
@@ -100,6 +109,13 @@ class Storage {
 
     bool operator==(const Storage& other) const {
         return data_ == other.data_;
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Storage& storage) {
+        for (const auto& [_, obj] : storage.data_) {
+            out << obj << " ";
+        }
+        return out;
     }
 };
 }  // namespace DnD

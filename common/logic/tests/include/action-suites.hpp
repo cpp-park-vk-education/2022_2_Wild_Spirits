@@ -22,7 +22,7 @@ class ActionSuite : public DamageSuite{
     ActionSuite() :
         DamageSuite(),
         locations(),
-        action(AreaFactory::create(1, 1), {}, 2),
+        action(AreaFactory::create(1, 1), {}, Action::Target::Enemies, 2),
         dice_ptr(dice.get())
     {
         locations.add(0, "", 0, 5, 5);
@@ -35,10 +35,11 @@ class ActionSuite : public DamageSuite{
 
         auto& location = locations.get(0);
 
+        // Add hostile enemies
         for (size_t i = 0; i < 5; ++i) {
-            location.npc().add(i, test_enemy_, PositionFactory::create(Tile{i, 1}), map);
+            location.npc().add(i, test_enemy_, PositionFactory::create(Tile{i, 1}), map, true);
         }
-        location.npc().add(5, test_enemy_, PositionFactory::create(Tile{2, 0}), map);
+        location.npc().add(5, test_enemy_, PositionFactory::create(Tile{2, 0}), map, true);
 
         using ::testing::ReturnRef;
 
@@ -55,19 +56,17 @@ class ActionSuite : public DamageSuite{
 
 class ActivatableSuite : public ActionSuite {
  protected:
-    PlayerCharacter player;
     Action heal_action;
 
  public:
     ActivatableSuite() :
         ActionSuite(),
-        player(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race()),
-        heal_action(AreaFactory::create(), {}, 0, Action::Cast::Self, false)
+        heal_action(AreaFactory::create(), {}, Action::Target::Allies, 0, Action::Cast::Self, false)
     {   
+        players_.add(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race());
+
         heal_action.addEffect(std::make_unique<Heal>(3));
         char_template_.setMaxHP(10);
-        player.resetHP();
-        player.takeDamage(5);
 
         test_enemy_.setMaxHP(10);
         for (auto& [_, enemy] : locations.get(0).npc()) {

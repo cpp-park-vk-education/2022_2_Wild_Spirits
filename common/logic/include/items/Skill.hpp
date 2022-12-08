@@ -19,6 +19,13 @@ class Skill : public GameEntity, public Activatable {
         Activatable(actions, action_cost, scaling),
         cooldown_(cooldown) {}
 
+    Skill(size_t id, std::string_view name, int image_id,
+          std::vector<Action>&& actions, unsigned int action_cost,
+          unsigned int cooldown, std::string_view scaling = "", const Info& info = {}) :
+        GameEntity(id, name, image_id, info),
+        Activatable(std::move(actions), action_cost, scaling),
+        cooldown_(cooldown) {}
+
     unsigned int cooldown() const {
         return cooldown_;
     }

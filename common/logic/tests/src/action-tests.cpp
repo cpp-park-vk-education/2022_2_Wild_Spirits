@@ -18,6 +18,9 @@ TEST_F(ActionSuite, SingleActionTest) {
     // Add buff to npc's dex, check if it will dodge action
     locations.get(0).npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
 
+    locations.get(0).npc().each([] (auto& c) { std::cout << std::boolalpha << c.isHostile() << '\n'; });
+    std::cout << locations.get(0).npc().size() << '\n';
+
     // Action checks enemies dex by default,
     // they have armor class of 10 by default, which is summed with dex bonus ((14 - 10) / 2 == 2)
     // equaling 12
@@ -60,19 +63,30 @@ TEST_F(ActionSuite, SingleActionTest) {
 }
 
 TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
-    Spell spell(0, "", 0, {action, heal_action}, 5, "int", 2);
+    auto& player = map.players().get(8);
+
+    player.resetHP();
+    player.takeDamage(5);
+
+    std::vector<Action> actions;
+    actions.reserve(2);
+
+    actions.push_back(std::move(action));
+    actions.push_back(std::move(heal_action));
+
+    Spell spell(0, "", 0, std::move(actions), 5, "int", 2);
     player.spells().add(&spell);
+    player.moveBy(2, 0);
 
     auto result_buff = Buff({ {"str", -2}, {"dex", -1} }, 2);
 
     // Let player roll 20 to hit both enemies
     MockDice player_die;
     EXPECT_CALL(player_die, roll(20))
-        .WillOnce(Return(20));
+        .WillRepeatedly(Return(20));
 
     auto player_use_spell = [&] {
-        return player.use("spell", 0,
-                              { Tile{4, 1}, player.mapPosition()[0] }, &player_die);
+        return player.use("spell", 0, { Tile{4, 1}, player.mapPosition()[0] }, &player_die);
     };
 
     // Damage rolls
@@ -86,12 +100,26 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     char_template_.setMaxActionPoints(10);
     player.refreshActionPoints();
 
-    Activatable::Result expected_results = {
-        5, 2,
-        std::vector<Action::Result>{{3, Tile{4, 4}, 5, { result_buff }},
-                                    {4, Tile{4, 3}, 3, { result_buff }},
-                                    {player.id(), Tile{2, 2}, 8, {}}}
-    };
+    std::vector<unsigned int> expected_enemy_hp = {5, 3};
+    std::set<size_t> enemies_hit = {3, 4};
+
+    std::vector<Action::Result> action_results;
+    action_results.reserve(3);
+
+    size_t i = 0;
+    for (auto& [_, npc] : locations.get(0).npc()) {
+        if (enemies_hit.contains(npc.id())) {
+            action_results.emplace_back(npc.id(),
+                                        Tile{4, 3},
+                                        expected_enemy_hp[i],
+                                        std::list<Buff>{ result_buff });
+            ++i;
+        }
+    }
+
+    action_results.emplace_back(player.id(), Tile{4, 2}, 8, std::list<Buff>{});
+
+    Activatable::Result expected_results = { 5, 2, action_results };
 
     auto [results, error_status] = player_use_spell();
 
@@ -113,7 +141,10 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 }
 
 TEST_F(ActivatableSuite, PlayerConsumableTest) {
-    player.consumables().add(0, "", 0, std::vector<Action>{ heal_action }, 1, 2);
+    auto& player = map.players().get(8);
+
+    ActivatableItem base_item(0, "", 0, std::vector<Action>{ heal_action }, 1);
+    player.consumables().add(Consumable{base_item, 2});
     auto& item = player.consumables().get(0);
 
     player.use("consumable", 0, { player.mapPosition()[0] });

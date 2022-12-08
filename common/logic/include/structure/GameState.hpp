@@ -20,6 +20,7 @@ class GameState {
     virtual Storage<CharacterInstance*>& allCharacters() = 0;
 
     virtual Storage<Item>& items() = 0;
+    virtual Storage<ActivatableItem>& activatableItems() = 0;
     virtual Storage<Weapon>& weapons() = 0;
     virtual Storage<Spell>& spells() = 0;
     virtual Storage<Armor>& armor() = 0;
@@ -52,6 +53,7 @@ class GameStateImpl : virtual public GameState {
     Storage<CharacterInstance*> all_characters_;
 
     Storage<Item> items_;
+    Storage<ActivatableItem> activatables_;
     Storage<Weapon> weapons_;
     Storage<Spell> spells_;
     Storage<Armor> armor_;
@@ -73,6 +75,7 @@ class GameStateImpl : virtual public GameState {
     Storage<CharacterInstance*>& allCharacters() override;
 
     Storage<Item>& items() override;
+    Storage<ActivatableItem>& activatableItems() override;
     Storage<Weapon>& weapons() override;
     Storage<Spell>& spells() override;
     Storage<Armor>& armor() override;

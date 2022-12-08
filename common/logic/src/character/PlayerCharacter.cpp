@@ -17,7 +17,6 @@ PlayerCharacter::PlayerCharacter(size_t id, Character& original,
 const ActivatableInterface* PlayerCharacter::chooseActivatable(std::string_view action_type, size_t action_id) {
     static std::unordered_map<std::string_view, std::function<const ActivatableInterface*(size_t)>> get_action = {
         {"skill", [this] (size_t id) { return skills_.safeGet(id); }},
-        {"spell", [this] (size_t id) { return spells_.safeGet(id); }},
         {"weapon", [this] (size_t id) { return weapons_.safeGet(id); }},
         {"consumable", [this] (size_t id) { return consumables_.safeGet(id); }}
     };
@@ -27,4 +26,28 @@ const ActivatableInterface* PlayerCharacter::chooseActivatable(std::string_view 
     }
     return nullptr;
 }
+
+std::tuple<Activatable::Result, ErrorStatus>
+    PlayerCharacter::use(std::string_view action_type, size_t action_id,
+                         const std::vector<Tile>& target, const DiceInterface* dice) {
+    if (action_type == "spell") {
+        auto spell = spells_.safeGet(action_id);
+
+        if (spell == nullptr) {
+            return std::make_tuple(Activatable::Result{}, ErrorStatus::NO_SUCH_ITEM);
+        }
+
+        if (spellPoints() < spell->cost()) {
+            return std::make_tuple(Activatable::Result{}, ErrorStatus::NO_SPELL_POINTS);
+        }
+
+        spell_points_ -= spell->cost();
+
+        uint8_t dice_roll_res = dice ? statCheckRoll(spell->scalesBy(), *dice) : 0;
+        return spell->use(this, target, dice_roll_res);
+    }
+
+    return CharacterInstance::use(action_type, action_id, target, dice);
+}
+
 }  // namespace DnD

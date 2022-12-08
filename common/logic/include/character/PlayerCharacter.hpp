@@ -50,15 +50,18 @@ class PlayerCharacter : public CharacterInstance {
  private:
     Storage<const Class*> class_list_;
     const Race* race_;
-    const Armor* armor_;
+    const Armor* armor_ = nullptr;
     
     Storage<const Weapon*> weapons_;
     Storage<const Spell*> spells_;
     Storage<Consumable> consumables_;
+    Storage<const ActivatableItem*> activatables_;
 
     unsigned int spell_points_;
     unsigned int max_spell_points_;
+
     unsigned int level_ = 1;
+    unsigned int current_exp_ = 0;
 
  protected:
     const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id) override;
@@ -70,12 +73,15 @@ class PlayerCharacter : public CharacterInstance {
 
     std::tuple<Activatable::Result, ErrorStatus> use(std::string_view action_type, size_t action_id,
                                                      const std::vector<Tile>& target,
-                                                     const DiceInterface* dice = nullptr) override {
-        return CharacterInstance::use(action_type, action_id, target, dice);
-    }
-
-    void gainXP(unsigned int) {
-
+                                                     const DiceInterface* dice = nullptr) override;
+    unsigned int gainXP(unsigned int exp) {
+        current_exp_ += exp;
+        if (current_exp_ >= original_.exp()) {
+            unsigned int res = current_exp_ / original_.exp();
+            current_exp_ %= original_.exp();
+            return res;
+        }
+        return 0;
     }
 
     unsigned int level() const {
@@ -137,6 +143,10 @@ class PlayerCharacter : public CharacterInstance {
 
     Storage<Consumable>& consumables() {
         return consumables_;
+    }
+
+    Storage<const ActivatableItem*>& activatableItems() {
+        return activatables_;
     }
 };
 }  // namespace DnD

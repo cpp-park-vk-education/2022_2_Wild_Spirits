@@ -43,6 +43,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     bool wasUpdated() const override {
         return was_updated_;
     }
+
  protected:
     virtual const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id);
 
@@ -77,6 +78,10 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     bool isAlive();
     void resetHP();
     int hp();
+
+    virtual bool isHostile() const {
+        return false;
+    }
 
     void addBuff(const Buff& buff);
     const std::list<Buff>& buffs() const;

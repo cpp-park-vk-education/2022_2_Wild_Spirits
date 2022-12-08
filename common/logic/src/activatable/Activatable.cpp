@@ -7,13 +7,32 @@
 #include <iterator>
 
 namespace DnD {
-Activatable::Result::Result(int ap, unsigned int resource, const std::vector<Action::Result>& input_results) :
+ActivatableInterface::Result::Result(int ap, unsigned int resource, const std::vector<Action::Result>& input_results) :
     action_points(ap), resource_spent(resource),
     results(input_results.begin(), input_results.end()) {}
 
-bool Activatable::Result::operator==(const Result& other) const {
+bool ActivatableInterface::Result::operator==(const Result& other) const {
     return std::tie(action_points, resource_spent, results) ==
            std::tie(other.action_points, other.resource_spent, other.results);
+}
+
+std::ostream& operator<<(std::ostream& out, const ActivatableInterface::Result& result) {
+    return out << "{ Action Points: " << result.action_points << ", Resource spent: " << result.resource_spent
+               << ", Action Results: " << result.results << " }";
+}
+
+static void assertCharacterIsInBounds(Action::Result* res, CharacterInstance* character) {
+    auto& result_pos = res->pos;
+    size_t width = character->location().width();
+    size_t height = character->location().height();
+
+    if (result_pos.x >= width) {
+        result_pos.x = width - 1;
+    }
+
+    if (result_pos.y >= height) {
+        result_pos.y = height - 1;
+    }
 }
 
 std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance* actor,
@@ -56,9 +75,12 @@ std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance*
             }
 
             *res_to_update += std::move(action_result);
+
+            assertCharacterIsInBounds(res_to_update, target_character);
         }
     }
 
+    actor->setActionPoints(result.action_points);
     return std::make_tuple(result, ErrorStatus::OK);
 }
 }  // namespace DnD

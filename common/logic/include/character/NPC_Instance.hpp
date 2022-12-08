@@ -18,7 +18,7 @@ class NPC_Instance : public CharacterInstance {
         return CharacterInstance::use(action_type, action_id, target, dice);
     }
 
-    bool isHostile() const {
+    bool isHostile() const override {
         return is_hostile_;
     }
 
