@@ -2,6 +2,7 @@
 
 #include "Area.hpp"
 #include "Tile.hpp"
+#include "ErrorStatus.hpp"
 
 #include <array>
 
@@ -9,8 +10,11 @@ namespace DnD {
 class Position {
  public:
     virtual bool isInArea(const Area& area) const = 0;
+
     virtual std::array<Tile, 2> mapPosition() const = 0;
-    virtual void moveTo(const Tile& tile) = 0;
+    virtual Tile centerPos() const = 0;
+
+    virtual ErrorStatus moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
     virtual std::unique_ptr<Position> clone() const = 0;
@@ -35,11 +39,16 @@ class TilePos : public Position {
     }
 
     std::array<Tile, 2> mapPosition() const override {
-        return std::array<Tile, 2>{pos_, Tile{}};
+        return std::array<Tile, 2>{pos_, pos_};
     }
 
-    void moveTo(const Tile& tile) override {
+    Tile centerPos() const override {
+        return pos_;
+    }
+
+    ErrorStatus moveTo(const Tile& tile) override {
         pos_ = tile;
+        return ErrorStatus::OK;
     }
 
     void moveBy(int x, int y) override {
@@ -75,10 +84,15 @@ class RectangularPos : public Position {
         return std::array<Tile, 2>{bottom_left_, upper_right_};
     }
 
-    void moveTo(const Tile& tile) override {
+    Tile centerPos() const override {
+        return (bottom_left_ + upper_right_) / 2;
+    }
+
+    ErrorStatus moveTo(const Tile& tile) override {
         Tile diff = upper_right_ - bottom_left_;
         bottom_left_ = tile;
         upper_right_ = bottom_left_ + diff;
+        return ErrorStatus::OK;
     }
 
     void moveBy(int x, int y) override {

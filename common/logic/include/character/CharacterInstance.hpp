@@ -82,7 +82,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     virtual bool isHostile() const {
         return false;
     }
-
+    
     void addBuff(const Buff& buff);
     const std::list<Buff>& buffs() const;
 

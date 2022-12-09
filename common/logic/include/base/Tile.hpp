@@ -60,6 +60,14 @@ struct Tile {
         return *this;
     }
 
+    Tile operator*(size_t multiplier) {
+        return Tile{x * multiplier, y * multiplier};
+    }
+
+    Tile operator/(size_t divisor) {
+        return Tile{x / divisor, y / divisor};
+    }
+
  private:
     template <typename T>
     static size_t add_without_overflow(size_t target, T other) {

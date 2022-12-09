@@ -84,6 +84,8 @@ class PlayerCharacter : public CharacterInstance {
         return 0;
     }
 
+    ErrorStatus moveTo(const Tile& tile) override;
+
     unsigned int level() const {
         return level_;
     }

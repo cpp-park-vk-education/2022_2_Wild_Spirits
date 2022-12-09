@@ -16,4 +16,16 @@ Location& OnLocation::location() const {
 void OnLocation::setLocation(Location& loc) {
     current_location_ = loc.id();
 }
+
+ErrorStatus OnLocation::moveTo(const Tile& tile) {
+    if (tile.x >= location().width()) {
+        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
+    }
+
+    if (tile.y >= location().height()) {
+        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
+    }
+
+    return pos_->moveTo(tile);
+}
 }  // namespace DnD

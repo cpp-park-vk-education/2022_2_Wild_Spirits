@@ -41,9 +41,11 @@ class OnLocation : public Position {
         return pos_->mapPosition();
     }
 
-    void moveTo(const Tile& tile) override {
-        return pos_->moveTo(tile);
+    Tile centerPos() const override {
+        return pos_->centerPos();
     }
+
+    ErrorStatus moveTo(const Tile& tile) override;
 
     void moveBy(int x, int y) override {
         return pos_->moveBy(x, y);

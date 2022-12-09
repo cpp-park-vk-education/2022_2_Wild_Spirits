@@ -14,6 +14,16 @@ PlayerCharacter::PlayerCharacter(size_t id, Character& original,
     }
 }
 
+ErrorStatus PlayerCharacter::moveTo(const Tile& tile) {
+    unsigned int points_spent = centerPos().distance(tile);
+    if (points_spent > actionPoints()) {
+        return ErrorStatus::NO_ACTION_POINTS;
+    }
+
+    setActionPoints(actionPoints() - points_spent);
+    return OnLocation::moveTo(tile);
+}
+
 const ActivatableInterface* PlayerCharacter::chooseActivatable(std::string_view action_type, size_t action_id) {
     static std::unordered_map<std::string_view, std::function<const ActivatableInterface*(size_t)>> get_action = {
         {"skill", [this] (size_t id) { return skills_.safeGet(id); }},

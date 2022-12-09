@@ -173,7 +173,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
         const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) const {
     std::vector<Action::Result> results;
 
-    if (cast_type_ != Cast::Self && tile.distance(actor.mapPosition()[0]) > range_) {
+    if (cast_type_ != Cast::Self && actor.centerPos().distance(tile) > range_) {
         return std::make_tuple(results, ErrorStatus::INVALID_CAST_RANGE);
     }
 

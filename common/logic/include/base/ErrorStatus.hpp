@@ -18,7 +18,8 @@ namespace DnD {
     XX(9, MAXIMUM_DMG_TYPES_EXCEEDED)\
     XX(10, NO_ACTOR_SET) \
     XX(11, SKILL_ON_COOLDOWN) \
-    XX(12, NO_USES_LEFT)
+    XX(12, NO_USES_LEFT) \
+    XX(13, OUT_OF_LOCATION_BOUNDS)
 
 
 #define XX(error_code, error_message) \
