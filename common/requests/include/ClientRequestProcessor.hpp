@@ -8,17 +8,20 @@
 
 class ClientSideProcessor: public RequestAcceptor, public RequestSender{
 public:
-    ClientSideProcessor(Client::GameState &gamestate, unsigned int client_id);
+    ClientSideProcessor(Client::GameState &gamestate, unsigned int client_id);//Передать в конструктор ip, port
     bool sendRequest(Client::Action action) override;
-    bool acceptRequest(std::string request_string) override;
+    bool sendRequest(Client::Request request) override;
+    bool getImage(std::string_view hash, std::shared_ptr<std::string>);
+    bool acceptRequest(std::string_view request_string) override;
+
 private:
     unsigned int _client_id;
     ClientProcessorEngine engine;
-    std::shared_ptr<Gateway::ClientConnection*> connection;
+    std::shared_ptr<Gateway::ClientConnection> connection;
     Client::GameState& gamestate;
     GameStateChanger changer;
     
     bool SendChangesRequest(Client::Action action);
     bool ApplyChanges(queue changes_queue);
-    bool ImageRequest(std::string image_hash);
+    std::string_view ImageRequest(std::string_view image_hash);
 };

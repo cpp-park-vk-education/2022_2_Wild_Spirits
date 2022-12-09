@@ -8,12 +8,11 @@ struct user_id;
 
 using std::string;
 
-class handler;
 
 class ClientConnection{
 public:
-    void SendReqeuest(string request, handler gateway_handler);
-    void getImage(string request, handler gateway_handler);
+    void SendReqeuest(string request,std::function<void(std::string)> gateway_handler);
+    void getImage(std::string_view request, std::function<void(std::string)> gateway_handler);
 };
 
 class Room{
