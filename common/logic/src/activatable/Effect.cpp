@@ -40,9 +40,12 @@ std::string Buff::statsToStr() const {
 }
 
 std::ostream& operator<<(std::ostream& out, const Buff& buff) {
-    out << "{ turns: " << buff.turnsLeft() << ", { ";
-    for (const auto& [stat, value] : buff.stats()) {
-        out << stat << ": " << static_cast<int>(value) << ", ";
+    out << "{ 'turns': " << buff.turnsLeft() << ", 'stats': { ";
+    for (auto it = buff.stats().begin(), end = buff.stats().end(); it != end; ++it) {
+        out << '\'' << it->first << '\'' << ": " << static_cast<int>(it->second);
+        if (std::next(it) != end) {
+            out << ", ";
+        }
     }
     return out << "} }";
 }

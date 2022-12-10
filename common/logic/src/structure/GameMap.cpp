@@ -8,6 +8,11 @@ ErrorStatus GameMapImpl::switchLocation(size_t id) {
         return ErrorStatus::NO_SUCH_ITEM;
     }
     current_location_ = id;
+
+    for (auto& [_, player] : players()) {
+        player.setLocation(id);
+    }
+
     return ErrorStatus::OK;
 }
 

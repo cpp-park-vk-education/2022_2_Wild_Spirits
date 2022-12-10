@@ -38,12 +38,16 @@ Action::Result& Action::Result::operator+=(Result&& other) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
-    out << "{ Id: " << result.char_id_ << ", Pos: {" << result.pos.x << ", " << result.pos.y
-               << "}, Health: " << result.hp << ", Buffs: { ";
-    for (auto& buff : result.buffs) {
-        out << buff;
+    out << "{ 'id': " << result.char_id_ << ", 'pos': {" << "'x': " << result.pos.x << ", 'y': " << result.pos.y
+               << "}, 'hp': " << result.hp;
+    if (!result.buffs.empty()) {
+        out << ", 'buffs': { ";
+        for (auto& buff : result.buffs) {
+            out << buff;
+        }
+        out << " }";
     }
-    return out << "} }";
+    return out << " }";
 }
 
 Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, Target target_type,

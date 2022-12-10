@@ -17,8 +17,12 @@ bool ActivatableInterface::Result::operator==(const Result& other) const {
 }
 
 std::ostream& operator<<(std::ostream& out, const ActivatableInterface::Result& result) {
-    return out << "{ Action Points: " << result.action_points << ", Resource spent: " << result.resource_spent
-               << ", Action Results: " << result.results << " }";
+    out << "{ 'action-points': " << result.action_points;
+    if ( result.resource_spent) {
+        out << ", 'resource-spent': " << result.resource_spent;
+    }
+    out << ", 'action-results': [" << result.results << "] }";
+    return out;
 }
 
 static void assertCharacterIsInBounds(Action::Result* res, CharacterInstance* character) {

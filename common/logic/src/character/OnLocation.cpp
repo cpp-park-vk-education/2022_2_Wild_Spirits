@@ -13,8 +13,8 @@ Location& OnLocation::location() const {
     return map_.locations().get(current_location_);
 }
 
-void OnLocation::setLocation(Location& loc) {
-    current_location_ = loc.id();
+void OnLocation::setLocation(size_t loc_id) {
+    current_location_ = loc_id;
 }
 
 ErrorStatus OnLocation::moveTo(const Tile& tile) {

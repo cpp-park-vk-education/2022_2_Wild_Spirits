@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <map>
 #include <cstddef>
 #include <functional>
 #include <type_traits>
@@ -13,7 +14,7 @@ namespace DnD {
 template <typename T>
 class Storage {
  private:
-    std::unordered_map<size_t, T> data_;
+    std::unordered_map<size_t, stT> data_;
 
  public:
     using size_type = size_t;
@@ -37,7 +38,7 @@ class Storage {
         std::swap(data_, tmp.data_);
         return *this;
     }
-    
+
     template <std::forward_iterator Iter>
     Storage(Iter begin, Iter end) {
         for (auto it = begin; it != end; it = std::next(it)) {
@@ -54,13 +55,13 @@ class Storage {
 
     std::tuple<T*, ErrorStatus> add(const T& object) {
         std::pair<iterator, bool> result;
-    
+
         if constexpr (std::is_pointer<T>::value) {
             result = data_.emplace(object->id(), object);
         } else {
             result =  data_.emplace(object.id(), object);
         }
-        
+
         auto& [it, inserted] = result;
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
@@ -92,7 +93,7 @@ class Storage {
         }
         return it->second;
     }
-    
+
     T* safeGet(size_t id) noexcept {
         auto it = data_.find(id);
         if (it == data_.end()) {
@@ -148,8 +149,11 @@ class Storage {
     }
 
     friend std::ostream& operator<<(std::ostream& out, const Storage& storage) {
-        for (const auto& [_, obj] : storage.data_) {
-            out << obj << " ";
+        for (auto it = storage.data_.begin(), end = storage.data_.end(); it != end; ++it) {
+            out << it->second;
+            if (std::next(it) != end) {
+                out << ", ";
+            }
         }
         return out;
     }

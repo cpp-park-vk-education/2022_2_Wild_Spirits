@@ -37,7 +37,7 @@ class OnLocation : public Position {
         return current_location_;
     }
 
-    virtual void setLocation(Location& loc);
+    virtual void setLocation(size_t loc_id);
 
     void setPosition(std::unique_ptr<Position>&& pos) {
         pos_ = std::move(pos);

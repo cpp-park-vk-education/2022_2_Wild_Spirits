@@ -1,5 +1,9 @@
 #include "GameState.hpp"
 
+#include "Dice.hpp"
+
+#include <sstream>
+
 namespace DnD {
 Storage<NPC>& GameStateImpl::npc() {
     return npc_;
@@ -41,14 +45,6 @@ Storage<Armor>& GameStateImpl::armor() {
     return armor_;
 }
 
-ErrorStatus GameStateImpl::addItem(size_t char_id, std::string_view item_type, size_t item_id) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::removeItem(size_t char_id, std::string_view item_type, size_t item_id) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
 ErrorStatus GameStateImpl::addAction(std::string_view item_type, size_t item_id, const Action& action) {
     return ErrorStatus::UNKNOWN_ERROR;
 }
@@ -73,18 +69,25 @@ ErrorStatus GameStateImpl::setPositionType(size_t char_id, std::unique_ptr<Posit
     return ErrorStatus::UNKNOWN_ERROR;
 }
 
-ErrorStatus GameStateImpl::moveCharacter(size_t char_id, Tile tile) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::changeCharacteristic(std::string_view type, size_t id, std::string_view characteristic,
-                                                const std::variant<std::string, size_t, int>& replacer) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
 std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
-                                                                        size_t item_id, Tile target) {
-    return {};
+                                                                        size_t item_id, const std::vector<Tile>& target) {
+    auto character = allCharacters().safeGet(actor_id);
+
+    if (!character) {
+        return std::make_tuple("", ErrorStatus::NO_SUCH_CHARACTER);
+    }
+
+    Dice dice;
+    auto [result, status] = character->use(type, item_id, target, &dice);
+
+    if (status != ErrorStatus::OK) {
+        return std::make_tuple("", status);
+    }
+
+    std::stringstream stream;
+    stream << result;
+
+    return std::make_tuple(stream.str(), ErrorStatus::OK);
 }
 
 std::unordered_map<size_t, size_t> LogicProcessorImpl::kill_NPC(size_t location_id, size_t npc_id) {
@@ -111,6 +114,6 @@ void LogicProcessorImpl::setUpdated(GameEntityInterface& object) {
 }
 
 LogicProcessor::GameData LogicProcessorImpl::getUpdatedObjs() {
-    return {};
+    GameData updated_objs;
 }
 }  // namespace DnD
