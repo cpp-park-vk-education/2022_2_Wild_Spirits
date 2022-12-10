@@ -8,6 +8,7 @@ set(SOURCES
      src/base/Dice.cpp
      src/base/GameEntity.cpp
      src/character/OnLocation.cpp
+     src/character/Character.cpp
      src/character/CharacterInstance.cpp
      src/character/PlayerCharacter.cpp
      src/character/NPC_Instance.cpp

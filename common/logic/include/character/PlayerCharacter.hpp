@@ -48,6 +48,8 @@ class Class : public GameEntity {
 
 class PlayerCharacter : public CharacterInstance {
  private:
+    Character base_;
+
     Storage<const Class*> class_list_;
     const Race* race_;
     const Armor* armor_ = nullptr;
@@ -67,27 +69,31 @@ class PlayerCharacter : public CharacterInstance {
     const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id) override;
 
  public:
-    PlayerCharacter(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
+    PlayerCharacter(size_t id, Character&& original, std::unique_ptr<Position>&& pos, GameMap& map,
                     const Class& char_class, const Race& race,
                     int money = 100, Storage<Item*> items = {});
 
     std::tuple<Activatable::Result, ErrorStatus> use(std::string_view action_type, size_t action_id,
                                                      const std::vector<Tile>& target,
                                                      const DiceInterface* dice = nullptr) override;
-    unsigned int gainXP(unsigned int exp) {
-        current_exp_ += exp;
-        if (current_exp_ >= original_.exp()) {
-            unsigned int res = current_exp_ / original_.exp();
-            current_exp_ %= original_.exp();
-            return res;
-        }
-        return 0;
-    }
+
+    PlayerCharacter(const PlayerCharacter& other) = delete;
+    PlayerCharacter& operator=(const PlayerCharacter& other) = delete;
+
+    unsigned int gainXP(unsigned int exp);
 
     ErrorStatus moveTo(const Tile& tile) override;
 
     unsigned int level() const {
         return level_;
+    }
+
+    const Character& original() const override {
+        return base_;
+    }
+
+    Character& original() {
+        return base_;
     }
 
     void refreshSpellPoints() {
@@ -114,22 +120,7 @@ class PlayerCharacter : public CharacterInstance {
         return armor_;
     }
 
-    int armorClass() const override {
-        if (!armor_) {
-            return original_.baseArmorClass();
-        }
-
-        int base = armor_->defense();
-
-        switch (armor_->armorType()) {
-            case Armor::Type::Light:
-                return base + statBonus(Armor::kScaling);
-            case Armor::Type::Medium:
-                return base + std::min(Armor::kMaxBonus, statBonus(Armor::kScaling));
-            default:
-                return base;
-        }
-    }
+    int armorClass() const override;
 
     auto& classes() {
         return class_list_;

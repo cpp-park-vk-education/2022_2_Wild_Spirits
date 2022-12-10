@@ -22,6 +22,21 @@ class Storage {
 
     Storage() = default;
     Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
+
+    Storage(const Storage& other) : data_(other.data_) {}
+    Storage(Storage&& other) : data_(std::move(other.data_)) {}
+
+    Storage& operator=(const Storage& other) {
+        auto tmp = other;
+        std::swap(data_, tmp.data_);
+        return *this;
+    }
+
+    Storage& operator=(Storage&& other) {
+        auto tmp = std::move(other);
+        std::swap(data_, tmp.data_);
+        return *this;
+    }
     
     template <std::forward_iterator Iter>
     Storage(Iter begin, Iter end) {
@@ -31,8 +46,7 @@ class Storage {
     }
 
     template <typename... Args>
-    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) {
-        static_assert(!std::is_pointer<T>::value);
+    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) requires (!std::is_pointer_v<T>) {
         auto [it, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
@@ -47,8 +61,14 @@ class Storage {
             result =  data_.emplace(object.id(), object);
         }
         
-        auto& [iter, inserted] = result;
-        return inserted ? std::make_tuple(&iter->second, ErrorStatus::OK) :
+        auto& [it, inserted] = result;
+        return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
+                          std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
+    }
+
+    std::tuple<T*, ErrorStatus> add(T&& object) requires (!std::is_pointer_v<T>) {
+        auto [it, inserted] = data_.try_emplace(object.id(), std::move(object));
+        return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
@@ -79,6 +99,22 @@ class Storage {
             return nullptr;
         }
         return &it->second;
+    }
+
+    const T& get(size_t id) const {
+        return const_cast<const T&>(const_cast<Storage*>(this)->get(id));
+    }
+
+    const T safeGet(size_t id) const noexcept requires std::is_pointer_v<T> {
+        return const_cast<const T>(const_cast<Storage*>(this)->safeGet(id));
+    }
+
+    const T* safeGet(size_t id) const noexcept {
+        return const_cast<const T*>(const_cast<Storage*>(this)->safeGet(id));
+    }
+
+    bool contains(size_t id) const {
+        return safeGet(id) != nullptr;
     }
 
     size_t size() const {

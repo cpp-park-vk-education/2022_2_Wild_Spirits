@@ -23,7 +23,6 @@ struct SaleResult {
 
 class CharacterInstance : public GameEntityInterface, public OnLocation, public TurnBased {
  protected:
-    Character& original_;
     std::list<Buff> buffs_;
 
     Storage<Item*> items_;
@@ -44,15 +43,23 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
         return was_updated_;
     }
 
+    Character& original();
+
  protected:
     virtual const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id);
 
  public:
-    CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
-                      int money = 100, Storage<Item*> items = {});
+    CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
+                      GameMap& map, int money = 100, const Storage<Item*>& items = {});
+    
+    CharacterInstance(const CharacterInstance& other) = delete;
+    CharacterInstance& operator=(const CharacterInstance& other) = delete;
+
+    CharacterInstance& operator=(CharacterInstance&& other) = delete;
+    CharacterInstance(CharacterInstance&& other);
 
     virtual ~CharacterInstance();
-    
+
     int buffToStat(const std::string& stat) const;
     int statTotal(const std::string& stat) const;
     int statCheckRoll(const std::string& stat, const DiceInterface& dice) const;
@@ -62,7 +69,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     virtual std::tuple<Activatable::Result, ErrorStatus>
         use(std::string_view action_type, size_t action_id,
             const std::vector<Tile>& target, const DiceInterface* = nullptr);
-    
+
     ErrorStatus trade(CharacterInstance& with, Item* give, Item* get);
     SaleResult buyItem(std::string_view item_type, CharacterInstance& from, size_t item_id, size_t count = 1);
 
@@ -91,7 +98,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     float damageModifier(uint8_t damage_type) const;
 
-    const Character& original() const;
+    virtual const Character& original() const = 0;
 
     const Info& info() const override;
     std::string& info(const std::string&) override;

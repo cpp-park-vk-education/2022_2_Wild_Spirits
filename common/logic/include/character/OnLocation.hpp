@@ -20,6 +20,11 @@ class OnLocation : public Position {
         return std::make_unique<OnLocation>(*this);
     }
 
+ protected:
+    std::unique_ptr<Position>& positionObj() {
+        return pos_;
+    }
+
  public:
     OnLocation(std::unique_ptr<Position>&& pos, GameMap& map);
 
@@ -27,6 +32,11 @@ class OnLocation : public Position {
     OnLocation& operator=(OnLocation& other) = delete;
     
     Location& location() const;
+
+    size_t locationId() const {
+        return current_location_;
+    }
+
     virtual void setLocation(Location& loc);
 
     void setPosition(std::unique_ptr<Position>&& pos) {
@@ -51,7 +61,7 @@ class OnLocation : public Position {
         return pos_->moveBy(x, y);
     }
 
-    const GameMap& map() const {
+    GameMap& map() const {
         return map_;
     }
 };

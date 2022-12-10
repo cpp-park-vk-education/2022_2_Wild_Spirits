@@ -25,15 +25,16 @@ public:
     Character(size_t id, std::string_view name, int image_id, unsigned int max_hp,
               int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
               unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{},
-              const Info& info = {}) :
-        GameEntity(id, name, image_id, info),
-        Resistible(),
-        StatBased(stats),
-        exp_(exp),
-        max_hp_(max_hp),
-        max_action_points_(ap),
-        base_armor_class_(ac) {}
+              const Info& info = {});
     
+    Character(const Character& other);
+    Character(Character&& other);
+
+    Character& operator=(const Character& other);
+    Character& operator=(Character&& other);
+    
+    void swap(Character& other);
+
     unsigned int exp() const {
         return exp_;
     }
@@ -46,7 +47,7 @@ public:
         max_action_points_ = max_ap;
     }
 
-    unsigned int maxHP() {
+    unsigned int maxHP() const {
         return max_hp_;
     }
 

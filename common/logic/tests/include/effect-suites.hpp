@@ -7,7 +7,7 @@
 namespace DnD {
 class EffectSuite : public ::testing::Test {
  protected:
-    Character char_template_;
+    NPC char_template_;
     Storage<CharacterInstance*> all_characters;
     MockGameMap map;
     std::unique_ptr<CharacterInstance> character;
@@ -28,7 +28,7 @@ class EffectSuite : public ::testing::Test {
         EXPECT_CALL(map, allCharacters())
             .WillRepeatedly(ReturnRef(all_characters));
 
-        character = std::make_unique<CharacterInstance>(7, char_template_,
+        character = std::make_unique<NPC_Instance>(7, char_template_,
                                         PositionFactory::create(Tile{1, 2}), map);
 
         char_template_.addResistance(0);

@@ -129,6 +129,10 @@ void Action::setArea(Action::AreaPtr&& area) {
     area_ = std::move(area);
 }
 
+const Action::AreaPtr& Action::area() const {
+    return area_;
+}
+
 std::vector<Action::EffectPtr>& Action::effects() {
     return effects_;
 }

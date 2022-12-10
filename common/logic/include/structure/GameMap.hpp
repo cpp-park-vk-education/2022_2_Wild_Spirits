@@ -11,8 +11,8 @@ class GameMap {
  public:
     virtual Storage<Location>& locations() = 0;
 
-    virtual void switchLocation(size_t id) = 0;
-    virtual void switchLocation(size_t char_id, size_t id) = 0;
+    virtual ErrorStatus switchLocation(size_t id) = 0;
+    virtual ErrorStatus switchLocation(size_t char_id, size_t id) = 0;
 
     virtual Location& currentLocation() = 0;
     virtual size_t currentLocationId() const = 0;
@@ -36,9 +36,9 @@ class GameMapImpl : public GameMap {
         return locations_;
     }
 
-    void switchLocation(size_t id) override;
+    ErrorStatus switchLocation(size_t id) override;
 
-    void switchLocation(size_t char_id, size_t id) override;
+    ErrorStatus switchLocation(size_t char_id, size_t id) override;
 
     Location& currentLocation() override {
         return locations_.get(current_location_);

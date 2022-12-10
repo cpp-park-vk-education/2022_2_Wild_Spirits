@@ -1,17 +1,45 @@
 #include "PlayerCharacter.hpp"
 
 namespace DnD {
-PlayerCharacter::PlayerCharacter(size_t id, Character& original,
+PlayerCharacter::PlayerCharacter(size_t id, Character&& original,
                                  std::unique_ptr<Position>&& pos, GameMap& map,
                                  const Class& char_class, const Race& race,
                                  int money, Storage<Item*> items) :
         CharacterInstance(id, original, std::move(pos), map, money, items),
+        base_(std::move(original)),
         class_list_(),
         race_(&race) {
     class_list_.add(&char_class);
     for (auto& skill : char_class.skills()) {
         skills_.add(skill);
     }
+}
+
+int PlayerCharacter::armorClass() const {
+    if (!armor_) {
+        return base_.baseArmorClass();
+    }
+
+    int base = armor_->defense();
+
+    switch (armor_->armorType()) {
+        case Armor::Type::Light:
+            return base + statBonus(Armor::kScaling);
+        case Armor::Type::Medium:
+            return base + std::min(Armor::kMaxBonus, statBonus(Armor::kScaling));
+        default:
+            return base;
+    }
+}
+
+unsigned int PlayerCharacter::gainXP(unsigned int exp) {
+    current_exp_ += exp;
+    if (current_exp_ >= base_.exp()) {
+        unsigned int levels_upped = current_exp_ / base_.exp();
+        current_exp_ %= base_.exp();
+        return levels_upped;
+    }
+    return 0;
 }
 
 ErrorStatus PlayerCharacter::moveTo(const Tile& tile) {

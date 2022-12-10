@@ -97,7 +97,7 @@ class Action {
     void toggleMissable();
     
     void setArea(AreaPtr&& area);
-    AreaPtr& area() const;
+    const AreaPtr& area() const;
 
     std::vector<EffectPtr>& effects();
     void addEffect(EffectPtr&& effect);

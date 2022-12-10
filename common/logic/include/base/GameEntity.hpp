@@ -57,5 +57,7 @@ class GameEntity : public GameEntityInterface {
 
     size_t getImageId() const override;
     void setImage(size_t) override;
+
+    void swap(GameEntity& other);
 };
 }  // namespace DnD

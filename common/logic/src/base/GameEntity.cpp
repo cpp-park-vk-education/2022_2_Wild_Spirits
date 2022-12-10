@@ -1,5 +1,7 @@
 #include "GameEntity.hpp"
 
+#include <utility>
+
 namespace DnD {
 GameEntity::GameEntity(size_t id, std::string_view name, size_t image_id, const GameEntity::Info& info) :
     id_(id), name_(name), image_id_(image_id), info_(info) {}
@@ -29,5 +31,13 @@ void GameEntity::setImage(size_t id) {
 
 size_t GameEntity::id() const {
     return id_;
+}
+
+void GameEntity::swap(GameEntity& other) {
+    std::swap(id_, other.id_);
+    std::swap(image_id_, other.image_id_);
+    std::swap(info_, other.info_);
+    std::swap(name_, other.name_);
+    std::swap(was_updated_, other.was_updated_);
 }
 }  // namespace DnD

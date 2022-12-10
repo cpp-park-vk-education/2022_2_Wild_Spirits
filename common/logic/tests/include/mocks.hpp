@@ -8,8 +8,8 @@ class MockGameMap : public GameMap {
  public:
     MockGameMap() = default;
     MOCK_METHOD(Storage<Location>&, locations, (), (override));
-    MOCK_METHOD(void, switchLocation, (size_t), (override));
-    MOCK_METHOD(void, switchLocation, (size_t, size_t), (override));
+    MOCK_METHOD(ErrorStatus, switchLocation, (size_t), (override));
+    MOCK_METHOD(ErrorStatus, switchLocation, (size_t, size_t), (override));
     MOCK_METHOD(Location&, currentLocation, (), (override));
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
     MOCK_METHOD(Storage<PlayerCharacter>&, players, (), (const, override));

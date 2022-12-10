@@ -18,7 +18,6 @@ class TurnOrderSuite : public ::testing::Test {
     TurnOrder queue;
 
     NPC enemy;
-    Character player_template;
     Class char_class_;
 
     std::vector<size_t> expected_turn_order_;
@@ -37,7 +36,7 @@ class TurnOrderSuite : public ::testing::Test {
         for (size_t i = 0; i < 2; ++i) {
             location.npc().add(i, enemy, PositionFactory::create({i, i}), map);
         }
-        game.players().add(2, player_template, PositionFactory::create({1, 2}), map, char_class_, Race());
+        game.players().add(2, Character(), PositionFactory::create({1, 2}), map, char_class_, Race());
 
         expected_turn_order_.reserve(3);
         expected_turn_order_.push_back(2);

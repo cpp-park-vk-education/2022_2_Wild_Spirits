@@ -6,14 +6,18 @@
 #include "GameMap.hpp"
 
 namespace DnD {
-CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos, GameMap& map,
-                                     int money, Storage<Item*> items) :
+CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
+                                     GameMap& map, int money, const Storage<Item*>& items) :
         OnLocation(std::move(pos), map),
-        original_(original), items_(items), id_(id),
+        items_(items), id_(id),
         action_points_(original.maxActionPoints()),
         hp_(original.maxHP()), money_(money) {
     map.allCharacters().add(this);
 }
+
+CharacterInstance::CharacterInstance(CharacterInstance&& other)
+    : CharacterInstance(other.id_, other.original(), std::move(other.positionObj()),
+                        other.map(), other.money_, std::move(other.items_)) {}
 
 CharacterInstance::~CharacterInstance() {
     map().allCharacters().remove(id_);
@@ -31,7 +35,7 @@ int CharacterInstance::buffToStat(const std::string& stat) const {
 }
 
 int CharacterInstance::statTotal(const std::string& stat_name) const {
-    return original_.stat(stat_name) + buffToStat(stat_name);
+    return original().stat(stat_name) + buffToStat(stat_name);
 }
 
 int8_t CharacterInstance::statBonus(const std::string& stat) const {
@@ -39,7 +43,7 @@ int8_t CharacterInstance::statBonus(const std::string& stat) const {
 }
 
 int CharacterInstance::armorClass() const {
-    return original_.baseArmorClass() + statBonus(Armor::kScaling);
+    return original().baseArmorClass() + statBonus(Armor::kScaling);
 }
 
 const std::list<Buff>& CharacterInstance::buffs() const {
@@ -86,21 +90,17 @@ SaleResult CharacterInstance::buyItem(std::string_view item_type, CharacterInsta
     return SaleResult{};
 }
 
-const Character& CharacterInstance::original() const {
-    return original_;
-}
-
 unsigned int CharacterInstance::actionPoints() {
     return action_points_;
 }
 
 void CharacterInstance::refreshActionPoints() {
-    action_points_ = original_.maxActionPoints();
+    action_points_ = original().maxActionPoints();
 }
 
 float CharacterInstance::damageModifier(uint8_t damage_type) const {
-    bool resists = original_.isResistantTo(damage_type);
-    bool vulnerable = original_.isVulnerableTo(damage_type);
+    bool resists = original().isResistantTo(damage_type);
+    bool vulnerable = original().isVulnerableTo(damage_type);
 
     if (resists && !vulnerable) {
         return Resistible::kResistModifier;
@@ -114,7 +114,7 @@ float CharacterInstance::damageModifier(uint8_t damage_type) const {
 }
 
 void CharacterInstance::setActionPoints(unsigned int action_points) {
-    action_points_ = std::min(action_points, original_.maxActionPoints());
+    action_points_ = std::min(action_points, original().maxActionPoints());
 }
 
 int CharacterInstance::money() {
@@ -138,31 +138,35 @@ bool CharacterInstance::isAlive() {
 }
 
 void CharacterInstance::resetHP() {
-    hp_ = original_.maxHP();
+    hp_ = original().maxHP();
 }
 
 int CharacterInstance::hp() {
     return hp_;
 }
 
+Character& CharacterInstance::original() {
+    return const_cast<Character&>(const_cast<const CharacterInstance*>(this)->original());
+}
+
 const GameEntity::Info& CharacterInstance::info() const {
-    return original_.info();
+    return original().info();
 }
 
 std::string& CharacterInstance::info(const std::string& key) {
-    return original_.info(key);
+    return original().info(key);
 }
 
 const std::string& CharacterInstance::name() const {
-    return original_.name();
+    return original().name();
 }
 
 void CharacterInstance::setName(std::string_view name) {
-    original_.setName(name);
+    original().setName(name);
 }
 
 size_t CharacterInstance::getImageId() const {
-    return original_.getImageId();
+    return original().getImageId();
 }
 
 size_t CharacterInstance::id() const {
@@ -170,7 +174,7 @@ size_t CharacterInstance::id() const {
 }
 
 void CharacterInstance::setImage(size_t image_id) {
-    original_.setImage(image_id);
+    original().setImage(image_id);
 }
 
 void CharacterInstance::onTurnStart() {

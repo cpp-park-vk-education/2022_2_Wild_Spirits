@@ -63,10 +63,10 @@ class ActivatableSuite : public ActionSuite {
         ActionSuite(),
         heal_action(AreaFactory::create(), {}, Action::Target::Allies, 0, Action::Cast::Self, false)
     {   
-        players_.add(8, char_template_, PositionFactory::create(Tile{2, 2}), map, Class(), Race());
+        char_template_.setMaxHP(10);
+        players_.add(8, std::move(char_template_), PositionFactory::create(Tile{2, 2}), map, Class(), Race());
 
         heal_action.addEffect(std::make_unique<Heal>(3));
-        char_template_.setMaxHP(10);
 
         test_enemy_.setMaxHP(10);
         for (auto& [_, enemy] : locations.get(0).npc()) {

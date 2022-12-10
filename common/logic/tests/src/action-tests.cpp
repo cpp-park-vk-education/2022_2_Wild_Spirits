@@ -161,9 +161,8 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
     EXPECT_CALL(map, allCharacters())
         .WillRepeatedly(::testing::ReturnRef(characters));
 
-    Character player_template;
-    PlayerCharacter player(0, player_template, PositionFactory::create({0, 0}), map, Class(), Race());
-    player_template.setStat("dex", 18);  // Bonus to dex is 4
+    PlayerCharacter player(0, Character(), PositionFactory::create({0, 0}), map, Class(), Race());
+    player.original().setStat("dex", 18);  // Bonus to dex is 4
 
     Armor armor(0, "", 0, 0, 11, Armor::Type::Light);
     player.setArmor(armor);
