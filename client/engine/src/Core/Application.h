@@ -16,6 +16,10 @@ namespace LM {
         static Application* get() { return s_Instance; }
 
         Ref<const Window> getWindow() const { return m_Window; }
+
+
+        void addLayer(Ref<Layer> layer) { m_LayerStack->pushLayer(layer); }
+        void removeLayer(Layer* layer) { m_LayerStack->popLayer(layer); }
     private:
         void init();
         void onEvent(Ref<Event> event);

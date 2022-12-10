@@ -21,7 +21,10 @@ namespace LM {
     }
 
     TextureLoader::~TextureLoader() {
-        stbi_image_free(m_Data);
+        if (m_Data)
+        {
+            stbi_image_free(m_Data);
+        }
     }
 
 }

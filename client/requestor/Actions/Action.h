@@ -7,7 +7,8 @@ namespace LM {
     class Action {
     public:
         enum class Type : uint32_t {
-            kUseWeapon = 0,
+            kMove = 0,
+            kUseWeapon,
             kUseConsumable,
             kUseSkill,
             kUseSpell,

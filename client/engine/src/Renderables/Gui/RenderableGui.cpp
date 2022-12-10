@@ -18,15 +18,14 @@ namespace LM {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
             glm::vec2 start = m_Position + m_AlignPosition;
-        glm::vec2 end = m_Position + m_AlignPosition + getSize();
-        if (e->getX() >= start.x && e->getX() <= end.x && e->getY() >= start.y && e->getY() <= end.y) {
-            m_IsHovered = true;
-            LOGI("HOWERED!!!");
-        }
-        else {
-            m_IsHovered = false;
-        }
-        return false;
+            glm::vec2 end = m_Position + m_AlignPosition + getSize();
+            if (e->getX() >= start.x && e->getX() <= end.x && e->getY() >= start.y && e->getY() <= end.y) {
+                m_IsHovered = true;
+            }
+            else {
+                m_IsHovered = false;
+            }
+            return false;
         });
     }
 

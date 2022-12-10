@@ -12,6 +12,13 @@ namespace LM {
         }
     }
 
+    void LayerStack::popLayer(Layer* layer) {
+        if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&](Ref<Layer> stackLayer) { return stackLayer.get() == layer; }); it != m_Layers.end()) {
+            m_Layers.erase(it);
+        }
+    }
+
+
     void LayerStack::render() {
         for (auto& layer : m_Layers) {
             layer->render();

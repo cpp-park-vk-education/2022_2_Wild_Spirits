@@ -12,6 +12,7 @@ namespace LM {
 
         void pushLayer(Ref<Layer> layer);
         void popLayer(Ref<Layer> layer);
+        void popLayer(Layer* layer);
 
         void render();
         void onUpdate(Tick tick);

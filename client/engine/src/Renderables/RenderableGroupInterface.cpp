@@ -5,7 +5,9 @@
 namespace LM {
 
     void RenderableGroupInterface::draw(RendererInterface* renderer) {
-
+        for (auto& renderable : getRenderables()) {
+            renderable->draw(renderer);
+        }
     }
 
 }

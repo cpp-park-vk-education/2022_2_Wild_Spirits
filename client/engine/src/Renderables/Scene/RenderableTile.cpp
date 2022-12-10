@@ -2,6 +2,12 @@
 
 namespace LM {
 
+    RenderableTile::RenderableTile(const RenderableTextureProps& props)
+        : RenderableTexture(props)
+    {
+
+    }
+
     void RenderableTile::onEvent(Ref<Event> _Event) {
 
     }

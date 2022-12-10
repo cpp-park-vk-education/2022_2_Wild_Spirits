@@ -12,7 +12,7 @@ namespace LM {
 
     class RenderableInterface {
     public:
-        RenderableInterface(Transform transform = Transform(), Color color = Color(1.0f)) : m_Transform(transform), m_Color(color) { }
+        RenderableInterface(const Transform& transform = Transform(), const Color& color = Color(1.0f)) : m_Transform(transform), m_Color(color) { }
         virtual ~RenderableInterface() = default;
 
         inline const Transform& getTransform() const { return m_Transform; }

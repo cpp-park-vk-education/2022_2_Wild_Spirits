@@ -35,6 +35,8 @@ namespace LM {
 
         virtual void draw(RendererInterface* renderer) = 0;
         virtual glm::vec2 getSize() const = 0;
+
+        bool isHovered() const { return m_IsHovered; }
     protected:
         float calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const;
     protected:

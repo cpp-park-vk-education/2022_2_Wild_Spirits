@@ -1,15 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(ClientEngine VERSION 1.0)
 
-set(SOURCES 
-    src/Actions/Action.h
-
-    src/Actions/UseAction/UseAction.h
-    src/Actions/UseAction/UseActionConsumable.h
-    src/Actions/UseAction/UseActionSkill.h
-    src/Actions/UseAction/UseActionSpell.h
-    src/Actions/UseAction/UseActionWeapon.h
-    
+set(SOURCES     
     src/Buffers/BufferLayout.h
     src/Buffers/IndexBuffer.cpp  src/Buffers/IndexBuffer.h
     src/Buffers/VertexArray.cpp  src/Buffers/VertexArray.h
@@ -57,6 +49,7 @@ set(SOURCES
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomWeapon.h
 
     src/Renderables/Scene/RenderableTile.cpp src/Renderables/Scene/RenderableTile.h
+    src/Renderables/Scene/RenderableTileGroup.cpp src/Renderables/Scene/RenderableTileGroup.h
 
     src/Renderers/RendererInterface.h
     src/Renderers/Renderer.cpp src/Renderers/Renderer.h
@@ -85,6 +78,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(${PROJECT_NAME} ClientRequestor)
 target_link_libraries(${PROJECT_NAME} glm glfw glew opengl32)
 
 add_definitions(-DGLEW_STATIC -D_LIB)

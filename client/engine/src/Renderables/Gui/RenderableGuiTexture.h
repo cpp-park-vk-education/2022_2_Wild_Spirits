@@ -18,7 +18,7 @@ namespace LM {
         virtual void onUpdate(Tick tick) override;
 
         virtual glm::vec2 getSize() const override { 
-            glm::uvec2 texSize = m_Renderable->getTexture()->getSize();
+            glm::uvec2 texSize = m_Renderable->getSize();
             glm::vec2 renderableSize = m_Renderable->getTransform().scale;
             return glm::vec2(renderableSize.x * texSize.x, renderableSize.y * texSize.y);
         }

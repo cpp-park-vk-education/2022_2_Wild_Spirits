@@ -30,7 +30,6 @@ namespace LM {
     void SceneGui::onEvent(Ref<Event> event) {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<WindowResizeEvent>([&](Ref<WindowResizeEvent> event) {
-            LOGI("WindowResizeEvent");
             m_Width = event->getWidth();
             m_Height = event->getHeight();
             return false;
@@ -39,33 +38,31 @@ namespace LM {
         bool isMouseMovedEvent = false;
         dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
             isMouseMovedEvent = true;
-        LOGI("FIX  ", e->toString());
-        for (auto& renderable : m_Renderables) {
-            Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX(), m_Height - e->getY());
-            renderable->onEvent(newEvent);
-        }
-        return false;
+            for (auto& renderable : m_Renderables) {
+                Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX(), m_Height - e->getY());
+                renderable->onEvent(newEvent);
+            }
+            return false;
         });
         if (isMouseMovedEvent) { return; }
 
-        for (auto& el : m_Renderables) {
-            el->onEvent(event);
+        for (auto& renderable : m_Renderables) {
+            renderable->onEvent(event);
         }
     }
 
     void SceneGui::onUpdate(Tick tick) {
-        for (auto& el : m_Renderables) {
-            el->onUpdate(tick);
+        for (auto& renderable : m_Renderables) {
+            renderable->onUpdate(tick);
         }
     }
-
 
     void SceneGui::render() {
         glm::mat4 viewMatrix = glm::ortho(0.0f, static_cast<float>(m_Width), 0.0f, static_cast<float>(m_Height));
         m_Renderer->start(glm::uvec2(m_Width, m_Height), glm::mat4(1.0f), viewMatrix);
-        for (auto& el : m_Renderables)
+        for (auto& renderable : m_Renderables)
         {
-            el->drawDecorator(m_Renderer.get());
+            renderable->drawDecorator(m_Renderer.get());
         }
     }
 

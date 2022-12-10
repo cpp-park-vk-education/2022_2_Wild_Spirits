@@ -3,10 +3,30 @@
 
 namespace LM {
 
-    RenderableBottomActionGroup::RenderableBottomActionGroup(float space, Vector<Ref<RenderableGui>> renderables, const RenderableGuiProps& propsGui) 
-        : RenderableGuiGroup(renderables, propsGui), m_Space(space)
+    RenderableBottomActionGroup::RenderableBottomActionGroup(float space, const RenderableGuiProps& propsGui) 
+        : RenderableGuiGroup({ }, propsGui), m_Space(space)
     {
 
+    }
+
+    void RenderableBottomActionGroup::add(Ref<RenderableBottomWeapon> renderable) {
+        m_Weapon.push_back(renderable);
+        m_Renderables.push_back(renderable);
+    }
+
+    void RenderableBottomActionGroup::add(Ref<RenderableBottomSpell> renderable) {
+        m_Spell.push_back(renderable);
+        m_Renderables.push_back(renderable);
+    }
+    
+    void RenderableBottomActionGroup::add(Ref<RenderableBottomSkill> renderable) {
+        m_Skill.push_back(renderable);
+        m_Renderables.push_back(renderable);
+    }
+    
+    void RenderableBottomActionGroup::add(Ref<RenderableBottomConsumable> renderable) {
+        m_Consumable.push_back(renderable);
+        m_Renderables.push_back(renderable);
     }
 
     void RenderableBottomActionGroup::rebuid(glm::uvec2 size) {
@@ -17,7 +37,6 @@ namespace LM {
             offsetX += renderable->getSize().x + m_Space;
         }
     }
-
 
     glm::vec2 RenderableBottomActionGroup::getSize() const {
         float sizeX = (m_Renderables.size() - 1) * m_Space;

@@ -6,9 +6,9 @@
 
 #include <Core/Base.h>
 
-#define USE_LOG
+//#define USE_LOG
 
-#ifdef DEBUG
+#ifdef _DEBUG
     #define LOG_ON
 #else
     #ifdef USE_LOG

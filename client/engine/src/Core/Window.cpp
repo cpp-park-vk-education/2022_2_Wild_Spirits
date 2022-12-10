@@ -68,6 +68,8 @@ namespace LM {
         glfwMakeContextCurrent(m_Window);
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     bool Window::init() {
