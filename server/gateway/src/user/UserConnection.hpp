@@ -4,13 +4,11 @@
 #include <EventLoop.hpp>
 // #include <Image.hpp>
 
+#include <User.hpp>
 #include <iostream>
 
-class User;
-
 class UserConnection: public RecievingConnection {
-private:
-    // EventLoop &loop;
+protected:
     User &user;
 
 public:
@@ -19,16 +17,15 @@ public:
             std::cout << "new connection" << std::endl;
         }
 
-    ~UserConnection() {
+    virtual ~UserConnection() {
         std::cout << "connection deleted" << std::endl;
     }
 
-    const User &get_user() {
+    User &get_user() {
         return user;
     }
 
-    void sendMessage(std::string message);
-    void processRequest ();
-    virtual void on_recieve(std::string) override;
-    // void sendImage (Image);
+    virtual void sendMessage(std::string message) = 0;
+    virtual void processRequest(std::string request) = 0;
+    // virtual void connectToRoom(std::string room_name) = 0;
 };

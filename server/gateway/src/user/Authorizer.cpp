@@ -1,4 +1,5 @@
 #include <Authorizer.hpp>
+#include <UserConnectionImpl.hpp>
 
 void UserAuthorizer::authorize_user(ws_connection_t connection, authorize_handler handler) {
     connection->async_read([this, handler, connection](std::string message){
@@ -18,10 +19,7 @@ void UserAuthorizer::authorize_user(ws_connection_t connection, authorize_handle
 
 void UserAuthorizer::on_wrong_credentials_format(ws_connection_t connection, authorize_handler handler) {
     connection->async_write("Authorization error: wrong format",
-        [this, connection, handler](beast::error_code ec, std::size_t bytes){
-            if (ec == beast::websocket::error::closed)
-                return;
-
+        [this, connection, handler](){
             authorize_user(connection, handler);
         });
 }
@@ -31,7 +29,7 @@ void UserAuthorizer::on_credentials(const std::string &nickname,
                                     ws_connection_t connection,
                                     authorize_handler handler) {
     User &user = user_manager.createUser(nickname);
-    auto user_connection = std::make_shared<UserConnection>(connection, user);
+    auto user_connection = std::make_shared<UserConnectionImpl>(connection, user);
     user.linkConnection(user_connection);
 
     user_connection->sendMessage("Authorized succesfully");

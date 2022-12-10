@@ -7,8 +7,6 @@
 #include <UserConnection.hpp>
 #include <UserManager.hpp>
 
-class DBQueue {};
-
 class UserAuthorizer {
 private:
     UserManager &user_manager;

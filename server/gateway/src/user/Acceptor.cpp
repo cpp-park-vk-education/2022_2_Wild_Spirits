@@ -1,10 +1,14 @@
 #include <Acceptor.hpp>
 
+#include <iostream>
+
 AsioAcceptor::AsioAcceptor(UserManager &manager, BoostEventLoop &loop, tcp::acceptor &&acceptor):
     UserAcceptor(manager), loop(loop), acceptor(std::move(acceptor)) {}
 
 void AsioAcceptor::accept(acceptor_handler handler) {
+    std::cout << "started accepting\n";
     acceptor.async_accept(loop.get_asio_context(), [this, handler](beast::error_code ec, tcp::socket socket) {
+        std::cout << "accepted" << std::endl;
         on_accept(ec, std::move(socket), handler);
     });
 }

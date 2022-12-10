@@ -7,7 +7,7 @@ void BoostWebSocketConnection::clearBuffer() {
     buffer->clear();
 }
 
-void BoostWebSocketConnection::async_read(read_handlter_t handler) {
+void BoostWebSocketConnection::async_read(read_handler_t handler) {
     ws->async_read(*buffer, [handler, this](beast::error_code ec, std::size_t bytes_read) {
         if (ec == beast::websocket::error::closed) {
             return;
@@ -18,19 +18,29 @@ void BoostWebSocketConnection::async_read(read_handlter_t handler) {
     });
 }
 
-void BoostWebSocketConnection::async_write(std::string message, handler_t handler) {
+void BoostWebSocketConnection::async_write(std::string message, write_handler_t handler) {
     ws->async_write(BoostBuffer(message), [this, handler](beast::error_code ec, std::size_t bytes) {
         if (ec == beast::websocket::error::closed) {
             return;
         }
 
-        handler(ec, bytes);
+        handler();
     });
 }
 
-RecievingConnection::RecievingConnection(std::shared_ptr<WebSocketConnection> connection):
+RecievingConnection::RecievingConnection(connection_ptr_t connection):
     connection(std::move(connection)) {}
 
 void RecievingConnection::recieve() {
     connection->async_read(beast::bind_front_handler(&RecievingConnection::on_recieve, shared_from_this()));
+}
+
+void RecievingConnection::async_read(read_handler_t handler) {
+    connection->async_read(handler);
+}
+
+void RecievingConnection::async_write(std::string message, write_handler_t handler) {
+    connection->async_write(message, [handler](){
+        handler();
+    });
 }

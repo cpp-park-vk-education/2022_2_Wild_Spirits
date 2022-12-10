@@ -1,32 +1,30 @@
 #pragma once
 
-#include <cstdlib>
+#include <memory>
 #include <string>
 #include <vector>
+
+class User;
 
 class RequestProcessor {};
 
 class Room {
-private:
+protected:
+    std::size_t _id;
     RequestProcessor processor;
 
 public:
-    virtual void sendDM (std::string) = 0 ;
-    virtual void broadcast (std::string) = 0;
+    Room(std::size_t id): _id(id) {}
 
-    virtual void sendImageTo (std::string, std::size_t) = 0;
-    virtual void processRequest (std::size_t user_id, std::string request) = 0;
-};
+    virtual void addUser(User*) = 0;
 
-class RoomImpl: public Room {
-private:
-    std::vector<std::size_t> playerIds;
-    std::size_t DMId;
+    virtual void sendDM(const std::string&) = 0 ;
+    virtual void broadcast(const std::string&) = 0;
 
-public:
-    virtual void sendDM (std::string) override;
-    virtual void broadcast (std::string) override;
+    std::size_t id() {
+        return _id;
+    }
 
-    virtual void sendImageTo (std::string, std::size_t) override;
-    virtual void processRequest (std::size_t user_id, std::string request) override;
+    // virtual void sendImageTo(const std::string&, std::size_t) = 0;
+    virtual void processRequest(std::size_t user_id, const std::string &request) = 0;
 };
