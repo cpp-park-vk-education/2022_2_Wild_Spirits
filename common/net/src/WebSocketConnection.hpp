@@ -1,48 +1,54 @@
 #pragma once
 
+#include <memory>
+
 #include <WebSocketStream.hpp>
 #include <Buffer.hpp>
 
 class WebSocketConnection {
-private:
-    WebSocketStream *ws;
-    Buffer *buffer;
-
+protected:
+    using read_handlter_t = std::function<void(std::string)>;
 public:
-    WebSocketConnection ();
-    ~WebSocketConnection();
+    virtual void async_read (read_handlter_t) = 0;
+    virtual void async_write (std::string, handler_t) = 0;
 
-    void async_read (handler_t);
-    void async_write (std::string, handler_t);
+    // bool is_stopped();
 
-    bool is_stopped();
-
-    void open();
-    void close();
+    // void open();
+    // void close();
 };
 
 class BoostWebSocketConnection: public WebSocketConnection {
 private:
-    BoostWebSocketStream *ws;
-    BoostBuffer *buffer;
+    using ws_ptr_t = std::shared_ptr<BoostWebSocketStream>;
+    using buffer_ptr_t = std::shared_ptr<BoostBuffer>;
+
+    ws_ptr_t ws;
+    buffer_ptr_t buffer;
 
 public:
-    BoostWebSocketConnection();
-    ~BoostWebSocketConnection();
+    BoostWebSocketConnection(ws_ptr_t ws, buffer_ptr_t buffer);
 
-    void async_read (handler_t);
-    void async_write (std::string, handler_t);
+    virtual void async_read(read_handlter_t) override;
+    virtual void async_write(std::string, handler_t) override;
 
-    bool is_stopped();
+    void clearBuffer();
 
-    void open();
-    void close();
+    // bool is_stopped();
+
+    // void open();
+    // void close();
 };
 
-class RecievingConnection: public WebSocketConnection {
+class RecievingConnection: public std::enable_shared_from_this<RecievingConnection> {
+protected:
+    using connection_ptr_t = std::shared_ptr<WebSocketConnection>;
+    connection_ptr_t connection;
+
 public:
-    RecievingConnection ();
+    RecievingConnection(connection_ptr_t connection);
 
     void recieve();
-    virtual void on_recieve(const ErrorCode &ec) = 0;
+    virtual void on_recieve(std::string) = 0;
 };
+

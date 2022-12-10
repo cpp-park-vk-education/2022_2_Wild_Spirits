@@ -13,5 +13,18 @@ private:
     boost::beast::flat_buffer buffer;
 
 public:
+    BoostBuffer() = default;
+    explicit BoostBuffer (const std::string&);
+
     virtual std::string data() override;
+
+    boost::beast::flat_buffer &get_underlying_buffer() {
+        return buffer;
+    }
+
+    const boost::beast::flat_buffer &get_underlying_buffer() const {
+        return buffer;
+    }
+
+    void clear();
 };
