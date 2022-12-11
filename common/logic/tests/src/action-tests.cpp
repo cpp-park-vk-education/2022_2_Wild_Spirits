@@ -133,7 +133,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 
     action_results.emplace_back(player.id(), Tile{4, 2}, 8, std::list<Buff>{});
 
-    Activatable::Result expected_results = { 5, 2, action_results };
+    Activatable::Result expected_results = { 8, 20, 5, 2, action_results };
 
     auto [results, error_status] = player_use_spell();
 

@@ -10,12 +10,21 @@ namespace DnD {
 class ActivatableInterface {
  public:
     struct Result {
+     private:
+        size_t char_id;
+
+     public:
+        uint8_t dice_roll_res = 0;
         int action_points = 0;
         unsigned int resource_spent = 0;  // Consumable uses or spell points
         Storage<Action::Result> results;
 
-        Result() = default;
-        Result(int ap, unsigned int resource, const std::vector<Action::Result>& result);
+        Result() : char_id(0) {}
+        Result(size_t id) : char_id(id) {}
+        Result(size_t id, uint8_t dice_roll, int ap, unsigned int resource,
+               const std::vector<Action::Result>& result);
+
+        size_t id() const { return char_id; }
 
         bool operator==(const Result& other) const;
         friend std::ostream& operator<<(std::ostream& out, const Result& other);
@@ -101,6 +110,8 @@ class Activatable : public ActivatableInterface {
     void setScaling(const std::string& scaling) {
         scaling_ = scaling;
     }
+
+    bool canMiss() const;
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>&,
                                                 uint8_t dice_roll_res = 0) const override;

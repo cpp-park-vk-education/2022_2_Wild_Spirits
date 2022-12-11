@@ -7,17 +7,24 @@
 #include <iterator>
 
 namespace DnD {
-ActivatableInterface::Result::Result(int ap, unsigned int resource, const std::vector<Action::Result>& input_results) :
-    action_points(ap), resource_spent(resource),
+ActivatableInterface::Result::Result(size_t id, uint8_t dice_roll, int ap, unsigned int resource,
+                                     const std::vector<Action::Result>& input_results) :
+    char_id(id), dice_roll_res(dice_roll), action_points(ap), resource_spent(resource),
     results(input_results.begin(), input_results.end()) {}
 
 bool ActivatableInterface::Result::operator==(const Result& other) const {
-    return std::tie(action_points, resource_spent, results) ==
-           std::tie(other.action_points, other.resource_spent, other.results);
+    return std::tie(char_id, dice_roll_res, action_points, resource_spent, results) ==
+           std::tie(other.char_id, other.dice_roll_res, other.action_points, other.resource_spent, other.results);
 }
 
 std::ostream& operator<<(std::ostream& out, const ActivatableInterface::Result& result) {
-    out << "{ 'action-points': " << result.action_points;
+    out << "{ 'id': " << result.id() << ", ";
+
+    if (result.dice_roll_res) {
+        out << "'roll': " << static_cast<int>(result.dice_roll_res) << ", ";
+    }
+
+    out << "'action-points': " << result.action_points;
     if (result.resource_spent) {
         out << ", 'resource-spent': " << result.resource_spent;
     }
@@ -31,6 +38,15 @@ void Activatable::setCastType(Activatable::Cast cast_type) {
 
 Activatable::Cast Activatable::castType() const {
     return cast_type_;
+}
+
+bool Activatable::canMiss() const {
+    for (auto& action : actions_) {
+        if (action.canMiss()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 static void assertCharacterIsInBounds(Action::Result* res, CharacterInstance* character) {
@@ -50,12 +66,17 @@ static void assertCharacterIsInBounds(Action::Result* res, CharacterInstance* ch
 std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance* actor,
                                                               const std::vector<Tile>& tiles,
                                                               uint8_t dice_roll_res) const {
-    Result result;
     if (actor == nullptr) {
-        return std::make_tuple(result, ErrorStatus::NO_ACTOR_SET);
+        return std::make_tuple(Result{}, ErrorStatus::NO_ACTOR_SET);
     }
 
+    Result result(actor->id());
+
     result.action_points = actor->actionPoints() - action_cost_;
+
+    if (canMiss()) {
+        result.dice_roll_res = dice_roll_res;
+    }
 
     if (result.action_points < 0) {
         return std::make_tuple(result, ErrorStatus::NO_ACTION_POINTS);

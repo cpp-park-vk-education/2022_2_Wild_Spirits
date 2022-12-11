@@ -22,7 +22,7 @@ Action::Result::Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& 
     char_id_(char_id),
     pos(pos),
     hp(hp),
-    buffs(buffs), 
+    buffs(buffs),
     roll_results(roll_res) {}
 
 bool Action::Result::operator==(const Result& other) const {
