@@ -1,5 +1,9 @@
 #include "LayerMainMenu.h"
 
+#ifdef BUILD_LOGIC
+#include <ClientRequestor.h>
+#endif
+
 #include <Core/Application.h>
 #include <Utils/ConsoleLog.h>
 #include <Renderables/Gui/RenderableGuiGroup.h>
@@ -72,11 +76,6 @@ namespace LM {
         Application::get()->removeLayer(this);
     }
 
-    void LayerMainMenu::handleStartDM() {
-        Application::get()->addLayer(CreateRef<LayerRoom>(Room({ 0 }), true));
-        Application::get()->removeLayer(this);
-    }
-
     void LayerMainMenu::handleLogin() {
         Application::get()->addLayer(CreateRef<LayerLogin>());
         Application::get()->removeLayer(this);
@@ -86,5 +85,17 @@ namespace LM {
         Application::get()->addLayer(CreateRef<LayerRegister>());
         Application::get()->removeLayer(this);
     }
+
+#ifdef BUILD_LOGIC
+    void LayerMainMenu::handleStartDM() {
+        Application::get()->addLayer(CreateRef<LayerRoom>(Room({ 0 }), true));
+        Application::get()->removeLayer(this);
+    }
+#else
+    void LayerMainMenu::handleStartDM() {
+        Application::get()->addLayer(CreateRef<LayerRoom>(Room({ 0 }), true));
+        Application::get()->removeLayer(this);
+    }
+#endif
 
 }

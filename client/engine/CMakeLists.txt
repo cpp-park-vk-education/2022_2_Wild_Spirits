@@ -84,6 +84,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/sr
 target_link_libraries(${PROJECT_NAME} ClientRequestor)
 target_link_libraries(${PROJECT_NAME} glm glfw glew ImGui opengl32)
 
+if (${BUILD_LOGIC})
+    add_definitions(-DBUILD_LOGIC) 
+    target_link_libraries(${PROJECT_NAME} request-processor)
+endif()
+
 add_definitions(-DGLEW_STATIC -D_LIB)
 
 include(FetchContent)
@@ -115,10 +120,6 @@ FetchContent_Declare(
     GIT_TAG 01785d8581c14156043325472a4150dae4aba8b2
 )
 FetchContent_MakeAvailable(ImGui)
-
-if (${BUILD_LOGIC})
-    add_definitions(-DBUILD_LOGIC)
-endif()
 
 option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
