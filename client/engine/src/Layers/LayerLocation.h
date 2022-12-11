@@ -15,7 +15,6 @@ namespace LM {
 
         virtual void onEvent(Ref<Event> event) override;
         virtual void onUpdate(Tick tick) override;
-        virtual void renderImGui() override;
     protected:
         bool hasActions() const;
         void clearActions();

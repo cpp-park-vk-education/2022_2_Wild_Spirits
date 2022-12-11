@@ -4,7 +4,9 @@ project(ClientRequestor VERSION 1.0)
 set(SOURCES 
     Actions/Action.h
     Actions/UseActions.cpp Actions/UseActions.h
-    Actions/MoveAction.cpp Actions/MoveAction.h)
+    Actions/MoveAction.cpp Actions/MoveAction.h
+    
+    Classes/Room.h)
 
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})

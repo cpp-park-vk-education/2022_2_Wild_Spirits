@@ -105,13 +105,6 @@ namespace LM {
         Layer::onUpdate(tick);
     }
 
-    void LayerLocation::renderImGui() {
-        if (ImGui::Begin("TestWindow")) {
-            ImGui::Text("Some Text");
-        }
-        ImGui::End();
-    }
-
     bool LayerLocation::hasActions() const {
         if (m_ActionMove) { return true; }
         if (m_ActionUse) { return true; }

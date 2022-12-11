@@ -26,6 +26,10 @@ set(SOURCES
     src/Layers/LayerLocation.cpp src/Layers/LayerLocation.h
     src/Layers/LayerMainMenu.cpp src/Layers/LayerMainMenu.h
     src/Layers/LayerSettings.cpp src/Layers/LayerSettings.h
+    src/Layers/LayerLogin.cpp src/Layers/LayerLogin.h
+    src/Layers/LayerRegister.cpp src/Layers/LayerRegister.h
+    src/Layers/LayerAvailRooms.cpp src/Layers/LayerAvailRooms.h
+    src/Layers/LayerRoom.cpp src/Layers/LayerRoom.h
     src/Layers/LayerStack.cpp src/Layers/LayerStack.h
     
     src/Renderables/RenderableInterface.h 
