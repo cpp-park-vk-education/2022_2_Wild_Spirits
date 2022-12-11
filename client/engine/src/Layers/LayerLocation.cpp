@@ -1,39 +1,52 @@
 #include "LayerLocation.h"
 
+#include <imgui.h>
+
 #include <Utils/ConsoleLog.h>
 
 namespace LM {
     
     LayerLocation::LayerLocation() {
-        
-        Vector<Ref<RenderableGui>> bottomItems;
-        for (size_t i = 1; i <= 5; ++i) {
-            bottomItems.push_back(CreateRef<RenderableGuiTexture>(
-                RenderableTextureProps{ CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Skill" + std::to_string(i) + ".png" }), s_BottomActionSize }));
+
+        m_Weapons.push_back(DnD::Weapon(0, DnD::Activatable::Cast::Tile)); m_Weapons.push_back(DnD::Weapon(1, DnD::Activatable::Cast::Tile));
+        m_Spells.push_back(DnD::Spell(0, DnD::Activatable::Cast::Tile)); m_Spells.push_back(DnD::Spell(1, DnD::Activatable::Cast::Tile));
+        m_Skills.push_back(DnD::Skill(0, DnD::Activatable::Cast::Tile)); m_Skills.push_back(DnD::Skill(1, DnD::Activatable::Cast::Tile));
+        m_Consumables.push_back(DnD::Consumable(0, DnD::Activatable::Cast::Tile)); m_Consumables.push_back(DnD::Consumable(1, DnD::Activatable::Cast::Self));
+
+        Ref<Texture2D> textureWeapon = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Skill1.png" });
+        Ref<Texture2D> textureSpell = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Skill2.png" });
+        Ref<Texture2D> textureSkill = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Skill3.png" });
+        Ref<Texture2D> textureConsumable = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Skill4.png" });
+
+        m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
+        for (auto& item : m_Weapons) { m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ textureWeapon }, item)); }
+        for (auto& item : m_Spells) { m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ textureSpell }, item)); }
+        for (auto& item : m_Skills) { m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ textureSkill }, item)); }
+        for (auto& item : m_Consumables) { m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ textureConsumable }, item)); }
+        addToGui(m_BottomActions);
+
+        Ref<Texture2D> textureCancel = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/BtnCancel.png" });
+        Ref<Texture2D> textureTurn = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/BtnTurn.png" });
+        m_BtnCancel = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureCancel }, RenderableGuiProps{ {RenderableGuiAlign::Align::kEnd}, glm::vec2(-16.0f, 16.0f) });
+        m_BtnTurn = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureTurn }, RenderableGuiProps{ {RenderableGuiAlign::Align::kEnd}, glm::vec2(-16.0f, 196.0f) });
+
+
+        glm::uvec2 fieldSize = glm::uvec2(16, 16);
+        m_Field = CreateRef<RenderableTileGroup>(CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Tile.png" }), fieldSize);
+        addToScene(m_Field);
+
+        Ref<Texture2D> texturePlayer = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Character.png" });
+        Ref<Texture2D> textureEnemy = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Location/Enemy.png" });
+        for (uint32_t i = 0, j = 2; i < fieldSize.x && j < fieldSize.y; i += 4, j += 2)
+        {
+            Ref<RenderableCharacter> character = CreateRef<RenderableCharacter>(texturePlayer, Color((float)i / fieldSize.x, 0.0f, (float)j / fieldSize.y, 1.0f), glm::uvec2(i, j));
+            m_Field->addCharacter(character);
         }
-        m_Weapons.push_back(GS::Weapon(0)); m_Weapons.push_back(GS::Weapon(1));
-        Ref<Texture2D> textureWeapon = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Skill1.png" });
-        
-        m_Spells.push_back(GS::Spell(0)); m_Spells.push_back(GS::Spell(1));
-        Ref<Texture2D> textureSpell = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Skill2.png" });
-        
-        m_Skills.push_back(GS::Skill(0)); m_Skills.push_back(GS::Skill(1));
-        Ref<Texture2D> textureSkill = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Skill3.png" });
-
-        m_Consumables.push_back(GS::Consumable(0)); m_Consumables.push_back(GS::Consumable(1));
-        Ref<Texture2D> textureConsumable = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Skill4.png" });
-
-        Ref<RenderableBottomActionGroup> bottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
-        for (auto& item : m_Weapons) { bottomActions->add(CreateRef<RenderableBottomWeapon>(RenderableTextureProps{ textureWeapon }, item)); }
-        for (auto& item : m_Spells) { bottomActions->add(CreateRef<RenderableBottomSpell>(RenderableTextureProps{ textureSpell }, item)); }
-        for (auto& item : m_Skills) { bottomActions->add(CreateRef<RenderableBottomSkill>(RenderableTextureProps{ textureSkill }, item)); }
-        for (auto& item : m_Consumables) { bottomActions->add(CreateRef<RenderableBottomConsumable>(RenderableTextureProps{ textureConsumable }, item)); }
-        addToGui(bottomActions);
-
-        Ref<RenderableTileGroup> tiles = CreateRef<RenderableTileGroup>(
-            CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Tile.png" }), glm::uvec2(16, 16));
-
-        addToScene(tiles);
+        for (uint32_t i = 1, j = 5; i < fieldSize.x && j < fieldSize.y; i += 3, j += 3)
+        {
+            Ref<RenderableCharacter> character = CreateRef<RenderableCharacter>(textureEnemy, Color((float)i / fieldSize.x, 0.0f, (float)j / fieldSize.y, 1.0f), glm::uvec2(i, j));
+            m_Field->addCharacter(character);
+        }
     }
 
     LayerLocation::~LayerLocation() {
@@ -42,10 +55,78 @@ namespace LM {
 
     void LayerLocation::onEvent(Ref<Event> event) {
         Layer::onEvent(event);
+        EventDispatcher dispatcher(event);
+        dispatcher.dispatch<MouseButtonPressedEvent>([&](Ref<MouseButtonPressedEvent> event) {
+            if (m_BtnCancel->isHovered()) {
+                clearActions();
+                m_Field->clearFocused();
+                LOGI("Cancel");
+                return false;
+            }
+            if (m_BtnTurn->isHovered()) {
+                LOGI("SEND MESSAGE TO SERVER");
+                clearActions();
+                m_Field->clearFocused();
+                return false;
+            }
+            if (auto action = m_BottomActions->getAction(); action) {
+                clearActions();
+                m_Field->clearFocused();
+                addToGui(m_BtnCancel);
+                m_BottomActions->setFocus();
+                m_ActionUse = action;
+                LOGI("Use Action Created!");
+                return false;
+            }
+            if (m_Field->hasHovered()) {
+                LOGI("Hovered tile: ", m_Field->getHoveredX(), " ", m_Field->getHoveredY());
+                m_Field->setHoveredInFocus();
+                if (m_ActionUse) {
+                    LOGI("UseAction setTarget");
+                    if (m_ActionUse->isFirstSet()) {
+                        addToGui(m_BtnTurn);
+                    }
+                    m_ActionUse->setTarget(m_Field->getHoveredX(), m_Field->getHoveredY());
+                    return false;
+                }
+                LOGI("MoveAction setTarget");
+                clearActions();
+                addToGui(m_BtnCancel);
+                addToGui(m_BtnTurn);
+                m_ActionMove = CreateRef<MoveAction>(m_Field->getHoveredX(), m_Field->getHoveredY());
+                return false;
+            }
+
+            return false;
+        });
     }
 
     void LayerLocation::onUpdate(Tick tick) {
         Layer::onUpdate(tick);
+    }
+
+    void LayerLocation::renderImGui() {
+        if (ImGui::Begin("TestWindow")) {
+            ImGui::Text("Some Text");
+        }
+        ImGui::End();
+    }
+
+    bool LayerLocation::hasActions() const {
+        if (m_ActionMove) { return true; }
+        if (m_ActionUse) { return true; }
+
+        return false;
+    }
+
+    void LayerLocation::clearActions() {
+        m_BottomActions->setUnFocus();
+        removeFromGui(m_BtnCancel);
+        m_BtnCancel->setHovered(false);
+        removeFromGui(m_BtnTurn);
+        m_BtnTurn->setHovered(false);
+        m_ActionMove = Ref<MoveAction>();
+        m_ActionUse = Ref<UseAction>();
     }
 
 }

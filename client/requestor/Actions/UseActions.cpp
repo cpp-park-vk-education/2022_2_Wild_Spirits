@@ -2,8 +2,8 @@
 
 namespace LM {
 
-    UseAction::UseAction(GS::Activatable& activatable, Type type, size_t actionId) 
-        : m_Activatable(activatable), m_Type(type), m_ActionId(actionId)
+    UseAction::UseAction(DnD::Activatable& activatable, Type type) 
+        : m_Activatable(activatable), m_Type(type)
     {
 
     }
@@ -20,25 +20,27 @@ namespace LM {
         return m_TargetY; 
     }
 
-    inline void UseAction::setTarget(uint32_t x, uint32_t y) { 
+    void UseAction::setTarget(uint32_t x, uint32_t y) { 
         m_TargetX = x; 
-        m_TargetY = y; 
+        m_TargetY = y;
+        m_IsFirstSet = false;
     }
 
-    GS::Activatable& UseAction::getActivatable() {
+    bool UseAction::isFirstSet() const {
+        return m_IsFirstSet;
+    }
+
+
+    DnD::Activatable& UseAction::getActivatable() {
         return m_Activatable; 
     }
 
-    GS::Action::Target UseAction::getTargetType() const {
-        return m_Activatable.actions()[m_ActionId].targetType(); 
+    std::vector<DnD::Action::Target> UseAction::getTargetTypes() const {
+        return std::vector<DnD::Action::Target>();
     }
     
-    GS::Action::Cast UseAction::getCastType() const { 
-        return m_Activatable.actions()[m_ActionId].castType(); 
+    DnD::Activatable::Cast UseAction::getCastType() const { 
+        return m_Activatable.castType(); 
     }
     
-    size_t UseAction::getActionId() const { 
-        return m_ActionId; 
-    }
-
 }

@@ -25,6 +25,12 @@ namespace LM {
         }
     }
 
+    void LayerStack::renderImGui() {
+        for (auto& layer : m_Layers) {
+            layer->renderImGui();
+        }
+    }
+
     void LayerStack::onUpdate(Tick tick) {
         for (auto& layer : m_Layers) {
             layer->onUpdate(tick);

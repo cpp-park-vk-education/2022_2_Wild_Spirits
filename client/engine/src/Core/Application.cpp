@@ -20,6 +20,7 @@ namespace LM {
     void Application::run() {
         m_LayerStack = CreateRef<LayerStack>();
         m_LayerStack->pushLayer(CreateRef<LayerMainMenu>());
+        m_ImGuiController = CreateRef<ImGuiController>();
 
         while (m_IsRun) {
             while (!m_EventQueue->empty()) {
@@ -30,7 +31,11 @@ namespace LM {
 
             m_LayerStack->onUpdate(0.0f);
             m_LayerStack->render();
-            
+        
+            m_ImGuiController->begin();
+            m_LayerStack->renderImGui();
+            m_ImGuiController->end();
+
             m_Window->onUpdate();
         }
     }

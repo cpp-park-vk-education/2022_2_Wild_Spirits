@@ -9,25 +9,35 @@ namespace LM {
 
     }
 
-    void RenderableBottomActionGroup::add(Ref<RenderableBottomWeapon> renderable) {
-        m_Weapon.push_back(renderable);
+    void RenderableBottomActionGroup::add(Ref<RenderableBottomAction> renderable) {
+        m_Items.push_back(renderable);
         m_Renderables.push_back(renderable);
     }
 
-    void RenderableBottomActionGroup::add(Ref<RenderableBottomSpell> renderable) {
-        m_Spell.push_back(renderable);
-        m_Renderables.push_back(renderable);
+    Ref<UseAction> RenderableBottomActionGroup::getAction() {
+        for (auto& item : m_Items) {
+            if (item->isHovered()) {
+                return item->createUseAction();
+            }
+        }
+        return Ref<UseAction>();
     }
-    
-    void RenderableBottomActionGroup::add(Ref<RenderableBottomSkill> renderable) {
-        m_Skill.push_back(renderable);
-        m_Renderables.push_back(renderable);
+
+    void RenderableBottomActionGroup::setFocus() {
+        for (auto& item : m_Items) {
+            if (item->isHovered()) {
+                item->setFocus(true);
+                break;
+            }
+        }
     }
-    
-    void RenderableBottomActionGroup::add(Ref<RenderableBottomConsumable> renderable) {
-        m_Consumable.push_back(renderable);
-        m_Renderables.push_back(renderable);
+
+    void RenderableBottomActionGroup::setUnFocus() {
+        for (auto& item : m_Items) {
+            item->setFocus(false);
+        }
     }
+
 
     void RenderableBottomActionGroup::rebuid(glm::uvec2 size) {
         RenderableGui::rebuid(size);

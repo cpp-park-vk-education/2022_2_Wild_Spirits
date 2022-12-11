@@ -16,11 +16,14 @@ namespace LM {
         virtual ~Layer() = default;
 
         virtual void addToGui(Ref<RenderableGui> renderable) { m_SceneGui->add(renderable); }
+        virtual void removeFromGui(Ref<RenderableGui> renderable) { m_SceneGui->remove(renderable); }
         virtual void addToScene(Ref<RenderableInterface> renderable) { m_SceneScene->add(renderable); }
+        virtual void removeFromScene(Ref<RenderableInterface> renderable) { m_SceneScene->remove(renderable); }
 
         virtual void onEvent(Ref<Event> _Event);
         virtual void onUpdate(Tick tick);
         virtual void render();
+        virtual void renderImGui() { }
     protected:
         Ref<SceneGui> m_SceneGui;
         Ref<Scene> m_SceneScene;

@@ -15,6 +15,7 @@ namespace LM {
         void popLayer(Layer* layer);
 
         void render();
+        void renderImGui();
         void onUpdate(Tick tick);
         void onEvent(Ref<Event> event);
     protected:

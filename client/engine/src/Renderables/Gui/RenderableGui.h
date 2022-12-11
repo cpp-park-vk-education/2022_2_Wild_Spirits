@@ -37,6 +37,7 @@ namespace LM {
         virtual glm::vec2 getSize() const = 0;
 
         bool isHovered() const { return m_IsHovered; }
+        void setHovered(bool isHovered) { m_IsHovered = false; }
     protected:
         float calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const;
     protected:

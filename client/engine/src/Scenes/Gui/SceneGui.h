@@ -19,7 +19,11 @@ namespace LM {
         virtual ~SceneGui();
         
         void add(Ref<RenderableGui> renderable) { m_Renderables.emplace_back(renderable); }
-        
+        void remove(Ref<RenderableGui> renderable) {
+            if (auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable); it != m_Renderables.end()) {
+                m_Renderables.erase(it);
+            }
+        }
         void rebuild();
 
         virtual void onEvent(Ref<Event> event) override;

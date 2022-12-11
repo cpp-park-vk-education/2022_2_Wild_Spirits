@@ -26,6 +26,39 @@ namespace LM {
             }
         }
         m_HoveredId = m_Tiles.size();
+        m_FocusedId = m_Tiles.size();
+    }
+
+    void RenderableTileGroup::addCharacter(Ref<RenderableCharacter> renderable) {
+        m_Characters.push_back(renderable);
+        m_Renderables.push_back(renderable);
+    }
+
+    bool RenderableTileGroup::hasHovered() const {
+        return m_HoveredId < m_Tiles.size();
+    }
+
+    size_t RenderableTileGroup::getHoveredX() const {
+        return m_HoveredId % m_Size.x;
+    }
+    
+    size_t RenderableTileGroup::getHoveredY() const {
+        return m_HoveredId / m_Size.x;
+    }
+
+    void RenderableTileGroup::setHoveredInFocus() {
+        if (m_HoveredId >= m_Tiles.size()) { return; }
+        clearFocused();
+
+        m_FocusedId = m_HoveredId;
+        m_Tiles[m_FocusedId]->setColor(s_FocusedColor);
+    }
+    
+    void RenderableTileGroup::clearFocused() {
+        if (m_FocusedId >= m_Tiles.size()) { return; }
+
+        m_Tiles[m_FocusedId]->setColor(m_FocusedId == m_HoveredId ? s_HoveredColor : s_DefaultColor);
+        m_FocusedId = m_Tiles.size();
     }
 
     void RenderableTileGroup::onEvent(Ref<Event> event) {
@@ -70,19 +103,20 @@ namespace LM {
     }
 
     void RenderableTileGroup::unselectHover() {
-        if (m_HoveredId >= m_Tiles.size())
-        {
-            return;
-        }
+        if (m_HoveredId >= m_Tiles.size()) { return; }
         
-        m_Tiles[m_HoveredId]->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+        if (m_HoveredId != m_FocusedId) {
+            m_Tiles[m_HoveredId]->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+        }
         m_HoveredId = m_Tiles.size();
     }
 
     void RenderableTileGroup::changeHover(uint32_t x, uint32_t y) {
         unselectHover();
         m_HoveredId = getTileIndex(x, y);
-        m_Tiles[m_HoveredId]->setColor(Color(1.0f, 0.0f, 0.0f, 1.0f));
-    } 
+        if (m_HoveredId != m_FocusedId) {
+            m_Tiles[m_HoveredId]->setColor(Color(1.0f, 0.0f, 0.0f, 1.0f));
+        }
+    }
 
 }

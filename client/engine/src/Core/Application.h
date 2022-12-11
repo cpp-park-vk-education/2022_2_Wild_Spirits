@@ -4,6 +4,7 @@
 #include <Core/Window.h>
 #include <Layers/LayerStack.h>
 #include <Events/EventQueue.h>
+#include <ImGui/ImGuiController.h>
 
 namespace LM {
 
@@ -27,6 +28,7 @@ namespace LM {
         Ref<Window> m_Window;
         Ref<LayerStack> m_LayerStack;
         Ref<EventQueue> m_EventQueue;
+        Ref<ImGuiController> m_ImGuiController;
 
         bool m_IsRun = true;
 

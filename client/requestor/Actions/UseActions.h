@@ -8,57 +8,58 @@
 #ifdef BUILD_LOGIC
 #include <GS files>
 #else
-namespace GS {
+namespace DnD {
 
     class Action {
     public:
-        enum class Cast {
-            Tile,
-            Self
-        };
         enum class Target {
             Both,
             Enemies,
             Allies
         };
     public:
-        Action(Cast cast, Target target) : m_Cast(cast), m_Target(target) { }
+        Action(Target target) : m_Target(target) { }
 
-        Cast castType() const { return m_Cast; }
         Target targetType() const { return m_Target; }
     protected:
-        Cast m_Cast;
         Target m_Target;
     };
 
     class Activatable {
     public:
-        Activatable(size_t id) : m_Id(id) { }
+        enum class Cast {
+            Tile,
+            Self
+        };
+    public:
+        Activatable(size_t id, Cast cast) : m_Id(id), m_Cast(cast) { }
         
+        Cast castType() const { return m_Cast; }
         std::vector<Action>& actions() { return m_Actions; }
     protected:
-        std::vector<Action> m_Actions;
         size_t m_Id;
+        Cast m_Cast;
+        std::vector<Action> m_Actions;
     };
 
     class Weapon : public Activatable {
     public:
-        Weapon(size_t id) : Activatable(id) { }
+        Weapon(size_t id, Cast cast) : Activatable(id, cast) { }
     };
 
     class Spell : public Activatable {
     public:
-        Spell(size_t id) : Activatable(id) { }
+        Spell(size_t id, Cast cast) : Activatable(id, cast) { }
     };
 
     class Skill : public Activatable {
     public:
-        Skill(size_t id) : Activatable(id) { }
+        Skill(size_t id, Cast cast) : Activatable(id, cast) { }
     };
 
     class Consumable : public Activatable {
     public:
-        Consumable(size_t id) : Activatable(id) { }
+        Consumable(size_t id, Cast cast) : Activatable(id, cast) { }
     };
 
 }
@@ -68,7 +69,7 @@ namespace LM {
 
     class UseAction : public Action {
     public:
-        UseAction(GS::Activatable& activatable, Type type, size_t actionId);
+        UseAction(DnD::Activatable& activatable, Type type);
 
         virtual Type getType() const override;
         
@@ -76,20 +77,21 @@ namespace LM {
         uint32_t getTargetY() const;
 
         void setTarget(uint32_t x, uint32_t y);
+        bool isFirstSet() const;
 
-        GS::Activatable& getActivatable();
-        GS::Action::Target getTargetType() const;
-        GS::Action::Cast getCastType() const;
-        size_t getActionId() const;
+        DnD::Activatable& getActivatable();
+        std::vector<DnD::Action::Target> getTargetTypes() const;
+        DnD::Activatable::Cast getCastType() const;
     protected:
-        GS::Activatable& m_Activatable;
-        size_t m_ActionId;
+        DnD::Activatable& m_Activatable;
         Type m_Type;
 
         uint32_t m_TargetX = 0;
         uint32_t m_TargetY = 0;
         //uint32_t m_RangeX;
         //uint32_t m_RangeY;
+
+        bool m_IsFirstSet = true;
     };
 
 }

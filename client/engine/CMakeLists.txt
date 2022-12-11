@@ -43,12 +43,9 @@ set(SOURCES
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomAction.h
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomActionGroup.cpp 
     src/Renderables/Gui/RenderableBottomAction/RenderableBottomActionGroup.h
-    src/Renderables/Gui/RenderableBottomAction/RenderableBottomConsumable.h
-    src/Renderables/Gui/RenderableBottomAction/RenderableBottomSkill.h
-    src/Renderables/Gui/RenderableBottomAction/RenderableBottomSpell.h
-    src/Renderables/Gui/RenderableBottomAction/RenderableBottomWeapon.h
 
     src/Renderables/Scene/RenderableTile.cpp src/Renderables/Scene/RenderableTile.h
+    src/Renderables/Scene/RenderableCharacter.cpp src/Renderables/Scene/RenderableCharacter.h
     src/Renderables/Scene/RenderableTileGroup.cpp src/Renderables/Scene/RenderableTileGroup.h
 
     src/Renderers/RendererInterface.h
@@ -70,6 +67,8 @@ set(SOURCES
     src/Transform/Transform.cpp src/Transform/Transform.h
     src/Transform/Rotation.h
 
+    src/ImGui/ImGuiController.cpp src/ImGui/ImGuiController.h
+
     src/Utils/Timer.h
     src/Utils/ConsoleLog.cpp src/Utils/ConsoleLog.h)
 
@@ -79,7 +78,7 @@ add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} ClientRequestor)
-target_link_libraries(${PROJECT_NAME} glm glfw glew opengl32)
+target_link_libraries(${PROJECT_NAME} glm glfw glew ImGui opengl32)
 
 add_definitions(-DGLEW_STATIC -D_LIB)
 
@@ -106,6 +105,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glew)
 
+FetchContent_Declare(
+    ImGui
+    GIT_REPOSITORY https://github.com/mihaillatyshov/imgui.git
+    GIT_TAG 01785d8581c14156043325472a4150dae4aba8b2
+)
+FetchContent_MakeAvailable(ImGui)
+
 option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
 
@@ -114,4 +120,5 @@ if(MSVC)
     set_target_properties(glfw PROPERTIES FOLDER "Client/Engine/deps")
     set_target_properties(update_mappings PROPERTIES FOLDER "Client/Engine/deps")
     set_target_properties(glew PROPERTIES FOLDER "Client/Engine/deps")
+    set_target_properties(ImGui PROPERTIES FOLDER "Client/Engine/deps")
 endif()

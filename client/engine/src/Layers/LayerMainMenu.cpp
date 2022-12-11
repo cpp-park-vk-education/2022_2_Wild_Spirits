@@ -9,12 +9,12 @@ namespace LM {
 
     LayerMainMenu::LayerMainMenu() {
         LOGI("LayerMainMenu");
-        Ref<Texture2D> textureStart = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/Start.png" });
-        Ref<Texture2D> textureStartAsDm = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/StartDM.png" });
+        Ref<Texture2D> textureStart = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/MainMenu/Start.png" });
+        Ref<Texture2D> textureStartAsDm = CreateRef<Texture2D>(Texture2D::FromFile{ "./ClientRes/Textures/MainMenu/StartGM.png" });
 
         m_BtnStart = CreateRef<RenderableGuiTexture>(
             RenderableTextureProps{ textureStart },
-            RenderableGuiProps{ { RenderableGuiAlign::Align::kCenter, RenderableGuiAlign::Align::kCenter }, glm::vec2(0.0f, 100.0f) });
+            RenderableGuiProps{ { RenderableGuiAlign::Align::kCenter, RenderableGuiAlign::Align::kCenter }, glm::vec2(0.0f, 120.0f) });
         m_BtnStartDM = CreateRef<RenderableGuiTexture>(
             RenderableTextureProps{ textureStartAsDm },
             RenderableGuiProps{ { RenderableGuiAlign::Align::kCenter, RenderableGuiAlign::Align::kCenter }, glm::vec2(0.0f, 0.0f) });
