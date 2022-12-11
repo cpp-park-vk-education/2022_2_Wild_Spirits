@@ -10,7 +10,6 @@ class GameEntityInterface {
 
  private:
     virtual void toggleUpdated() = 0;
-    virtual bool wasUpdated() const = 0;
 
  public:
     virtual std::string& info(const std::string&) = 0;
@@ -25,6 +24,8 @@ class GameEntityInterface {
     virtual size_t id() const = 0;
 
     virtual ~GameEntityInterface() {}
+
+    virtual bool wasUpdated() const = 0;
 
     friend class LogicProcessorImpl;
 };
@@ -41,13 +42,13 @@ class GameEntity : public GameEntityInterface {
         was_updated_ = !was_updated_;
     }
 
-    bool wasUpdated() const override {
-        return was_updated_;
-    }
-
  public:
     GameEntity() = default;
     GameEntity(size_t id, std::string_view name, size_t image_id, const Info& info);
+
+    bool wasUpdated() const override {
+        return was_updated_;
+    }
 
     size_t id() const override;
 

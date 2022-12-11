@@ -12,16 +12,18 @@ class Spell : public GameEntity, public Activatable {
 
     Spell(size_t id, std::string_view name, int image_id,
           const std::vector<Action>& actions, unsigned int action_cost,
-          std::string_view scaling, unsigned int spell_cost, const Info& info = {}) :
+          std::string_view scaling, unsigned int spell_cost,
+          Cast cast_type = Cast::Tile, const Info& info = {}) :
         GameEntity(id, name, image_id, info),
-        Activatable(actions, action_cost, scaling),
+        Activatable(actions, action_cost, scaling, cast_type),
         spell_cost_(spell_cost) {}
 
     Spell(size_t id, std::string_view name, int image_id,
           std::vector<Action>&& actions, unsigned int action_cost,
-          std::string_view scaling, unsigned int spell_cost, const Info& info = {}) :
+          std::string_view scaling, unsigned int spell_cost,
+          Cast cast_type = Cast::Tile, const Info& info = {}) :
         GameEntity(id, name, image_id, info),
-        Activatable(std::move(actions), action_cost, scaling),
+        Activatable(std::move(actions), action_cost, scaling, cast_type),
         spell_cost_(spell_cost) {}
 
     unsigned int cost() const {

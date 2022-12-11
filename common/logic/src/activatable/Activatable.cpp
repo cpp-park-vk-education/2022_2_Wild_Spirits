@@ -25,6 +25,14 @@ std::ostream& operator<<(std::ostream& out, const ActivatableInterface::Result& 
     return out;
 }
 
+void Activatable::setCastType(Activatable::Cast cast_type) {
+    cast_type_ = cast_type;
+}
+
+Activatable::Cast Activatable::castType() const {
+    return cast_type_;
+}
+
 static void assertCharacterIsInBounds(Action::Result* res, CharacterInstance* character) {
     auto& result_pos = res->pos;
     size_t width = character->location().width();

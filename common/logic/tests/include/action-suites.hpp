@@ -64,7 +64,7 @@ class ActivatableSuite : public ActionSuite {
  public:
     ActivatableSuite() :
         ActionSuite(),
-        heal_action(AreaFactory::create(), {}, Action::Target::Allies, 0, Action::Cast::Self, false)
+        heal_action(AreaFactory::create(), {}, Action::Target::Allies, 0, false)
     {
         char_template_->setMaxHP(10);
         players_.add(8, Character(*char_template_), PositionFactory::create(Tile{2, 2}), map,

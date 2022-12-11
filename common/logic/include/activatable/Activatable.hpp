@@ -30,21 +30,33 @@ class ActivatableInterface {
 };
 
 class Activatable : public ActivatableInterface {
+ public:
+    enum class Cast {
+        Tile,
+        Self
+    };
+
  private:
     std::vector<Action> actions_;
     Tile target;
     unsigned int action_cost_;
     std::string scaling_;
+    Cast cast_type_;
 
  public:
     Activatable() = default;
     virtual ~Activatable() {}
 
-    Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
-        actions_(actions), action_cost_(action_cost), scaling_(scaling) {}
+    Activatable(const std::vector<Action>& actions, unsigned int action_cost,
+                std::string_view scaling, Cast cast_type = Cast::Tile) :
+        actions_(actions), action_cost_(action_cost), scaling_(scaling), cast_type_(cast_type) {}
 
-    Activatable(std::vector<Action>&& actions, unsigned int action_cost, std::string_view scaling) :
-        actions_(std::move(actions)), action_cost_(action_cost), scaling_(scaling) {}
+    Activatable(std::vector<Action>&& actions, unsigned int action_cost,
+                std::string_view scaling, Cast cast_type = Cast::Tile) :
+        actions_(std::move(actions)), action_cost_(action_cost), scaling_(scaling), cast_type_(cast_type) {}
+
+    void setCastType(Cast cast_type);
+    Cast castType() const;
     
     void addEffect(int action, std::unique_ptr<Effect>&& effect) {
         actions_[action].addEffect(std::move(effect));

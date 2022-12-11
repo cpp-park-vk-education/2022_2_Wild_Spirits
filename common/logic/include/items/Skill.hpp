@@ -14,16 +14,18 @@ class Skill : public GameEntity, public Activatable {
 
     Skill(size_t id, std::string_view name, int image_id,
           const std::vector<Action>& actions, unsigned int action_cost,
-          unsigned int cooldown, std::string_view scaling = "", const Info& info = {}) :
+          unsigned int cooldown, std::string_view scaling = "",
+          Cast cast_type = Cast::Tile, const Info& info = {}) :
         GameEntity(id, name, image_id, info),
-        Activatable(actions, action_cost, scaling),
+        Activatable(actions, action_cost, scaling, cast_type),
         cooldown_(cooldown) {}
 
     Skill(size_t id, std::string_view name, int image_id,
           std::vector<Action>&& actions, unsigned int action_cost,
-          unsigned int cooldown, std::string_view scaling = "", const Info& info = {}) :
+          unsigned int cooldown, std::string_view scaling = "",
+          Cast cast_type = Cast::Tile, const Info& info = {}) :
         GameEntity(id, name, image_id, info),
-        Activatable(std::move(actions), action_cost, scaling),
+        Activatable(std::move(actions), action_cost, scaling, cast_type),
         cooldown_(cooldown) {}
 
     unsigned int cooldown() const {

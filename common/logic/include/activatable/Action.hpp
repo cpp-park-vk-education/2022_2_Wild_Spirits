@@ -18,11 +18,6 @@ class Buff;
 
 class Action {
  public:
-    enum class Cast {
-        Tile,
-        Self
-    };
-
     enum class Target {
         Both,
         Enemies,
@@ -55,7 +50,6 @@ class Action {
     using AreaPtr = std::unique_ptr<Area>;
     using EffectPtr = std::unique_ptr<Effect>;
 
-    Cast cast_type_;
     Target target_type_;
 
     AreaPtr area_;
@@ -81,11 +75,8 @@ class Action {
 
     Action(AreaPtr&& area, std::vector<EffectPtr>&& effects,
            Target target_type = Target::Both, unsigned int range = 0,
-           Cast cast_type = Cast::Tile, bool can_miss = true,
+           bool can_miss = true,
            const std::string& target_scaling = "dex");
-
-    void setCastType(Cast cast_type);
-    Cast castType() const;
 
     void setTargetType(Target cast_type);
     Target targetType() const;

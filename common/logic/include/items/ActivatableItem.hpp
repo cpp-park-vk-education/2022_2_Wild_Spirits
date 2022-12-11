@@ -11,16 +11,16 @@ class ActivatableItem : public Item, public Activatable {
     ActivatableItem(size_t id, std::string_view name, int image_id,
                     const std::vector<Action>& actions, unsigned int action_cost = 0, 
                     unsigned int cost = 0, std::string_view scaling = "",
-                    const Info& info = {}) :
+                    Cast cast_type = Cast::Tile, const Info& info = {}) :
         Item(id, name, image_id, cost, info),
-        Activatable(actions, action_cost, scaling) {}
+        Activatable(actions, action_cost, scaling, cast_type) {}
 
     ActivatableItem(size_t id, std::string_view name, int image_id,
                     std::vector<Action>&& actions, unsigned int action_cost = 0, 
                     unsigned int cost = 0, std::string_view scaling = "",
-                    const Info& info = {}) :
+                    Cast cast_type = Cast::Tile, const Info& info = {}) :
         Item(id, name, image_id, cost, info),
-        Activatable(std::move(actions), action_cost, scaling) {}
+        Activatable(std::move(actions), action_cost, scaling, cast_type) {}
 };
 
 class Weapon : public ActivatableItem {
@@ -29,13 +29,13 @@ class Weapon : public ActivatableItem {
 
     Weapon(size_t id, std::string_view name, int image_id, const std::vector<Action>& actions,
            unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",
-           const Info& info = {}) :
-        ActivatableItem(id, name, image_id, actions, action_cost, cost, scaling, info) {}
+           Cast cast_type = Cast::Tile, const Info& info = {}) :
+        ActivatableItem(id, name, image_id, actions, action_cost, cost, scaling, cast_type, info) {}
 
     Weapon(size_t id, std::string_view name, int image_id, std::vector<Action>&& actions,
            unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",
-           const Info& info = {}) :
-        ActivatableItem(id, name, image_id, std::move(actions), action_cost, cost, scaling, info) {}
+           Cast cast_type = Cast::Tile, const Info& info = {}) :
+        ActivatableItem(id, name, image_id, std::move(actions), action_cost, cost, scaling, cast_type, info) {}
 };
 
 class Consumable : public ActivatableInterface {

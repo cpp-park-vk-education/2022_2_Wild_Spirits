@@ -9,11 +9,15 @@ class AreaSuite : public ::testing::Test {
     Tile target_ = {5, 2};
 };
 
+using ::testing::SizeIs;
+
 TEST_F(AreaSuite, PointAreaWorks) {  // cppcheck-suppress [syntaxError]
     PointArea area;
     area.setTarget(target_);
 
     ASSERT_TRUE(area.isInArea(target_));
+
+    ASSERT_EQ(area.tilesCovered(), std::vector<Tile>{target_});
 
     EXPECT_FALSE(area.isInArea(Tile{4, 2}));
     EXPECT_FALSE(area.isInArea(Tile{5, 3}));
@@ -27,6 +31,14 @@ TEST_F(AreaSuite, RectAreaWorks) {
     EXPECT_TRUE(area.isInArea(target_ + Tile{1, 1}));
     EXPECT_TRUE(area.isInArea(target_ - Tile{1, 2}));
 
+    auto tiles_covered = area.tilesCovered();
+
+    ASSERT_THAT(tiles_covered, SizeIs(15));
+
+    for (const auto& tile : tiles_covered) {
+        EXPECT_TRUE(area.isInArea(tile));
+    }
+
     EXPECT_FALSE(area.isInArea(target_ - Tile{2, 2}));
     EXPECT_FALSE(area.isInArea(target_ + Tile{1, 3}));
 }
@@ -39,6 +51,10 @@ TEST_F(AreaSuite, CustomAreaWorks) {
 
     for (const auto& offset : offsets) {
         ASSERT_TRUE(area.isInArea(target_ + offset));
+    }
+
+    for (const auto& tile : area.tilesCovered()) {
+        EXPECT_TRUE(area.isInArea(tile));
     }
 
     EXPECT_FALSE(area.isInArea(target_ + Tile{1, 3}));

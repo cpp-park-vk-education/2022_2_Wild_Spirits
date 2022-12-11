@@ -51,13 +51,13 @@ std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
 }
 
 Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, Target target_type,
-               unsigned int range, Cast cast_type, bool can_miss, const std::string& target_scaling) :
-    cast_type_(cast_type), target_type_(target_type), area_(std::move(area)),
+               unsigned int range, bool can_miss, const std::string& target_scaling) :
+    target_type_(target_type), area_(std::move(area)),
     range_(range), effects_(std::move(effects)),
     can_miss_(can_miss), target_scaling_(target_scaling) {}
 
 Action::Action(const Action& other) :
-    cast_type_(other.cast_type_), target_type_(other.target_type_),
+    target_type_(other.target_type_),
     area_(other.area_->clone()), range_(other.range_),
     effects_(other.effects_.size()), can_miss_(other.can_miss_), target_scaling_(other.target_scaling_) {
         for (size_t i = 0; i < other.effects_.size(); ++i) {
@@ -72,7 +72,7 @@ Action& Action::operator=(const Action& other) {
 }
 
 Action::Action(Action&& other) :
-     cast_type_(other.cast_type_), target_type_(other.target_type_),
+     target_type_(other.target_type_),
      area_(std::move(other.area_)), range_(other.range_),
      effects_(std::move(other.effects_)), can_miss_(other.can_miss_),
      target_scaling_(std::move(other.target_scaling_)) {
@@ -93,16 +93,7 @@ void Action::swap(Action& other) {
     std::swap(range_, other.range_);
     std::swap(can_miss_, other.can_miss_);
     std::swap(target_scaling_, other.target_scaling_);
-    std::swap(cast_type_, other.cast_type_);
     std::swap(target_type_, other.target_type_);
-}
-
-void Action::setCastType(Cast cast_type) {
-    cast_type_ = cast_type;
-}
-
-Action::Cast Action::castType() const {
-    return cast_type_;
 }
 
 void Action::setTargetType(Target target_type) {
@@ -181,7 +172,7 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
         const CharacterInstance& actor, const Tile& tile, uint8_t dice_roll_res) const {
     std::vector<Action::Result> results;
 
-    if (cast_type_ != Cast::Self && actor.centerPos().distance(tile) > range_) {
+    if (actor.centerPos().distance(tile) > range_) {
         return std::make_tuple(results, ErrorStatus::INVALID_CAST_RANGE);
     }
 

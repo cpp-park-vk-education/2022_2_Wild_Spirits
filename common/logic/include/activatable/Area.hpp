@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include <memory>
 #include <cmath>
 
@@ -19,6 +20,7 @@ class Area {
 
     virtual std::unique_ptr<Area> clone() const = 0;
     virtual bool isInArea(const Tile& tile) const = 0;
+    virtual std::vector<Tile> tilesCovered() const = 0;
 
     virtual ~Area() {}
 };
@@ -33,6 +35,10 @@ class PointArea : public Area {
 
     bool isInArea(const Tile& tile) const override {
         return tile == target_;
+    }
+
+    std::vector<Tile> tilesCovered() const override {
+        return std::vector<Tile>{target_};
     }
 };
 
@@ -54,6 +60,18 @@ class RectangularArea : public Area {
                tile.y <= target_.y + height_ &&
                tile.y >= (target_.y > height_ ? target_.y - height_ : 0);
     }
+
+    std::vector<Tile> tilesCovered() const override {
+        std::vector<Tile> result;
+        result.reserve((2 * width_ + 1) * (2 * height_ + 1));
+
+        for (long long i = -width_; i <= static_cast<long long>(width_); ++i) {
+            for (long long j = -height_; j <= static_cast<long long>(height_); ++j) {
+                result.push_back(target_ + Offset{i, j});
+            }
+        }
+        return result;
+    }
 };
 
 class CustomArea : public Area {
@@ -74,6 +92,13 @@ class CustomArea : public Area {
             }
         }
         return false;
+    }
+
+    std::vector<Tile> tilesCovered() const override {
+        std::vector<Tile> result(offsets_.size());
+        std::transform(offsets_.begin(), offsets_.end(), result.begin(),
+                       [this] (const Offset& offset) { return target_ + offset; });
+        return result;
     }
 };
 
