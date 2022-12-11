@@ -1,11 +1,17 @@
 #include "ActionHandler.hpp"
+#include "Headers.hpp"
 
 
-string ActionHandler::Action_string(string action_params){
+string ActionHandler::actionString(Client::Action action){
     std::string action_view;
+
     return action_view;
 }
 
-ActionHandler::ActionHandler(ActionCollector &collector) : collector(collector) {
+Client::ActionType ActionHandler::actionHeader(Client::Action action){
+    return action.getType();
+}
+
+ActionHandler::ActionHandler() {
 
 }

@@ -11,7 +11,7 @@ using std::string;
 
 class ClientConnection{
 public:
-    void SendReqeuest(string request,std::function<void(std::string)> gateway_handler);
+    void SendReqeuest(string request,std::function<void(bool)> gateway_handler);
     void getImage(std::string_view request, std::function<void(std::string)> gateway_handler);
 };
 

@@ -55,7 +55,13 @@ if (${BUILD_SERVER})
     option(BUILD_TEST OFF)
     FetchContent_MakeAvailable(libpqxx)
 endif()
-    
+
+find_package(Boost 1.80.0)
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+endif()
+
 set(SANITIZER_FLAGS "-fsanitize=leak,undefined,address")
 set(ERROR_FLAGS "-Wall")
 if(MSVC)

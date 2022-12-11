@@ -1,6 +1,9 @@
 #include "RequestStringGenerator.hpp"
+#include "nlohmann/json.hpp"
 
-std::string RequestStringGenerator::makeRequestString(std::unordered_map<std::string, std::string> changes, Client::Header request_header){
+
+std::string RequestStringGenerator::makeRequestString(std::unordered_map<std::string, std::string> changes, std::string request_header){
+    using nlohmann::json;
     std::string final_request;
 
 
@@ -9,4 +12,11 @@ std::string RequestStringGenerator::makeRequestString(std::unordered_map<std::st
 
 RequestStringGenerator::RequestStringGenerator() {
 
+}
+
+std::string RequestStringGenerator::makeRequestString(std::string change, std::string header) {
+    using nlohmann::json;
+
+
+    return std::string();
 }

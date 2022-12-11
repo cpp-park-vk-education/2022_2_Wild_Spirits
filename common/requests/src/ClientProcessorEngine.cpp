@@ -1,20 +1,29 @@
 #include "ClientProcessorEngine.hpp"
+#include "Headers.hpp"
 
 
-
-string ClientProcessorEngine::getRequestString(std::unordered_map<std::string, string> actions){
-    string final_request;
-
-
+string ClientProcessorEngine::getRequestString(std::string action_string, Client::ActionType header) {
+    std::string final_request;
+    HeaderSerial serializer;
+    final_request = generator -> makeRequestString(action_string ,serializer(header));
     return final_request;
 }
 
 setter_queue ClientProcessorEngine::getSetterQueue(string request){
-
-    setter_queue setters;
-    return setters;
+    parser->change_queue = parser ->make_queue(request);
+    return parser -> change_queue;
 }
 
 ClientProcessorEngine::ClientProcessorEngine() {
 
 }
+
+string ClientProcessorEngine::getRequestString(std::string request_string, Header header) {
+    HeaderSerial serializer;
+    return generator->makeRequestString(request_string, serializer(header));
+}
+
+bool ClientProcessorEngine::hasChanges() const {
+    return parser -> has_changes();
+}
+
