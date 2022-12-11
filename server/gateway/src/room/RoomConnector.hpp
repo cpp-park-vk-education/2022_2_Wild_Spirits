@@ -15,7 +15,7 @@ private:
     using connection_handler_t = std::function<void(connection_t)>;
 
 public:
-    RoomConnector(RoomManager &room_manager);
+    explicit RoomConnector(RoomManager &room_manager);
 
     void processRequest(connection_t, connection_handler_t);
     void onWrongFormat(connection_t, connection_handler_t);

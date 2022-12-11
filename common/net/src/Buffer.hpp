@@ -6,6 +6,7 @@
 class Buffer {
 public:
     virtual std::string data() = 0;
+    virtual void setData(const std::string &) = 0;
 };
 
 class BoostBuffer: public Buffer {
@@ -17,14 +18,10 @@ public:
     explicit BoostBuffer (const std::string&);
 
     virtual std::string data() override;
+    virtual void setData(const std::string &) override;
 
-    boost::beast::flat_buffer &get_underlying_buffer() {
-        return buffer;
-    }
-
-    const boost::beast::flat_buffer &get_underlying_buffer() const {
-        return buffer;
-    }
+    boost::beast::flat_buffer &get_underlying_buffer();
+    const boost::beast::flat_buffer &get_underlying_buffer() const;
 
     void clear();
 };

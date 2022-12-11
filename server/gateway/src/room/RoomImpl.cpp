@@ -4,7 +4,7 @@
 #include <iostream>
 
 RoomImpl::RoomImpl(User *user, std::size_t id): Room(id), DM(user) {
-    addUser(user);
+    players.push_back(user);
 }
 
 void RoomImpl::addUser(User *player) {
@@ -16,7 +16,7 @@ void RoomImpl::sendDM(const std::string &message) {
 }
 
 void RoomImpl::broadcast(const std::string &message) {
-    for (User *player: players) {
+    for (User *player : players) {
         player->sendMessage(message);
     }
 }
@@ -24,3 +24,7 @@ void RoomImpl::broadcast(const std::string &message) {
 void RoomImpl::processRequest(std::size_t user_id, const std::string &request) {
     broadcast(request);
 }
+
+// void RoomImpl::sendImageTo(const std::string& path, std::size_t user_id) {
+
+// }

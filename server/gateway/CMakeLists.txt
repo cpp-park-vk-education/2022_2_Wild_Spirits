@@ -6,7 +6,10 @@ set(SOURCES src/user/UserConnectionImpl.cpp
             src/user/Acceptor.cpp
             src/user/User.cpp
             src/room/RoomImpl.cpp
-            src/room/RoomConnector.cpp)
+            src/room/RoomConnector.cpp
+            src/imageStorage/Encoder.cpp
+            src/imageStorage/Image.cpp
+            src/imageStorage/ImageStorage.cpp)
 
 add_subdirectory(tests)
 
@@ -14,7 +17,8 @@ add_library(${PROJECT_NAME} STATIC ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src
                                                   ${PROJECT_SOURCE_DIR}/src/user
                                                   ${PROJECT_SOURCE_DIR}/src/room
-                                                  ${PROJECT_SOURCE_DIR}/src/managers)
+                                                  ${PROJECT_SOURCE_DIR}/src/managers
+                                                  ${PROJECT_SOURCE_DIR}/src/imageStorage)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dnd-net)
 target_link_libraries(${PROJECT_NAME} PRIVATE dnd-db)

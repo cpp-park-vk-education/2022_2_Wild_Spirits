@@ -1,11 +1,11 @@
 #pragma once
 
+#include <User.hpp>
+#include <iostream>
+
 #include <WebSocketConnection.hpp>
 #include <EventLoop.hpp>
 // #include <Image.hpp>
-
-#include <User.hpp>
-#include <iostream>
 
 class UserConnection: public RecievingConnection {
 protected:
@@ -27,5 +27,6 @@ public:
 
     virtual void sendMessage(std::string message) = 0;
     virtual void processRequest(std::string request) = 0;
+
     // virtual void connectToRoom(std::string room_name) = 0;
 };

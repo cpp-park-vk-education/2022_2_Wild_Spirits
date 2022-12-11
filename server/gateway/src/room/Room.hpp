@@ -21,7 +21,7 @@ public:
     virtual void sendDM(const std::string&) = 0 ;
     virtual void broadcast(const std::string&) = 0;
 
-    std::size_t id() {
+    std::size_t id() const {
         return _id;
     }
 

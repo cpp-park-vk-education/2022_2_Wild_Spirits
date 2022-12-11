@@ -12,10 +12,10 @@
 class UserAcceptor {
 protected:
     using acceptor_handler = std::function<void(std::shared_ptr<UserConnection>)>;
-    UserAuthorizer authorizer;
+    UserAuthorizer &authorizer;
 
 public:
-    UserAcceptor (UserManager &manager): authorizer(manager) {}
+    UserAcceptor (UserAuthorizer &authorizer): authorizer(authorizer) {}
 
     virtual void accept (acceptor_handler) = 0;
 };
@@ -28,7 +28,7 @@ private:
     BoostEventLoop &loop;
     tcp::acceptor acceptor;
 public:
-    AsioAcceptor(UserManager &manager, BoostEventLoop&, tcp::acceptor&&);
+    AsioAcceptor(UserAuthorizer &authorizer, BoostEventLoop&, tcp::acceptor&&);
 
     virtual void accept(acceptor_handler) override;
     void on_accept(beast::error_code, tcp::socket, acceptor_handler);

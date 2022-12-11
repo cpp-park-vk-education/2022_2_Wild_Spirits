@@ -9,12 +9,12 @@ class UserConnection;
 class User {
 private:
     std::string nickname;
+    std::size_t _id;
     std::weak_ptr<UserConnection> connection;
     Room *room;
-    std::size_t _id;
 
 public:
-    User (const std::string &nickname, std::size_t id): nickname(nickname), _id(id) {}
+    User (const std::string &nickname, std::size_t id): nickname(nickname), _id(id), room(nullptr) {}
 
     std::size_t id() const;
 

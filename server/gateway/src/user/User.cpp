@@ -9,7 +9,7 @@ void User::setRoom(Room *room) {
     this->room = room;
 }
 
-void User::connectToRoom (Room *room) {
+void User::connectToRoom(Room *room) {
     setRoom(room);
     room->addUser(this);
 }
