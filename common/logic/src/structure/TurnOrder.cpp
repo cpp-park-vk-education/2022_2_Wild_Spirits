@@ -11,7 +11,7 @@ void TurnOrder::nextTurn() {
     } else {
         it->lock()->onTurnEnd();
     }
-    
+
     current_turn_ = (current_turn_ + 1) % queue_.size();
 
     it = queue_.begin() + current_turn_;
