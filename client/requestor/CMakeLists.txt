@@ -8,8 +8,11 @@ set(SOURCES
     
     Classes/Room.h)
 
-
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+
+if (${BUILD_LOGIC})
+    add_definitions(-DBUILD_LOGIC)
+endif()
 
 add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})

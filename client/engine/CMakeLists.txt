@@ -116,6 +116,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(ImGui)
 
+if (${BUILD_LOGIC})
+    add_definitions(-DBUILD_LOGIC)
+endif()
+
 option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
 
