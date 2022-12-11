@@ -24,7 +24,7 @@ class TurnOrderSuite : public ::testing::Test {
 
  public:
     TurnOrderSuite() :
-            map(), location(), game(&map), queue(game, map),
+            map(), location(), game(), queue(game, map),
             enemy(std::make_shared<NPC>()),
             char_class_(std::make_shared<Class>()) {
         EXPECT_CALL(map, currentLocation())

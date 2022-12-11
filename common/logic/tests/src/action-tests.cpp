@@ -40,6 +40,11 @@ TEST_F(ActionSuite, SingleActionTest) {
 
     std::set<size_t> enemies_hit = {1, 3, 5};
     std::vector<int> expected_hp_loss = {-3, -5, -7};
+    std::vector<std::vector<Dice::Roll>> expected_dice_rolls = {
+        {Dice::Roll{4, 1}, Dice::Roll{4, 2}},
+        {Dice::Roll{4, 3}, Dice::Roll{4, 2}},
+        {Dice::Roll{4, 4}, Dice::Roll{4, 3}}
+    };
 
     std::vector<Action::Result> expected_results;
     expected_results.reserve(results.size());
@@ -48,9 +53,11 @@ TEST_F(ActionSuite, SingleActionTest) {
     size_t i = 0;
     for (const auto& [_, npc] : location.npc()) {
         if (enemies_hit.contains(npc->id())) {
-             expected_results.emplace_back(npc->id(),
+             expected_results.emplace_back(
+                                      npc->id(),
                                       Tile{1, 2}, expected_hp_loss[i],
-                                      std::list<Buff>{Buff({ {"str", -2}, {"dex", -1} }, 2)});
+                                      std::list<Buff>{Buff({ {"str", -2}, {"dex", -1} }, 2)},
+                                      expected_dice_rolls[i]);
             ++i;
         }
     }
@@ -101,6 +108,12 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     player.refreshActionPoints();
 
     std::vector<unsigned int> expected_enemy_hp = {5, 3};
+
+    std::vector<std::vector<Dice::Roll>> expected_dice_rolls = {
+        {Dice::Roll{4, 3}, Dice::Roll{4, 2}},
+        {Dice::Roll{4, 4}, Dice::Roll{4, 3}}
+    };
+
     std::set<size_t> enemies_hit = {3, 4};
 
     std::vector<Action::Result> action_results;
@@ -112,7 +125,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
             action_results.emplace_back(npc->id(),
                                         Tile{4, 3},
                                         expected_enemy_hp[i],
-                                        std::list<Buff>{ result_buff });
+                                        std::list<Buff>{ result_buff },
+                                        expected_dice_rolls[i]);
             ++i;
         }
     }

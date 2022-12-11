@@ -30,6 +30,15 @@ class Dice : public DiceInterface {
     static std::mt19937 gen_;
 
  public:
+     struct Roll {
+        unsigned int rolled;
+        unsigned int got;
+
+        bool operator==(const Roll& other) const {
+            return rolled == other.rolled && got == other.got;
+        }
+    };
+
     static constexpr uint8_t D20 = 20;
 
     uint8_t roll(uint8_t die) const override;

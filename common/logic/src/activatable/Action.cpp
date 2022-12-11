@@ -1,6 +1,7 @@
 #include "Action.hpp"
 
 #include "Effect.hpp"
+#include "Dice.hpp"
 #include "Buff.hpp"
 #include "Armor.hpp"
 #include "GameMap.hpp"
@@ -8,6 +9,7 @@
 #include "CharacterInstance.hpp"
 #include "PlayerCharacter.hpp"
 #include "Location.hpp"
+#include "Print.hpp"
 
 #include <utility>
 #include <tuple>
@@ -15,14 +17,17 @@
 namespace DnD {
 Action::Result::Result(size_t char_id) : char_id_(char_id) {}
 
-Action::Result::Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs) :
+Action::Result::Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs,
+                       const std::vector<Dice::Roll>& roll_res) :
     char_id_(char_id),
     pos(pos),
     hp(hp),
-    buffs(buffs) {}
+    buffs(buffs), 
+    roll_results(roll_res) {}
 
 bool Action::Result::operator==(const Result& other) const {
-    return std::tie(char_id_, pos, hp, buffs) == std::tie(other.char_id_, other.pos, other.hp, other.buffs);
+    return std::tie(char_id_, pos, hp, buffs, roll_results) ==
+           std::tie(other.char_id_, other.pos, other.hp, other.buffs, other.roll_results);
 }
 
 Action::Result& Action::Result::operator+=(Result&& other) {
@@ -34,20 +39,30 @@ Action::Result& Action::Result::operator+=(Result&& other) {
     hp += other.hp;
 
     buffs.splice(buffs.end(), other.buffs);
+    std::copy(other.roll_results.begin(), other.roll_results.end(), std::back_inserter(roll_results));
     return *this;
 }
 
+std::ostream& operator<<(std::ostream& out, Dice::Roll roll) {
+     return out << "{'rolled': " << roll.rolled
+                << ", 'got': " << roll.got << '}';
+}
+
 std::ostream& operator<<(std::ostream& out, const Action::Result& result) {
-    out << "{ 'id': " << result.char_id_ << ", 'pos': {" << "'x': " << result.pos.x << ", 'y': " << result.pos.y
-               << "}, 'hp': " << result.hp;
+    out << "{'id': " << result.char_id_ << ", 'pos': {" << "'x': "
+        << result.pos.x << ", 'y': " << result.pos.y
+        << "}, 'hp': " << result.hp;
+
     if (!result.buffs.empty()) {
-        out << ", 'buffs': { ";
-        for (auto& buff : result.buffs) {
-            out << buff;
-        }
-        out << " }";
+        out << ", 'buffs': ";
+        printIterable(result.buffs.begin(), result.buffs.end(), out);
     }
-    return out << " }";
+
+    if (!result.roll_results.empty()) {
+        out << ", 'rolls': ";
+        printIterable(result.roll_results.begin(), result.roll_results.end(), out);
+    }
+    return out << "}";
 }
 
 Action::Action(Action::AreaPtr&& area, std::vector<Action::EffectPtr>&& effects, Target target_type,

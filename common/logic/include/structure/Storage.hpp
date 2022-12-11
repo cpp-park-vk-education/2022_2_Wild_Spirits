@@ -10,6 +10,7 @@
 
 #include "ErrorStatus.hpp"
 #include "Exception.hpp"
+#include "Print.hpp"
 
 namespace DnD {
 
@@ -25,6 +26,14 @@ concept IdentifiableObj = requires(T obj) {
 
 template <typename T>
 concept Identifiable = IdentifiablePtr<T> || IdentifiableObj<T>;
+
+template <typename T, typename U>
+concept DerivedPtr = requires(T obj) {
+    { *obj } -> std::derived_from<U>;
+};
+
+template <typename T, typename U>
+concept DerivedFrom = std::derived_from<T, U> || DerivedPtr<T, U>;
 
 template <Identifiable T>
 class Storage {
@@ -161,14 +170,24 @@ class Storage {
         return data_ == other.data_;
     }
 
-    friend std::ostream& operator<<(std::ostream& out, const Storage& storage) {
-        for (auto it = storage.begin(), end = storage.end(); it != end; ++it) {
-            out << it->second;
-            if (std::next(it) != end) {
-                out << ", ";
+    bool wasUpdated() const requires DerivedFrom<T, GameEntityInterface> {
+        for (auto& [_, elem] : data_) {
+            if constexpr(DerivedPtr<T, GameEntityInterface>) {
+                if (elem->wasUpdated()) {
+                    return true;
+                }
+            } else {
+                if (elem.wasUpdated()) {
+                    return true;
+                }
             }
         }
-        return out;
+        return true;
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Storage& storage) {
+        return printIterable(storage.begin(), storage.end(), out,
+                             [] (std::pair<size_t, T> it, std::ostream& out) { out << it.second; });
     }
 };
 
@@ -221,13 +240,8 @@ class SharedStorage : public Storage<std::shared_ptr<T>> {
     }
 
     friend std::ostream& operator<<(std::ostream& out, const SharedStorage& storage) {
-        for (auto it = storage.begin(), end = storage.end(); it != end; ++it) {
-            out << *(it->second);
-            if (std::next(it) != end) {
-                out << ", ";
-            }
-        }
-        return out;
+        return printIterable(storage.begin(), storage.end(), out,
+                             [] (std::pair<size_t, T> it, std::ostream& out) { out << *(it.second); });
     }
 };
 }  // namespace DnD

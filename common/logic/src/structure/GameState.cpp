@@ -45,30 +45,6 @@ SharedStorage<Armor>& GameStateImpl::armor() {
     return armor_;
 }
 
-ErrorStatus GameStateImpl::addAction(std::string_view item_type, size_t item_id, const Action& action) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::removeAction(std::string_view item_type, size_t item_id, size_t action_id) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::addEffect(std::string_view item_type, size_t item_id, std::unique_ptr<Effect>&& effect) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::removeEffect(std::string_view item_type, size_t item_id, size_t effect_id) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::setArea(std::string_view item_type, size_t item_id, std::unique_ptr<Area>&& area) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
-ErrorStatus GameStateImpl::setPositionType(size_t char_id, std::unique_ptr<Position>&& pos) {
-    return ErrorStatus::UNKNOWN_ERROR;
-}
-
 std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
                                                                     size_t item_id, const std::vector<Tile>& target) {
     auto character = allCharacters().safeGet(actor_id);
@@ -88,6 +64,15 @@ std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t a
     stream << result;
 
     return std::make_tuple(stream.str(), ErrorStatus::OK);
+}
+
+std::tuple<unsigned int, ErrorStatus> LogicProcessorImpl::rollDie(unsigned int die) const {
+    Dice dice;
+    if (!dice.isValid(die)) {
+        return std::make_tuple(0, ErrorStatus::INVALID_ARGUMENT);
+    }
+
+    return std::make_tuple(dice.roll(die), ErrorStatus::OK);
 }
 
 std::unordered_map<size_t, size_t> LogicProcessorImpl::kill_NPC(size_t location_id, size_t npc_id) {
@@ -111,10 +96,5 @@ void LogicProcessorImpl::setUpdated(GameEntityInterface& object) {
     if (!object.wasUpdated()) {
         object.toggleUpdated();
     }
-}
-
-LogicProcessor::GameData LogicProcessorImpl::getUpdatedObjs() {
-    GameData updated_objs;
-    return updated_objs;
 }
 }  // namespace DnD

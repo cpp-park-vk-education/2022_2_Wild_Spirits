@@ -7,6 +7,7 @@
 
 #include "Area.hpp"
 #include "Armor.hpp"
+#include "Dice.hpp"
 #include "Storage.hpp"
 #include "StatBased.hpp"
 
@@ -32,9 +33,11 @@ class Action {
         Tile pos = {};
         int hp = 0;
         std::list<Buff> buffs;
+        std::vector<Dice::Roll> roll_results;
 
         explicit Result(size_t char_id);
-        Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs);
+        Result(size_t char_id, Tile pos, int hp, const std::list<Buff>& buffs,
+               const std::vector<Dice::Roll>& roll_res = {});
 
         size_t id() const {
             return char_id_;

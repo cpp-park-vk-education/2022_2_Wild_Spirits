@@ -7,6 +7,7 @@
 
 #include <numeric>
 #include <sstream>
+#include <iterator>
 
 namespace DnD {
 void Heal::updateActionResult(const CharacterInstance&, Action::Result* result) const {
@@ -23,7 +24,10 @@ void DealDamage::updateActionResult(const CharacterInstance& character, Action::
     float damage_modifier = character.damageModifier(damage_type_.id());
 
     result->hp -= std::accumulate(roll_results.begin(), roll_results.end(), 0) * damage_modifier;
-    // TODO: Store roll results in ActionResult
+
+    std::transform(roll_results.begin(), roll_results.end(),
+                   std::back_inserter(result->roll_results),
+                   [this] (auto& got) { return Dice::Roll{die_type_, got}; });
 }
 
 void Buff::updateActionResult(const CharacterInstance&, Action::Result* result) const {
