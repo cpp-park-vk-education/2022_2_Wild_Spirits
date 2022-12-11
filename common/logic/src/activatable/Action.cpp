@@ -154,25 +154,25 @@ void Action::removeEffect(size_t effect_id) {
 }
 
 template <typename T>
-void Action::applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results,
+void Action::applyEffectsTo(SharedStorage<T>& characters, std::vector<Action::Result>* results,
                             uint8_t dice_roll_res, std::function<bool(const CharacterInstance&)> predicate) const {
     for (const auto& [_, character] : characters) {
-        if (!predicate(character) || !character.isInArea(*area_)) {
+        if (!predicate(*character) || !character->isInArea(*area_)) {
             continue;
         }
 
         if (can_miss_ && target_scaling_ == Armor::kScaling) {
-            if (dice_roll_res < character.armorClass()) {
+            if (dice_roll_res < character->armorClass()) {
                 continue;
             }
-        } else if (can_miss_ && dice_roll_res < character.original().stat(target_scaling_)) {
+        } else if (can_miss_ && dice_roll_res < character->original().stat(target_scaling_)) {
             continue;
         }
 
-        results->emplace_back(character.id());
+        results->emplace_back(character->id());
 
         for (auto& effect : effects_) {
-            effect->updateActionResult(character, &results->back());
+            effect->updateActionResult(*character, &results->back());
         }
     }
 }

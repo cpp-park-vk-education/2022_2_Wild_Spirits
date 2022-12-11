@@ -10,7 +10,7 @@ ErrorStatus GameMapImpl::switchLocation(size_t id) {
     current_location_ = id;
 
     for (auto& [_, player] : players()) {
-        player.setLocation(id);
+        player->setLocation(id);
     }
 
     return ErrorStatus::OK;
@@ -42,7 +42,7 @@ Storage<CharacterInstance*>& GameMapImpl::allCharacters() const {
     return game_.allCharacters();
 }
 
-Storage<PlayerCharacter>& GameMapImpl::players() const {
+SharedStorage<PlayerCharacter>& GameMapImpl::players() const {
     return game_.players();
 }
 }  // namespace DnD

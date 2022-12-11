@@ -40,24 +40,24 @@ class Weapon : public ActivatableItem {
 
 class Consumable : public ActivatableInterface {
  private:
-    const ActivatableItem& original_;
+    const std::shared_ptr<const ActivatableItem> original_;
     unsigned int uses_;
 
  public:
     Consumable() = default;
 
-    Consumable(const ActivatableItem& item, unsigned int uses) : original_(item), uses_(uses) {}
+    Consumable(const std::shared_ptr<ActivatableItem>& item, unsigned int uses) : original_(item), uses_(uses) {}
     
     void add(unsigned int num) {
         uses_ += num;
     }
 
     size_t id() const {
-        return original_.id();
+        return original_->id();
     }
 
     const ActivatableItem& original() const {
-        return original_;
+        return *original_;
     }
 
     unsigned int usesLeft() {
@@ -69,11 +69,11 @@ class Consumable : public ActivatableInterface {
     }
 
     unsigned int activateCost() const override {
-        return original_.activateCost();
+        return original_->activateCost();
     }
 
     const std::string& scalesBy() const override {
-        return original_.scalesBy();
+        return original_->scalesBy();
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& targets,
@@ -84,7 +84,7 @@ class Consumable : public ActivatableInterface {
 
         const_cast<Consumable*>(this)->uses_ -= 1;
 
-        auto result = original_.use(actor, targets, dice_roll_res);
+        auto result = original_->use(actor, targets, dice_roll_res);
         std::get<Result>(result).resource_spent = 1;
         return result;
     }

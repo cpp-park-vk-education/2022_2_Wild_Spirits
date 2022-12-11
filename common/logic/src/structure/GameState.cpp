@@ -5,11 +5,11 @@
 #include <sstream>
 
 namespace DnD {
-Storage<NPC>& GameStateImpl::npc() {
+SharedStorage<NPC>& GameStateImpl::npc() {
     return npc_;
 }
 
-Storage<PlayerCharacter>& GameStateImpl::players() {
+SharedStorage<PlayerCharacter>& GameStateImpl::players() {
     return players_;
 }
 
@@ -17,31 +17,31 @@ Storage<CharacterInstance*>& GameStateImpl::allCharacters() {
     return all_characters_;
 }
 
-Storage<Race>& GameStateImpl::races() {
+SharedStorage<Race>& GameStateImpl::races() {
     return races_;
 }
 
-Storage<Class>& GameStateImpl::classes() {
+SharedStorage<Class>& GameStateImpl::classes() {
     return classes_;
 }
 
-Storage<Item>& GameStateImpl::items() {
+SharedStorage<Item>& GameStateImpl::items() {
     return items_;
 }
 
-Storage<ActivatableItem>& GameStateImpl::activatableItems() {
+SharedStorage<ActivatableItem>& GameStateImpl::activatableItems() {
     return activatables_;
 }
 
-Storage<Weapon>& GameStateImpl::weapons() {
+SharedStorage<Weapon>& GameStateImpl::weapons() {
     return weapons_;
 }
 
-Storage<Spell>& GameStateImpl::spells() {
+SharedStorage<Spell>& GameStateImpl::spells() {
     return spells_;
 }
 
-Storage<Armor>& GameStateImpl::armor() {
+SharedStorage<Armor>& GameStateImpl::armor() {
     return armor_;
 }
 
@@ -70,7 +70,7 @@ ErrorStatus GameStateImpl::setPositionType(size_t char_id, std::unique_ptr<Posit
 }
 
 std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
-                                                                        size_t item_id, const std::vector<Tile>& target) {
+                                                                    size_t item_id, const std::vector<Tile>& target) {
     auto character = allCharacters().safeGet(actor_id);
 
     if (!character) {
@@ -115,5 +115,6 @@ void LogicProcessorImpl::setUpdated(GameEntityInterface& object) {
 
 LogicProcessor::GameData LogicProcessorImpl::getUpdatedObjs() {
     GameData updated_objs;
+    return updated_objs;
 }
 }  // namespace DnD

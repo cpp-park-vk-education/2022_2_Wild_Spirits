@@ -18,7 +18,7 @@ bool ActivatableInterface::Result::operator==(const Result& other) const {
 
 std::ostream& operator<<(std::ostream& out, const ActivatableInterface::Result& result) {
     out << "{ 'action-points': " << result.action_points;
-    if ( result.resource_spent) {
+    if (result.resource_spent) {
         out << ", 'resource-spent': " << result.resource_spent;
     }
     out << ", 'action-results': [" << result.results << "] }";
@@ -66,7 +66,7 @@ std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance*
 
         for (auto& action_result : results) {
             size_t char_id = action_result.id();
-            CharacterInstance* target_character = actor->map().allCharacters().get(char_id);
+            CharacterInstance* target_character = actor->map().allCharacters().safeGet(char_id);
 
             auto res_to_update = result.results.safeGet(char_id);
 

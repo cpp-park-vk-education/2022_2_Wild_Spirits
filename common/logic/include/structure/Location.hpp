@@ -13,7 +13,7 @@ class Position;
 
 class Location : public GameEntity {
  private:
-    Storage<NPC_Instance> npc_;
+    SharedStorage<NPC_Instance> npc_;
     size_t height_;
     size_t width_;
 
@@ -39,7 +39,7 @@ class Location : public GameEntity {
         return width_;
     }
 
-    Storage<NPC_Instance>& npc() {
+    SharedStorage<NPC_Instance>& npc() {
         return npc_;
     }
 };

@@ -7,12 +7,12 @@ namespace DnD {
 class NPC_Instance : public CharacterInstance {
  private:
     bool is_hostile_;
-    NPC& original_;
+    std::shared_ptr<NPC> original_;
 
  public:
-    NPC_Instance(size_t id, NPC& original, std::unique_ptr<Position>&& pos,
+    NPC_Instance(size_t id, const std::shared_ptr<NPC>& original, std::unique_ptr<Position>&& pos,
                  GameMap& map, bool is_hostile = false, int money = 100,
-                 const Storage<Item*>& items = {});
+                 const SharedStorage<Item>& items = {});
 
     NPC_Instance(const NPC_Instance& other) = delete;
     NPC_Instance& operator=(const NPC_Instance& other) = delete;
@@ -27,7 +27,7 @@ class NPC_Instance : public CharacterInstance {
     }
 
     const Character& original() const override {
-        return original_;
+        return *original_;
     }
 
     bool isHostile() const override {

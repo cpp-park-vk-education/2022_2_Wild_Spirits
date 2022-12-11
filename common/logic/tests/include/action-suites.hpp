@@ -12,26 +12,29 @@
 namespace DnD {
 class ActionSuite : public DamageSuite{
  protected:
-    NPC test_enemy_;
+    std::shared_ptr<NPC> test_enemy_;
     Storage<Location> locations;
     Action action;
-    Storage<PlayerCharacter> players_;
+    SharedStorage<PlayerCharacter> players_;
     MockDice* dice_ptr;
 
  public:
     ActionSuite() :
         DamageSuite(),
+        test_enemy_(std::make_shared<NPC>()),
         locations(),
         action(AreaFactory::create(1, 1), {}, Action::Target::Enemies, 2),
         dice_ptr(dice.get())
     {
         locations.add(0, "", 0, 5, 5);
+
+        action.effects().reserve(3);
         action.addEffect(std::make_unique<DealDamage>(DamageType(1), 4, 2, std::move(dice)));
         action.addEffect(std::make_unique<Move>(1, 2));
         action.addEffect(std::make_unique<Buff>(StatBased::Stats{ {"str", -2}, {"dex", -1} }, 2));
 
-        test_enemy_.setStat("str", 10);
-        test_enemy_.setStat("dex", 14);
+        test_enemy_->setStat("str", 10);
+        test_enemy_->setStat("dex", 14);
 
         auto& location = locations.get(0);
 
@@ -62,15 +65,16 @@ class ActivatableSuite : public ActionSuite {
     ActivatableSuite() :
         ActionSuite(),
         heal_action(AreaFactory::create(), {}, Action::Target::Allies, 0, Action::Cast::Self, false)
-    {   
-        char_template_.setMaxHP(10);
-        players_.add(8, std::move(char_template_), PositionFactory::create(Tile{2, 2}), map, Class(), Race());
+    {
+        char_template_->setMaxHP(10);
+        players_.add(8, Character(*char_template_), PositionFactory::create(Tile{2, 2}), map,
+                     std::make_shared<Class>(), std::make_shared<Race>());
 
         heal_action.addEffect(std::make_unique<Heal>(3));
 
-        test_enemy_.setMaxHP(10);
+        test_enemy_->setMaxHP(10);
         for (auto& [_, enemy] : locations.get(0).npc()) {
-            enemy.resetHP();
+            enemy->resetHP();
         }
     }
 };

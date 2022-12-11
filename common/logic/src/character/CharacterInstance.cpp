@@ -7,7 +7,7 @@
 
 namespace DnD {
 CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
-                                     GameMap& map, int money, const Storage<Item*>& items) :
+                                     GameMap& map, int money, const SharedStorage<Item>& items) :
         OnLocation(std::move(pos), map),
         items_(items), id_(id),
         action_points_(original.maxActionPoints()),
@@ -58,7 +58,7 @@ Storage<Skill_Instance>& CharacterInstance::skills() {
     return skills_;
 }
 
-Storage<Item*>& CharacterInstance::items() {
+SharedStorage<Item>& CharacterInstance::items() {
     return items_;
 }
 

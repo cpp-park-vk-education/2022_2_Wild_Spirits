@@ -37,25 +37,25 @@ class Skill : public GameEntity, public Activatable {
 
 class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
  private:
-    const Skill& original_;
+    const std::shared_ptr<const Skill> original_;
 
  public:
-    Skill_Instance(const Skill& skill) : Temporal<TurnStart>(0), original_(skill) {}
+    Skill_Instance(const std::shared_ptr<const Skill>& skill) : Temporal<TurnStart>(0), original_(skill) {}
 
     const Skill& original() const {
-        return original_;
+        return *original_;
     }
 
     size_t id() const {
-        return original_.id();
+        return original_->id();
     }
 
     unsigned int activateCost() const override {
-        return original_.activateCost();
+        return original_->activateCost();
     }
 
     const std::string& scalesBy() const override {
-        return original_.scalesBy();
+        return original_->scalesBy();
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& tiles,
@@ -63,8 +63,8 @@ class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
         if (turnsLeft() != 0) {
             return std::make_tuple(Result{}, ErrorStatus::SKILL_ON_COOLDOWN);
         }
-        const_cast<Skill_Instance*>(this)->reset(original_.cooldown());
-        return original_.use(actor, tiles, dice_roll_res);
+        const_cast<Skill_Instance*>(this)->reset(original_->cooldown());
+        return original_->use(actor, tiles, dice_roll_res);
     }
 };
 }  // namespace DnD

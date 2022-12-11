@@ -1,20 +1,35 @@
 #pragma once
 
 #include <map>
-#include <map>
+#include <memory>
 #include <cstddef>
 #include <functional>
 #include <type_traits>
+#include <concepts>
 #include <iterator>
 
 #include "ErrorStatus.hpp"
 #include "Exception.hpp"
 
 namespace DnD {
+
 template <typename T>
+concept IdentifiablePtr = requires(T obj) {
+    { obj->id() } -> std::unsigned_integral;
+};
+
+template <typename T>
+concept IdentifiableObj = requires(T obj) {
+    { obj.id() } -> std::unsigned_integral;
+};
+
+template <typename T>
+concept Identifiable = IdentifiablePtr<T> || IdentifiableObj<T>;
+
+template <Identifiable T>
 class Storage {
  private:
-    std::unordered_map<size_t, stT> data_;
+    std::unordered_map<size_t, T> data_;
 
  public:
     using size_type = size_t;
@@ -47,29 +62,27 @@ class Storage {
     }
 
     template <typename... Args>
-    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) requires (!std::is_pointer_v<T>) {
+    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) requires IdentifiableObj<T> {
         auto [it, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
-    std::tuple<T*, ErrorStatus> add(const T& object) {
-        std::pair<iterator, bool> result;
-
-        if constexpr (std::is_pointer<T>::value) {
-            result = data_.emplace(object->id(), object);
-        } else {
-            result =  data_.emplace(object.id(), object);
-        }
-
-        auto& [it, inserted] = result;
+    std::tuple<T*, ErrorStatus> add(const T& object) requires IdentifiableObj<T> {
+        auto [it, inserted] = data_.emplace(object.id(), object);
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
-    std::tuple<T*, ErrorStatus> add(T&& object) requires (!std::is_pointer_v<T>) {
-        auto [it, inserted] = data_.try_emplace(object.id(), std::move(object));
+    std::tuple<T*, ErrorStatus> add(T&& object) requires IdentifiableObj<T> {
+        auto [it, inserted] = data_.emplace(object.id(), std::move(object));
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
+                          std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
+    }
+
+    std::tuple<T, ErrorStatus> add(T object) requires IdentifiablePtr<T> {
+        auto [it, inserted] = data_.emplace(object->id(), object);
+        return inserted ? std::make_tuple(it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
@@ -107,7 +120,7 @@ class Storage {
     }
 
     const T safeGet(size_t id) const noexcept requires std::is_pointer_v<T> {
-        return const_cast<const T>(const_cast<Storage*>(this)->safeGet(id));
+        return const_cast<const T*>(const_cast<Storage*>(this)->safeGet(id));
     }
 
     const T* safeGet(size_t id) const noexcept {
@@ -149,8 +162,67 @@ class Storage {
     }
 
     friend std::ostream& operator<<(std::ostream& out, const Storage& storage) {
-        for (auto it = storage.data_.begin(), end = storage.data_.end(); it != end; ++it) {
+        for (auto it = storage.begin(), end = storage.end(); it != end; ++it) {
             out << it->second;
+            if (std::next(it) != end) {
+                out << ", ";
+            }
+        }
+        return out;
+    }
+};
+
+template <Identifiable T>
+class SharedStorage : public Storage<std::shared_ptr<T>> {
+ public:
+    using Storage<std::shared_ptr<T>>::add;
+
+    template <typename... Args>
+    std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) {
+        auto [shared, status] = add(std::make_shared<T>(id, std::forward<Args>(args)...));
+        return shared ? std::make_tuple(shared.get(), status) :
+                        std::make_tuple(nullptr, status);
+    }
+
+    std::tuple<T*, ErrorStatus> add(const T& object) {
+        auto [shared, status] = add(std::make_shared<T>(object));
+        return shared ? std::make_tuple(shared.get(), status) :
+                        std::make_tuple(nullptr, status);
+    }
+
+    std::tuple<T*, ErrorStatus> add(T&& object) {
+        auto [shared, status] = add(std::make_shared<T>(std::move(object)));
+        return shared ? std::make_tuple(shared.get(), status) :
+                        std::make_tuple(nullptr, status);
+    }
+
+    T& get(size_t id) {
+        auto shared = Storage<std::shared_ptr<T>>::get(id);
+        return *shared;
+    }
+
+    std::shared_ptr<T> safeGet(size_t id) noexcept {
+        auto shared = Storage<std::shared_ptr<T>>::safeGet(id);
+        return shared ? *shared : nullptr;
+    }
+
+    const T& get(size_t id) const {
+        return const_cast<const T&>(const_cast<SharedStorage*>(this)->get(id));
+    }
+
+    std::shared_ptr<const T> safeGet(size_t id) const noexcept {
+        return const_cast<const T*>(const_cast<SharedStorage*>(this)->safeGet(id));
+    }
+
+    void each(const std::function<void(T&)>& visit) {
+        for (auto& [_, elem] : *this) {
+            visit(*elem);
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const SharedStorage& storage) {
+        for (auto it = storage.begin(), end = storage.end(); it != end; ++it) {
+            out << *(it->second);
             if (std::next(it) != end) {
                 out << ", ";
             }

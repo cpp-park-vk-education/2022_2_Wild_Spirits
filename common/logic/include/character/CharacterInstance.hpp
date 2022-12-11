@@ -25,7 +25,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
  protected:
     std::list<Buff> buffs_;
 
-    Storage<Item*> items_;
+    SharedStorage<Item> items_;
     Storage<Skill_Instance> skills_;
  
  private:
@@ -50,7 +50,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
  public:
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
-                      GameMap& map, int money = 100, const Storage<Item*>& items = {});
+                      GameMap& map, int money = 100, const SharedStorage<Item>& items = {});
     
     CharacterInstance(const CharacterInstance& other) = delete;
     CharacterInstance& operator=(const CharacterInstance& other) = delete;
@@ -94,7 +94,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     const std::list<Buff>& buffs() const;
 
     Storage<Skill_Instance>& skills();
-    Storage<Item*>& items();
+    SharedStorage<Item>& items();
 
     float damageModifier(uint8_t damage_type) const;
 

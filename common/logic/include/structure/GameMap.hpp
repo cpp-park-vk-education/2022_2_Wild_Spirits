@@ -2,10 +2,12 @@
 
 #include "Location.hpp"
 
+#include "PlayerCharacter.hpp"
+
 namespace DnD {
 class GameState;
-class PlayerCharacter;
-class CharacterInstance;
+// class PlayerCharacter;
+// class CharacterInstance;
 
 class GameMap {
  public:
@@ -17,7 +19,7 @@ class GameMap {
     virtual Location& currentLocation() = 0;
     virtual size_t currentLocationId() const = 0;
 
-    virtual Storage<PlayerCharacter>& players() const = 0;
+    virtual SharedStorage<PlayerCharacter>& players() const = 0;
     virtual Storage<CharacterInstance*>& allCharacters() const = 0;
 
     virtual ~GameMap() {}
@@ -48,7 +50,7 @@ class GameMapImpl : public GameMap {
         return current_location_;
     }
 
-    Storage<PlayerCharacter>& players() const override;
+    SharedStorage<PlayerCharacter>& players() const override;
     Storage<CharacterInstance*>& allCharacters() const override;
 };
 }  // namespace DnD

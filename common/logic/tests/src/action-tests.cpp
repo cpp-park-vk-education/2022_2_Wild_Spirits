@@ -47,8 +47,8 @@ TEST_F(ActionSuite, SingleActionTest) {
     auto& location = locations.get(0);
     size_t i = 0;
     for (const auto& [_, npc] : location.npc()) {
-        if (enemies_hit.contains(npc.id())) {
-             expected_results.emplace_back(npc.id(),
+        if (enemies_hit.contains(npc->id())) {
+             expected_results.emplace_back(npc->id(),
                                       Tile{1, 2}, expected_hp_loss[i],
                                       std::list<Buff>{Buff({ {"str", -2}, {"dex", -1} }, 2)});
             ++i;
@@ -74,8 +74,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     actions.push_back(std::move(action));
     actions.push_back(std::move(heal_action));
 
-    Spell spell(0, "", 0, std::move(actions), 5, "int", 2);
-    player.spells().add(&spell);
+    auto spell = std::make_shared<Spell>(0, "", 0, std::move(actions), 5, "int", 2);
+    player.spells().add(spell);
     player.moveBy(2, 0);
 
     auto result_buff = Buff({ {"str", -2}, {"dex", -1} }, 2);
@@ -97,7 +97,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     player.setMaxSpellPoints(5);
     player.refreshSpellPoints();
 
-    char_template_.setMaxActionPoints(10);
+    char_template_->setMaxActionPoints(10);
     player.refreshActionPoints();
 
     std::vector<unsigned int> expected_enemy_hp = {5, 3};
@@ -108,8 +108,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 
     size_t i = 0;
     for (auto& [_, npc] : locations.get(0).npc()) {
-        if (enemies_hit.contains(npc.id())) {
-            action_results.emplace_back(npc.id(),
+        if (enemies_hit.contains(npc->id())) {
+            action_results.emplace_back(npc->id(),
                                         Tile{4, 3},
                                         expected_enemy_hp[i],
                                         std::list<Buff>{ result_buff });
@@ -143,7 +143,7 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 TEST_F(ActivatableSuite, PlayerConsumableTest) {
     auto& player = map.players().get(8);
 
-    ActivatableItem base_item(0, "", 0, std::vector<Action>{ heal_action }, 1);
+    auto base_item = std::make_shared<ActivatableItem>(0, "", 0, std::vector<Action>{ heal_action }, 1);
     player.consumables().add(Consumable{base_item, 2});
     auto& item = player.consumables().get(0);
 
@@ -161,17 +161,19 @@ TEST(ArmorSuite, ArmorClassDependsOnType) {
     EXPECT_CALL(map, allCharacters())
         .WillRepeatedly(::testing::ReturnRef(characters));
 
-    PlayerCharacter player(0, Character(), PositionFactory::create({0, 0}), map, Class(), Race());
+    PlayerCharacter player(0, Character(), PositionFactory::create({0, 0}), map,
+                              std::make_shared<Class>(), std::make_shared<Race>());
+
     player.original().setStat("dex", 18);  // Bonus to dex is 4
 
-    Armor armor(0, "", 0, 0, 11, Armor::Type::Light);
+    auto armor = std::make_shared<Armor>(0, "", 0, 0, 11, Armor::Type::Light);
     player.setArmor(armor);
     EXPECT_EQ(player.armorClass(), 15);
 
-    armor.setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
+    armor->setArmorType(Armor::Type::Medium);  // Medium armor gains 2 points maximum from dex
     EXPECT_EQ(player.armorClass(), 13);
 
-    armor.setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
+    armor->setArmorType(Armor::Type::Heavy);  // Heavy armor gains no bonuses from dex
     EXPECT_EQ(player.armorClass(), 11);
 }
 }  // namespace DnD

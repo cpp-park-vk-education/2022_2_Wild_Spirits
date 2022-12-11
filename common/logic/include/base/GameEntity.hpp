@@ -24,6 +24,8 @@ class GameEntityInterface {
 
     virtual size_t id() const = 0;
 
+    virtual ~GameEntityInterface() {}
+
     friend class LogicProcessorImpl;
 };
 

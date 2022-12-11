@@ -66,7 +66,7 @@ class Action {
     std::string target_scaling_ = Armor::kScaling;
     
     template <typename T>
-    void applyEffectsTo(Storage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0,
+    void applyEffectsTo(SharedStorage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0,
                     std::function<bool(const CharacterInstance&)> predicate = [] (const auto&) { return true; }) const;
 
  public:

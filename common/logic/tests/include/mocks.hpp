@@ -12,7 +12,7 @@ class MockGameMap : public GameMap {
     MOCK_METHOD(ErrorStatus, switchLocation, (size_t, size_t), (override));
     MOCK_METHOD(Location&, currentLocation, (), (override));
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
-    MOCK_METHOD(Storage<PlayerCharacter>&, players, (), (const, override));
+    MOCK_METHOD(SharedStorage<PlayerCharacter>&, players, (), (const, override));
     MOCK_METHOD(Storage<CharacterInstance*>&, allCharacters, (), (const, override));
 };
 

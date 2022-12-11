@@ -15,21 +15,18 @@
 namespace DnD {
 class GameState {
  public:
-    virtual Storage<NPC>& npc() = 0;
-    virtual Storage<PlayerCharacter>& players() = 0;
+    virtual SharedStorage<NPC>& npc() = 0;
+    virtual SharedStorage<PlayerCharacter>& players() = 0;
     virtual Storage<CharacterInstance*>& allCharacters() = 0;
 
-    virtual Storage<Item>& items() = 0;
-    virtual Storage<ActivatableItem>& activatableItems() = 0;
-    virtual Storage<Weapon>& weapons() = 0;
-    virtual Storage<Spell>& spells() = 0;
-    virtual Storage<Armor>& armor() = 0;
+    virtual SharedStorage<Item>& items() = 0;
+    virtual SharedStorage<ActivatableItem>& activatableItems() = 0;
+    virtual SharedStorage<Weapon>& weapons() = 0;
+    virtual SharedStorage<Spell>& spells() = 0;
+    virtual SharedStorage<Armor>& armor() = 0;
 
-    virtual Storage<Race>& races() = 0;
-    virtual Storage<Class>& classes() = 0;
-
-    virtual ErrorStatus addItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
-    virtual ErrorStatus removeItem(size_t char_id, std::string_view item_type, size_t item_id) = 0;
+    virtual SharedStorage<Race>& races() = 0;
+    virtual SharedStorage<Class>& classes() = 0;
 
     virtual ErrorStatus addAction(std::string_view item_type, size_t item_id, const Action& action) = 0;
     virtual ErrorStatus removeAction(std::string_view item_type, size_t item_id, size_t action_id) = 0;
@@ -39,25 +36,22 @@ class GameState {
 
     virtual ErrorStatus setArea(std::string_view item_type, size_t item_id, std::unique_ptr<Area>&& area) = 0;
     virtual ErrorStatus setPositionType(size_t char_id, std::unique_ptr<Position>&& pos) = 0;
-
-    virtual ErrorStatus changeCharacteristic(std::string_view type, size_t id, std::string_view characteristic,
-                                             const std::variant<std::string, size_t, int>& replacer) = 0;
 };
 
 class GameStateImpl : virtual public GameState {
  private:
-    Storage<NPC> npc_;
-    Storage<PlayerCharacter> players_;
+    SharedStorage<NPC> npc_;
+    SharedStorage<PlayerCharacter> players_;
     Storage<CharacterInstance*> all_characters_;
 
-    Storage<Item> items_;
-    Storage<ActivatableItem> activatables_;
-    Storage<Weapon> weapons_;
-    Storage<Spell> spells_;
-    Storage<Armor> armor_;
+    SharedStorage<Item> items_;
+    SharedStorage<ActivatableItem> activatables_;
+    SharedStorage<Weapon> weapons_;
+    SharedStorage<Spell> spells_;
+    SharedStorage<Armor> armor_;
 
-    Storage<Race> races_;
-    Storage<Class> classes_;
+    SharedStorage<Race> races_;
+    SharedStorage<Class> classes_;
 
     DamageTypeStorage damage_types_;
 
@@ -68,18 +62,18 @@ class GameStateImpl : virtual public GameState {
     GameStateImpl() = default;
     GameStateImpl(GameMap* map) : map_(map) {}
 
-    Storage<NPC>& npc() override;
-    Storage<PlayerCharacter>& players() override;
+    SharedStorage<NPC>& npc() override;
+    SharedStorage<PlayerCharacter>& players() override;
     Storage<CharacterInstance*>& allCharacters() override;
 
-    Storage<Item>& items() override;
-    Storage<ActivatableItem>& activatableItems() override;
-    Storage<Weapon>& weapons() override;
-    Storage<Spell>& spells() override;
-    Storage<Armor>& armor() override;
+    SharedStorage<Item>& items() override;
+    SharedStorage<ActivatableItem>& activatableItems() override;
+    SharedStorage<Weapon>& weapons() override;
+    SharedStorage<Spell>& spells() override;
+    SharedStorage<Armor>& armor() override;
 
-    Storage<Race>& races() override;
-    Storage<Class>& classes() override;
+    SharedStorage<Race>& races() override;
+    SharedStorage<Class>& classes() override;
 
     ErrorStatus addAction(std::string_view item_type, size_t item_id, const Action& action) override;
     ErrorStatus removeAction(std::string_view item_type, size_t item_id, size_t action_id) override;
@@ -98,18 +92,18 @@ class LogicProcessor : virtual public GameState {
 
         std::unordered_map<std::string, size_t> damage_types;
 
-        Storage<NPC> npc;
-        Storage<PlayerCharacter> players;
+        Storage<NPC*> npc;
+        Storage<PlayerCharacter*> players;
 
-        Storage<Item> items;
-        Storage<Weapon> weapons;
-        Storage<Spell> spells;
-        Storage<Armor> armor;
+        Storage<Item*> items;
+        Storage<Weapon*> weapons;
+        Storage<Spell*> spells;
+        Storage<Armor*> armor;
 
-        Storage<Race> races;
-        Storage<Class> classes;
+        Storage<Race*> races;
+        Storage<Class*> classes;
 
-        Storage<Location> locations;
+        Storage<Location*> locations;
     };
 
  public:

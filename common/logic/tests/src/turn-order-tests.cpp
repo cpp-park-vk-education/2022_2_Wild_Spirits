@@ -17,13 +17,16 @@ class TurnOrderSuite : public ::testing::Test {
     GameStateImpl game;
     TurnOrder queue;
 
-    NPC enemy;
-    Class char_class_;
+    std::shared_ptr<NPC> enemy;
+    std::shared_ptr<Class> char_class_;
 
     std::vector<size_t> expected_turn_order_;
 
  public:
-    TurnOrderSuite() : map(), location(), game(&map), queue(game, map) {
+    TurnOrderSuite() :
+            map(), location(), game(&map), queue(game, map),
+            enemy(std::make_shared<NPC>()),
+            char_class_(std::make_shared<Class>()) {
         EXPECT_CALL(map, currentLocation())
             .WillRepeatedly(ReturnRef(location));
 
@@ -36,7 +39,7 @@ class TurnOrderSuite : public ::testing::Test {
         for (size_t i = 0; i < 2; ++i) {
             location.npc().add(i, enemy, PositionFactory::create({i, i}), map);
         }
-        game.players().add(2, Character(), PositionFactory::create({1, 2}), map, char_class_, Race());
+        game.players().add(2, Character(), PositionFactory::create({1, 2}), map, char_class_, std::make_shared<Race>());
 
         expected_turn_order_.reserve(3);
         expected_turn_order_.push_back(2);
@@ -93,9 +96,9 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
     PlayerCharacter& player = game.players().get(2);
 
     queue.pushFront(player.id());
-    Skill skill(0, "", 0, {}, 2, 3);
+    auto skill = std::make_shared<Skill>(0, "", 0, std::vector<Action>{}, 2, 3);
 
-    player.skills().add(skill);
+    player.skills().add(Skill_Instance(skill));
 
     auto& player_skill = player.skills().get(0);
 

@@ -46,11 +46,11 @@ void TurnOrder::fillQueue() {
     queue_.clear();
 
     for (auto& [_, player] : game_.players()) {
-        queue_.push_back(&player);
+        queue_.push_back(player.get());
     }
 
     for (auto& [_, character] : map_.currentLocation().npc()) {
-        queue_.push_back(&character);
+        queue_.push_back(character.get());
     }
 }
 

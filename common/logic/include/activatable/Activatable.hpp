@@ -15,7 +15,7 @@ class ActivatableInterface {
         Storage<Action::Result> results;
 
         Result() = default;
-        Result(int ap, unsigned int  resource, const std::vector<Action::Result>& result);
+        Result(int ap, unsigned int resource, const std::vector<Action::Result>& result);
 
         bool operator==(const Result& other) const;
         friend std::ostream& operator<<(std::ostream& out, const Result& other);
@@ -38,6 +38,7 @@ class Activatable : public ActivatableInterface {
 
  public:
     Activatable() = default;
+    virtual ~Activatable() {}
 
     Activatable(const std::vector<Action>& actions, unsigned int action_cost, std::string_view scaling) :
         actions_(actions), action_cost_(action_cost), scaling_(scaling) {}
