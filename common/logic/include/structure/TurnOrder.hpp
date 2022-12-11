@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <memory>
 #include <cstddef>
 
 #include "ErrorStatus.hpp"
@@ -13,9 +14,11 @@ class CharacterInstance;
 class TurnOrder {
  private:
     size_t current_turn_;
-    std::deque<CharacterInstance*> queue_;
+    std::deque<std::weak_ptr<CharacterInstance>> queue_;
     GameState& game_;
     GameMap& map_;
+
+    std::shared_ptr<CharacterInstance> getCharacter(size_t id);
  
  public:
     using size_type = size_t;
@@ -34,7 +37,7 @@ class TurnOrder {
     void fillQueue();  // Pushes all players and npc's on current location to the queue
 
     ErrorStatus swapOrder(size_t first, size_t second);
-    CharacterInstance* getActiveCharacter() const;
+    std::weak_ptr<CharacterInstance> getActiveCharacter() const;
     size_t getActiveCharacterId() const;
 
     auto begin() {

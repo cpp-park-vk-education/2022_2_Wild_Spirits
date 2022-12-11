@@ -70,7 +70,7 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
     ASSERT_EQ(player.buffs().front().turnsLeft(), 2);
 
     // First entry should be the only player, with id == 2
-    EXPECT_EQ(queue.getActiveCharacter(), &player);
+    EXPECT_EQ(queue.getActiveCharacter().lock().get(), &player);
     EXPECT_EQ(queue.getActiveCharacterId(), 2);
 
     // Skip to the player's turn, check his buff
@@ -87,7 +87,7 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
 
     // While second enemy still has the buff
     NPC_Instance& npc = location.npc().get(expected_turn_order_[2]);
-    EXPECT_EQ(queue.getActiveCharacter(), &npc);
+    EXPECT_EQ(queue.getActiveCharacter().lock().get(), &npc);
     ASSERT_THAT(npc.buffs(), SizeIs(1));
     EXPECT_EQ(npc.buffs().front().turnsLeft(), 1);
 }

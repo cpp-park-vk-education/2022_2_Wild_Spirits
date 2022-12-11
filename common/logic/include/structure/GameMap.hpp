@@ -6,8 +6,6 @@
 
 namespace DnD {
 class GameState;
-// class PlayerCharacter;
-// class CharacterInstance;
 
 class GameMap {
  public:
