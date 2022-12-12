@@ -41,5 +41,7 @@ class Spell : public GameEntity, public Activatable {
         std::get<Result>(result).resource_spent = spell_cost_;
         return result;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

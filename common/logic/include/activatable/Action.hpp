@@ -17,7 +17,7 @@ class Effect;
 class CharacterInstance;
 class Buff;
 
-class Action {
+class Action : public DynamiclySettable {
  public:
     enum class Target {
         Both,
@@ -88,7 +88,7 @@ class Action {
     const std::string& targetScaling() const;
 
     bool canMiss() const;
-    void toggleMissable();
+    void setMissable(bool);
     
     void setArea(AreaPtr&& area);
     const AreaPtr& area() const;
@@ -99,5 +99,7 @@ class Action {
 
     std::tuple<std::vector<Action::Result>, ErrorStatus> getResults(const CharacterInstance&,
                                                             const Tile& tile, uint8_t dice_roll_res = 0) const;
+    
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

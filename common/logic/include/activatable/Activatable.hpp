@@ -4,6 +4,8 @@
 
 #include "GameEntity.hpp"
 #include "Action.hpp"
+#include "Effect.hpp"
+#include "Buff.hpp"
 
 namespace DnD {
 class ActivatableInterface : virtual public Identifiable {
@@ -37,7 +39,7 @@ class ActivatableInterface : virtual public Identifiable {
                                                 uint8_t dice_roll_res = 0) const = 0;
 };
 
-class Activatable : public ActivatableInterface {
+class Activatable : public ActivatableInterface, virtual public DynamiclySettable  {
  public:
     enum class Cast {
         Tile,
@@ -46,7 +48,6 @@ class Activatable : public ActivatableInterface {
 
  private:
     std::vector<Action> actions_;
-    Tile target;
     unsigned int action_cost_;
     std::string scaling_;
     Cast cast_type_;
@@ -54,8 +55,6 @@ class Activatable : public ActivatableInterface {
  public:
     Activatable() = default;
     virtual ~Activatable() {}
-
-    // virtual size_t id() const = 0;
 
     Activatable(const std::vector<Action>& actions, unsigned int action_cost,
                 std::string_view scaling, Cast cast_type = Cast::Tile) :
@@ -117,6 +116,6 @@ class Activatable : public ActivatableInterface {
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>&,
                                                 uint8_t dice_roll_res = 0) const override;
     
-    // ErrorStatus setCharacteristic(const std::string& which, const GameEntity::SetterParam& to);
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

@@ -35,6 +35,8 @@ class Skill : public GameEntity, public Activatable {
     void setCooldown(unsigned int cooldown) {
         cooldown_ = cooldown;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 
 class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
@@ -61,12 +63,6 @@ class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& tiles,
-                                        uint8_t dice_roll_res = 0) const override {
-        if (turnsLeft() != 0) {
-            return std::make_tuple(Result{}, ErrorStatus::SKILL_ON_COOLDOWN);
-        }
-        const_cast<Skill_Instance*>(this)->reset(original_->cooldown());
-        return original_->use(actor, tiles, dice_roll_res);
-    }
+                                        uint8_t dice_roll_res = 0) const override;
 };
 }  // namespace DnD

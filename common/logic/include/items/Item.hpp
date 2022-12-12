@@ -20,5 +20,7 @@ class Item : public GameEntity {
     void setCost(int cost) {
         cost_ = cost;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

@@ -117,7 +117,29 @@ std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance*
     return std::make_tuple(result, ErrorStatus::OK);
 }
 
-// ErrorStatus Activatable::setCharacteristic(const std::string& which, const SetterParam& to) {
+ErrorStatus Activatable::setCharacteristic(const std::string& which, const SetterParam& to) {
+    if (which == "scaling") {
+        auto value = std::get_if<std::string>(&to);
+        if (!value) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+        setScaling(*value);
+        return ErrorStatus::OK;
+    }
 
-// }
+    auto value = std::get_if<int64_t>(&to);
+    if (!value) {
+        return ErrorStatus::INVALID_ARGUMENT;
+    }
+
+    if (which == "ap-cost") {
+        setActivateCost(*value);
+        return ErrorStatus::OK;
+    } else if (which == "cast") {
+        setCastType(static_cast<Cast>(*value));
+        return ErrorStatus::OK;
+    }
+
+    return ErrorStatus::INVALID_SETTER;
+}
 }  // namespace DnD

@@ -21,6 +21,8 @@ class ActivatableItem : public Item, public Activatable {
                     Cast cast_type = Cast::Tile, const Info& info = {}) :
         Item(id, name, image_id, cost, info),
         Activatable(std::move(actions), action_cost, scaling, cast_type) {}
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 
 class Weapon : public ActivatableItem {
@@ -38,7 +40,7 @@ class Weapon : public ActivatableItem {
         ActivatableItem(id, name, image_id, std::move(actions), action_cost, cost, scaling, cast_type, info) {}
 };
 
-class Consumable : public ActivatableInterface {
+class Consumable : public ActivatableInterface, public DynamiclySettable {
  private:
     const std::shared_ptr<const ActivatableItem> original_;
     unsigned int uses_;
@@ -48,8 +50,12 @@ class Consumable : public ActivatableInterface {
 
     Consumable(const std::shared_ptr<ActivatableItem>& item, unsigned int uses) : original_(item), uses_(uses) {}
     
-    void add(unsigned int num) {
+    void addUses(unsigned int num) {
         uses_ += num;
+    }
+
+    void setUses(unsigned int num) {
+        uses_ = num;
     }
 
     size_t id() const {
@@ -60,11 +66,11 @@ class Consumable : public ActivatableInterface {
         return *original_;
     }
 
-    unsigned int usesLeft() {
+    unsigned int usesLeft() const {
         return uses_;
     }
 
-    bool empty() {
+    bool empty() const {
         return uses_ == 0;
     }
 
@@ -77,16 +83,8 @@ class Consumable : public ActivatableInterface {
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& targets,
-                                                uint8_t dice_roll_res = 0) const override {
-        if (uses_ == 0) {
-            return std::make_tuple(Result{}, ErrorStatus::NO_USES_LEFT);
-        }
+                                                uint8_t dice_roll_res = 0) const override;
 
-        const_cast<Consumable*>(this)->uses_ -= 1;
-
-        auto result = original_->use(actor, targets, dice_roll_res);
-        std::get<Result>(result).resource_spent = 1;
-        return result;
-    }
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

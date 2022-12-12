@@ -4,6 +4,7 @@
 #include "Dice.hpp"
 #include "DamageTypeStorage.hpp"
 #include "Resistible.hpp"
+#include "Character.hpp"
 
 namespace DnD {
 TEST(StatTest, ValidStatBonus) {

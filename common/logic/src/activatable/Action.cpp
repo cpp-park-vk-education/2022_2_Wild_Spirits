@@ -131,8 +131,8 @@ bool Action::canMiss() const {
     return can_miss_;
 }
 
-void Action::toggleMissable() {
-    can_miss_ = !can_miss_;
+void Action::setMissable(bool value) {
+    can_miss_ = value;
 }
 
 void Action::setArea(Action::AreaPtr&& area) {
@@ -206,5 +206,31 @@ std::tuple<std::vector<Action::Result>, ErrorStatus> Action::getResults(
     }
 
     return std::make_tuple(results, ErrorStatus::OK);
+}
+
+ErrorStatus Action::setCharacteristic(const std::string& which, const SetterParam& to) {
+    if (which == "scaling") {
+        auto value = std::get_if<std::string>(&to);
+        if (!value) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+        setTargetScaling(*value);
+        return ErrorStatus::OK;
+    }
+
+    auto value = std::get_if<int64_t>(&to);
+    if (!value) {
+        return ErrorStatus::INVALID_ARGUMENT;
+    }
+
+    if (which == "miss") {
+        setMissable(*value);
+        return ErrorStatus::OK;
+    } else if (which == "target") {
+        setTargetType(static_cast<Target>(*value));
+        return ErrorStatus::OK;
+    }
+
+    return ErrorStatus::INVALID_SETTER;
 }
 }  // namespace DnD

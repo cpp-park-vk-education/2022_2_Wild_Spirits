@@ -7,6 +7,10 @@ set(SOURCES
      src/activatable/Effect.cpp
      src/base/Dice.cpp
      src/base/GameEntity.cpp
+     src/items/Armor.cpp
+     src/items/Item.cpp
+     src/items/Spell.cpp
+     src/items/Skill.cpp
      src/character/OnLocation.cpp
      src/character/Character.cpp
      src/character/CharacterInstance.cpp

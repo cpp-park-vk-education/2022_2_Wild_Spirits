@@ -39,5 +39,7 @@ class Armor : public Item {
     void setArmorType(Type type) {
         type_ = type;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD
