@@ -7,7 +7,7 @@
 
 namespace LM {
 
-    class SceneGui : public SceneInterface {
+    class SceneGui: public SceneInterface {
     protected:
         //struct TransformData {
         //    glm::mat4 transform;
@@ -17,13 +17,9 @@ namespace LM {
     public:
         SceneGui();
         virtual ~SceneGui();
-        
-        void add(Ref<RenderableGui> renderable) { m_Renderables.emplace_back(renderable); }
-        void remove(Ref<RenderableGui> renderable) {
-            if (auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable); it != m_Renderables.end()) {
-                m_Renderables.erase(it);
-            }
-        }
+
+        void add(Ref<RenderableGui> renderable);
+        void remove(Ref<RenderableGui> renderable);
         void rebuild();
 
         virtual void onEvent(Ref<Event> event) override;
@@ -33,7 +29,7 @@ namespace LM {
         Vector<Ref<RenderableGui>> m_Renderables;
         Scope<Renderer> m_Renderer;
 
-        uint32_t m_Width = 0; 
+        uint32_t m_Width = 0;
         uint32_t m_Height = 0;
     };
 

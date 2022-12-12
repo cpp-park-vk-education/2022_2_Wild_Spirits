@@ -1,5 +1,7 @@
 #include "SceneGui.h"
 
+#include <algorithm>
+
 #include <glm/gtx/transform.hpp>
 
 #include <Core/Application.h>
@@ -19,6 +21,16 @@ namespace LM {
 
     }
 
+    void SceneGui::add(Ref<RenderableGui> renderable) {
+        m_Renderables.emplace_back(renderable);
+    }
+
+    void SceneGui::remove(Ref<RenderableGui> renderable) {
+        if (auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable); it != m_Renderables.end()) {
+            m_Renderables.erase(it);
+        }
+    }
+
     void SceneGui::rebuild() {
         //m_Transforms.push_back({ glm::mat4(), glm::vec2(0.0f, 0.0f), glm::vec2(m_Width, m_Height) });
         for (auto& renderable : m_Renderables)
@@ -31,18 +43,18 @@ namespace LM {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<WindowResizeEvent>([&](Ref<WindowResizeEvent> event) {
             m_Width = event->getWidth();
-            m_Height = event->getHeight();
-            return false;
+        m_Height = event->getHeight();
+        return false;
         });
 
         bool isMouseMovedEvent = false;
         dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
             isMouseMovedEvent = true;
-            for (auto& renderable : m_Renderables) {
-                Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX(), m_Height - e->getY());
-                renderable->onEvent(newEvent);
-            }
-            return false;
+        for (auto& renderable : m_Renderables) {
+            Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX(), m_Height - e->getY());
+            renderable->onEvent(newEvent);
+        }
+        return false;
         });
         if (isMouseMovedEvent) { return; }
 
