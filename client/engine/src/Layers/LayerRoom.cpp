@@ -57,7 +57,7 @@ namespace LM {
                 ImGui::Separator();
             }
             for (auto& userName : std::vector<std::string>{ "LENIA", "MIHAIL", "MAKS", "NIKITA" }) {
-                ImGui::Text(userName.data());
+                ImGui::Text("%s", userName.data());
             }
             ImGui::Separator();
             if (m_IsUserCreator && ImGui::Button("Start Game")) {

@@ -50,7 +50,7 @@ namespace LM {
         if (ImGui::Begin("Rooms", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) {
             for (size_t i = 0; i < m_Rooms.size(); ++i) {
                 ImGui::PushID(static_cast<int>(m_Rooms[i].getId()));
-                ImGui::Text("RoomId: %10llu", m_Rooms[i].getId());
+                ImGui::Text("RoomId: %10lu", m_Rooms[i].getId());
                 ImGui::SameLine();
                 if (ImGui::Button("Connect")) {
                     m_RoomId = i;

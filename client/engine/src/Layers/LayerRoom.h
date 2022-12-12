@@ -18,9 +18,9 @@ namespace LM {
     protected:
         bool m_NeedGoBack = false;
         bool m_NeedStart = false;
-        bool m_IsUserCreator;
-
         Room m_Room;
+
+        bool m_IsUserCreator;
     };
 
 }
