@@ -5,12 +5,13 @@
 #include <variant>
 
 #include "ErrorStatus.hpp"
+#include "Identifiable.hpp"
+#include "DynamiclySettable.hpp"
 
 namespace DnD {
-class GameEntityInterface {
+class GameEntityInterface : virtual public Identifiable, virtual public DynamiclySettable {
  protected:
     using Info = std::unordered_map<std::string, std::string>;
-    using SetterParam = std::variant<std::string, int64_t>;
 
  private:
     virtual void toggleUpdated() = 0;
@@ -24,8 +25,6 @@ class GameEntityInterface {
 
     virtual size_t getImageId() const = 0;
     virtual void setImage(size_t) = 0;
-
-    virtual size_t id() const = 0;
 
     virtual ~GameEntityInterface() {}
 

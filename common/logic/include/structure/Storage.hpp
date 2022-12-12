@@ -25,7 +25,7 @@ concept IdentifiableObj = requires(T obj) {
 };
 
 template <typename T>
-concept Identifiable = IdentifiablePtr<T> || IdentifiableObj<T>;
+concept IdentifiableEntity = IdentifiablePtr<T> || IdentifiableObj<T>;
 
 template <typename T, typename U>
 concept DerivedPtr = requires(T obj) {
@@ -35,7 +35,7 @@ concept DerivedPtr = requires(T obj) {
 template <typename T, typename U>
 concept DerivedFrom = std::derived_from<T, U> || DerivedPtr<T, U>;
 
-template <Identifiable T>
+template <IdentifiableEntity T>
 class Storage {
  private:
     std::unordered_map<size_t, T> data_;
@@ -191,7 +191,7 @@ class Storage {
     }
 };
 
-template <Identifiable T>
+template <IdentifiableEntity T>
 class SharedStorage : public Storage<std::shared_ptr<T>> {
  public:
     using Storage<std::shared_ptr<T>>::add;

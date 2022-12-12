@@ -6,7 +6,7 @@
 #include "Action.hpp"
 
 namespace DnD {
-class ActivatableInterface {
+class ActivatableInterface : virtual public Identifiable {
  public:
     struct Result {
      private:
@@ -55,6 +55,8 @@ class Activatable : public ActivatableInterface {
     Activatable() = default;
     virtual ~Activatable() {}
 
+    // virtual size_t id() const = 0;
+
     Activatable(const std::vector<Action>& actions, unsigned int action_cost,
                 std::string_view scaling, Cast cast_type = Cast::Tile) :
         actions_(actions), action_cost_(action_cost), scaling_(scaling), cast_type_(cast_type) {}
@@ -65,8 +67,8 @@ class Activatable : public ActivatableInterface {
 
     void setCastType(Cast cast_type);
     Cast castType() const;
-    
-    void addEffect(int action, std::unique_ptr<Effect>&& effect) {
+
+    void addEffect(size_t action, std::unique_ptr<Effect>&& effect) {
         actions_[action].addEffect(std::move(effect));
     }
 

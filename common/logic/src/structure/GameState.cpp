@@ -45,25 +45,22 @@ SharedStorage<Armor>& GameStateImpl::armor() {
     return armor_;
 }
 
-std::tuple<std::string, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
+std::tuple<Activatable::Result, ErrorStatus> LogicProcessorImpl::useActivatable(size_t actor_id, std::string_view type,
                                                                     size_t item_id, const std::vector<Tile>& target) {
     auto character = allCharacters().safeGet(actor_id);
 
     if (!character) {
-        return std::make_tuple("", ErrorStatus::NO_SUCH_CHARACTER);
+        return std::make_tuple(Activatable::Result{}, ErrorStatus::NO_SUCH_CHARACTER);
     }
 
     Dice dice;
     auto [result, status] = character->use(type, item_id, target, &dice);
 
     if (status != ErrorStatus::OK) {
-        return std::make_tuple("", status);
+        return std::make_tuple(Activatable::Result{}, status);
     }
 
-    std::stringstream stream;
-    stream << result;
-
-    return std::make_tuple(stream.str(), ErrorStatus::OK);
+    return std::make_tuple(result, ErrorStatus::OK);
 }
 
 std::tuple<unsigned int, ErrorStatus> LogicProcessorImpl::rollDie(unsigned int die) const {

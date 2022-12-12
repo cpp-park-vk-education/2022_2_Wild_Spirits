@@ -65,7 +65,7 @@ class GameStateImpl : virtual public GameState {
 
 class LogicProcessor : virtual public GameState {
  public:
-    virtual std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
+    virtual std::tuple<Activatable::Result, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
                                                                 size_t item_id, const std::vector<Tile>& tiles) = 0;
     
     virtual std::tuple<unsigned int, ErrorStatus> rollDie(unsigned int die) const = 0;
@@ -83,7 +83,7 @@ class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
  public:
     LogicProcessorImpl() = default;
 
-    std::tuple<std::string, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
+    std::tuple<Activatable::Result, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
                                                         size_t item_id, const std::vector<Tile>& tiles) override;
     std::tuple<unsigned int, ErrorStatus> rollDie(unsigned int die) const override;
 

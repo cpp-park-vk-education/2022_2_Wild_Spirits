@@ -61,7 +61,7 @@ class Action {
 
     bool can_miss_ = true;
     std::string target_scaling_ = Armor::kScaling;
-    
+
     template <typename T>
     void applyEffectsTo(SharedStorage<T>& characters, std::vector<Action::Result>* results, uint8_t dice_roll_res = 0,
                     std::function<bool(const CharacterInstance&)> predicate = [] (const auto&) { return true; }) const;
