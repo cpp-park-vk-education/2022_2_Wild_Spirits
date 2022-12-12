@@ -136,15 +136,16 @@ namespace LM {
             m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ m_TextureManager->get(item->getImageId()) }, item));
         }
     }
+
     void LayerLocation::load() {
         // clearScenes();
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
-        DnD::PlayerCharacter& player = getCurrentPlayer();
-        loadActivatable(player.weapons());
-        loadActivatable(player.spels());
-        loadActivatable(player.skills());
-        loadActivatable(player.consumables());
+        std::shared_ptr<DnD::PlayerCharacter> player = Application::get()->getClientSideProcessor()->getCurrentPlayer();
+        loadActivatable(player->weapons());
+        loadActivatable(player->spels());
+        loadActivatable(player->skills());
+        loadActivatable(player->consumables());
         //for (auto& item : player.weapons()) {
         //    if (!m_TextureManager->has(item->getImageId())) {
         //        std::shared_ptr<std::string> imgSource = std::make_shared<std::string>();
@@ -155,19 +156,28 @@ namespace LM {
         //    m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ m_TextureManager->get(item->getImageId()) }, item));
         //}
         addToGui(m_BottomActions);
-        DnD::Loation& location = getLocation();
-        // Из Location доставать NPC(Enemies)
-        // Из GameMap доставать игроков
-        // метод center pos
+
+        Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
+
+        DnD::Loation& location = gameMap->currentLocation();
         glm::uvec2 fieldSize = glm::uvec2(location.width(), location.height());
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
 
-        auto& characters = getCharacters();
+        // Из Location доставать NPC(Enemies)
+        // Из GameMap доставать игроков
+        // метод centerPos
+        auto& npcs = location.npc();
+        for (auto& npc : npcs) {
+            tryLoadImage(npc->getImageId());
+            Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(m_TextureManager->get(npc->getImageId()), Color(), glm::uvec2(npc->centerPos().x, npc->centerPos().y));
+            m_Field->addCharacter(renderable);
+        }
+        auto& characters = gameMap->players();
         for (auto& character : characters) {
             tryLoadImage(character->getImageId());
             Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(m_TextureManager->get(character->getImageId()), Color(), glm::uvec2(character.posX(), character.posY()));
-            m_Field->addCharacter(character);
+            m_Field->addCharacter(renderable);
         }
     }
 #else

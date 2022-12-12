@@ -27,6 +27,9 @@ namespace LM {
 
 #ifdef BUILD_LOGIC
         Ref<ClientSideProcessor> getClientSideProcessor() { return m_ClientSideProcessor; }
+        Ref<DnD::GameState> getGameState() { return m_GameState; }
+        Ref<DnD::GameMap> getGameMap() { return m_GameMap; }
+        Ref<DnD::TurnOrder> getTurnOrder() { return m_TurnOrder; }
 #endif
 
         void addLayer(Ref<Layer> layer) { m_LayerStack->pushLayer(layer); }
