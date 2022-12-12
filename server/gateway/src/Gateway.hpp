@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <thread>
+#include <vector>
 
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
@@ -23,10 +25,10 @@ struct Gateway {
 
     BoostEventLoop loop;
     UserManagerImpl user_manager;
-    RoomManagerImpl room_manager;
-    RoomConnector room_connector;
     ImageStorage image_storage;
     InMemoryAuthorizer authorizer;
+    RoomManagerImpl room_manager;
+    RoomConnector room_connector;
 
     std::shared_ptr<UserAcceptor> acceptor;
 
@@ -78,7 +80,16 @@ struct Gateway {
         connection->recieve();
     }
 
-    void start() {
+    void start(std::size_t threads_cnt=1) {
+        std::vector<std::thread> v;
+        v.reserve(threads_cnt - 1);
+        for(auto i = threads_cnt - 1; i > 0; --i){
+            v.emplace_back(
+            [&loop=this->loop]
+            {
+                loop.start();
+            });
+        }
         loop.start();
     }
 

@@ -5,7 +5,8 @@ std::string Base64Encoder::encode(const std::string& in) {
 
     const auto symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    int val = 0, valb = -6;
+    unsigned int val = 0;
+    int valb = -6;
     for (unsigned char c : in) {
         val = (val << 8) + c;
         valb += 8;
@@ -27,7 +28,8 @@ std::string Base64Encoder::decode(const std::string& in) {
     std::vector<int> T(256, -1);
     for (int i = 0; i < 64; i++) T[symbols[i]] = i;
 
-    int val = 0, valb = -8;
+    unsigned int val = 0;
+    int valb = -8;
     for (unsigned char c : in) {
         if (T[c] == -1) break;
         val = (val << 6) + T[c];
