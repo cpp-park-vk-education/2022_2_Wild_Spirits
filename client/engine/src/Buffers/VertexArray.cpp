@@ -10,17 +10,18 @@ namespace LM {
     {
         switch (_Type)
         {
-        case ShaderDataType::Float:    return GL_FLOAT;
-        case ShaderDataType::Float2:   return GL_FLOAT;
-        case ShaderDataType::Float3:   return GL_FLOAT;
-        case ShaderDataType::Float4:   return GL_FLOAT;
-        case ShaderDataType::Mat3:     return GL_FLOAT;
-        case ShaderDataType::Mat4:     return GL_FLOAT;
-        case ShaderDataType::Int:      return GL_INT;
-        case ShaderDataType::Int2:     return GL_INT;
-        case ShaderDataType::Int3:     return GL_INT;
-        case ShaderDataType::Int4:     return GL_INT;
-        case ShaderDataType::Bool:     return GL_BOOL;
+            case ShaderDataType::None:   break;
+            case ShaderDataType::Float:  return GL_FLOAT;
+            case ShaderDataType::Float2: return GL_FLOAT;
+            case ShaderDataType::Float3: return GL_FLOAT;
+            case ShaderDataType::Float4: return GL_FLOAT;
+            case ShaderDataType::Mat3:   return GL_FLOAT;
+            case ShaderDataType::Mat4:   return GL_FLOAT;
+            case ShaderDataType::Int:    return GL_INT;
+            case ShaderDataType::Int2:   return GL_INT;
+            case ShaderDataType::Int3:   return GL_INT;
+            case ShaderDataType::Int4:   return GL_INT;
+            case ShaderDataType::Bool:   return GL_BOOL;
         }
 
         CORE_ASSERT(false, "Unknown ShaderDataType!");
@@ -65,65 +66,67 @@ namespace LM {
         {
             switch (element.type)
             {
-            case ShaderDataType::Float:
-            case ShaderDataType::Float2:
-            case ShaderDataType::Float3:
-            case ShaderDataType::Float4:
-            {
-                glEnableVertexAttribArray(m_VertexBufferIndex);
-                glVertexAttribPointer(m_VertexBufferIndex,
-                    element.getComponentCount(),
-                    shaderDataTypeToOpenGLBaseType(element.type),
-                    element.normalized ? GL_TRUE : GL_FALSE,
-                    layout.getStride(),
-                    reinterpret_cast<const void*>(element.offset));
-                if (layout.hasDivisor())
-                {
-                    glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
-                }
-                m_VertexBufferIndex++;
-                break;
-            }
-            case ShaderDataType::Int:
-            case ShaderDataType::Int2:
-            case ShaderDataType::Int3:
-            case ShaderDataType::Int4:
-            case ShaderDataType::Bool:
-            {
-                glEnableVertexAttribArray(m_VertexBufferIndex);
-                glVertexAttribIPointer(m_VertexBufferIndex,
-                    element.getComponentCount(),
-                    shaderDataTypeToOpenGLBaseType(element.type),
-                    layout.getStride(),
-                    reinterpret_cast<const void*>(element.offset));
-                if (layout.hasDivisor())
-                {
-                    glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
-                }
-                m_VertexBufferIndex++;
-                break;
-            }
-            case ShaderDataType::Mat3:
-            case ShaderDataType::Mat4:
-            {
-                uint32_t count = element.getComponentCount();
-                for (uint32_t i = 0; i < count; ++i)
+                case ShaderDataType::None: break;
+
+                case ShaderDataType::Float:
+                case ShaderDataType::Float2:
+                case ShaderDataType::Float3:
+                case ShaderDataType::Float4:
                 {
                     glEnableVertexAttribArray(m_VertexBufferIndex);
                     glVertexAttribPointer(m_VertexBufferIndex,
-                        count,
+                        element.getComponentCount(),
                         shaderDataTypeToOpenGLBaseType(element.type),
                         element.normalized ? GL_TRUE : GL_FALSE,
                         layout.getStride(),
-                        (const void*)(element.offset + sizeof(float) * count * i));
+                        reinterpret_cast<const void*>(element.offset));
                     if (layout.hasDivisor())
                     {
                         glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
                     }
                     m_VertexBufferIndex++;
+                    break;
                 }
-                break;
-            }
+                case ShaderDataType::Int:
+                case ShaderDataType::Int2:
+                case ShaderDataType::Int3:
+                case ShaderDataType::Int4:
+                case ShaderDataType::Bool:
+                {
+                    glEnableVertexAttribArray(m_VertexBufferIndex);
+                    glVertexAttribIPointer(m_VertexBufferIndex,
+                        element.getComponentCount(),
+                        shaderDataTypeToOpenGLBaseType(element.type),
+                        layout.getStride(),
+                        reinterpret_cast<const void*>(element.offset));
+                    if (layout.hasDivisor())
+                    {
+                        glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
+                    }
+                    m_VertexBufferIndex++;
+                    break;
+                }
+                case ShaderDataType::Mat3:
+                case ShaderDataType::Mat4:
+                {
+                    uint32_t count = element.getComponentCount();
+                    for (uint32_t i = 0; i < count; ++i)
+                    {
+                        glEnableVertexAttribArray(m_VertexBufferIndex);
+                        glVertexAttribPointer(m_VertexBufferIndex,
+                            count,
+                            shaderDataTypeToOpenGLBaseType(element.type),
+                            element.normalized ? GL_TRUE : GL_FALSE,
+                            layout.getStride(),
+                            (const void*)(element.offset + sizeof(float) * count * i));
+                        if (layout.hasDivisor())
+                        {
+                            glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
+                        }
+                        m_VertexBufferIndex++;
+                    }
+                    break;
+                }
             }
         }
     }
