@@ -16,7 +16,7 @@ namespace LM {
         return m_TargetY; 
     }
 
-    void MoveAction::setTarget(uint32_t x, uint32_t y) {
+    void MoveAction::setTarget(size_t x, size_t y) {
         m_TargetX = x;
         m_TargetY = y;
     }
