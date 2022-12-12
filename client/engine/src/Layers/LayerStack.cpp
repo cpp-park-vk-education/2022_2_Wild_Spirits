@@ -1,5 +1,7 @@
 #include "LayerStack.h"
 
+#include <algorithm>
+
 namespace LM {
 
     void LayerStack::pushLayer(Ref<Layer> layer) {
