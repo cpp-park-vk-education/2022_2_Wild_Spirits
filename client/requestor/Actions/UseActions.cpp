@@ -9,18 +9,18 @@ namespace LM {
     }
 
     Action::Type UseAction::getType() const { 
-        return Type::kUseWeapon; 
+        return m_Type;
     }
 
-    uint32_t UseAction::getTargetX() const { 
+    size_t UseAction::getTargetX() const { 
         return m_TargetX; 
     }
 
-    uint32_t UseAction::getTargetY() const { 
+    size_t UseAction::getTargetY() const { 
         return m_TargetY; 
     }
 
-    void UseAction::setTarget(uint32_t x, uint32_t y) { 
+    void UseAction::setTarget(size_t x, size_t y) { 
         m_TargetX = x; 
         m_TargetY = y;
         m_IsFirstSet = false;
@@ -29,7 +29,6 @@ namespace LM {
     bool UseAction::isFirstSet() const {
         return m_IsFirstSet;
     }
-
 
     DnD::Activatable& UseAction::getActivatable() {
         return m_Activatable; 

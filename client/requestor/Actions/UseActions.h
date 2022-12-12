@@ -73,10 +73,10 @@ namespace LM {
 
         virtual Type getType() const override;
         
-        uint32_t getTargetX() const;
-        uint32_t getTargetY() const;
+        size_t getTargetX() const;
+        size_t getTargetY() const;
 
-        void setTarget(uint32_t x, uint32_t y);
+        void setTarget(size_t x, size_t y);
         bool isFirstSet() const;
 
         DnD::Activatable& getActivatable();
@@ -86,8 +86,8 @@ namespace LM {
         DnD::Activatable& m_Activatable;
         Type m_Type;
 
-        uint32_t m_TargetX = 0;
-        uint32_t m_TargetY = 0;
+        size_t m_TargetX = 0;
+        size_t m_TargetY = 0;
         //uint32_t m_RangeX;
         //uint32_t m_RangeY;
 

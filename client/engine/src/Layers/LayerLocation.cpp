@@ -155,7 +155,10 @@ namespace LM {
         //    m_BottomActions->add(CreateRef<RenderableBottomAction>(RenderableTextureProps{ m_TextureManager->get(item->getImageId()) }, item));
         //}
         addToGui(m_BottomActions);
-        DnD::Loation& location = GetLocation();
+        DnD::Loation& location = getLocation();
+        // Из Location доставать NPC(Enemies)
+        // Из GameMap доставать игроков
+        // метод center pos
         glm::uvec2 fieldSize = glm::uvec2(location.width(), location.height());
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
