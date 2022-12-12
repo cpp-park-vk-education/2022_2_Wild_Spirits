@@ -12,7 +12,7 @@ namespace LM {
         BufferElement() = default;
 
         BufferElement(ShaderDataType type, std::string_view name, bool normalized = false) 
-            : name(name), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
+            : name(name), type(type), size(ShaderDataTypeFuncs::ShaderDataTypeSize(type)), offset(0), normalized(normalized)
         { }
 
         uint32_t getComponentCount() const {
@@ -39,7 +39,7 @@ namespace LM {
         std::string name;
         ShaderDataType type;
         uint32_t size;
-        uint32_t offset;
+        size_t offset;
         bool normalized;
     };
 
@@ -69,7 +69,7 @@ namespace LM {
         Vector<BufferElement>::const_iterator end()      const { return m_Elements.end(); }
     private:
         void calculateOffsetsAndStride() {
-            uint32_t offset = 0;
+            size_t offset = 0;
             m_Stride = 0;
             for (auto& element : m_Elements)
             {

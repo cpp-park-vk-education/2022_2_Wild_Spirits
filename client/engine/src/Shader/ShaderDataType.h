@@ -20,9 +20,11 @@ namespace LM {
         Bool
     };
 
-    static uint32_t ShaderDataTypeSize(ShaderDataType _Type) {
-        switch (_Type)
-        {
+    class ShaderDataTypeFuncs {
+    public:
+        static uint32_t ShaderDataTypeSize(ShaderDataType _Type) {
+            switch (_Type)
+            {
             case ShaderDataType::None:   break;
             case ShaderDataType::Float:  return 4;
             case ShaderDataType::Float2: return 4 * 2;
@@ -35,10 +37,11 @@ namespace LM {
             case ShaderDataType::Int3:   return 4 * 3;
             case ShaderDataType::Int4:   return 4 * 4;
             case ShaderDataType::Bool:   return 1;
+            }
+
+            CORE_ASSERT(false, "Unknown ShaderDataType!");
+            return 0;
         }
-        
-        CORE_ASSERT(false, "Unknown ShaderDataType!");
-        return 0;
-    }
+    };
 
 }

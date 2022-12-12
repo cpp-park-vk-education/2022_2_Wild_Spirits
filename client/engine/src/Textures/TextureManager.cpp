@@ -7,7 +7,7 @@ namespace LM {
     }
 
     void TextureManager::remove(size_t id) {
-
+        (void)id;
     }
     
     void TextureManager::remove(Ref<Texture2D> texture) {

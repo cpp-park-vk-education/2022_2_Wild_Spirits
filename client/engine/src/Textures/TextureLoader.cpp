@@ -18,7 +18,7 @@ namespace LM {
 
     TextureLoader::TextureLoader(TextureLoader::FromSource source) {
         stbi_set_flip_vertically_on_load(true);
-        m_Data = stbi_load_from_memory((stbi_uc*)source.source.data(), source.source.size(), &m_Width, &m_Height, &m_Channels, STBI_rgb_alpha);
+        m_Data = stbi_load_from_memory((stbi_uc*)source.source.data(), static_cast<int>(source.source.size()), &m_Width, &m_Height, &m_Channels, STBI_rgb_alpha);
         if (!m_Data)
         {
             LOGW("Can't load texture from source!");
