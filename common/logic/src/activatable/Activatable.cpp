@@ -116,4 +116,8 @@ std::tuple<Activatable::Result, ErrorStatus> Activatable::use(CharacterInstance*
     actor->setActionPoints(result.action_points);
     return std::make_tuple(result, ErrorStatus::OK);
 }
+
+// ErrorStatus Activatable::setCharacteristic(const std::string& which, const SetterParam& to) {
+
+// }
 }  // namespace DnD

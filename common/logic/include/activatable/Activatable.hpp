@@ -6,7 +6,6 @@
 #include "Action.hpp"
 
 namespace DnD {
-
 class ActivatableInterface {
  public:
     struct Result {
@@ -115,5 +114,7 @@ class Activatable : public ActivatableInterface {
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>&,
                                                 uint8_t dice_roll_res = 0) const override;
+    
+    // ErrorStatus setCharacteristic(const std::string& which, const GameEntity::SetterParam& to);
 };
 }  // namespace DnD

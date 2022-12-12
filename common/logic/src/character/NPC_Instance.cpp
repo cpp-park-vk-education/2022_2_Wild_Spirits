@@ -17,4 +17,23 @@ NPC_Instance::NPC_Instance(size_t id, const std::shared_ptr<NPC>& original, std:
 NPC_Instance::NPC_Instance(NPC_Instance&& other) :
     NPC_Instance(other.id(), other.original_, std::move(other.positionObj()),
                  other.map(), other.is_hostile_, other.money(), std::move(other.items_)) {}
+
+ErrorStatus NPC_Instance::setCharacteristic(const std::string& which, const SetterParam& to) {
+    auto status = CharacterInstance::setCharacteristic(which, to);
+    if (status != ErrorStatus::INVALID_SETTER) {
+        return status;
+    }
+
+    auto value = std::get_if<int64_t>(&to);
+    if (!value) {
+        return ErrorStatus::INVALID_ARGUMENT;
+    }
+
+    if (which == "hostility") {
+        setHostility(*value);
+        return ErrorStatus::OK;
+    }
+
+    return ErrorStatus::INVALID_SETTER;
+}
 }  // namespace DnD

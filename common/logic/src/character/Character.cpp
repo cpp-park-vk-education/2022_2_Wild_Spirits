@@ -42,4 +42,29 @@ namespace DnD {
         std::swap(max_hp_, other.max_hp_);
         std::swap(base_armor_class_, other.base_armor_class_);
     }
+
+    ErrorStatus Character::setCharacteristic(const std::string& which, const SetterParam& to) {
+        auto status = GameEntity::setCharacteristic(which, to);
+        if (status != ErrorStatus::INVALID_SETTER) {
+            return status;
+        }
+
+        auto value = std::get_if<int64_t>(&to);
+        if (!value) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+
+        if (which == "max-ap") {
+            setMaxActionPoints(*value);
+            return ErrorStatus::OK;
+        } else if (which == "max-hp") {
+            setMaxHP(*value);
+            return ErrorStatus::OK;
+        } else if (which == "base-armor") {
+            setBaseArmorClass(*value);
+            return ErrorStatus::OK;
+        }
+
+        return ErrorStatus::INVALID_SETTER;
+    }
 }  // namespace DnD

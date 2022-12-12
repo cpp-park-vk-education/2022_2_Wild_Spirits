@@ -145,5 +145,7 @@ class PlayerCharacter : public CharacterInstance {
     Storage<Consumable>& consumables() {
         return consumables_;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

@@ -2,11 +2,15 @@
 
 #include <unordered_map>
 #include <string>
+#include <variant>
+
+#include "ErrorStatus.hpp"
 
 namespace DnD {
 class GameEntityInterface {
  protected:
     using Info = std::unordered_map<std::string, std::string>;
+    using SetterParam = std::variant<std::string, int64_t>;
 
  private:
     virtual void toggleUpdated() = 0;
@@ -27,6 +31,7 @@ class GameEntityInterface {
 
     virtual bool wasUpdated() const = 0;
 
+    virtual ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to);
     friend class LogicProcessorImpl;
 };
 

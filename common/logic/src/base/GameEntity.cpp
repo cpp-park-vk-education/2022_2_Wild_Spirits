@@ -40,4 +40,32 @@ void GameEntity::swap(GameEntity& other) {
     std::swap(name_, other.name_);
     std::swap(was_updated_, other.was_updated_);
 }
+
+ErrorStatus GameEntityInterface::setCharacteristic(const std::string& which, const SetterParam& to) {
+    if (which == "name") {
+        auto name = std::get_if<std::string>(&to);
+        if (!name) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+        setName(*name);
+        return ErrorStatus::OK;
+    } else if (which == "image") {
+        auto img_id = std::get_if<int64_t>(&to);
+        if (!img_id) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+        setImage(*img_id);
+        return ErrorStatus::OK;
+    } else if (which.starts_with("info-")) {
+        auto value = std::get_if<std::string>(&to);
+        if (!value) {
+            return ErrorStatus::INVALID_ARGUMENT;
+        }
+        std::string key = which.substr(sizeof("info-"));
+        info(key) = *value;
+        return ErrorStatus::OK;
+    }
+
+    return ErrorStatus::INVALID_SETTER;
+}
 }  // namespace DnD

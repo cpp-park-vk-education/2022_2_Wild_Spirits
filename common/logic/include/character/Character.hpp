@@ -62,5 +62,7 @@ public:
     void setBaseArmorClass(unsigned int armor_class) {
         base_armor_class_ = armor_class;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

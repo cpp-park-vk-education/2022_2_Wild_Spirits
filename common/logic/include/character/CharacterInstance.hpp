@@ -39,10 +39,6 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
         was_updated_ = !was_updated_;
     }
 
-    bool wasUpdated() const override {
-        return was_updated_;
-    }
-
     Character& original();
 
  protected:
@@ -79,15 +75,21 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
 
     int money();
     void gainMoney(int money);
+    void setMoney(int money);
 
     void healBy(unsigned int amount);
     void takeDamage(unsigned int amount);
+    void setHP(int value);
     bool isAlive();
     void resetHP();
     int hp();
 
     virtual bool isHostile() const {
         return false;
+    }
+
+    bool wasUpdated() const override {
+        return was_updated_;
     }
     
     void addBuff(const Buff& buff);
@@ -114,5 +116,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     void onTurnEnd() override;
 
     size_t id() const override;
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 } // namespace DnD

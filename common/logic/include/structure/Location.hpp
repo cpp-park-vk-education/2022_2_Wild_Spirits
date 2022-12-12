@@ -42,5 +42,7 @@ class Location : public GameEntity {
     SharedStorage<NPC_Instance>& npc() {
         return npc_;
     }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD

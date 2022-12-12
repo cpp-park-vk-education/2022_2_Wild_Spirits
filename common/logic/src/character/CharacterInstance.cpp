@@ -121,16 +121,24 @@ int CharacterInstance::money() {
     return money_;
 }
 
+void CharacterInstance::setMoney(int money) {
+    money_ = money;
+}
+
 void CharacterInstance::gainMoney(int money) {
     money_ += money;
 }
 
 void CharacterInstance::healBy(unsigned int amount) {
-    hp_ += amount;
+    setHP(hp_ + amount);
 }
 
 void CharacterInstance::takeDamage(unsigned int amount) {
     hp_ -= amount;
+}
+
+void CharacterInstance::setHP(int value) {
+    hp_ = min(value, static_cast<int>(original().maxHP()));
 }
 
 bool CharacterInstance::isAlive() {
@@ -193,5 +201,30 @@ void CharacterInstance::onTurnEnd() {
         }
         it = next;
     }
+}
+
+ErrorStatus CharacterInstance::setCharacteristic(const std::string& which, const SetterParam& to) {
+    auto status = original().setCharacteristic(which, to);
+    if (status != ErrorStatus::INVALID_SETTER) {
+        return status;
+    }
+
+    auto value = std::get_if<int64_t>(&to);
+    if (!value) {
+        return ErrorStatus::INVALID_ARGUMENT;
+    }
+
+    if (which == "ap") {
+        setHP(*value);
+        return ErrorStatus::OK;
+    } else if (which == "hp") {
+        setActionPoints(*value);
+        return ErrorStatus::OK;
+    } else if (which == "money") {
+        setMoney(*value);
+        return ErrorStatus::OK;
+    }
+
+    return ErrorStatus::INVALID_SETTER;
 }
 }  // namespace DnD

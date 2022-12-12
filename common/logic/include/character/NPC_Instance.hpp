@@ -41,5 +41,11 @@ class NPC_Instance : public CharacterInstance {
     void makeFriendly() {
         is_hostile_ = false;
     }
+
+    void setHostility(bool to) {
+        is_hostile_ = to;
+    }
+
+    ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 }  // namespace DnD
