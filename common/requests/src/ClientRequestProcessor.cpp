@@ -1,6 +1,7 @@
 #include "ClientRequestProcessor.hpp"
-#include
-
+#include "GameState.hpp"
+#include "boost/asio.hpp"
+#include "nlohmann/json.hpp"
 
 
 //Interface methods
@@ -28,6 +29,16 @@ bool ClientSideProcessor::sendRequest(Client::Action action){
 
 }
 
+std::string ClientSideProcessor::sendRequest(std::string request){
+    bool state = true;
+    std::string buffer;
+    std::function<void(bool)> handler = [&state](bool answer){
+        state = answer;
+    };
+    connection ->SendReqeuest(request, handler);
+    return buffer;
+}
+
 bool ClientSideProcessor::sendRequest(Client::Request request) {
     bool state = true;
     switch(request.getType()){
@@ -41,8 +52,8 @@ bool ClientSideProcessor::sendRequest(Client::Request request) {
     return state;
 }
 
-ClientSideProcessor::ClientSideProcessor(Client::GameState &gamestate, unsigned int client_id) : _client_id(client_id), gamestate(gamestate),
-                                                                                                 changer(*new GameStateChanger(gamestate)) {
+ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, unsigned int client_id) : _client_id(client_id), gamestate(gamestate),
+                                                                                              changer(*new GameStateChanger(gamestate)) {
 
 }
 
@@ -60,7 +71,7 @@ bool ClientSideProcessor::SendChangesRequest(Client::Action action) {
 
     std::string action_string = engine.handler->actionString(action);
     Client::ActionType header = action.getType();
-    std::function<void(bool)> handler = [&state](bool status){state = status;}; //TODO:Сделать коды ответа в handler
+    std::function<void(bool)> handler = [&state](bool status){state = status;}; //TODO: Сделать коды ответа в handler
     connection -> SendReqeuest(engine.getRequestString(action_string, header), handler);
     return state;
 }
@@ -83,12 +94,17 @@ std::string_view ClientSideProcessor::ImageRequest(std::string_view image_hash) 
 }
 //Interface methods
 bool ClientSideProcessor::Connection(std::string ip, std::string port) {
-
-    return false;
+    bool state = true;
+    connection = std::make_shared<Gateway::ClientConnection>(ip, port, loop, [this, &state](std::string message){
+        state = acceptRequest(message);
+    });
+    return state;
 }
 
-std::size_t ClientSideProcessor::CreateRoom() {
-    return false;
+Client::Room ClientSideProcessor::CreateRoom() {
+    std::string creating_request = "create_room";
+    sendRequest(creating_request);
+    return {};
 }
 
 bool ClientSideProcessor::StartGame() {
@@ -101,8 +117,10 @@ bool ClientSideProcessor::ApplicationRequest(queue changes) {
     return state;
 }
 
-Header ClientSideProcessor::getHeader(std::string) {
-    return img_request;
+Header ClientSideProcessor::getHeader(std::string request) {
+    HeaderSerial deserializer;
+    json request_obj = json::parse(request);
+    return deserializer(request_obj.begin().key());
 }
 
 bool ClientSideProcessor::checkUnappliedChanges() const {
@@ -111,13 +129,13 @@ bool ClientSideProcessor::checkUnappliedChanges() const {
 
 
 
-bool ClientSideProcessor::ConnectToRoom() {
+bool ClientSideProcessor::ConnectToRoom(Client::Room room) {
     return false;
 }
 
-ClientSideProcessor::ClientSideProcessor(Client::GameState &gamestate): is_connected(false), _client_id(), engine(), connection(), gamestate(gamestate),
-                                                                        changer(gamestate), buffer(){
-
-}
+//ClientSideProcessor::ClientSideProcessor(Client::GameState &gamestate): is_connected(false), _client_id(), engine(), connection(), gamestate(gamestate),
+//                                                                        changer(gamestate), buffer(){
+//
+//}
 
 
