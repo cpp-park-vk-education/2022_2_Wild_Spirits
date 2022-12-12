@@ -9,10 +9,7 @@
 namespace LM {
 
     LayerAvailRooms::LayerAvailRooms() {
-        m_Rooms.emplace_back(RoomProps{ 0 });
-        m_Rooms.emplace_back(RoomProps{ 1 });
-        m_Rooms.emplace_back(RoomProps{ 2 });
-        m_Rooms.emplace_back(RoomProps{ 3 });
+        getRooms();
     }
 
     void LayerAvailRooms::goToMainMenu() {
@@ -21,11 +18,22 @@ namespace LM {
     }
 
     void LayerAvailRooms::goToRoom() {
+#ifdef BUILD_LOGIC
+        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[m_RoomId].getId())) {
+            Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[m_RoomId]));
+            Application::get()->removeLayer(this);
+            return;
+        }
+        m_NeedGoToRoom = false;
+        getRooms();
+#else
         Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[m_RoomId]));
         Application::get()->removeLayer(this);
+#endif
     }
 
     void LayerAvailRooms::onUpdate(Tick tick) {
+        (void)tick;
         if (m_NeedGoBack) {
             goToMainMenu();
             return;
@@ -57,5 +65,21 @@ namespace LM {
         }
         ImGui::End();
     }
+
+#ifdef BUILD_LOGIC
+    void LayerAvailRooms::getRooms() {
+        m_Rooms.clear();
+        m_Rooms = Application::get()->getClientSideProcessor()->GetRooms();
+    }
+#else
+    void LayerAvailRooms::getRooms() {
+        m_Rooms.clear();
+        m_Rooms.emplace_back(RoomProps{ 0 });
+        m_Rooms.emplace_back(RoomProps{ 1 });
+        m_Rooms.emplace_back(RoomProps{ 2 });
+        m_Rooms.emplace_back(RoomProps{ 3 });
+    }
+#endif
+
 
 }

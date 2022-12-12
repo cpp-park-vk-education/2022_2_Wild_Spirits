@@ -8,14 +8,13 @@ namespace LM {
 
         virtual Type getType() const override;
 
-        uint32_t getTargetX() const;
-        uint32_t getTargetY() const;
+        size_t getTargetX() const;
+        size_t getTargetY() const;
 
         void setTarget(uint32_t x, uint32_t y);
     protected:
-        uint32_t m_TargetX = 0;
-        uint32_t m_TargetY = 0;
-
+        size_t m_TargetX = 0;
+        size_t m_TargetY = 0;
     };
 
 }

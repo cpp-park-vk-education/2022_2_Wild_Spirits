@@ -39,7 +39,7 @@ namespace LM {
     }
 
     glm::vec2 RenderableGuiGroup::getSize() const {
-        return glm::uvec2(0.0f);
+        return glm::uvec2(0, 0);
     }
 
     void RenderableGuiGroup::draw(RendererInterface* renderer) {

@@ -45,6 +45,7 @@ namespace LM {
     }
 
     void Renderer::draw(RenderableGroupInterface* renderable) {
+        (void)renderable;
         LOGI("void Renderer::draw(RenderableGroupInterface* renderable)");
     }
 

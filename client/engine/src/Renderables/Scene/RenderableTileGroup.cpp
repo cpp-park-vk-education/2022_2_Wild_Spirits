@@ -94,7 +94,7 @@ namespace LM {
     }
 
     void RenderableTileGroup::onUpdate(Tick tick) {
-
+        (void)tick;
     }
 
     uint32_t RenderableTileGroup::getTileIndex(uint32_t x, uint32_t y) const

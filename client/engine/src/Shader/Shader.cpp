@@ -27,27 +27,27 @@ namespace LM {
     }
 
     void Shader::setUniform1f(std::string_view name, float value) {
-
+        glUniform1f(getUniformLocation(name), value);
     }
 
     void Shader::setUniform1fv(std::string_view name, float* value, int count) {
-
+        glUniform1fv(getUniformLocation(name), count, value);
     }
 
     void Shader::setUniform1i(std::string_view name, int value) {
-
+        glUniform1i(getUniformLocation(name), value);
     }
 
     void Shader::setUniform1iv(std::string_view name, int* value, int count) {
-
+        glUniform1iv(getUniformLocation(name), count, value);
     }
 
     void Shader::setUniform2f(std::string_view name, const glm::vec2& vector) {
-
+        glUniform2f(getUniformLocation(name), vector.x, vector.y);
     }
 
     void Shader::setUniform3f(std::string_view name, const glm::vec3& vector) {
-
+        glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
     }
 
     void Shader::setUniform4f(std::string_view name, const glm::vec4& vector) {

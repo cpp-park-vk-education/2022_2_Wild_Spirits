@@ -14,8 +14,10 @@ namespace LM {
     protected:
         void goToMainMenu();
         void goToRoom();
+
+        void getRooms();
     protected:
-        Vector<Room> m_Rooms;
+        std::vector<Room> m_Rooms;
 
         bool m_NeedGoBack = false;
         bool m_NeedGoToRoom = false;

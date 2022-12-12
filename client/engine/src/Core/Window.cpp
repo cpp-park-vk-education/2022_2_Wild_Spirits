@@ -9,40 +9,45 @@
 namespace LM {
 
 #ifdef _DEBUG
-    static void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param)
-    {
+    static void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param) {
+        (void)length;
+        (void)user_param;
+
         auto const src_str = [source]() {
             switch (source)
             {
-            case GL_DEBUG_SOURCE_API: return "API";
-            case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
-            case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
-            case GL_DEBUG_SOURCE_THIRD_PARTY: return "THIRD PARTY";
-            case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
-            case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+                case GL_DEBUG_SOURCE_API: return "API";
+                case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
+                case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
+                case GL_DEBUG_SOURCE_THIRD_PARTY: return "THIRD PARTY";
+                case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
+                case GL_DEBUG_SOURCE_OTHER: return "OTHER";
             }
+            return "OTHER";
         }();
 
         auto const type_str = [type]() {
             switch (type)
             {
-            case GL_DEBUG_TYPE_ERROR: return "ERROR";
-            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
-            case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
-            case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
-            case GL_DEBUG_TYPE_MARKER: return "MARKER";
-            case GL_DEBUG_TYPE_OTHER: return "OTHER";
+                case GL_DEBUG_TYPE_ERROR: return "ERROR";
+                case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
+                case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
+                case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
+                case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
+                case GL_DEBUG_TYPE_MARKER: return "MARKER";
+                case GL_DEBUG_TYPE_OTHER: return "OTHER";
             }
+            return "OTHER";
         }();
 
         auto const severity_str = [severity]() {
             switch (severity) {
-            case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
-            case GL_DEBUG_SEVERITY_LOW: return "LOW";
-            case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
-            case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+                case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
+                case GL_DEBUG_SEVERITY_LOW: return "LOW";
+                case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
+                case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
             }
+            return "OTHER";
         }();
         LOGE(src_str, ":", type_str, ":", severity_str, ":", id, ":", message);
         DEBUGBREAK();
@@ -150,11 +155,13 @@ namespace LM {
         });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* _Window, int _Key, int _ScanCode, int _Action, int _Mods) {
+            (void)_ScanCode;
+            (void)_Mods;
             WindowData* Data = (WindowData*)glfwGetWindowUserPointer(_Window);
             switch (_Action) {
-            case GLFW_PRESS:    Data->eventQueue->add(CreateRef<KeyPressedEvent>(_Key, 0)); break;
-            case GLFW_RELEASE:    Data->eventQueue->add(CreateRef<KeyReleasedEvent>(_Key));    break;
-            case GLFW_REPEAT:    Data->eventQueue->add(CreateRef<KeyPressedEvent>(_Key, 1)); break;
+            case GLFW_PRESS:   Data->eventQueue->add(CreateRef<KeyPressedEvent>(_Key, 0)); break;
+            case GLFW_RELEASE: Data->eventQueue->add(CreateRef<KeyReleasedEvent>(_Key));    break;
+            case GLFW_REPEAT:  Data->eventQueue->add(CreateRef<KeyPressedEvent>(_Key, 1)); break;
             }
         });
 
@@ -164,11 +171,12 @@ namespace LM {
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* _Window, int _Button, int _Action, int _Mods) {
+            (void)_Mods;
             WindowData* Data = (WindowData*)glfwGetWindowUserPointer(_Window);
             switch (_Action)
             {
-            case GLFW_PRESS:    Data->eventQueue->add(CreateRef<MouseButtonPressedEvent>(_Button));        break;
-            case GLFW_RELEASE:    Data->eventQueue->add(CreateRef<MouseButtonReleasedEvent>(_Button));    break;
+            case GLFW_PRESS:   Data->eventQueue->add(CreateRef<MouseButtonPressedEvent>(_Button));        break;
+            case GLFW_RELEASE: Data->eventQueue->add(CreateRef<MouseButtonReleasedEvent>(_Button));    break;
             }
         });
 

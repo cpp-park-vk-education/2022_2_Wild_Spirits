@@ -42,6 +42,7 @@ namespace LM {
         case RenderableGuiAlign::Align::kCenter: return ((float)winSize - size) / 2.0f;
         case RenderableGuiAlign::Align::kEnd: return (float)winSize - size;
         }
+        return 0;
     }
 
 }

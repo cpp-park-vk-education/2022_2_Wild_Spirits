@@ -8,11 +8,11 @@ namespace LM {
         return Action::Type::kMove; 
     }
 
-    uint32_t MoveAction::getTargetX() const {
+    size_t MoveAction::getTargetX() const {
         return m_TargetX; 
     }
 
-    uint32_t MoveAction::getTargetY() const {
+    size_t MoveAction::getTargetY() const {
         return m_TargetY; 
     }
 

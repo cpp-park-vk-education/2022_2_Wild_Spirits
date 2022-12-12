@@ -19,9 +19,7 @@ namespace LM {
         Bool
     };
 
-
-    static uint32_t ShaderDataTypeSize(ShaderDataType _Type)
-    {
+    static uint32_t ShaderDataTypeSize(ShaderDataType _Type) {
         switch (_Type)
         {
             case ShaderDataType::Float:    return 4;

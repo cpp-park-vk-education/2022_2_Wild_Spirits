@@ -15,7 +15,7 @@ namespace LM {
     }
 
     void LayerSettings::onUpdate(Tick tick) {
-
+        (void)tick;
     }
 
 }

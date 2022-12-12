@@ -9,6 +9,7 @@
 namespace LM {
 
     void LayerRegister::onUpdate(Tick tick) {
+        (void)tick;
         if (m_NeedRemove) {
             Application::get()->addLayer(CreateRef<LayerMainMenu>());
             Application::get()->removeLayer(this);

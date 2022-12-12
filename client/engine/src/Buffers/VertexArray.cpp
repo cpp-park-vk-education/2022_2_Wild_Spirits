@@ -76,7 +76,7 @@ namespace LM {
                     shaderDataTypeToOpenGLBaseType(element.type),
                     element.normalized ? GL_TRUE : GL_FALSE,
                     layout.getStride(),
-                    (const void*)element.offset);
+                    reinterpret_cast<const void*>(element.offset));
                 if (layout.hasDivisor())
                 {
                     glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
@@ -95,7 +95,7 @@ namespace LM {
                     element.getComponentCount(),
                     shaderDataTypeToOpenGLBaseType(element.type),
                     layout.getStride(),
-                    (const void*)element.offset);
+                    reinterpret_cast<const void*>(element.offset));
                 if (layout.hasDivisor())
                 {
                     glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
@@ -106,8 +106,8 @@ namespace LM {
             case ShaderDataType::Mat3:
             case ShaderDataType::Mat4:
             {
-                uint8_t count = element.getComponentCount();
-                for (uint8_t i = 0; i < count; ++i)
+                uint32_t count = element.getComponentCount();
+                for (uint32_t i = 0; i < count; ++i)
                 {
                     glEnableVertexAttribArray(m_VertexBufferIndex);
                     glVertexAttribPointer(m_VertexBufferIndex,

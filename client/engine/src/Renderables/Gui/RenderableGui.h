@@ -29,7 +29,7 @@ namespace LM {
         virtual void rebuid(glm::uvec2 size);
 
         virtual void onEvent(Ref<Event> event);
-        virtual void onUpdate(Tick tick) { }
+        virtual void onUpdate(Tick tick) { (void)tick; }
 
         virtual void drawDecorator(RendererInterface* renderer);
 
@@ -37,7 +37,7 @@ namespace LM {
         virtual glm::vec2 getSize() const = 0;
 
         bool isHovered() const { return m_IsHovered; }
-        void setHovered(bool isHovered) { m_IsHovered = false; }
+        void setHovered(bool isHovered) { m_IsHovered = isHovered; }
     protected:
         float calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const;
     protected:

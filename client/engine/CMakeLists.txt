@@ -65,6 +65,7 @@ set(SOURCES
 
     src/Textures/Texture2D.cpp src/Textures/Texture2D.h
     src/Textures/TextureLoader.cpp src/Textures/TextureLoader.h
+    src/Textures/TextureManager.cpp src/Textures/TextureManager.h
     src/Textures/stb_image.h
     src/Textures/CalcTextureParameters.cpp src/Textures/CalcTextureParameters.h
     
@@ -86,7 +87,7 @@ target_link_libraries(${PROJECT_NAME} glm glfw glew ImGui opengl32)
 
 if (${BUILD_LOGIC})
     add_definitions(-DBUILD_LOGIC) 
-    target_link_libraries(${PROJECT_NAME} request-processor)
+    target_link_libraries(${PROJECT_NAME} request-processor dnd-logic)
 endif()
 
 add_definitions(-DGLEW_STATIC -D_LIB)

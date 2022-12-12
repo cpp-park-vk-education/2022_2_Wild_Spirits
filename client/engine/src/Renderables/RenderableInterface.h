@@ -22,7 +22,7 @@ namespace LM {
         inline void setColor(const Color& color) { m_Color = color; }
 
         virtual void onEvent(Ref<Event> event) { }
-        virtual void onUpdate(Tick tick) { }
+        virtual void onUpdate(Tick tick) { (void)tick; }
 
         virtual void draw(RendererInterface* renderer) = 0;
     protected:

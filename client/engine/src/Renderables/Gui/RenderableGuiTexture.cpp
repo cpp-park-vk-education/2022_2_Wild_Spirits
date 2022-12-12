@@ -11,7 +11,9 @@ namespace LM {
     }
 
     void RenderableGuiTexture::onUpdate(Tick tick) {
-    }
+        (void)tick;
+    }        
+
 
     void RenderableGuiTexture::draw(RendererInterface* renderer) {
         renderer->draw(m_Renderable.get());

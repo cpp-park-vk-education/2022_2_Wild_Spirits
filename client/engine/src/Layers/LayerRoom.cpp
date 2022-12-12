@@ -8,7 +8,7 @@
 
 namespace LM {
 
-    LayerRoom::LayerRoom(Room room, bool isUserCreator) 
+    LayerRoom::LayerRoom(Room room, bool isUserCreator)
         : m_Room(room), m_IsUserCreator(isUserCreator)
     {
 
@@ -20,11 +20,24 @@ namespace LM {
     }
 
     void LayerRoom::startGame() {
-        Application::get()->addLayer(CreateRef<LayerLocation>());
+#ifdef BUILD_LOGIC
+        if (m_IsUserCreator) {
+            if (Application::get()->getClientSideProcessor()->StartGame()) {
+                Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
+                Application::get()->removeLayer(this);
+            }
+            return;
+        }
+#endif
+        Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
         Application::get()->removeLayer(this);
     }
 
     void LayerRoom::onUpdate(Tick tick) {
+        (void)tick;
+#ifdef BUILD_LOGIC
+        // Some Check for users(not GM) that GM start the game
+#endif
         if (m_NeedGoBack) {
             goToMainMenu();
             return;
@@ -39,6 +52,10 @@ namespace LM {
         ImGuiIO& io = ImGui::GetIO(); //(void)io;
         ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
         if (ImGui::Begin("Room", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (!m_IsUserCreator) {
+                ImGui::Text("Wait for GM to start the game");
+                ImGui::Separator();
+            }
             for (auto& userName : std::vector<std::string>{ "LENIA", "MIHAIL", "MAKS", "NIKITA" }) {
                 ImGui::Text(userName.data());
             }

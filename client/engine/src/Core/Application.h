@@ -23,7 +23,11 @@ namespace LM {
 
         static Application* get() { return s_Instance; }
 
-        Ref<const Window> getWindow() const { return m_Window; }
+        Ref<Window> getWindow() { return m_Window; }
+
+#ifdef BUILD_LOGIC
+        Ref<ClientSideProcessor> getClientSideProcessor() { return m_ClientSideProcessor; }
+#endif
 
         void addLayer(Ref<Layer> layer) { m_LayerStack->pushLayer(layer); }
         void removeLayer(Layer* layer) { m_LayerStack->popLayer(layer); }
