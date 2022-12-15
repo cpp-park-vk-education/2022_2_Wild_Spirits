@@ -6,12 +6,12 @@
 
 namespace LM {
 
-    class RenderableTileGroup : public RenderableGroup {
+    class RenderableTileGroup: public RenderableGroup {
     public:
         RenderableTileGroup(Ref<Texture2D> texture, glm::uvec2 size);
 
         void addCharacter(Ref<RenderableCharacter> renderable);
-        
+
         bool hasHovered() const;
         size_t getHoveredX() const;
         size_t getHoveredY() const;
@@ -40,4 +40,4 @@ namespace LM {
         size_t m_FocusedId;
     };
 
-}
+}    // namespace LM

@@ -17,4 +17,4 @@ namespace LM {
         std::unordered_map<size_t, Ref<Texture2D>> m_Textures;
     };
 
-}
+}    // namespace LM

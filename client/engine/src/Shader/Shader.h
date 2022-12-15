@@ -7,8 +7,7 @@
 
 #include "ShaderLayout.h"
 
-namespace LM
-{
+namespace LM {
 
     class Shader {
     public:
@@ -39,4 +38,4 @@ namespace LM
         ShaderLayout m_Layout;
     };
 
-}
+}    // namespace LM

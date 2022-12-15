@@ -10,4 +10,4 @@ namespace LM {
         }
     }
 
-}
+}    // namespace LM

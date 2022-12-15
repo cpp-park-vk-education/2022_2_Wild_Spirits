@@ -5,7 +5,7 @@
 
 namespace LM {
 
-    class LayerMainMenu : public Layer {
+    class LayerMainMenu: public Layer {
     public:
         LayerMainMenu();
         ~LayerMainMenu();
@@ -24,4 +24,4 @@ namespace LM {
         Ref<RenderableGuiTexture> m_BtnRegister;
     };
 
-}
+}    // namespace LM

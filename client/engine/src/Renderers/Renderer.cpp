@@ -33,14 +33,19 @@ namespace LM {
     }
 
     void Renderer::draw(RenderableTexture* renderable) {
-        m_Shader->setUniformMat4("u_Transform", m_Transforms[m_Transforms.size() - 1] * renderable->getTransform().getMatrix());
+        m_Shader->setUniformMat4(
+            "u_Transform",
+            m_Transforms[m_Transforms.size() - 1] * renderable->getTransform().getMatrix());
         m_Shader->setUniform4f("u_Color", renderable->getColor());
+
         renderable->getVertexArray()->bind();
-        //renderable->getVertexArray()->getIndexBuffer()->bind();
         renderable->getTexture()->bind(0);
-        if (renderable->getVertexArray()->getIndexBuffer()->getCount())
-        {
-            glDrawElements(GL_TRIANGLES, renderable->getVertexArray()->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, NULL);
+        if (renderable->getVertexArray()->getIndexBuffer()->getCount()) {
+            glDrawElements(
+                GL_TRIANGLES,
+                renderable->getVertexArray()->getIndexBuffer()->getCount(),
+                GL_UNSIGNED_INT,
+                NULL);
         }
     }
 
@@ -49,4 +54,4 @@ namespace LM {
         LOGI("void Renderer::draw(RenderableGroupInterface* renderable)");
     }
 
-}
+}    // namespace LM

@@ -15,4 +15,4 @@ namespace LM {
         virtual void render() = 0;
     };
 
-}
+}    // namespace LM

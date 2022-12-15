@@ -21,4 +21,4 @@ namespace LM {
         uint32_t m_Count;
     };
 
-}
+}    // namespace LM

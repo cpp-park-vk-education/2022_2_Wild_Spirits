@@ -40,7 +40,7 @@ namespace LM {
 
             m_LayerStack->onUpdate(0.0f);
             m_LayerStack->render();
-        
+
             m_ImGuiController->begin();
             m_LayerStack->renderImGui();
             m_ImGuiController->end();
@@ -53,9 +53,9 @@ namespace LM {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<WindowCloseEvent>([&](Ref<WindowCloseEvent> event) {
             m_IsRun = false;
-            return false;
+        return false;
         });
     }
 
 
-}
+}    // namespace LM

@@ -1,18 +1,15 @@
 #pragma once
 
-#include <string>
-
 #include <glm/glm.hpp>
 
 #include <Core/Base.h>
+#include <Utils/DataLoading.h>
 
 namespace LM {
 
-    class Texture2D
-    {
+    class Texture2D {
     public:
-        enum MASK : uint32_t
-        {
+        enum MASK: uint32_t {
             NONE = 0,
 
             SRGB = 0,
@@ -51,8 +48,6 @@ namespace LM {
             MIN_NEAREST_MIPMAP_LINEAR = BIT(15),
             MIN_NEAREST_MIPMAP_NEAREST = BIT(16),
         };
-        struct FromFile { std::string filename; }; 
-        struct FromSource { std::string source; };
         struct FromData { uint8_t* data; uint32_t width; uint32_t height; };
     public:
         Texture2D(FromFile file, MASK mask = MASK::NONE);
@@ -75,4 +70,4 @@ namespace LM {
         uint32_t m_TextureId = 0;
     };
 
-}
+}    // namespace LM

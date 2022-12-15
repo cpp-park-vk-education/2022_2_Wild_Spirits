@@ -4,16 +4,17 @@
 
 namespace LM {
 
-    struct RenderableGuiAlign {
-        enum class Align : uint8_t
-        {
-            kStart = 0,
-            kCenter,
-            kEnd,
-        };
-
-        Align horizontal = Align::kStart;
-        Align vertical = Align::kStart;
+    enum class GuiAlign: uint8_t
+    {
+        kStart = 0,
+        kCenter,
+        kEnd,
     };
 
-}
+
+    struct RenderableGuiAlign {
+        GuiAlign horizontal = GuiAlign::kStart;
+        GuiAlign vertical = GuiAlign::kStart;
+    };
+
+}    // namespace LM

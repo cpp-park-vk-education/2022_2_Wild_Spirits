@@ -7,17 +7,16 @@
 #include <Shader/ShaderDataType.h>
 
 namespace LM {
-    
+
     struct BufferElement {
         BufferElement() = default;
 
-        BufferElement(ShaderDataType type, std::string_view name, bool normalized = false) 
-            : name(name), type(type), size(ShaderDataTypeFuncs::ShaderDataTypeSize(type)), offset(0), normalized(normalized)
-        { }
+        BufferElement(ShaderDataType type, std::string_view name, bool normalized = false)
+            : name(name), type(type), size(ShaderDataTypeFuncs::ShaderDataTypeSize(type)), offset(0), normalized(normalized) {
+        }
 
         uint32_t getComponentCount() const {
-            switch (type)
-            {
+            switch (type) {
                 case ShaderDataType::None:   break;
                 case ShaderDataType::Float:  return 1;
                 case ShaderDataType::Float2: return 2;
@@ -50,8 +49,7 @@ namespace LM {
         BufferLayout() = default;
 
         BufferLayout(const std::initializer_list<BufferElement>& elements, uint32_t divisor = 0)
-            : m_Elements(elements), m_Divisor(divisor) 
-        {
+            : m_Elements(elements), m_Divisor(divisor) {
             calculateOffsetsAndStride();
         }
 
@@ -63,7 +61,7 @@ namespace LM {
         inline const Vector<BufferElement>& getElements() const { return m_Elements; }
 
         Vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
-        Vector<BufferElement>::iterator end()   { return m_Elements.end(); }
+        Vector<BufferElement>::iterator end() { return m_Elements.end(); }
 
         Vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
         Vector<BufferElement>::const_iterator end()      const { return m_Elements.end(); }
@@ -71,8 +69,7 @@ namespace LM {
         void calculateOffsetsAndStride() {
             size_t offset = 0;
             m_Stride = 0;
-            for (auto& element : m_Elements)
-            {
+            for (auto& element : m_Elements) {
                 element.offset = offset;
                 offset += element.size;
                 m_Stride += element.size;
@@ -84,4 +81,4 @@ namespace LM {
         uint32_t m_Stride = 0;
     };
 
-}
+}    // namespace LM

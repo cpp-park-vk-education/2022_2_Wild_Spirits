@@ -17,4 +17,4 @@ namespace LM {
         static bool hasMipmap(Texture2D::MASK mask);
     };
 
-}
+}    // namespace LM

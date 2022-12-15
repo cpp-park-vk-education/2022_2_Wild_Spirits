@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    class LayerRegister : public Layer {
+    class LayerRegister: public Layer {
     public:
         virtual void onUpdate(Tick tick) override;
         virtual void renderImGui() override;
@@ -15,4 +15,4 @@ namespace LM {
         bool m_NeedRemove = false;
     };
 
-}
+}    // namespace LM

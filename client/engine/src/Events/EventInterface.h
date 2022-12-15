@@ -34,4 +34,4 @@ namespace LM {
         return out << event.toString();
     }
 
-}
+}    // namespace LM

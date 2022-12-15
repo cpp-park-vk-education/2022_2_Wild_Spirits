@@ -5,7 +5,7 @@
 
 namespace LM {
 
-    class RenderableBottomAction : public RenderableGuiTexture {
+    class RenderableBottomAction: public RenderableGuiTexture {
     public:
         RenderableBottomAction(const RenderableTextureProps& props, DnD::Weapon& item);
         RenderableBottomAction(const RenderableTextureProps& props, DnD::Spell& item);
@@ -26,4 +26,4 @@ namespace LM {
         bool m_IsFocused = false;
     };
 
-}
+}    // namespace LM

@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    class MoveAction : public Action {
+    class MoveAction: public Action {
     public:
         MoveAction(size_t x, size_t y);
 
@@ -19,4 +19,4 @@ namespace LM {
         size_t m_TargetY = 0;
     };
 
-}
+}    // namespace LM

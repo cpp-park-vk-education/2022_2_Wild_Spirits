@@ -7,42 +7,32 @@
 
 namespace LM {
 
-    Texture2D::Texture2D(FromFile file, Texture2D::MASK mask) 
-        : m_Mask(mask) 
-    {
-        TextureLoader textureLoader(TextureLoader::FromFile(file.filename));
-        if (!textureLoader.isOk())
-        {
+    Texture2D::Texture2D(FromFile file, Texture2D::MASK mask)
+        : m_Mask(mask) {
+        TextureLoader textureLoader(FromFile{ file.filename });
+        if (!textureLoader.isOk()) {
             loadOnError();
-        }
-        else
-        {
+        } else {
             load(textureLoader.getData(), textureLoader.getWidht(), textureLoader.getHeight());
         }
     }
 
-    Texture2D::Texture2D(FromSource source, Texture2D::MASK mask) 
-        : m_Mask(mask) 
-    {
-        TextureLoader textureLoader(TextureLoader::FromSource(source.source));
-        if (!textureLoader.isOk())
-        {
+    Texture2D::Texture2D(FromSource source, Texture2D::MASK mask)
+        : m_Mask(mask) {
+        TextureLoader textureLoader(FromSource{ source.source });
+        if (!textureLoader.isOk()) {
             loadOnError();
-        }
-        else
-        {
+        } else {
             load(textureLoader.getData(), textureLoader.getWidht(), textureLoader.getHeight());
         }
     }
-    
+
     Texture2D::Texture2D(FromData data, MASK mask)
-        : m_Mask(mask) 
-    {
+        : m_Mask(mask) {
         load(data.data, data.width, data.height);
     }
 
     Texture2D::~Texture2D() {
-
     }
 
     void Texture2D::bind(uint32_t slotId) {
@@ -51,14 +41,12 @@ namespace LM {
     }
 
     void Texture2D::unbind() {
-
     }
 
     void Texture2D::load(const uint8_t* const data, uint32_t width, uint32_t height) {
         m_Width = width;
         m_Height = height;
 
-        //glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
         glGenTextures(1, &m_TextureId);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
 
@@ -70,12 +58,11 @@ namespace LM {
         glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-        if (CalcTextureParameters::hasMipmap(m_Mask))
-        {
+        if (CalcTextureParameters::hasMipmap(m_Mask)) {
             glGenerateMipmap(m_TextureId);
         }
     }
-    
+
     void Texture2D::loadOnError() {
         glGenTextures(1, &m_TextureId);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
@@ -93,4 +80,4 @@ namespace LM {
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, Data);
     }
 
-}
+}    // namespace LM

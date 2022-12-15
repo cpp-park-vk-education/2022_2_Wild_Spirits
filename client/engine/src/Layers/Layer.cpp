@@ -23,4 +23,4 @@ namespace LM {
         m_SceneScene->onUpdate(tick);
     }
 
-}
+}    // namespace LM

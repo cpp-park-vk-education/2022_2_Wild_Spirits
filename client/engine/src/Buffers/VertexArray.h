@@ -29,4 +29,4 @@ namespace LM {
         Ref<IndexBuffer> m_IndexBuffer;
     };
 
-}
+}    // namespace LM

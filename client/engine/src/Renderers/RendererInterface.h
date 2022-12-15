@@ -26,4 +26,4 @@ namespace LM {
         Scope<Shader> m_Shader;
     };
 
-}
+}    // namespace LM

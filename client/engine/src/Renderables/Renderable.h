@@ -5,7 +5,7 @@
 
 namespace LM {
 
-    class Renderable : public RenderableInterface {
+    class Renderable: public RenderableInterface {
     public:
         struct Vertex
         {
@@ -13,10 +13,11 @@ namespace LM {
             glm::vec2 texCoord;
         };
     public:
-        Renderable(Transform transform = Transform(), const Color& color = Color(1.0f)) 
-            : RenderableInterface(transform, color) { }
+        Renderable(Transform transform = Transform(), const Color& color = Color(1.0f))
+            : RenderableInterface(transform, color) {
+        }
 
         virtual ~Renderable() = default;
     };
 
-}
+}    // namespace LM

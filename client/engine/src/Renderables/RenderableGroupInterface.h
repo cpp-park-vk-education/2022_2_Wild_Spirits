@@ -8,9 +8,9 @@
 
 namespace LM {
 
-    class RenderableGroupInterface : public RenderableInterface {
+    class RenderableGroupInterface: public RenderableInterface {
     public:
-        RenderableGroupInterface(const Transform& transform = Transform()) : RenderableInterface(transform) { }
+        RenderableGroupInterface(const Transform& transform = Transform()): RenderableInterface(transform) {}
         virtual ~RenderableGroupInterface() = default;
 
         virtual void draw(RendererInterface* renderer);
@@ -20,4 +20,4 @@ namespace LM {
         virtual Vector<Ref<RenderableInterface>> getRenderables() = 0;
     };
 
-}
+}    // namespace LM

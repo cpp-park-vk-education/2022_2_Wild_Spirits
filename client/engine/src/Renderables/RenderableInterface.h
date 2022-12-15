@@ -12,7 +12,7 @@ namespace LM {
 
     class RenderableInterface {
     public:
-        RenderableInterface(const Transform& transform = Transform(), const Color& color = Color(1.0f)) : m_Transform(transform), m_Color(color) { }
+        RenderableInterface(const Transform& transform = Transform(), const Color& color = Color(1.0f)): m_Transform(transform), m_Color(color) {}
         virtual ~RenderableInterface() = default;
 
         inline const Transform& getTransform() const { return m_Transform; }
@@ -21,7 +21,7 @@ namespace LM {
         inline const Color& getColor() const { return m_Color; }
         inline void setColor(const Color& color) { m_Color = color; }
 
-        virtual void onEvent(Ref<Event> event) { }
+        virtual void onEvent(Ref<Event> event) {}
         virtual void onUpdate(Tick tick) { (void)tick; }
 
         virtual void draw(RendererInterface* renderer) = 0;
@@ -30,4 +30,4 @@ namespace LM {
         Color m_Color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     };
 
-}
+}    // namespace LM

@@ -9,9 +9,8 @@ namespace LM {
     void TextureManager::remove(size_t id) {
         (void)id;
     }
-    
-    void TextureManager::remove(Ref<Texture2D> texture) {
 
+    void TextureManager::remove(Ref<Texture2D> texture) {
     }
 
     bool TextureManager::has(size_t id) {
@@ -22,4 +21,4 @@ namespace LM {
         return m_Textures[id];
     }
 
-}
+}    // namespace LM

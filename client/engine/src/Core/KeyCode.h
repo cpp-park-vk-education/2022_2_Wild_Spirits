@@ -8,7 +8,7 @@ namespace LM {
 
     namespace Key {
 
-        enum : KeyCode {
+        enum: KeyCode {
             // From glfw3.h
             Space = 32,
             Apostrophe = 39, /* ' */
@@ -144,4 +144,4 @@ namespace LM {
 
     }
 
-}
+}    // namespace LM

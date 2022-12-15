@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    class LayerSettings : public Layer {
+    class LayerSettings: public Layer {
     public:
         LayerSettings();
         ~LayerSettings();
@@ -14,4 +14,4 @@ namespace LM {
     protected:
     };
 
-}
+}    // namespace LM

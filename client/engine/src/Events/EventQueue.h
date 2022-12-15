@@ -4,8 +4,7 @@
 
 #include "EventInterface.h"
 
-namespace LM
-{
+namespace LM {
 
     class EventQueue {
     public:
@@ -28,4 +27,4 @@ namespace LM
         std::queue<Ref<Event>> m_Events;
     };
 
-}
+}    // namespace LM

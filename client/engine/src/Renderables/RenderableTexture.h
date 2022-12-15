@@ -13,7 +13,7 @@ namespace LM {
         Color color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     };
 
-    class RenderableTexture : public Renderable {
+    class RenderableTexture: public Renderable {
     public:
         RenderableTexture(const RenderableTextureProps& props);
         virtual ~RenderableTexture() = default;
@@ -28,4 +28,4 @@ namespace LM {
         glm::vec2 m_Size;
     };
 
-}
+}    // namespace LM

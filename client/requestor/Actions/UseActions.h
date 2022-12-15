@@ -18,7 +18,7 @@ namespace DnD {
             Allies
         };
     public:
-        Action(Target target) : m_Target(target) { }
+        Action(Target target): m_Target(target) {}
 
         Target targetType() const { return m_Target; }
     protected:
@@ -32,8 +32,8 @@ namespace DnD {
             Self
         };
     public:
-        Activatable(size_t id, Cast cast) : m_Id(id), m_Cast(cast) { }
-        
+        Activatable(size_t id, Cast cast): m_Id(id), m_Cast(cast) {}
+
         Cast castType() const { return m_Cast; }
         std::vector<Action>& actions() { return m_Actions; }
     protected:
@@ -42,24 +42,24 @@ namespace DnD {
         std::vector<Action> m_Actions;
     };
 
-    class Weapon : public Activatable {
+    class Weapon: public Activatable {
     public:
-        Weapon(size_t id, Cast cast) : Activatable(id, cast) { }
+        Weapon(size_t id, Cast cast): Activatable(id, cast) {}
     };
 
-    class Spell : public Activatable {
+    class Spell: public Activatable {
     public:
-        Spell(size_t id, Cast cast) : Activatable(id, cast) { }
+        Spell(size_t id, Cast cast): Activatable(id, cast) {}
     };
 
-    class Skill : public Activatable {
+    class Skill: public Activatable {
     public:
-        Skill(size_t id, Cast cast) : Activatable(id, cast) { }
+        Skill(size_t id, Cast cast): Activatable(id, cast) {}
     };
 
-    class Consumable : public Activatable {
+    class Consumable: public Activatable {
     public:
-        Consumable(size_t id, Cast cast) : Activatable(id, cast) { }
+        Consumable(size_t id, Cast cast): Activatable(id, cast) {}
     };
 
 }
@@ -67,12 +67,12 @@ namespace DnD {
 
 namespace LM {
 
-    class UseAction : public Action {
+    class UseAction: public Action {
     public:
         UseAction(DnD::Activatable& activatable, Type type);
 
         virtual Type getType() const override;
-        
+
         size_t getTargetX() const;
         size_t getTargetY() const;
 
@@ -88,10 +88,8 @@ namespace LM {
 
         size_t m_TargetX = 0;
         size_t m_TargetY = 0;
-        //uint32_t m_RangeX;
-        //uint32_t m_RangeY;
 
         bool m_IsFirstSet = true;
     };
 
-}
+}    // namespace LM

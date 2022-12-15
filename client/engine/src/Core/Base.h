@@ -4,14 +4,14 @@
 #include <vector>
 
 #ifdef _DEBUG
-    #if defined(WIN32)
-        #define DEBUGBREAK() __debugbreak()
-    #elif defined(LINUX)
-        #include <signal.h>
-        #define DEBUGBREAK() raise(SIGTRAP)
-    #else
-        #define DEBUGBREAK()
-    #endif
+#if defined(WIN32)
+#define DEBUGBREAK() __debugbreak()
+#elif defined(LINUX)
+#include <signal.h>
+#define DEBUGBREAK() raise(SIGTRAP)
+#else
+#define DEBUGBREAK()
+#endif
 #endif
 
 #define BIT(x) (1 << x)
@@ -45,4 +45,4 @@ namespace LM {
         return std::dynamic_pointer_cast<T>(from);
     }
 
-}
+}    // namespace LM

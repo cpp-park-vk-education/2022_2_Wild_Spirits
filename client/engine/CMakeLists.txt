@@ -72,8 +72,10 @@ set(SOURCES
     src/Transform/Rotation.h
 
     src/ImGui/ImGuiController.cpp src/ImGui/ImGuiController.h
+    src/ImGui/ImGuiFuncs.cpp src/ImGui/ImGuiFuncs.h
 
     src/Utils/Timer.h
+    src/Utils/DataLoading.h
     src/Utils/ConsoleLog.cpp src/Utils/ConsoleLog.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
