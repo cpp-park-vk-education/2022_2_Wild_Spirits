@@ -12,4 +12,4 @@ namespace LM {
         return posTransform * rotTransform * sclTransform;
     }
 
-}
+}    // namespace LM

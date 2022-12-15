@@ -27,4 +27,4 @@ namespace LM {
         Scope<RenderableTexture> m_Renderable;
     };
 
-}
+}    // namespace LM

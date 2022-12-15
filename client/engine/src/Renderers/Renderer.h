@@ -19,4 +19,4 @@ namespace LM {
         virtual void draw(RenderableGroupInterface* renderable) override;
     };
 
-}
+}    // namespace LM

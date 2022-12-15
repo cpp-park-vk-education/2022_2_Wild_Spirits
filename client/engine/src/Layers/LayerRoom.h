@@ -23,4 +23,4 @@ namespace LM {
         bool m_IsUserCreator;
     };
 
-}
+}    // namespace LM

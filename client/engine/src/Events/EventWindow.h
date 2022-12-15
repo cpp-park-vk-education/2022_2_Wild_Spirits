@@ -29,4 +29,4 @@ namespace LM {
         EVENT_CLASS_TYPE(WindowClose)
     };
 
-}
+}    // namespace LM

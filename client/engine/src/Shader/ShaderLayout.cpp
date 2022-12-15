@@ -6,4 +6,4 @@ namespace LM {
         : m_Sources(sources) {
     }
 
-}
+}    // namespace LM

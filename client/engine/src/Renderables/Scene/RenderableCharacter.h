@@ -11,4 +11,4 @@ namespace LM {
         glm::uvec2 m_Position;
     };
 
-}
+}    // namespace LM

@@ -39,7 +39,7 @@ namespace LM {
             White = 15
         };
 #else
-        enum class ConsoleColorType: short {
+        enum class ConsoleColorType: int16_t {
             Black = 30,
             Blue = 34,
             Green = 32,
@@ -113,7 +113,7 @@ namespace LM {
         std::mutex m_Mtx;
     };
 
-}
+}    // namespace LM
 
 #ifdef LOG_ON
 

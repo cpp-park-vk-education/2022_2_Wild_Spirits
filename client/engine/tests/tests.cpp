@@ -6,31 +6,28 @@
 #include <Buffers/BufferLayout.h>
 #include <Transform/Transform.h>
 
-using namespace LM;
-
 TEST(Texture, LoadTexture) {
-    TextureLoader tl1(FromFile{ "test.png" });
+    LM::TextureLoader tl1(LM::FromFile{ "test.png" });
     EXPECT_TRUE(tl1.isOk());
     EXPECT_EQ(tl1.getWidht(), 32);
     EXPECT_EQ(tl1.getHeight(), 32);
 
-    //std::string someGoodImgSource = "";
-    //TextureLoader tl2(TextureLoader::FromSource{ someGoodImgSource });
-    //EXPECT_TRUE(tl2.isOk());
-    //EXPECT_EQ(tl2.getWidht(), 32);
-    //EXPECT_EQ(tl2.getHeight(), 32);
+    std::string someGoodImgSource = "";
+    LM::TextureLoader tl2(LM::FromSource{ someGoodImgSource });
+    EXPECT_TRUE(tl2.isOk());
+    EXPECT_EQ(tl2.getWidht(), 32);
+    EXPECT_EQ(tl2.getHeight(), 32);
 
-    TextureLoader tl3(FromFile{ "fileWithWrongName.png" });
+    LM::TextureLoader tl3(LM::FromFile{ "fileWithWrongName.png" });
     EXPECT_FALSE(tl3.isOk());
 
-
-    //std::string someBadImgSource = "";
-    //TextureLoader tl4(TextureLoader::FromSource{ someBadImgSource });
-    //EXPECT_TRUE(tl4.isOk());
+    std::string someBadImgSource = "";
+    LM::TextureLoader tl4(LM::FromSource{ someBadImgSource });
+    EXPECT_TRUE(tl4.isOk());
 }
 
 TEST(Transform, TransformRotationPlus) {
-    Transform transform;
+    LM::Transform transform;
     EXPECT_EQ(static_cast<float>(transform.rotation), 0.0f);
 
     transform.rotation += 10.0f;
@@ -42,13 +39,12 @@ TEST(Transform, TransformRotationPlus) {
     transform.rotation = 10.0f + transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 30.0f);
 
-    transform.rotation = Rotation(10.0f) + transform.rotation;
+    transform.rotation = LM::Rotation(10.0f) + transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 40.0f);
 }
 
 TEST(Transform, TransformRotationMinus) {
-
-    Transform transform;
+    LM::Transform transform;
     transform.rotation = 100.0f;
     EXPECT_EQ(static_cast<float>(transform.rotation), 0.0f);
 
@@ -61,12 +57,12 @@ TEST(Transform, TransformRotationMinus) {
     transform.rotation = 100.0f - transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 20.0f);
 
-    transform.rotation = Rotation(50.0f) - transform.rotation;
+    transform.rotation = LM::Rotation(50.0f) - transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 30.0f);
 }
 
 TEST(Transform, TransformRotationSub) {
-    Transform transform;
+    LM::Transform transform;
     transform.rotation = 100.0f;
     EXPECT_EQ(static_cast<float>(transform.rotation), 100.0f);
 
@@ -79,12 +75,12 @@ TEST(Transform, TransformRotationSub) {
     transform.rotation = 100.0f / transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 20.0f);
 
-    transform.rotation = Rotation(40.0f) / transform.rotation;
+    transform.rotation = LM::Rotation(40.0f) / transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 2.0f);
 }
 
 TEST(Transform, TransformRotationMulti) {
-    Transform transform;
+    LM::Transform transform;
     transform.rotation = 4.0f;
     EXPECT_EQ(static_cast<float>(transform.rotation), 4.0f);
 
@@ -97,16 +93,16 @@ TEST(Transform, TransformRotationMulti) {
     transform.rotation = 2.0f * transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 64.0f);
 
-    transform.rotation = Rotation(2) * transform.rotation;
+    transform.rotation = LM::Rotation(2) * transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 128.0f);
 }
 
 TEST(BufferLayout, TypeTest) {
-    BufferLayout layout({
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float2, "a_TexCoord" },
-            { ShaderDataType::Float3, "a_Normal" },
-            { ShaderDataType::Float3, "a_Tangent" } });
+    LM::BufferLayout layout({
+            { LM::ShaderDataType::Float3, "a_Position" },
+            { LM::ShaderDataType::Float2, "a_TexCoord" },
+            { LM::ShaderDataType::Float3, "a_Normal" },
+            { LM::ShaderDataType::Float3, "a_Tangent" } });
 
     EXPECT_EQ(layout.getStride(), 44);
     EXPECT_EQ(layout.getElements()[0].offset, 0);

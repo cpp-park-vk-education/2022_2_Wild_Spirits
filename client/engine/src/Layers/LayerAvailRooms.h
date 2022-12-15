@@ -24,4 +24,4 @@ namespace LM {
         size_t m_RoomId = 0;
     };
 
-}
+}    // namespace LM

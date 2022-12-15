@@ -61,7 +61,6 @@ namespace LM {
             _Mask & Texture2D::MASK::MIN_LINEAR_MIPMAP_NEAREST ||
             _Mask & Texture2D::MASK::MIN_NEAREST_MIPMAP_LINEAR ||
             _Mask & Texture2D::MASK::MIN_NEAREST_MIPMAP_NEAREST;
-
     }
 
-}
+}    // namespace LM

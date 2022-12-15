@@ -20,4 +20,4 @@ namespace LM {
         virtual ~Renderable() = default;
     };
 
-}
+}    // namespace LM

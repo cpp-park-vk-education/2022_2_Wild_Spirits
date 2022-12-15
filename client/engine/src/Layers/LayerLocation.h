@@ -53,4 +53,4 @@ namespace LM {
         Ref<UseAction> m_ActionUse;
     };
 
-}
+}    // namespace LM

@@ -91,4 +91,4 @@ namespace LM {
         float m_Angle;
     };
 
-}
+}    // namespace LM

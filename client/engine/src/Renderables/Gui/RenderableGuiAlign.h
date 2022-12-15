@@ -17,4 +17,4 @@ namespace LM {
         GuiAlign vertical = GuiAlign::kStart;
     };
 
-}
+}    // namespace LM

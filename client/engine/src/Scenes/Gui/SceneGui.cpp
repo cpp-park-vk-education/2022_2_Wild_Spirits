@@ -31,7 +31,6 @@ namespace LM {
     }
 
     void SceneGui::rebuild() {
-        //m_Transforms.push_back({ glm::mat4(), glm::vec2(0.0f, 0.0f), glm::vec2(m_Width, m_Height) });
         for (auto& renderable : m_Renderables) {
             renderable->rebuid(glm::uvec2(m_Width, m_Height));
         }
@@ -75,4 +74,4 @@ namespace LM {
         }
     }
 
-}
+}    // namespace LM

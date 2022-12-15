@@ -47,4 +47,4 @@ namespace LM {
         Vector<ShaderSource> m_Sources;
     };
 
-}
+}    // namespace LM

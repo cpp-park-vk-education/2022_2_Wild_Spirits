@@ -22,4 +22,4 @@ namespace LM {
         Vector<Ref<RenderableInterface>> m_Renderables;
     };
 
-}
+}    // namespace LM

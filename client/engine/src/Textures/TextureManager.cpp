@@ -21,4 +21,4 @@ namespace LM {
         return m_Textures[id];
     }
 
-}
+}    // namespace LM

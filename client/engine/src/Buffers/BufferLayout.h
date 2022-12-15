@@ -81,4 +81,4 @@ namespace LM {
         uint32_t m_Stride = 0;
     };
 
-}
+}    // namespace LM

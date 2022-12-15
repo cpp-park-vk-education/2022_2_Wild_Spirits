@@ -27,4 +27,4 @@ namespace LM {
         uint32_t m_Height = 0;
     };
 
-}
+}    // namespace LM

@@ -40,4 +40,4 @@ namespace LM {
         size_t m_FocusedId;
     };
 
-}
+}    // namespace LM

@@ -22,4 +22,4 @@ namespace LM {
         Scope<Renderer> m_Renderer;
     };
 
-}
+}    // namespace LM

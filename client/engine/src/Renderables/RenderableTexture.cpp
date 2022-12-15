@@ -29,11 +29,10 @@ namespace LM {
         m_VertexArray = CreateRef<VertexArray>();
         m_VertexArray->addVertexBuffer(verticesVBO);
         m_VertexArray->setIndexBuffer(IBO);
-
     }
 
     void RenderableTexture::draw(RendererInterface* renderer) {
         renderer->draw(this);
     }
 
-}
+}    // namespace LM

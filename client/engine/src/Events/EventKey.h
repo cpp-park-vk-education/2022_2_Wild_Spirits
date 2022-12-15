@@ -53,4 +53,4 @@ namespace LM {
         EVENT_CLASS_TYPE(KeyTyped)
     };
 
-}
+}    // namespace LM

@@ -4,15 +4,14 @@
 
 namespace LM {
 
-    class VertexBuffer
-    {
+    class VertexBuffer {
     public:
         VertexBuffer(uint32_t size);
         VertexBuffer(const void* data, uint32_t size);
         ~VertexBuffer();
 
-        void bind()      const;
-        void unbind()    const;
+        void bind()   const;
+        void unbind() const;
 
         void setData(const void* data, uint32_t size);
 
@@ -23,4 +22,4 @@ namespace LM {
         BufferLayout m_Layout;
     };
 
-}
+}    // namespace LM

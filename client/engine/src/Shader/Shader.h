@@ -38,4 +38,4 @@ namespace LM {
         ShaderLayout m_Layout;
     };
 
-}
+}    // namespace LM

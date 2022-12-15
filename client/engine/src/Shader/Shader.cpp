@@ -113,7 +113,10 @@ namespace LM {
         uint32_t type = getType(source.getType());
         std::string name = getName(source.getType());
 
-        std::string sourceString = (source.getLoadType() == ShaderSource::LoadType::kFilepath ? loadFile(source.getSource()) : source.getSource());
+        std::string sourceString =
+            source.getLoadType() == ShaderSource::LoadType::kFilepath ?
+            loadFile(source.getSource()) :
+            source.getSource();
         const char* charSource = sourceString.c_str();
         uint32_t res = glCreateShader(type);
         glShaderSource(res, 1, &charSource, NULL);
@@ -159,4 +162,4 @@ namespace LM {
         return location;
     }
 
-}
+}    // namespace LM

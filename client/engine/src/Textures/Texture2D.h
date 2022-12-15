@@ -70,4 +70,4 @@ namespace LM {
         uint32_t m_TextureId = 0;
     };
 
-}
+}    // namespace LM

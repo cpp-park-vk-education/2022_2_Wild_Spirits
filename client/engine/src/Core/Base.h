@@ -45,4 +45,4 @@ namespace LM {
         return std::dynamic_pointer_cast<T>(from);
     }
 
-}
+}    // namespace LM

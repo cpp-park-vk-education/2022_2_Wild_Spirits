@@ -21,4 +21,4 @@ namespace LM {
         Ref<Event> m_Event;
     };
 
-}
+}    // namespace LM

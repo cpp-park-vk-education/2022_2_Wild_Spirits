@@ -24,4 +24,4 @@ namespace LM {
         Ref<RenderableGuiTexture> m_BtnRegister;
     };
 
-}
+}    // namespace LM

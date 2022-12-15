@@ -14,4 +14,4 @@ namespace LM {
     protected:
     };
 
-}
+}    // namespace LM

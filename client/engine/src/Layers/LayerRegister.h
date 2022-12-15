@@ -15,4 +15,4 @@ namespace LM {
         bool m_NeedRemove = false;
     };
 
-}
+}    // namespace LM

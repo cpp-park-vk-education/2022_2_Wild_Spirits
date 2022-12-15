@@ -16,4 +16,4 @@ namespace LM {
         float zIndex = 0.0f;
     };
 
-}
+}    // namespace LM

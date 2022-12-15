@@ -70,4 +70,4 @@ namespace LM {
         EVENT_CLASS_TYPE(MouseButtonReleased)
     };
 
-}
+}    // namespace LM

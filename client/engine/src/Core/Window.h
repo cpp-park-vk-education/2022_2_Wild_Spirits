@@ -40,4 +40,4 @@ namespace LM {
         WindowData m_Data;
     };
 
-}
+}    // namespace LM

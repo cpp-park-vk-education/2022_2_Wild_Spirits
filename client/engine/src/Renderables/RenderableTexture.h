@@ -28,4 +28,4 @@ namespace LM {
         glm::vec2 m_Size;
     };
 
-}
+}    // namespace LM

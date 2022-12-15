@@ -30,4 +30,4 @@ namespace LM {
         Color m_Color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     };
 
-}
+}    // namespace LM

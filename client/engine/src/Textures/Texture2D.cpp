@@ -33,7 +33,6 @@ namespace LM {
     }
 
     Texture2D::~Texture2D() {
-
     }
 
     void Texture2D::bind(uint32_t slotId) {
@@ -42,14 +41,12 @@ namespace LM {
     }
 
     void Texture2D::unbind() {
-
     }
 
     void Texture2D::load(const uint8_t* const data, uint32_t width, uint32_t height) {
         m_Width = width;
         m_Height = height;
 
-        //glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
         glGenTextures(1, &m_TextureId);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
 
@@ -83,4 +80,4 @@ namespace LM {
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, Data);
     }
 
-}
+}    // namespace LM

@@ -20,4 +20,4 @@ namespace LM {
         virtual Vector<Ref<RenderableInterface>> getRenderables() = 0;
     };
 
-}
+}    // namespace LM

@@ -22,4 +22,4 @@ namespace LM {
         std::vector<Ref<Layer>> m_Layers;
     };
 
-}
+}    // namespace LM

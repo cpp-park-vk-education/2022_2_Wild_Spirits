@@ -23,4 +23,4 @@ namespace LM {
         uint8_t* m_Data;
     };
 
-}
+}    // namespace LM

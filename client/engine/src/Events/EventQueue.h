@@ -27,4 +27,4 @@ namespace LM {
         std::queue<Ref<Event>> m_Events;
     };
 
-}
+}    // namespace LM

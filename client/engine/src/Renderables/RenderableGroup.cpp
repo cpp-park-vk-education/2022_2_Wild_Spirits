@@ -10,4 +10,4 @@ namespace LM {
         m_Renderables.erase(m_Renderables.begin() + id);
     }
 
-}
+}    // namespace LM

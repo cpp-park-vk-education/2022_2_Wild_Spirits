@@ -15,11 +15,14 @@ namespace LM {
         m_Tiles.reserve(m_Size.x * m_Size.y);
         m_Renderables.reserve(m_Size.x * m_Size.y);
         m_Transform.scale = glm::vec2(glm::min(availSize.x / m_Size.x, availSize.y / m_Size.y));
-        m_Transform.position = glm::vec2(winSize.x / 2.0f - m_Size.x * m_Transform.scale.x / 2.0f, winSize.y / 2 - m_Size.y * m_Transform.scale.y / 2.0f);
+        m_Transform.position = glm::vec2(
+            winSize.x / 2.0f - m_Size.x * m_Transform.scale.x / 2.0f,
+            winSize.y / 2 - m_Size.y * m_Transform.scale.y / 2.0f);
 
         for (uint32_t y = 0; y < m_Size.y; ++y) {
             for (uint32_t x = 0; x < m_Size.x; ++x) {
-                Ref<RenderableTile> tile = CreateRef<RenderableTile>(RenderableTextureProps{ m_TextureTile, glm::vec2(tileSize), { glm::vec2(x, y) } });
+                Ref<RenderableTile> tile = CreateRef<RenderableTile>(
+                    RenderableTextureProps{ m_TextureTile, glm::vec2(tileSize), { glm::vec2(x, y) } });
                 m_Tiles.push_back(tile);
                 m_Renderables.push_back(tile);
             }
@@ -117,4 +120,4 @@ namespace LM {
         }
     }
 
-}
+}    // namespace LM

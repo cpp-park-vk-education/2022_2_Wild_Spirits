@@ -26,4 +26,4 @@ namespace LM {
         bool m_IsFocused = false;
     };
 
-}
+}    // namespace LM

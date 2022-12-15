@@ -24,4 +24,4 @@ namespace LM {
         Vector<Ref<RenderableBottomAction>> m_Items;
     };
 
-}
+}    // namespace LM
