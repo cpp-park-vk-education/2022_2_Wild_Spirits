@@ -1,6 +1,4 @@
-#pragma once
-
-#include <Events/Events.h>
+#include "SceneInterface.h"
 
 namespace LM {
 

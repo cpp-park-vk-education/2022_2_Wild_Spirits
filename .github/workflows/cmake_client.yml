@@ -49,7 +49,7 @@ jobs:
               run: tar -xzf build.tar.gz
 
             - name: Run linters
-              run: cd build && make check
+              run: cd build && make client_check
 
     client-tests:
         runs-on: ubuntu-latest
