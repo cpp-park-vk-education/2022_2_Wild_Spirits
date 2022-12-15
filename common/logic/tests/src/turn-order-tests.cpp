@@ -24,7 +24,8 @@ class TurnOrderSuite : public ::testing::Test {
 
  public:
     TurnOrderSuite() :
-            map(), location(), game(), queue(game, map),
+            map(), location(0, "", 0, 5, 5),
+            game(), queue(game, map),
             enemy(std::make_shared<NPC>()),
             char_class_(std::make_shared<Class>()) {
         EXPECT_CALL(map, currentLocation())
@@ -106,12 +107,12 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
     auto [results, status] = player.use("skill", 0, {});
     ASSERT_EQ(status, ErrorStatus::OK);
 
-    ASSERT_EQ(player_skill.turnsLeft(), player_skill.original().cooldown());
+    ASSERT_EQ(player_skill.turnsLeft(), player_skill.cooldown());
     std::tie(results, status) = player.use("skill", 0, {});
     ASSERT_EQ(status, ErrorStatus::SKILL_ON_COOLDOWN);
 
     queue.nextTurn();
-    ASSERT_EQ(player_skill.turnsLeft(), player_skill.original().cooldown() - 1);
+    ASSERT_EQ(player_skill.turnsLeft(), player_skill.cooldown() - 1);
 
     queue.skipTurns(2);
     ASSERT_EQ(player_skill.turnsLeft(), 0);

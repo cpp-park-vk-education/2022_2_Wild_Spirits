@@ -203,6 +203,21 @@ void CharacterInstance::onTurnEnd() {
     }
 }
 
+ErrorStatus CharacterInstance::moveTo(const Tile& tile) {
+    unsigned int points_spent = centerPos().distance(tile);
+    if (points_spent > actionPoints()) {
+        return ErrorStatus::NO_ACTION_POINTS;
+    }
+
+    auto status = OnLocation::moveTo(tile);
+    if (status != ErrorStatus::OK) {
+        return status;
+    }
+
+    setActionPoints(actionPoints() - points_spent);
+    return ErrorStatus::OK;
+}
+
 ErrorStatus CharacterInstance::setCharacteristic(const std::string& which, const SetterParam& to) {
     auto status = original().setCharacteristic(which, to);
     if (status != ErrorStatus::INVALID_SETTER) {

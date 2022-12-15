@@ -14,6 +14,8 @@ class Position {
     virtual std::array<Tile, 2> mapPosition() const = 0;
     virtual Tile centerPos() const = 0;
 
+    virtual std::vector<Tile> occupiedTiles() const = 0;
+
     virtual ErrorStatus moveTo(const Tile& tile) = 0;
     virtual void moveBy(int x, int y) = 0;
 
@@ -44,6 +46,10 @@ class TilePos : public Position {
 
     Tile centerPos() const override {
         return pos_;
+    }
+
+    std::vector<Tile> occupiedTiles() const override {
+        return std::vector<Tile>{pos_};
     }
 
     ErrorStatus moveTo(const Tile& tile) override {
@@ -86,6 +92,19 @@ class RectangularPos : public Position {
 
     Tile centerPos() const override {
         return (bottom_left_ + upper_right_) / 2;
+    }
+
+    std::vector<Tile> occupiedTiles() const override {
+        std::vector<Tile> result;
+        result.reserve((upper_right_.x - bottom_left_.x) * (upper_right_.y - bottom_left_.y));
+
+        for (size_t x = bottom_left_.x; x <= upper_right_.x; ++x) {
+            for (size_t y = bottom_left_.y; y <= upper_right_.y; ++y) {
+                result.push_back(Tile{x, y});
+            }
+        }
+
+        return result;
     }
 
     ErrorStatus moveTo(const Tile& tile) override {

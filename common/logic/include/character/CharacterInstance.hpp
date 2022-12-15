@@ -84,13 +84,22 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     void resetHP();
     int hp();
 
-    virtual bool isHostile() const {
-        return false;
+    unsigned int maxHP() const {
+        return original().maxHP();
     }
+
+    unsigned int maxActionPoints() const {
+        return original().maxActionPoints();
+    }
+
+    virtual bool isHostile() const = 0;
+    virtual unsigned int spellPoints() const = 0;
 
     bool wasUpdated() const override {
         return was_updated_;
     }
+
+    ErrorStatus moveTo(const Tile& tile) override;
     
     void addBuff(const Buff& buff);
     const std::list<Buff>& buffs() const;

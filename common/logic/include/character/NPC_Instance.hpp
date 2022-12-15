@@ -34,6 +34,10 @@ class NPC_Instance : public CharacterInstance {
         return is_hostile_;
     }
 
+    unsigned int spellPoints() const override {
+        return 0;
+    }
+
     void makeHostile() {
         is_hostile_ = true;
     }

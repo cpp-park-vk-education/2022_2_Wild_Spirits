@@ -8,11 +8,12 @@ add_executable(${PROJECT_NAME}
     src/effects-tests.cpp
     src/single-tests.cpp
     src/action-tests.cpp
-    src/turn-order-tests.cpp)
+    src/turn-order-tests.cpp
+    src/location-tests.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gtest_main GTest::gmock_main dnd-logic)
+target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gmock_main dnd-logic)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})

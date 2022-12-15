@@ -36,11 +36,7 @@ class Spell : public GameEntity, public Activatable {
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* character,
                                         const std::vector<Tile>& targets,
-                                        uint8_t dice_roll_res = 0) const  {
-        auto result = Activatable::use(character, targets, dice_roll_res);
-        std::get<Result>(result).resource_spent = spell_cost_;
-        return result;
-    }
+                                        uint8_t dice_roll_res = 0) const override;
 
     ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };

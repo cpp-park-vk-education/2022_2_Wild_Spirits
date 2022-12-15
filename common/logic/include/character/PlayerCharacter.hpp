@@ -77,16 +77,10 @@ class PlayerCharacter : public CharacterInstance {
                     std::shared_ptr<const Class> char_class, std::shared_ptr<const Race> race,
                     int money = 100, const SharedStorage<Item>& items = {});
 
-    std::tuple<Activatable::Result, ErrorStatus> use(std::string_view action_type, size_t action_id,
-                                                     const std::vector<Tile>& target,
-                                                     const DiceInterface* dice = nullptr) override;
-
     PlayerCharacter(const PlayerCharacter& other) = delete;
     PlayerCharacter& operator=(const PlayerCharacter& other) = delete;
 
     unsigned int gainXP(unsigned int exp);
-
-    ErrorStatus moveTo(const Tile& tile) override;
 
     unsigned int level() const {
         return level_;
@@ -98,6 +92,10 @@ class PlayerCharacter : public CharacterInstance {
 
     Character& original() {
         return base_;
+    }
+
+    bool isHostile() const override {
+        return false;
     }
 
     void refreshSpellPoints() {
@@ -112,7 +110,7 @@ class PlayerCharacter : public CharacterInstance {
         max_spell_points_ = spell_points;
     }
 
-    unsigned int spellPoints() const {
+    unsigned int spellPoints() const override {
         return spell_points_;
     }
 

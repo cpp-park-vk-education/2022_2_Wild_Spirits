@@ -62,6 +62,10 @@ class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
         return original_->scalesBy();
     }
 
+    unsigned int cooldown() const {
+        return original_->cooldown();
+    }
+
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& tiles,
                                         uint8_t dice_roll_res = 0) const override;
 };

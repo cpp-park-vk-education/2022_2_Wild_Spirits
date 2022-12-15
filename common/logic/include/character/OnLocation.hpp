@@ -4,6 +4,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <limits>
 
 namespace DnD {
 
@@ -12,6 +13,8 @@ class Location;
 
 class OnLocation : public Position {
  private:
+    static constexpr size_t kNoLocationPassed = std::numeric_limits<unsigned int>::max();
+
     std::unique_ptr<Position> pos_;
     GameMap& map_;
     size_t current_location_;
@@ -26,7 +29,7 @@ class OnLocation : public Position {
     }
 
  public:
-    OnLocation(std::unique_ptr<Position>&& pos, GameMap& map);
+    OnLocation(std::unique_ptr<Position>&& pos, GameMap& map, size_t location_id = kNoLocationPassed);
 
     OnLocation(const OnLocation& other);
     OnLocation& operator=(OnLocation& other) = delete;
@@ -55,6 +58,10 @@ class OnLocation : public Position {
         return pos_->centerPos();
     }
 
+    std::vector<Tile> occupiedTiles() const override {
+        return pos_->occupiedTiles();
+    }
+
     ErrorStatus moveTo(const Tile& tile) override;
 
     void moveBy(int x, int y) override {
@@ -64,5 +71,7 @@ class OnLocation : public Position {
     GameMap& map() const {
         return map_;
     }
+
+    friend class Location;
 };
 } // namespace DnD

@@ -4,8 +4,11 @@
 #include "Location.hpp"
 
 namespace DnD {
-OnLocation::OnLocation(std::unique_ptr<Position>&& pos, GameMap& map) :
-        pos_(std::move(pos)), map_(map), current_location_(map.currentLocationId()) {}
+OnLocation::OnLocation(std::unique_ptr<Position>&& pos, GameMap& map, size_t location_id) :
+        pos_(std::move(pos)), map_(map),
+        current_location_(location_id == kNoLocationPassed ? map.currentLocationId() : location_id) {
+    location().addObject(*this);
+}
 
 OnLocation::OnLocation(const OnLocation& other) : OnLocation(other.pos_->clone(), other.map_) {}
 
@@ -18,14 +21,6 @@ void OnLocation::setLocation(size_t loc_id) {
 }
 
 ErrorStatus OnLocation::moveTo(const Tile& tile) {
-    if (tile.x >= location().width()) {
-        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
-    }
-
-    if (tile.y >= location().height()) {
-        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
-    }
-
-    return pos_->moveTo(tile);
+    return location().setPosition(*this, tile);
 }
 }  // namespace DnD

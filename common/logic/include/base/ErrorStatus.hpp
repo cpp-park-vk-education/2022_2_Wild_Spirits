@@ -22,7 +22,9 @@ namespace DnD {
     XX(13, OUT_OF_LOCATION_BOUNDS) \
     XX(14, NO_SUCH_LOCATION) \
     XX(15, NO_SUCH_CHARACTER) \
-    XX(16, INVALID_SETTER)
+    XX(16, INVALID_SETTER) \
+    XX(17, WOULD_ERASE_CHARACTERS) \
+    XX(18, TILE_OCCUPIED)
 
 #define XX(error_code, error_message) \
     error_message = error_code,

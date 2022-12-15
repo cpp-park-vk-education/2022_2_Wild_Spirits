@@ -138,8 +138,6 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
     auto [results, error_status] = player_use_spell();
 
     ASSERT_EQ(error_status, ErrorStatus::OK);
-    EXPECT_EQ(player.actionPoints(), 5);
-    EXPECT_EQ(player.spellPoints(), 3);
     ASSERT_EQ(results, expected_results);
 
     // Cast spell with less action points than required
