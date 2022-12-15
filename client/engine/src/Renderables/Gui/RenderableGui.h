@@ -38,8 +38,8 @@ namespace LM {
 
         bool isHovered() const { return m_IsHovered; }
         void setHovered(bool isHovered) { m_IsHovered = isHovered; }
-    protected:
-        float calcAlign(GuiAlign align, glm::uint winSize, float size) const;
+    public:
+        static float calcAlign(GuiAlign align, glm::uint winSize, float size);
     protected:
         RenderableGuiAlign m_Align;
         glm::vec2 m_AlignPosition;

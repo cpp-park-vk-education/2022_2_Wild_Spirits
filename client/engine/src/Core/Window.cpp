@@ -64,6 +64,7 @@ namespace LM {
     }
 
     Window::~Window() {
+        glfwDestroyWindow(m_Window);
     }
 
     void Window::onUpdate() {

@@ -6,7 +6,7 @@ namespace LM {
         : RenderableTexture(props) {
     }
 
-    void RenderableTile::onEvent(Ref<Event> _Event) {
+    void RenderableTile::onEvent(Ref<Event> event) {
     }
 
 }    // namespace LM

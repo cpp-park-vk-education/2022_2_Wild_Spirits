@@ -8,10 +8,10 @@ namespace LM {
 
     class LayerRoom: public Layer {
     public:
-        LayerRoom(Room room, bool isUserCreator = false);
+        explicit LayerRoom(Room room, bool isUserCreator = false);
 
         virtual void onUpdate(Tick tick) override;
-        virtual void renderImGui();
+        virtual void renderImGui() override;
     protected:
         void goToMainMenu();
         void startGame();

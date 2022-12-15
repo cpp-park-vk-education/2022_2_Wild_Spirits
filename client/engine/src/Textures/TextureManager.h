@@ -10,7 +10,6 @@ namespace LM {
     public:
         void add(size_t id, Ref<Texture2D> texture);
         void remove(size_t id);
-        void remove(Ref<Texture2D> texture);
         bool has(size_t id);
         Ref<Texture2D> get(size_t id);
     protected:

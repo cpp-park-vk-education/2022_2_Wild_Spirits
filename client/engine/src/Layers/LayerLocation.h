@@ -20,6 +20,7 @@ namespace LM {
     protected:
         bool hasActions() const;
         void clearActions();
+        void init();
         void load();
 
 #ifdef BUILD_LOGIC

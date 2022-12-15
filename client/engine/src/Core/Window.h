@@ -17,7 +17,7 @@ namespace LM {
 
     class Window {
     public:
-        Window(const WindowProps& props = WindowProps());
+        explicit Window(const WindowProps& props = WindowProps());
         ~Window();
 
         uint32_t getWidth()  const { return m_Data.width; }
@@ -32,7 +32,7 @@ namespace LM {
         void setCallbacks();
     private:
         struct WindowData: WindowProps {
-            WindowData(const WindowProps& props): WindowProps(props) {}
+            explicit WindowData(const WindowProps& props): WindowProps(props) {}
             Ref<EventQueue> eventQueue;
         };
     private:

@@ -11,8 +11,12 @@ namespace LM {
     struct BufferElement {
         BufferElement() = default;
 
-        BufferElement(ShaderDataType type, std::string_view name, bool normalized = false)
-            : name(name), type(type), size(ShaderDataTypeFuncs::ShaderDataTypeSize(type)), offset(0), normalized(normalized) {
+        BufferElement(ShaderDataType type, const std::string_view& name, bool normalized = false)
+            : name(name),
+            type(type),
+            size(ShaderDataTypeFuncs::ShaderDataTypeSize(type)),
+            offset(0),
+            normalized(normalized) {
         }
 
         uint32_t getComponentCount() const {
@@ -48,7 +52,7 @@ namespace LM {
     public:
         BufferLayout() = default;
 
-        BufferLayout(const std::initializer_list<BufferElement>& elements, uint32_t divisor = 0)
+        explicit BufferLayout(const std::initializer_list<BufferElement>& elements, uint32_t divisor = 0)
             : m_Elements(elements), m_Divisor(divisor) {
             calculateOffsetsAndStride();
         }

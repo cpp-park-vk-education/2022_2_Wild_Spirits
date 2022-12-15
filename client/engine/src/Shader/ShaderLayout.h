@@ -39,7 +39,7 @@ namespace LM {
     class ShaderLayout {
     public:
         ShaderLayout() = default;
-        ShaderLayout(const std::initializer_list<ShaderSource>& sources);
+        explicit ShaderLayout(const std::initializer_list<ShaderSource>& sources);
 
         inline const std::vector<ShaderSource>& getSources() const { return m_Sources; }
         inline const ShaderSource& getSource(uint32_t sourceId) const { return m_Sources[sourceId]; }

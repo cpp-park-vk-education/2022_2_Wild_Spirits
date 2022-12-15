@@ -10,7 +10,7 @@ namespace LM {
     public:
         LayerAvailRooms();
         virtual void onUpdate(Tick tick) override;
-        virtual void renderImGui();
+        virtual void renderImGui() override;
     protected:
         void goToMainMenu();
         void goToRoom();

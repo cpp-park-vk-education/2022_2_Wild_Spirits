@@ -7,8 +7,8 @@ namespace LM {
     RenderableGuiTexture::RenderableGuiTexture(
         const RenderableTextureProps& propsTexture,
         const RenderableGuiProps& propsGui)
-        : RenderableGui(propsGui) {
-        m_Renderable = CreateScope<RenderableTexture>(propsTexture);
+        : RenderableGui(propsGui),
+        m_Renderable(CreateScope<RenderableTexture>(propsTexture)) {
     }
 
     void RenderableGuiTexture::onUpdate(Tick tick) {

@@ -15,7 +15,7 @@ namespace LM {
 
     class RenderableTexture: public Renderable {
     public:
-        RenderableTexture(const RenderableTextureProps& props);
+        explicit RenderableTexture(const RenderableTextureProps& props);
         virtual ~RenderableTexture() = default;
 
         virtual void draw(RendererInterface* renderer) override;

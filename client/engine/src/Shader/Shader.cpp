@@ -21,39 +21,39 @@ namespace LM {
         glUseProgram(m_ShaderId);
     }
 
-    void Shader::disable() const {
+    void Shader::disable() {
         glUseProgram(0);
     }
 
-    void Shader::setUniform1f(std::string_view name, float value) {
+    void Shader::setUniform1f(const std::string_view& name, float value)  const {
         glUniform1f(getUniformLocation(name), value);
     }
 
-    void Shader::setUniform1fv(std::string_view name, float* value, int count) {
+    void Shader::setUniform1fv(const std::string_view& name, float* value, int count) const {
         glUniform1fv(getUniformLocation(name), count, value);
     }
 
-    void Shader::setUniform1i(std::string_view name, int value) {
+    void Shader::setUniform1i(const std::string_view& name, int value) const {
         glUniform1i(getUniformLocation(name), value);
     }
 
-    void Shader::setUniform1iv(std::string_view name, int* value, int count) {
+    void Shader::setUniform1iv(const std::string_view& name, int* value, int count) const {
         glUniform1iv(getUniformLocation(name), count, value);
     }
 
-    void Shader::setUniform2f(std::string_view name, const glm::vec2& vector) {
+    void Shader::setUniform2f(const std::string_view& name, const glm::vec2& vector) const {
         glUniform2f(getUniformLocation(name), vector.x, vector.y);
     }
 
-    void Shader::setUniform3f(std::string_view name, const glm::vec3& vector) {
+    void Shader::setUniform3f(const std::string_view& name, const glm::vec3& vector) const {
         glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
     }
 
-    void Shader::setUniform4f(std::string_view name, const glm::vec4& vector) {
+    void Shader::setUniform4f(const std::string_view& name, const glm::vec4& vector) const {
         glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
     }
 
-    void Shader::setUniformMat4(std::string_view name, const glm::mat4& matrix) {
+    void Shader::setUniformMat4(const std::string_view& name, const glm::mat4& matrix) const {
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
     }
 
@@ -153,7 +153,7 @@ namespace LM {
         return shader;
     }
 
-    int Shader::getUniformLocation(std::string_view name) const {
+    int Shader::getUniformLocation(const std::string_view& name) const {
         if (m_UniformLocationCache.find(name.data()) != m_UniformLocationCache.end())
             return m_UniformLocationCache[name.data()];
 

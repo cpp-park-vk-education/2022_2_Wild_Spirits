@@ -13,7 +13,7 @@ namespace LM {
         RenderableGroupInterface(const Transform& transform = Transform()): RenderableInterface(transform) {}
         virtual ~RenderableGroupInterface() = default;
 
-        virtual void draw(RendererInterface* renderer);
+        virtual void draw(RendererInterface* renderer) override;
         virtual Ref<RenderableInterface> getRenderable(size_t id) const = 0;
         virtual size_t getRenderablesCount() const = 0;
     protected:

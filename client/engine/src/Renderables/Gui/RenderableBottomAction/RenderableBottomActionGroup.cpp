@@ -1,4 +1,7 @@
 #include "RenderableBottomActionGroup.h"
+
+#include <numeric>
+
 #include <Utils/ConsoleLog.h>
 
 namespace LM {
@@ -36,7 +39,6 @@ namespace LM {
         }
     }
 
-
     void RenderableBottomActionGroup::rebuid(glm::uvec2 size) {
         RenderableGui::rebuid(size);
         float offsetX = 0.0f;
@@ -47,12 +49,14 @@ namespace LM {
     }
 
     glm::vec2 RenderableBottomActionGroup::getSize() const {
-        float sizeX = (m_Renderables.size() - 1) * m_Space;
-        for (const auto& renderable : m_Renderables) {
-            sizeX += renderable->getSize().x;
-        }
-        return glm::vec2(sizeX, 0);
+        return glm::vec2(std::accumulate(
+            m_Renderables.begin(),
+            m_Renderables.end(),
+            (m_Renderables.size() - 1) * m_Space,
+            [](float left, const auto& right) {
+                return left + right->getSize().x;
+            }),
+            0.0f);
     }
-
 
 }    // namespace LM

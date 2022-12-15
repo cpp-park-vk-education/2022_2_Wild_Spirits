@@ -18,7 +18,7 @@ namespace DnD {
             Allies
         };
     public:
-        Action(Target target): m_Target(target) {}
+        explicit Action(Target target): m_Target(target) {}
 
         Target targetType() const { return m_Target; }
     protected:

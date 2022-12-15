@@ -11,27 +11,28 @@ namespace LM {
 
     class Shader {
     public:
-        Shader(const ShaderLayout& layout);
+        explicit Shader(const ShaderLayout& layout);
         ~Shader();
 
         void enable() const;
-        void disable() const;
+        static void disable();
 
-        void setUniform1f(std::string_view name, float value);
-        void setUniform1fv(std::string_view name, float* value, int count);
-        void setUniform1i(std::string_view name, int value);
-        void setUniform1iv(std::string_view name, int* value, int count);
-        void setUniform2f(std::string_view name, const glm::vec2& vector);
-        void setUniform3f(std::string_view name, const glm::vec3& vector);
-        void setUniform4f(std::string_view name, const glm::vec4& vector);
-        void setUniformMat4(std::string_view name, const glm::mat4& matrix);
+        void setUniform1f(const std::string_view& name, float value) const;
+        void setUniform1fv(const std::string_view& name, float* value, int count) const;
+        void setUniform1i(const std::string_view& name, int value) const;
+        void setUniform1iv(const std::string_view& name, int* value, int count) const;
+        void setUniform2f(const std::string_view& name, const glm::vec2& vector) const;
+        void setUniform3f(const std::string_view& name, const glm::vec3& vector) const;
+        void setUniform4f(const std::string_view& name, const glm::vec4& vector) const;
+        void setUniformMat4(const std::string_view& name, const glm::mat4& matrix) const;
     protected:
-        uint32_t load(const ShaderLayout& layout);
-        uint32_t getType(ShaderSource::Type type);
-        std::string getName(ShaderSource::Type type);
-        uint32_t loadShader(const ShaderLayout& layout, uint32_t sourceId);
-        std::string loadFile(std::string_view filepath);
-        int getUniformLocation(std::string_view name) const;
+        static uint32_t load(const ShaderLayout& layout);
+        static uint32_t getType(ShaderSource::Type type);
+        static std::string getName(ShaderSource::Type type);
+        static uint32_t loadShader(const ShaderLayout& layout, uint32_t sourceId);
+        static std::string loadFile(std::string_view filepath);
+    protected:
+        int getUniformLocation(const std::string_view& name) const;
     protected:
         uint32_t m_ShaderId;
         mutable std::unordered_map<std::string, int> m_UniformLocationCache;

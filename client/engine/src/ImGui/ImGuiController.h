@@ -7,8 +7,8 @@ namespace LM {
         ImGuiController();
         ~ImGuiController();
 
-        void begin();
-        void end();
+        static void begin();
+        static void end();
     protected:
 
     };

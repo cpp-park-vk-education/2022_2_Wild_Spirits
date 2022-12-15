@@ -25,8 +25,8 @@ namespace LM {
         virtual void render();
         virtual void renderImGui() {}
     protected:
-        Ref<SceneGui> m_SceneGui;
         Ref<Scene> m_SceneScene;
+        Ref<SceneGui> m_SceneGui;
     };
 
 }    // namespace LM

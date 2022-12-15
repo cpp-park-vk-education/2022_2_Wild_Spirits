@@ -2,9 +2,8 @@
 
 namespace LM {
 
-    Layer::Layer() {
-        m_SceneScene = CreateRef<Scene>();
-        m_SceneGui = CreateRef<SceneGui>();
+    Layer::Layer()
+        : m_SceneScene(CreateRef<Scene>()), m_SceneGui(CreateRef<SceneGui>()) {
     }
 
     void Layer::render() {

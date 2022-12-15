@@ -6,12 +6,12 @@ namespace LM {
 
     class VertexBuffer {
     public:
-        VertexBuffer(uint32_t size);
+        explicit VertexBuffer(uint32_t size);
         VertexBuffer(const void* data, uint32_t size);
         ~VertexBuffer();
 
-        void bind()   const;
-        void unbind() const;
+        void bind() const;
+        static void unbind();
 
         void setData(const void* data, uint32_t size);
 

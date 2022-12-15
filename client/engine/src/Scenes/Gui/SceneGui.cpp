@@ -11,10 +11,10 @@
 
 namespace LM {
 
-    SceneGui::SceneGui() {
-        m_Renderer = CreateScope<Renderer>();
-        m_Width = Application::get()->getWindow()->getWidth();
-        m_Height = Application::get()->getWindow()->getHeight();
+    SceneGui::SceneGui()
+        : m_Renderer(CreateScope<Renderer>()),
+        m_Width(Application::get()->getWindow()->getWidth()),
+        m_Height(Application::get()->getWindow()->getHeight()) {
     }
 
     SceneGui::~SceneGui() {

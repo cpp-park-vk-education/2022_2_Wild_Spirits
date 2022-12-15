@@ -25,7 +25,7 @@ namespace LM {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferId);
     }
 
-    void IndexBuffer::unbind() const {
+    void IndexBuffer::unbind() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 

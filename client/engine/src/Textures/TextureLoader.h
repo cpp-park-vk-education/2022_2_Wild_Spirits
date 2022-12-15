@@ -6,8 +6,8 @@ namespace LM {
 
     class TextureLoader {
     public:
-        TextureLoader(FromFile file);
-        TextureLoader(FromSource source);
+        explicit TextureLoader(FromFile file);
+        explicit TextureLoader(FromSource source);
         ~TextureLoader();
 
         inline uint32_t getWidht() const { return m_Width; }

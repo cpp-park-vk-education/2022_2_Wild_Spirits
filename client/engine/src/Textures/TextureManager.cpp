@@ -1,5 +1,7 @@
 #include "TextureManager.h"
 
+#include <algorithm>
+
 namespace LM {
 
     void TextureManager::add(size_t id, Ref<Texture2D> texture) {
@@ -7,10 +9,9 @@ namespace LM {
     }
 
     void TextureManager::remove(size_t id) {
-        (void)id;
-    }
-
-    void TextureManager::remove(Ref<Texture2D> texture) {
+        if (auto it = m_Textures.find(id); it != m_Textures.end()) {
+            m_Textures.erase(it);
+        }
     }
 
     bool TextureManager::has(size_t id) {

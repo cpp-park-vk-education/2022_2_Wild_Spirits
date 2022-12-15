@@ -37,7 +37,7 @@ namespace LM {
         renderer->popTransform();
     }
 
-    float RenderableGui::calcAlign(GuiAlign align, glm::uint winSize, float size) const {
+    float RenderableGui::calcAlign(GuiAlign align, glm::uint winSize, float size) {
         switch (align) {
             case GuiAlign::kStart:  return  0.0f;
             case GuiAlign::kCenter: return (static_cast<float>(winSize) - size) / 2.0f;

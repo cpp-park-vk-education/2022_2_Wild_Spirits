@@ -11,9 +11,8 @@ namespace LM {
         VertexArray();
         ~VertexArray();
 
-
         void bind() const;
-        void unbind() const;
+        static void unbind();
 
         void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
         void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer);

@@ -6,12 +6,12 @@ namespace LM {
 
     class IndexBuffer {
     public:
-        IndexBuffer(uint32_t count);
+        explicit IndexBuffer(uint32_t count);
         IndexBuffer(const uint32_t* data, uint32_t count);
         ~IndexBuffer();
 
-        void bind()      const;
-        void unbind() const;
+        void bind() const;
+        static void unbind();
 
         void setIndices(const uint32_t* data, uint32_t count);
 

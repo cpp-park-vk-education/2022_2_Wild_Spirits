@@ -50,16 +50,16 @@ namespace LM {
         };
         struct FromData { uint8_t* data; uint32_t width; uint32_t height; };
     public:
-        Texture2D(FromFile file, MASK mask = MASK::NONE);
-        Texture2D(FromSource source, MASK mask = MASK::NONE);
-        Texture2D(FromData data, MASK mask = MASK::NONE);
+        explicit Texture2D(FromFile file, MASK mask = MASK::NONE);
+        explicit Texture2D(FromSource source, MASK mask = MASK::NONE);
+        explicit Texture2D(FromData data, MASK mask = MASK::NONE);
         ~Texture2D();
 
         uint32_t getTextureId() const { return m_TextureId; }
         glm::uvec2 getSize() const { return glm::uvec2(m_Width, m_Height); }
 
-        void bind(uint32_t slotId);
-        void unbind();
+        void bind(uint32_t slotId) const;
+        void unbind() const;
     private:
         void load(const uint8_t* const data, uint32_t width, uint32_t height);
         void loadOnError();
@@ -68,6 +68,8 @@ namespace LM {
         uint32_t m_Width;
         uint32_t m_Height;
         uint32_t m_TextureId = 0;
+
+        mutable uint32_t m_BindSlotId = 0;
     };
 
 }    // namespace LM

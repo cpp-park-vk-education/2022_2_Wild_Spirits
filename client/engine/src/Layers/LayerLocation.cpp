@@ -9,14 +9,7 @@ namespace LM {
 
     LayerLocation::LayerLocation(bool isUserCreator)
         : m_IsUserCreator(isUserCreator) {
-        Ref<Texture2D> textureCancel = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/BtnCancel.png" });
-        Ref<Texture2D> textureTurn = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/BtnTurn.png" });
-        m_BtnCancel = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureCancel },
-            RenderableGuiProps{ {GuiAlign::kEnd}, glm::vec2(-16.0f, 16.0f) });
-        m_BtnTurn = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureTurn },
-        RenderableGuiProps{ {GuiAlign::kEnd}, glm::vec2(-16.0f, 196.0f) });
-        m_TextureManager = CreateRef<TextureManager>();
-        m_TileTexture = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/Tile.png" });
+        init();
 
         load();
     }
@@ -72,6 +65,18 @@ namespace LM {
         });
     }
 
+    void LayerLocation::init() {
+        Ref<Texture2D> textureCancel = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/BtnCancel.png" });
+        Ref<Texture2D> textureTurn = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/BtnTurn.png" });
+        m_BtnCancel = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureCancel },
+            RenderableGuiProps{ {GuiAlign::kEnd}, glm::vec2(-16.0f, 16.0f) });
+        m_BtnTurn = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureTurn },
+        RenderableGuiProps{ {GuiAlign::kEnd}, glm::vec2(-16.0f, 196.0f) });
+        m_TextureManager = CreateRef<TextureManager>();
+        m_TileTexture = CreateRef<Texture2D>(FromFile{ "./ClientRes/Textures/Location/Tile.png" });
+    }
+
+
     void LayerLocation::onUpdate(Tick tick) {
         Layer::onUpdate(tick);
 #ifdef BUILD_LOGIC
@@ -79,7 +84,7 @@ namespace LM {
             load();
         }
 #endif
-    }
+        }
 
     void LayerLocation::renderImGui() {
 #ifdef BUILD_LOGIC
@@ -100,7 +105,7 @@ namespace LM {
         }
         ImGui::End();
 #endif
-    }
+        }
 
     bool LayerLocation::hasActions() const {
         if (m_ActionMove) { return true; }
@@ -232,4 +237,4 @@ namespace LM {
     }
 #endif
 
-}    // namespace LM
+    }    // namespace LM

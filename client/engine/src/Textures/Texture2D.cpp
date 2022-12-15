@@ -35,12 +35,15 @@ namespace LM {
     Texture2D::~Texture2D() {
     }
 
-    void Texture2D::bind(uint32_t slotId) {
+    void Texture2D::bind(uint32_t slotId) const {
+        m_BindSlotId = slotId;
         glActiveTexture(GL_TEXTURE0 + slotId);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
     }
 
-    void Texture2D::unbind() {
+    void Texture2D::unbind() const {
+        glActiveTexture(GL_TEXTURE0 + m_BindSlotId);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void Texture2D::load(const uint8_t* const data, uint32_t width, uint32_t height) {

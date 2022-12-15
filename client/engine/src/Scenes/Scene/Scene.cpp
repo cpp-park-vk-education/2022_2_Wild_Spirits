@@ -6,8 +6,8 @@
 
 namespace LM {
 
-    Scene::Scene() {
-        m_Renderer = CreateScope<Renderer>();
+    Scene::Scene()
+        : m_Renderer(CreateScope<Renderer>()) {
     }
 
     Scene::~Scene() {

@@ -24,7 +24,7 @@ namespace LM {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
     }
 
-    void VertexBuffer::unbind() const {
+    void VertexBuffer::unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

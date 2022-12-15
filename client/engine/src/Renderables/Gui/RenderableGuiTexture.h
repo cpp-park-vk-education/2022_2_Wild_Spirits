@@ -9,7 +9,7 @@ namespace LM {
 
     class RenderableGuiTexture: public RenderableGui {
     public:
-        RenderableGuiTexture(const RenderableTextureProps& propsTexture, const RenderableGuiProps& propsGui = {});
+        explicit RenderableGuiTexture(const RenderableTextureProps& propsTexture, const RenderableGuiProps& propsGui = {});
         virtual ~RenderableGuiTexture() = default;
 
         void setTransform(const Transform& transform) { m_Renderable->setTransform(transform); }

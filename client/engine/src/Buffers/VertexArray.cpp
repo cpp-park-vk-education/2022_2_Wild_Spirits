@@ -38,7 +38,7 @@ namespace LM {
         glBindVertexArray(m_BufferId);
     }
 
-    void VertexArray::unbind() const {
+    void VertexArray::unbind() {
         glBindVertexArray(0);
     }
 
