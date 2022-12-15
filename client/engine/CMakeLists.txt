@@ -66,7 +66,6 @@ set(SOURCES
     src/Textures/Texture2D.cpp src/Textures/Texture2D.h
     src/Textures/TextureLoader.cpp src/Textures/TextureLoader.h
     src/Textures/TextureManager.cpp src/Textures/TextureManager.h
-    src/Textures/stb_image.h
     src/Textures/CalcTextureParameters.cpp src/Textures/CalcTextureParameters.h
     
     src/Transform/Transform.cpp src/Transform/Transform.h
@@ -83,7 +82,7 @@ add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} ClientRequestor)
-target_link_libraries(${PROJECT_NAME} glm glfw glew ImGui)
+target_link_libraries(${PROJECT_NAME} glm glfw glew stb ImGui)
 
 if(MSVC)
     target_link_libraries(${PROJECT_NAME} opengl32)
@@ -127,6 +126,13 @@ FetchContent_Declare(
     GIT_TAG 01785d8581c14156043325472a4150dae4aba8b2
 )
 FetchContent_MakeAvailable(ImGui)
+
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/mihaillatyshov/stb.git
+    GIT_TAG c21c3bd687736635033267bd836168103cce59dd
+)
+FetchContent_MakeAvailable(stb)
 
 option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
