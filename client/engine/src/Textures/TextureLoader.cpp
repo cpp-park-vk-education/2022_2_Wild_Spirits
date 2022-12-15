@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #ifndef STBI_MALLOC
 #define STBI_MALLOC(sz)           ((sz) ? malloc(sz) : reinterpret_cast<void*>(0))
-#define STBI_REALLOC(p,newsz)     realloc(p,newsz)
+#define STBI_REALLOC(p, newsz)     realloc(p, newsz)
 #define STBI_FREE(p)              free(p)
 #endif
 #include <stb_image.h>
