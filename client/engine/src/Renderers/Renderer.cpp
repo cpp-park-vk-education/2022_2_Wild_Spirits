@@ -38,8 +38,7 @@ namespace LM {
         renderable->getVertexArray()->bind();
         //renderable->getVertexArray()->getIndexBuffer()->bind();
         renderable->getTexture()->bind(0);
-        if (renderable->getVertexArray()->getIndexBuffer()->getCount())
-        {
+        if (renderable->getVertexArray()->getIndexBuffer()->getCount()) {
             glDrawElements(GL_TRIANGLES, renderable->getVertexArray()->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, NULL);
         }
     }

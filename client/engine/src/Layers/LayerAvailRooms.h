@@ -6,7 +6,7 @@
 
 namespace LM {
 
-    class LayerAvailRooms : public Layer {
+    class LayerAvailRooms: public Layer {
     public:
         LayerAvailRooms();
         virtual void onUpdate(Tick tick) override;

@@ -5,7 +5,7 @@
 
 namespace LM {
 
-    class LayerMainMenu : public Layer {
+    class LayerMainMenu: public Layer {
     public:
         LayerMainMenu();
         ~LayerMainMenu();

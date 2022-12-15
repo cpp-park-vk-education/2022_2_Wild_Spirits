@@ -9,11 +9,10 @@
 namespace LM {
 
     Shader::Shader(const ShaderLayout& layout)
-        : m_Layout(layout)
-    {
+        : m_Layout(layout) {
         m_ShaderId = load(layout);
     }
-    
+
     Shader::~Shader() {
         glDeleteProgram(m_ShaderId);
     }
@@ -61,13 +60,11 @@ namespace LM {
     uint32_t Shader::load(const ShaderLayout& layout) {
         uint32_t program = glCreateProgram();
         std::vector<uint32_t> shaders;
-        for (uint32_t i = 0; i < layout.getSources().size(); ++i)
-        {
+        for (uint32_t i = 0; i < layout.getSources().size(); ++i) {
             shaders.emplace_back(loadShader(layout, i));
         }
 
-        for (uint32_t shaderId : shaders)
-        {
+        for (uint32_t shaderId : shaders) {
             glAttachShader(program, shaderId);
         }
 
@@ -86,8 +83,7 @@ namespace LM {
             return 0;
         }
 
-        for (uint32_t shaderId : shaders)
-        {
+        for (uint32_t shaderId : shaders) {
             glDeleteShader(shaderId);
         }
 
@@ -95,8 +91,7 @@ namespace LM {
     }
 
     uint32_t Shader::getType(ShaderSource::Type type) {
-        switch (type)
-        {
+        switch (type) {
             case ShaderSource::Type::kVertex:   return GL_VERTEX_SHADER;
             case ShaderSource::Type::kFragment: return GL_FRAGMENT_SHADER;
             case ShaderSource::Type::kGeometry: return GL_GEOMETRY_SHADER;
@@ -105,8 +100,7 @@ namespace LM {
     }
 
     std::string Shader::getName(ShaderSource::Type type) {
-        switch (type)
-        {
+        switch (type) {
             case ShaderSource::Type::kVertex:   return "Vertex";
             case ShaderSource::Type::kFragment: return "Fragment";
             case ShaderSource::Type::kGeometry: return "Geometry";
@@ -141,7 +135,7 @@ namespace LM {
 
         return res;
     }
-    
+
     std::string Shader::loadFile(std::string_view filepath) {
         std::ifstream ifStream(filepath.data());
         if (!ifStream.is_open())
@@ -149,16 +143,14 @@ namespace LM {
         std::string line;
         std::string shader;
 
-        while (getline(ifStream, line))
-        {
+        while (getline(ifStream, line)) {
             shader += line + "\n";
         }
 
         return shader;
     }
 
-    int Shader::getUniformLocation(std::string_view name) const
-    {
+    int Shader::getUniformLocation(std::string_view name) const {
         if (m_UniformLocationCache.find(name.data()) != m_UniformLocationCache.end())
             return m_UniformLocationCache[name.data()];
 

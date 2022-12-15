@@ -1,5 +1,7 @@
 #include "LayerRoom.h"
 
+#include <ImGui/ImGuiFuncs.h>
+
 #include <imgui.h>
 
 #include <Core/Application.h>
@@ -9,9 +11,7 @@
 namespace LM {
 
     LayerRoom::LayerRoom(Room room, bool isUserCreator)
-        : m_Room(room), m_IsUserCreator(isUserCreator)
-    {
-
+        : m_Room(room), m_IsUserCreator(isUserCreator) {
     }
 
     void LayerRoom::goToMainMenu() {
@@ -27,7 +27,7 @@ namespace LM {
                 Application::get()->removeLayer(this);
             }
             return;
-        }
+}
 #endif
         Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
         Application::get()->removeLayer(this);
@@ -49,9 +49,7 @@ namespace LM {
     }
 
     void LayerRoom::renderImGui() {
-        ImGuiIO& io = ImGui::GetIO(); //(void)io;
-        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        if (ImGui::Begin("Room", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) {
+        if (ImGui::Begin("Room", 0, ImGuiFuncs::SetNextWindowCenterAutoResize())) {
             if (!m_IsUserCreator) {
                 ImGui::Text("Wait for GM to start the game");
                 ImGui::Separator();
@@ -71,4 +69,4 @@ namespace LM {
         ImGui::End();
     }
 
-}
+}    // namespace LM

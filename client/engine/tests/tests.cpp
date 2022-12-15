@@ -9,7 +9,7 @@
 using namespace LM;
 
 TEST(Texture, LoadTexture) {
-    TextureLoader tl1(TextureLoader::FromFile{ "test.png" });
+    TextureLoader tl1(FromFile{ "test.png" });
     EXPECT_TRUE(tl1.isOk());
     EXPECT_EQ(tl1.getWidht(), 32);
     EXPECT_EQ(tl1.getHeight(), 32);
@@ -20,7 +20,7 @@ TEST(Texture, LoadTexture) {
     //EXPECT_EQ(tl2.getWidht(), 32);
     //EXPECT_EQ(tl2.getHeight(), 32);
 
-    TextureLoader tl3(TextureLoader::FromFile{ "fileWithWrongName.png" });
+    TextureLoader tl3(FromFile{ "fileWithWrongName.png" });
     EXPECT_FALSE(tl3.isOk());
 
 

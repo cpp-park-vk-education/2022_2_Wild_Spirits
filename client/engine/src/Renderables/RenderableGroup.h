@@ -5,9 +5,9 @@
 
 namespace LM {
 
-    class RenderableGroup : public RenderableGroupInterface {
+    class RenderableGroup: public RenderableGroupInterface {
     public:
-        RenderableGroup(const Transform& transform = Transform()) : RenderableGroupInterface(transform) { }
+        RenderableGroup(const Transform& transform = Transform()): RenderableGroupInterface(transform) {}
         virtual ~RenderableGroup() = default;
 
         void add(Ref<RenderableInterface> renderable);

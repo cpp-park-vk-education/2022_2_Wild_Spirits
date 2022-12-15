@@ -1,8 +1,7 @@
 #include "LayerAvailRooms.h"
 
-#include "imgui.h"
-
 #include <Core/Application.h>
+#include <ImGui/ImGuiFuncs.h>
 #include "LayerMainMenu.h"
 #include "LayerRoom.h"
 
@@ -45,9 +44,7 @@ namespace LM {
     }
 
     void LayerAvailRooms::renderImGui() {
-        ImGuiIO& io = ImGui::GetIO(); //(void)io;
-        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        if (ImGui::Begin("Rooms", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) {
+        if (ImGui::Begin("Rooms", 0, ImGuiFuncs::SetNextWindowCenterAutoResize())) {
             for (size_t i = 0; i < m_Rooms.size(); ++i) {
                 ImGui::PushID(static_cast<int>(m_Rooms[i].getId()));
                 ImGui::Text("RoomId: %10lu", m_Rooms[i].getId());
@@ -82,4 +79,4 @@ namespace LM {
 #endif
 
 
-}
+    }    // namespace LM

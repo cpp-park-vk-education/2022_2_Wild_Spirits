@@ -9,7 +9,7 @@
 #include <Utils/Timer.h>
 
 namespace LM {
- 
+
     class Layer {
     public:
         Layer();
@@ -23,7 +23,7 @@ namespace LM {
         virtual void onEvent(Ref<Event> _Event);
         virtual void onUpdate(Tick tick);
         virtual void render();
-        virtual void renderImGui() { }
+        virtual void renderImGui() {}
     protected:
         Ref<SceneGui> m_SceneGui;
         Ref<Scene> m_SceneScene;

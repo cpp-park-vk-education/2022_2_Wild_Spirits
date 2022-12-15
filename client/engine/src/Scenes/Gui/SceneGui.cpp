@@ -18,7 +18,6 @@ namespace LM {
     }
 
     SceneGui::~SceneGui() {
-
     }
 
     void SceneGui::add(Ref<RenderableGui> renderable) {
@@ -33,8 +32,7 @@ namespace LM {
 
     void SceneGui::rebuild() {
         //m_Transforms.push_back({ glm::mat4(), glm::vec2(0.0f, 0.0f), glm::vec2(m_Width, m_Height) });
-        for (auto& renderable : m_Renderables)
-        {
+        for (auto& renderable : m_Renderables) {
             renderable->rebuid(glm::uvec2(m_Width, m_Height));
         }
     }
@@ -72,8 +70,7 @@ namespace LM {
     void SceneGui::render() {
         glm::mat4 viewMatrix = glm::ortho(0.0f, static_cast<float>(m_Width), 0.0f, static_cast<float>(m_Height));
         m_Renderer->start(glm::uvec2(m_Width, m_Height), glm::mat4(1.0f), viewMatrix);
-        for (auto& renderable : m_Renderables)
-        {
+        for (auto& renderable : m_Renderables) {
             renderable->drawDecorator(m_Renderer.get());
         }
     }

@@ -9,7 +9,7 @@
 
 namespace LM {
 
-    class LayerLocation : public Layer {
+    class LayerLocation: public Layer {
     public:
         LayerLocation(bool isUserCreator = false);
         ~LayerLocation();
@@ -25,7 +25,7 @@ namespace LM {
 #ifdef BUILD_LOGIC
         void tryLoadImage(size_t id);
 
-        template<typename T> 
+        template<typename T>
         void loadActivatable(T storage);
 #endif
     protected:

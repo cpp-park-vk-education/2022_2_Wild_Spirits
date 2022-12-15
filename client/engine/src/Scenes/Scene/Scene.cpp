@@ -11,7 +11,6 @@ namespace LM {
     }
 
     Scene::~Scene() {
-
     }
 
     void Scene::add(Ref<RenderableInterface> renderable) {
@@ -60,8 +59,7 @@ namespace LM {
         //m_Renderer->start(glm::uvec2(m_Width, m_Height), glm::mat4(1.0f), viewMatrix);
         m_Renderer->start(glm::uvec2(Application::get()->getWindow()->getWidth(), Application::get()->getWindow()->getHeight()),
             glm::mat4(1.0f), viewMatrix);
-        for (auto& renderable : m_Renderables)
-        {
+        for (auto& renderable : m_Renderables) {
             m_Renderer->pushTransform(renderable->getTransform().getMatrix());
             renderable->draw(m_Renderer.get());
             m_Renderer->popTransform();

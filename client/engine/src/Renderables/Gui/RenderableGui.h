@@ -22,7 +22,7 @@ namespace LM {
 
         RenderableGuiAlign getAlight() const { return m_Align; }
         void setAlight(RenderableGuiAlign align) { m_Align = align; }
-        
+
         glm::vec2 getPosition() const { return m_Position; }
         void setPosition(const glm::vec2& position) { m_Position = position; }
 
@@ -39,7 +39,7 @@ namespace LM {
         bool isHovered() const { return m_IsHovered; }
         void setHovered(bool isHovered) { m_IsHovered = isHovered; }
     protected:
-        float calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const;
+        float calcAlign(GuiAlign align, glm::uint winSize, float size) const;
     protected:
         RenderableGuiAlign m_Align;
         glm::vec2 m_AlignPosition;

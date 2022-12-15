@@ -6,7 +6,8 @@
 namespace LM {
 
     RenderableGui::RenderableGui(const RenderableGuiProps& props)
-        : m_Align(props.align), m_AlignPosition({ 0 ,0 }), m_Position(props.position) { }
+        : m_Align(props.align), m_AlignPosition({ 0 ,0 }), m_Position(props.position) {
+    }
 
 
     void RenderableGui::rebuid(glm::uvec2 size) {
@@ -18,14 +19,14 @@ namespace LM {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
             glm::vec2 start = m_Position + m_AlignPosition;
-            glm::vec2 end = m_Position + m_AlignPosition + getSize();
-            if (e->getX() >= start.x && e->getX() <= end.x && e->getY() >= start.y && e->getY() <= end.y) {
-                m_IsHovered = true;
-            }
-            else {
-                m_IsHovered = false;
-            }
-            return false;
+        glm::vec2 end = m_Position + m_AlignPosition + getSize();
+        if (e->getX() >= start.x && e->getX() <= end.x && e->getY() >= start.y && e->getY() <= end.y) {
+            m_IsHovered = true;
+        }
+        else {
+            m_IsHovered = false;
+        }
+        return false;
         });
     }
 
@@ -35,12 +36,11 @@ namespace LM {
         renderer->popTransform();
     }
 
-    float RenderableGui::calcAlign(RenderableGuiAlign::Align align, glm::uint winSize, float size) const {
-        switch (align)
-        {
-        case RenderableGuiAlign::Align::kStart: return 0;
-        case RenderableGuiAlign::Align::kCenter: return ((float)winSize - size) / 2.0f;
-        case RenderableGuiAlign::Align::kEnd: return (float)winSize - size;
+    float RenderableGui::calcAlign(GuiAlign align, glm::uint winSize, float size) const {
+        switch (align) {
+            case GuiAlign::kStart: return 0;
+            case GuiAlign::kCenter: return ((float)winSize - size) / 2.0f;
+            case GuiAlign::kEnd: return (float)winSize - size;
         }
         return 0;
     }

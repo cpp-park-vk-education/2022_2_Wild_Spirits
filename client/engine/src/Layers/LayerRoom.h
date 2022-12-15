@@ -6,7 +6,7 @@
 
 namespace LM {
 
-    class LayerRoom : public Layer {
+    class LayerRoom: public Layer {
     public:
         LayerRoom(Room room, bool isUserCreator = false);
 

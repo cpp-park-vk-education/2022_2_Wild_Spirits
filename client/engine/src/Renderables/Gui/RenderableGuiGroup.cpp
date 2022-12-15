@@ -3,8 +3,7 @@
 namespace LM {
 
     RenderableGuiGroup::RenderableGuiGroup(Vector<Ref<RenderableGui>> renderables, const RenderableGuiProps& propsGui)
-        : RenderableGui(propsGui), m_Renderables(renderables)
-    {
+        : RenderableGui(propsGui), m_Renderables(renderables) {
 
     }
 
@@ -13,18 +12,18 @@ namespace LM {
         bool isMouseMovedEvent = false;
         dispatcher.dispatch<MouseMovedEvent>([&](Ref<MouseMovedEvent> e) {
             isMouseMovedEvent = true;
-            for (auto& renderable : m_Renderables) {
-                Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX() - m_Position.x - m_AlignPosition.x, e->getY() - m_Position.y - m_AlignPosition.y);
-                renderable->onEvent(newEvent);
-            }
-            return false;
+        for (auto& renderable : m_Renderables) {
+            Ref<MouseMovedEvent> newEvent = CreateRef<MouseMovedEvent>(e->getX() - m_Position.x - m_AlignPosition.x, e->getY() - m_Position.y - m_AlignPosition.y);
+            renderable->onEvent(newEvent);
+        }
+        return false;
         });
         if (isMouseMovedEvent) { return; }
         for (auto& renderable : m_Renderables) {
             renderable->onEvent(event);
         }
     }
-    
+
     void RenderableGuiGroup::onUpdate(Tick tick) {
         for (auto& renderable : m_Renderables) {
             renderable->onUpdate(tick);
@@ -43,8 +42,7 @@ namespace LM {
     }
 
     void RenderableGuiGroup::draw(RendererInterface* renderer) {
-        for (auto& renderable : m_Renderables)
-        {
+        for (auto& renderable : m_Renderables) {
             renderable->drawDecorator(renderer);
         }
     }

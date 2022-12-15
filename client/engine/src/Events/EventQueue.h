@@ -4,8 +4,7 @@
 
 #include "EventInterface.h"
 
-namespace LM
-{
+namespace LM {
 
     class EventQueue {
     public:

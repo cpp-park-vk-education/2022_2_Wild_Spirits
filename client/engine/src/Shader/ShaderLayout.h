@@ -21,7 +21,8 @@ namespace LM {
         };
 
         ShaderSource(Type type, std::pair<std::string, LoadType> source)
-            : m_Type(type), m_LoadType(source.second), m_Source(source.first) { }
+            : m_Type(type), m_LoadType(source.second), m_Source(source.first) {
+        }
 
         inline Type getType()                    const { return m_Type; }
         inline LoadType getLoadType()            const { return m_LoadType; }
@@ -35,8 +36,7 @@ namespace LM {
         std::string m_Source;
     };
 
-    class ShaderLayout
-    {
+    class ShaderLayout {
     public:
         ShaderLayout() = default;
         ShaderLayout(const std::initializer_list<ShaderSource>& sources);

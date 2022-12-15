@@ -7,7 +7,7 @@
 namespace LM {
 
     struct Transform {
-        
+
         glm::mat4 getMatrix() const;
 
         glm::vec2 position = glm::vec2(0.0f);

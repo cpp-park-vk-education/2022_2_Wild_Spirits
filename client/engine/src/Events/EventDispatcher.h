@@ -3,13 +3,11 @@
 #include <Core/Base.h>
 #include "EventInterface.h"
 
-namespace LM
-{
+namespace LM {
 
-    class EventDispatcher
-    {
+    class EventDispatcher {
     public:
-        EventDispatcher(Ref<Event> event) : m_Event(event) { }
+        EventDispatcher(Ref<Event> event): m_Event(event) {}
 
         template<typename T, typename F>
         bool dispatch(const F& func) {

@@ -6,7 +6,7 @@
 
 namespace LM {
 
-    class RenderableGuiGroup : public RenderableGui {
+    class RenderableGuiGroup: public RenderableGui {
     public:
         RenderableGuiGroup(Vector<Ref<RenderableGui>> renderables = {}, const RenderableGuiProps& propsGui = {});
         virtual ~RenderableGuiGroup() = default;

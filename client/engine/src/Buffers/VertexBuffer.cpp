@@ -33,4 +33,4 @@ namespace LM {
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
 
-}
+}    // namespace LM

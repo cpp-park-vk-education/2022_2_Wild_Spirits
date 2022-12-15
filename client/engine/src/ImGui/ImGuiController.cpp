@@ -12,19 +12,13 @@ namespace LM {
     ImGuiController::ImGuiController() {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); //(void)io;
-        //io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-        //io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-        //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
         ImGui::StyleColorsDark();
 
         ImGuiStyle& style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
@@ -35,7 +29,7 @@ namespace LM {
         (void)font;
         IM_ASSERT(font != NULL);
 
-        ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(Application::get()->getWindow()->getNativeWindow()), true);
+        ImGui_ImplGlfw_InitForOpenGL(Application::get()->getWindow()->getNativeWindow(), true);
         ImGui_ImplOpenGL3_Init("#version 330 core");
     }
 
@@ -51,15 +45,16 @@ namespace LM {
     }
 
     void ImGuiController::end() {
-        ImGuiIO& io = ImGui::GetIO(); //(void)io;
-        io.DisplaySize = ImVec2((float)Application::get()->getWindow()->getWidth(), (float)Application::get()->getWindow()->getHeight());
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2(
+            static_cast<float>(Application::get()->getWindow()->getWidth()),
+            static_cast<float>(Application::get()->getWindow()->getHeight()));
 
         ImGui::Render();
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
@@ -67,4 +62,4 @@ namespace LM {
         }
     }
 
-}
+}    // namespace LM

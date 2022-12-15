@@ -8,12 +8,6 @@
 namespace LM {
 
     class SceneGui: public SceneInterface {
-    protected:
-        //struct TransformData {
-        //    glm::mat4 transform;
-        //    glm::vec2 position;
-        //    glm::vec2 size;
-        //};
     public:
         SceneGui();
         virtual ~SceneGui();

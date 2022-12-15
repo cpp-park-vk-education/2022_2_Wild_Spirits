@@ -6,10 +6,8 @@
 
 namespace LM {
 
-    static GLenum shaderDataTypeToOpenGLBaseType(ShaderDataType _Type)
-    {
-        switch (_Type)
-        {
+    static GLenum shaderDataTypeToOpenGLBaseType(ShaderDataType type) {
+        switch (type) {
             case ShaderDataType::None:   break;
             case ShaderDataType::Float:  return GL_FLOAT;
             case ShaderDataType::Float2: return GL_FLOAT;
@@ -62,17 +60,14 @@ namespace LM {
         vertexBuffer->bind();
 
         const auto& layout = vertexBuffer->getLayout();
-        for (const auto& element : layout)
-        {
-            switch (element.type)
-            {
+        for (const auto& element : layout) {
+            switch (element.type) {
                 case ShaderDataType::None: break;
 
                 case ShaderDataType::Float:
                 case ShaderDataType::Float2:
                 case ShaderDataType::Float3:
-                case ShaderDataType::Float4:
-                {
+                case ShaderDataType::Float4: {
                     glEnableVertexAttribArray(m_VertexBufferIndex);
                     glVertexAttribPointer(m_VertexBufferIndex,
                         element.getComponentCount(),
@@ -80,8 +75,7 @@ namespace LM {
                         element.normalized ? GL_TRUE : GL_FALSE,
                         layout.getStride(),
                         reinterpret_cast<const void*>(element.offset));
-                    if (layout.hasDivisor())
-                    {
+                    if (layout.hasDivisor()) {
                         glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
                     }
                     m_VertexBufferIndex++;
@@ -91,27 +85,23 @@ namespace LM {
                 case ShaderDataType::Int2:
                 case ShaderDataType::Int3:
                 case ShaderDataType::Int4:
-                case ShaderDataType::Bool:
-                {
+                case ShaderDataType::Bool: {
                     glEnableVertexAttribArray(m_VertexBufferIndex);
                     glVertexAttribIPointer(m_VertexBufferIndex,
                         element.getComponentCount(),
                         shaderDataTypeToOpenGLBaseType(element.type),
                         layout.getStride(),
                         reinterpret_cast<const void*>(element.offset));
-                    if (layout.hasDivisor())
-                    {
+                    if (layout.hasDivisor()) {
                         glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
                     }
                     m_VertexBufferIndex++;
                     break;
                 }
                 case ShaderDataType::Mat3:
-                case ShaderDataType::Mat4:
-                {
+                case ShaderDataType::Mat4: {
                     uint32_t count = element.getComponentCount();
-                    for (uint32_t i = 0; i < count; ++i)
-                    {
+                    for (uint32_t i = 0; i < count; ++i) {
                         glEnableVertexAttribArray(m_VertexBufferIndex);
                         glVertexAttribPointer(m_VertexBufferIndex,
                             count,
@@ -119,8 +109,7 @@ namespace LM {
                             element.normalized ? GL_TRUE : GL_FALSE,
                             layout.getStride(),
                             (const void*)(element.offset + sizeof(float) * count * i));
-                        if (layout.hasDivisor())
-                        {
+                        if (layout.hasDivisor()) {
                             glVertexAttribDivisor(m_VertexBufferIndex, layout.getDivisor());
                         }
                         m_VertexBufferIndex++;
@@ -131,5 +120,4 @@ namespace LM {
         }
     }
 
-
-}
+}    // namespace LM

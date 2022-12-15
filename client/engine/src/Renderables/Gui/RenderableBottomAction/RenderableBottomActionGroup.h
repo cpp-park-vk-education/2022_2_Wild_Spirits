@@ -5,9 +5,10 @@
 
 namespace LM {
 
-    class RenderableBottomActionGroup : public RenderableGuiGroup {
+    class RenderableBottomActionGroup: public RenderableGuiGroup {
     public:
-        RenderableBottomActionGroup(float space = 5.0f, const RenderableGuiProps& propsGui = { { RenderableGuiAlign::Align::kCenter } });
+        RenderableBottomActionGroup(float space = 5.0f,
+            const RenderableGuiProps& propsGui = { { GuiAlign::kCenter } });
 
         void add(Ref<RenderableBottomAction> renderable);
 

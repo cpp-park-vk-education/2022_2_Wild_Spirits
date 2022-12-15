@@ -31,8 +31,8 @@ namespace LM {
         bool init();
         void setCallbacks();
     private:
-        struct WindowData : WindowProps {
-            WindowData(const WindowProps& props) : WindowProps(props) { }
+        struct WindowData: WindowProps {
+            WindowData(const WindowProps& props): WindowProps(props) {}
             Ref<EventQueue> eventQueue;
         };
     private:

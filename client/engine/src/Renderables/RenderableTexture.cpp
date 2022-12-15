@@ -5,18 +5,16 @@
 namespace LM {
 
     RenderableTexture::RenderableTexture(const RenderableTextureProps& props)
-        : Renderable(props.transform, props.color), m_Texture(props.texture), m_Size(props.size)
-    {
-        if (props.size.x == 0.0f || props.size.y == 0.0f)
-        {
+        : Renderable(props.transform, props.color), m_Texture(props.texture), m_Size(props.size) {
+        if (props.size.x == 0.0f || props.size.y == 0.0f) {
             m_Size = m_Texture->getSize();
         }
         BufferLayout verticesLayout({
             { ShaderDataType::Float3, "a_Position" },
             { ShaderDataType::Float2, "a_TexCoord" } });
 
-        
-        std::vector<Renderable::Vertex> vertices {
+
+        std::vector<Renderable::Vertex> vertices{
             { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
             { glm::vec3(0.0f, m_Size.y, 0.0f), glm::vec2(0.0f, 1.0f) },
             { glm::vec3(m_Size.x, m_Size.y, 0.0f), glm::vec2(1.0f, 1.0f) },

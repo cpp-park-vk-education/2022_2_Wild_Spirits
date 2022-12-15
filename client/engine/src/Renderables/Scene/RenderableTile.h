@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    class RenderableTile : public RenderableTexture {
+    class RenderableTile: public RenderableTexture {
     public:
         RenderableTile(const RenderableTextureProps& props);
         virtual ~RenderableTile() = default;

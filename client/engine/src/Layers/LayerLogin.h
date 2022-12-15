@@ -6,7 +6,7 @@
 
 namespace LM {
 
-    class LayerLogin : public Layer {
+    class LayerLogin: public Layer {
     public:
         virtual void onUpdate(Tick tick) override;
         virtual void renderImGui() override;

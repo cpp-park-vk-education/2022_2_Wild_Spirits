@@ -4,7 +4,7 @@
 
 namespace LM {
 
-    class LayerSettings : public Layer {
+    class LayerSettings: public Layer {
     public:
         LayerSettings();
         ~LayerSettings();

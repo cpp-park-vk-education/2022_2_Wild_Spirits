@@ -1,13 +1,10 @@
 #pragma once
 
-#include <string>
+#include <Utils/DataLoading.h>
 
 namespace LM {
 
     class TextureLoader {
-    public:
-        struct FromFile { std::string filename; };
-        struct FromSource { std::string source; };
     public:
         TextureLoader(FromFile file);
         TextureLoader(FromSource source);

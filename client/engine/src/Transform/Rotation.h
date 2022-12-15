@@ -4,7 +4,7 @@ namespace LM {
 
     class Rotation {
     public:
-        Rotation(float angle) : m_Angle(angle) { }
+        Rotation(float angle): m_Angle(angle) {}
 
         Rotation& operator+=(const Rotation& other) {
             m_Angle += other.m_Angle;
@@ -13,7 +13,7 @@ namespace LM {
 
         friend Rotation operator+(Rotation left, Rotation right) {
             left += right;
-            return left; 
+            return left;
         }
 
         friend Rotation operator+(Rotation left, float right) {
@@ -60,7 +60,7 @@ namespace LM {
         }
 
         friend Rotation operator/(float left, Rotation right) {
-            
+
             return Rotation(left / right.m_Angle);
         }
 

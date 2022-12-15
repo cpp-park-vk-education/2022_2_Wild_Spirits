@@ -9,11 +9,11 @@
 //#define USE_LOG
 
 #ifdef _DEBUG
-    #define LOG_ON
+#define LOG_ON
 #else
-    #ifdef USE_LOG
-        #define LOG_ON
-    #endif
+#ifdef USE_LOG
+#define LOG_ON
+#endif
 #endif
 
 namespace LM {
@@ -39,7 +39,7 @@ namespace LM {
             White = 15
         };
 #else
-        enum class ConsoleColorType : short {
+        enum class ConsoleColorType: short {
             Black = 30,
             Blue = 34,
             Green = 32,
