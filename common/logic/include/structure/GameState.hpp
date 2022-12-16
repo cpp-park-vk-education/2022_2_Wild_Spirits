@@ -93,6 +93,6 @@ class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;
     SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) override;
 
-    void setUpdated(GameEntityInterface& object) override;
+   inline void setUpdated(GameEntityInterface& object) override;
 };
 } // namespace DnD

@@ -14,6 +14,7 @@ class MockGameMap : public GameMap {
     MOCK_METHOD(size_t, currentLocationId, (), (const, override));
     MOCK_METHOD(SharedStorage<PlayerCharacter>&, players, (), (const, override));
     MOCK_METHOD(Storage<CharacterInstance*>&, allCharacters, (), (const, override));
+    MOCK_METHOD(ErrorStatus, createPlayer, (std::shared_ptr<PlayerCharacter>), (override));
 };
 
 class MockDice : public DiceInterface {

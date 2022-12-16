@@ -35,6 +35,12 @@ concept DerivedPtr = requires(T obj) {
 template <typename T, typename U>
 concept DerivedFrom = std::derived_from<T, U> || DerivedPtr<T, U>;
 
+class OutOfRange : public Exception {
+ public:
+    OutOfRange() :
+        Exception("Storage index out of range") {}
+};
+
 template <IdentifiableEntity T>
 class Storage {
  private:

@@ -6,9 +6,7 @@
 namespace DnD {
 OnLocation::OnLocation(std::unique_ptr<Position>&& pos, GameMap& map, size_t location_id) :
         pos_(std::move(pos)), map_(map),
-        current_location_(location_id == kNoLocationPassed ? map.currentLocationId() : location_id) {
-    location().addObject(*this);
-}
+        current_location_(location_id == kNoLocationPassed ? map.currentLocationId() : location_id) {}
 
 OnLocation::OnLocation(const OnLocation& other) : OnLocation(other.pos_->clone(), other.map_) {}
 

@@ -45,4 +45,19 @@ Storage<CharacterInstance*>& GameMapImpl::allCharacters() const {
 SharedStorage<PlayerCharacter>& GameMapImpl::players() const {
     return game_.players();
 }
+
+ErrorStatus GameMapImpl::createPlayer(std::shared_ptr<PlayerCharacter> player) {
+    auto [_, status] = players().add(player);
+    if (status != ErrorStatus::OK) {
+        return status;
+    }
+
+    status = currentLocation().addObject(*player);
+    if (status != ErrorStatus::OK) {
+        players().remove(player->id());
+        return status;
+    }
+
+    return ErrorStatus::OK;
+}
 }  // namespace DnD

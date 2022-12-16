@@ -65,10 +65,27 @@ class Location : public GameEntity {
     ErrorStatus setPosition(OnLocation& obj, const Tile& pos);
     ErrorStatus addObject(OnLocation& obj);
 
+    template <typename ...Args>
+    ErrorStatus createNPC(size_t id, Args&&... args);
+
     SharedStorage<NPC_Instance>& npc() {
         return npc_;
     }
 
     ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
+
+template <typename ...Args>
+inline ErrorStatus Location::createNPC(size_t id, Args&&... args) {
+    auto [character, status] = npc().add(id, std::forward<Args>(args)...);
+    if (status != ErrorStatus::OK) {
+        return status;
+    }
+    status = addObject(*character);
+    if (status != ErrorStatus::OK) {
+        npc().remove(character->id());
+        return status;
+    }
+    return ErrorStatus::OK;
+}
 }  // namespace DnD

@@ -15,10 +15,4 @@ class Exception : public std::exception {
         return msg_.c_str();
     }
 };
-
-class OutOfRange : public Exception {
- public:
-    OutOfRange() :
-        Exception("Index out of range") {}
-};
 }  // namespace DnD

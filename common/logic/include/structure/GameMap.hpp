@@ -21,16 +21,18 @@ class GameMap {
     virtual Storage<CharacterInstance*>& allCharacters() const = 0;
 
     virtual ~GameMap() {}
+
+    virtual ErrorStatus createPlayer(std::shared_ptr<PlayerCharacter> player) = 0;
 };
 
 class GameMapImpl : public GameMap {
  private:
     Storage<Location> locations_;
-    size_t current_location_;
     GameState& game_;
+    size_t current_location_;
 
  public:
-    GameMapImpl(GameState& game) : game_(game) {}
+    GameMapImpl(GameState& game) : game_(game), current_location_(0) {}
 
     Storage<Location>& locations() override {
         return locations_;
@@ -50,5 +52,7 @@ class GameMapImpl : public GameMap {
 
     SharedStorage<PlayerCharacter>& players() const override;
     Storage<CharacterInstance*>& allCharacters() const override;
+
+    ErrorStatus createPlayer(std::shared_ptr<PlayerCharacter> player) override;
 };
 }  // namespace DnD
