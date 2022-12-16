@@ -8,8 +8,8 @@ namespace DnD {
 
     std::mt19937 Dice::gen_(std::random_device{}());  // NOLINT
 
-    uint8_t Dice::roll(uint8_t die) const {
-        std::uniform_int_distribution<uint8_t> dist(1, die);
+    uint16_t Dice::roll(uint8_t die) const {
+        std::uniform_int_distribution<uint16_t> dist(1, die);
         auto res = dist(gen_);
         return res;
     }
@@ -18,9 +18,9 @@ namespace DnD {
         return std::make_unique<Dice>();
     }
 
-    std::vector<uint8_t> Dice::roll(uint8_t die, size_t num) const {
-        std::uniform_int_distribution<uint8_t> dist(1, die);
-        std::vector<uint8_t> res(num);
+    std::vector<uint16_t> Dice::roll(uint8_t die, size_t num) const {
+        std::uniform_int_distribution<uint16_t> dist(1, die);
+        std::vector<uint16_t> res(num);
         std::generate_n(res.begin(), num, [&dist] { return dist(gen_); });
         return res;
     }

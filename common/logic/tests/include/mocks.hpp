@@ -19,8 +19,8 @@ class MockGameMap : public GameMap {
 
 class MockDice : public DiceInterface {
  public:
-    MOCK_METHOD(uint8_t, roll, (uint8_t), (const, override));
-    MOCK_METHOD(std::vector<uint8_t>, roll, (uint8_t, size_t), (const, override));
+    MOCK_METHOD(uint16_t, roll, (uint8_t), (const, override));
+    MOCK_METHOD(std::vector<uint16_t>, roll, (uint8_t, size_t), (const, override));
     std::unique_ptr<DiceInterface> clone() const override {
         return std::make_unique<MockDice>();
     }

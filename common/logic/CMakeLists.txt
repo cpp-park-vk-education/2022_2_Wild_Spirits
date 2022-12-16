@@ -16,9 +16,9 @@ set(SOURCES
      src/character/CharacterInstance.cpp
      src/character/PlayerCharacter.cpp
      src/character/NPC_Instance.cpp
-     src/structure/GameMap.cpp
-     src/structure/GameState.cpp
      src/structure/Location.cpp
+     src/structure/GameState.cpp
+     src/structure/GameMap.cpp
      src/structure/DamageTypeStorage.cpp
      src/structure/TurnOrder.cpp)
 

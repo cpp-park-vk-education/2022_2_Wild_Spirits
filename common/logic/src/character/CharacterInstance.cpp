@@ -5,6 +5,8 @@
 #include "Action.hpp"
 #include "GameMap.hpp"
 
+#include <algorithm>
+
 namespace DnD {
 CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
                                      GameMap& map, int money, const SharedStorage<Item>& items) :

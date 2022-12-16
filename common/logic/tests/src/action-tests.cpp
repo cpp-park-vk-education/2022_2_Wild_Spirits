@@ -27,9 +27,9 @@ TEST_F(ActionSuite, SingleActionTest) {
 
     // Damage rolls
     EXPECT_CALL(*dice_ptr, roll(4, 2))
-        .WillOnce(Return(std::vector<uint8_t>{1, 2}))
-        .WillOnce(Return(std::vector<uint8_t>{3, 2}))
-        .WillOnce(Return(std::vector<uint8_t>{4, 3}));
+        .WillOnce(Return(std::vector<uint16_t>{1, 2}))
+        .WillOnce(Return(std::vector<uint16_t>{3, 2}))
+        .WillOnce(Return(std::vector<uint16_t>{4, 3}));
 
     // Assume player rolled 11 when he used this action,
     // and got 2 points as a bonus from his stats, totalling 13
@@ -98,8 +98,8 @@ TEST_F(ActivatableSuite, PlayerSpellTest) {  // cppcheck-suppress [syntaxError]
 
     // Damage rolls
     EXPECT_CALL(*dice_ptr, roll(4, 2))
-        .WillOnce(Return(std::vector<uint8_t>{3, 2}))
-        .WillOnce(Return(std::vector<uint8_t>{4, 3}));
+        .WillOnce(Return(std::vector<uint16_t>{3, 2}))
+        .WillOnce(Return(std::vector<uint16_t>{4, 3}));
 
     player.setMaxSpellPoints(5);
     player.refreshSpellPoints();

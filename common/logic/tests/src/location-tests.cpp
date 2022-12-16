@@ -3,6 +3,8 @@
 #include "GameState.hpp"
 #include "GameMap.hpp"
 #include "OnLocation.hpp"
+#include "Storage.hpp"
+#include "PlayerCharacter.hpp"
 
 namespace DnD {
 class LocationSuite : public ::testing::Test {

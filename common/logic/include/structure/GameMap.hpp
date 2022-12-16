@@ -46,7 +46,7 @@ class GameMapImpl : public GameMap {
         return locations_.get(current_location_);
     }
 
-    size_t currentLocationId() const override{
+    size_t currentLocationId() const override {
         return current_location_;
     }
 

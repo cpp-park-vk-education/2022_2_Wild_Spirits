@@ -26,7 +26,7 @@ TEST_F(EffectSuite, MoveReturnsValidResult) {  // cppcheck-suppress [syntaxError
 
 TEST_F(DamageSuite, DealDamageConsidersResists) {
     EXPECT_CALL((*dice), roll(_, _))
-        .WillOnce(Return(std::vector<uint8_t>{6, 6}));
+        .WillOnce(Return(std::vector<uint16_t>{6, 6}));
 
     DealDamage damage_resist(DamageType(0), 6, 2, std::move(dice));
     damage_resist.updateActionResult(*character, &new_result);
@@ -35,7 +35,7 @@ TEST_F(DamageSuite, DealDamageConsidersResists) {
 
 TEST_F(DamageSuite, DealDamageConsidersVulnerabilities) {
     EXPECT_CALL(*dice, roll(_, _))
-        .WillOnce(Return(std::vector<uint8_t>{3, 3}));
+        .WillOnce(Return(std::vector<uint16_t>{3, 3}));
 
     DealDamage damage(DamageType(1), 6, 2, std::move(dice));
     damage.updateActionResult(*character, &new_result);

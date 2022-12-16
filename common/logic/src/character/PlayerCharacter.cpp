@@ -43,7 +43,7 @@ unsigned int PlayerCharacter::gainXP(unsigned int exp) {
 }
 
 const ActivatableInterface* PlayerCharacter::chooseActivatable(std::string_view action_type, size_t action_id) {
-    static std::unordered_map<std::string_view, std::function<const ActivatableInterface*(size_t)>> get_action = {
+    std::unordered_map<std::string_view, std::function<const ActivatableInterface*(size_t)>> get_action = {
         {"skill", [this] (size_t id) { return skills_.safeGet(id); }},
         {"weapon", [this] (size_t id) { return weapons_.safeGet(id).get(); }},
         {"consumable", [this] (size_t id) { return consumables_.safeGet(id); }},
