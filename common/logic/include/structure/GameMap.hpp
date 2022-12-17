@@ -17,7 +17,7 @@ class GameMap {
     virtual Location& currentLocation() = 0;
     virtual size_t currentLocationId() const = 0;
 
-    virtual SharedStorage<PlayerCharacter>& players() const = 0;
+    virtual SharedStorage<PlayerCharacter>& players() = 0;
     virtual Storage<CharacterInstance*>& allCharacters() const = 0;
 
     virtual ~GameMap() {}
@@ -30,6 +30,7 @@ class GameMapImpl : public GameMap {
     Storage<Location> locations_;
     GameState& game_;
     size_t current_location_;
+    SharedStorage<PlayerCharacter> players_;
 
  public:
     GameMapImpl(GameState& game) : game_(game), current_location_(0) {}
@@ -50,7 +51,7 @@ class GameMapImpl : public GameMap {
         return current_location_;
     }
 
-    SharedStorage<PlayerCharacter>& players() const override;
+    SharedStorage<PlayerCharacter>& players() override;
     Storage<CharacterInstance*>& allCharacters() const override;
 
     ErrorStatus createPlayer(std::shared_ptr<PlayerCharacter> player) override;

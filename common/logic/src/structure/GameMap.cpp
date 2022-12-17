@@ -42,8 +42,8 @@ Storage<CharacterInstance*>& GameMapImpl::allCharacters() const {
     return game_.allCharacters();
 }
 
-SharedStorage<PlayerCharacter>& GameMapImpl::players() const {
-    return game_.players();
+SharedStorage<PlayerCharacter>& GameMapImpl::players() {
+    return players_;
 }
 
 ErrorStatus GameMapImpl::createPlayer(std::shared_ptr<PlayerCharacter> player) {

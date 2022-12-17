@@ -30,8 +30,10 @@ class Location : public GameEntity {
         TileMatrix(size_t x, size_t y);
 
         bool isFree(const Tile& tile) const;
-        void freeTile(const Tile& tile);
-        void occupyTile(const Tile& tile);
+        bool isFree(const std::vector<Tile>& tiles) const;
+
+        ErrorStatus freeTile(const Tile& tile);
+        ErrorStatus occupyTile(const Tile& tile);
 
         void clear();
 
@@ -44,6 +46,8 @@ class Location : public GameEntity {
     SharedStorage<NPC_Instance> npc_;
     TileMatrix matrix_;
 
+    std::vector<Tile> getNextTiles(const Tile& tile) const;
+
  public:
     Location() = default;
 
@@ -53,6 +57,12 @@ class Location : public GameEntity {
     ErrorStatus setHeight(size_t height);
     ErrorStatus setWidth(size_t width);
     ErrorStatus setSize(size_t width, size_t height);
+
+    std::tuple<Tile, ErrorStatus> closestFreeTile(const OnLocation& obj, const Tile& tile) const;
+    ErrorStatus hasValidPosition(const OnLocation& obj) const;
+    bool isInBounds(const Tile& tile) const;
+
+    std::vector<Tile> freeTiles() const;
 
     size_t width() const {
         return matrix_.width();

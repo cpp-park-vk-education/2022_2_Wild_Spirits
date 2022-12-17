@@ -31,6 +31,10 @@ struct Tile {
         return x == other.x && y == other.y;
     }
 
+    bool operator<(const Tile& other) const {
+        return x < other.x || y < other.y;
+    }
+
     size_t distance(const Tile& other) const {
         return max(x, other.x) - min(x, other.x) +
                max(y, other.y) - min(y, other.y);

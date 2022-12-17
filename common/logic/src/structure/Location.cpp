@@ -4,6 +4,8 @@
 #include "NPC_Instance.hpp"
 #include "GameMap.hpp"
 
+#include <queue>
+
 namespace DnD {
 Location::Location(size_t id, std::string_view name, int image_id,
                    size_t height, size_t width, const Info& info) :
@@ -43,17 +45,88 @@ ErrorStatus Location::setSize(size_t width, size_t height) {
     return matrix_.resize(width, height);
 }
 
-ErrorStatus Location::addObject(OnLocation& obj) {
-    auto tiles = obj.occupiedTiles();
+std::vector<Tile> Location::getNextTiles(const Tile& tile) const {
+    std::vector<Tile> res;
+    std::vector<Offset> offsets = {
+        Offset{1, 0}, Offset{-1, 0}, Offset{0, 1}, Offset{0, -1}
+    };
 
-    for (auto tile : tiles) {
-        if (tile.x >= width() || tile.y >= height()) {
+    for (const auto& offset : offsets) {
+        Tile next = tile + offset;
+        if (isInBounds(next)) {
+            res.push_back(next);
+        }
+    }
+
+    return res;
+}
+
+bool Location::isInBounds(const Tile& tile) const {
+    return tile.x < width() && tile.y < height();
+}
+
+std::tuple<Tile, ErrorStatus> Location::closestFreeTile(const OnLocation& obj, const Tile& tile) const {
+    Tile old_pos = obj.mapPosition()[0];
+    std::queue<Tile> queue;
+
+    queue.push(tile);
+    std::set<Tile> visited;
+
+    while (!queue.empty()) {
+        auto cur = queue.front();
+        queue.pop();
+
+        obj.pos_->moveTo(cur);
+        if (hasValidPosition(obj) == ErrorStatus::OK) {
+            obj.pos_->moveTo(old_pos);
+            return std::make_tuple(cur, ErrorStatus::OK);
+        }
+
+        for (auto tile : getNextTiles(cur)) {
+            if (!visited.contains(tile)) {
+                visited.insert(tile);
+                queue.push(tile);
+            }
+        }
+    }
+
+    obj.pos_->moveTo(old_pos);
+    return std::make_tuple(Tile{}, ErrorStatus::NO_FREE_TILES);
+}
+
+std::vector<Tile> Location::freeTiles() const {
+    std::vector<Tile> res;
+    for (size_t x = 0; x < width(); ++x) {
+        for (size_t y = 0; y < height(); ++y) {
+            Tile tile{x, y};
+            if (matrix_.isFree(tile)) {
+                res.push_back(tile);
+            }
+        }
+    }
+    return res;
+}
+
+ErrorStatus Location::hasValidPosition(const OnLocation& obj) const {
+    for (const auto& tile : obj.occupiedTiles()) {
+        if (!isInBounds(tile)) {
             return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
         }
 
         if (!matrix_.isFree(tile)) {
             return ErrorStatus::TILE_OCCUPIED;
         }
+    }
+
+    return ErrorStatus::OK;
+}
+
+ErrorStatus Location::addObject(OnLocation& obj) {
+    auto tiles = obj.occupiedTiles();
+
+    auto status = hasValidPosition(obj);
+    if (status != ErrorStatus::OK) {
+        return status;
     }
 
     for (const auto& tile : tiles) {
@@ -69,16 +142,10 @@ ErrorStatus Location::setPosition(OnLocation& obj, const Tile& pos) {
     Tile old_pos = obj.mapPosition()[0];
     obj.pos_->moveTo(pos);
 
-    for (auto tile : obj.occupiedTiles()) {
-        if (tile.x >= width() || tile.y >= height()) {
-            obj.pos_->moveTo(old_pos);
-            return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
-        }
-
-        if (!matrix_.isFree(tile)) {
-            obj.pos_->moveTo(old_pos);
-            return ErrorStatus::TILE_OCCUPIED;
-        }
+    auto status = hasValidPosition(obj);
+    if (status != ErrorStatus::OK) {
+        obj.pos_->moveTo(old_pos);
+        return status;
     }
 
     for (const auto& tile : old_tiles) {
@@ -103,15 +170,35 @@ const Location::TileStatus& Location::TileMatrix::get(size_t x, size_t y) const 
 }
 
 bool Location::TileMatrix::isFree(const Tile& tile) const {
+    if (tile.x >= width_ || tile.y >= height_) {
+        return false;
+    }
     return get(tile.x, tile.y) == TileStatus::Free;
 }
 
-void Location::TileMatrix::freeTile(const Tile& tile) {
-    get(tile.x, tile.y) = TileStatus::Free;
+bool Location::TileMatrix::isFree(const std::vector<Tile>& tiles) const {
+    for (const auto& tile : tiles) {
+        if (!isFree(tile)) {
+            return false;
+        }
+    }
+    return true;
 }
 
-void Location::TileMatrix::occupyTile(const Tile& tile) {
+ErrorStatus Location::TileMatrix::freeTile(const Tile& tile) {
+    if (tile.x >= width_ || tile.y >= height_) {
+        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
+    }
+    get(tile.x, tile.y) = TileStatus::Free;
+    return ErrorStatus::OK;
+}
+
+ErrorStatus Location::TileMatrix::occupyTile(const Tile& tile) {
+    if (tile.x >= width_ || tile.y >= height_) {
+        return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
+    }
     get(tile.x, tile.y) = TileStatus::Occupied;
+    return ErrorStatus::OK;
 }
 
 void Location::TileMatrix::clear() {
@@ -128,6 +215,14 @@ size_t Location::TileMatrix::height() const {
 
 bool Location::TileMatrix::cannotResize(size_t width, size_t height) const {
     for (size_t i = min(width, width_); i < width_; ++i) {
+        for (size_t j = 0; j < height_; ++j) {
+            if (get(i, j) == TileStatus::Occupied) {
+                return true;
+            }
+        }
+    }
+
+    for (size_t i = 0; i < width_; ++i) {
         for (size_t j = min(height, height_); j < height_; ++j) {
             if (get(i, j) == TileStatus::Occupied) {
                 return true;
@@ -145,8 +240,8 @@ ErrorStatus Location::TileMatrix::resize(size_t width, size_t height) {
     std::vector<TileStatus> old_data(width * height, TileStatus::Free);
     std::swap(tiles_, old_data);
 
-    for (size_t i = 0; i < width_; ++i) {
-        for (size_t j = 0; j < height_; ++j)
+    for (size_t i = 0; i < min(width_, width); ++i) {
+        for (size_t j = 0; j < min(height_, height); ++j)
         if (old_data[i * height_ + j] == TileStatus::Occupied) {
             get(i, j) = TileStatus::Occupied;
         }

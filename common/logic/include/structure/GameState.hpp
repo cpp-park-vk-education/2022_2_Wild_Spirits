@@ -16,7 +16,6 @@ namespace DnD {
 class GameState {
  public:
     virtual SharedStorage<NPC>& npc() = 0;
-    virtual SharedStorage<PlayerCharacter>& players() = 0;
     virtual Storage<CharacterInstance*>& allCharacters() = 0;
 
     virtual SharedStorage<Item>& items() = 0;
@@ -27,13 +26,14 @@ class GameState {
 
     virtual SharedStorage<Race>& races() = 0;
     virtual SharedStorage<Class>& classes() = 0;
+
+    virtual ~GameState() {}
 };
 
 class GameStateImpl : virtual public GameState {
  private:
-    SharedStorage<NPC> npc_;
-    SharedStorage<PlayerCharacter> players_;
     Storage<CharacterInstance*> all_characters_;
+    SharedStorage<NPC> npc_;
 
     SharedStorage<Item> items_;
     SharedStorage<ActivatableItem> activatables_;
@@ -50,7 +50,6 @@ class GameStateImpl : virtual public GameState {
     GameStateImpl() = default;
 
     SharedStorage<NPC>& npc() override;
-    SharedStorage<PlayerCharacter>& players() override;
     Storage<CharacterInstance*>& allCharacters() override;
 
     SharedStorage<Item>& items() override;

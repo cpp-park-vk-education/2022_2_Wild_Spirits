@@ -9,10 +9,6 @@ SharedStorage<NPC>& GameStateImpl::npc() {
     return npc_;
 }
 
-SharedStorage<PlayerCharacter>& GameStateImpl::players() {
-    return players_;
-}
-
 Storage<CharacterInstance*>& GameStateImpl::allCharacters() {
     return all_characters_;
 }

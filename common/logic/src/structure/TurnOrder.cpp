@@ -31,7 +31,7 @@ void TurnOrder::skipTurns(size_t turns) {
 std::shared_ptr<CharacterInstance> TurnOrder::getCharacter(size_t id) {
     std::shared_ptr<CharacterInstance> character = map_.currentLocation().npc().safeGet(id);
     if (!character) {
-        character = game_.players().safeGet(id);
+        character = map_.players().safeGet(id);
     }
     return character;
 }
@@ -67,7 +67,7 @@ ErrorStatus TurnOrder::swapOrder(size_t first, size_t second) {
 void TurnOrder::fillQueue() {
     queue_.clear();
 
-    for (auto& [_, player] : game_.players()) {
+    for (auto& [_, player] : map_.players()) {
         queue_.push_back(player);
     }
 

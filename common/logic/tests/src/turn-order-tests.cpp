@@ -17,6 +17,8 @@ class TurnOrderSuite : public ::testing::Test {
     GameStateImpl game;
     TurnOrder queue;
 
+    SharedStorage<PlayerCharacter> players;
+
     std::shared_ptr<NPC> enemy;
     std::shared_ptr<Class> char_class_;
 
@@ -34,13 +36,16 @@ class TurnOrderSuite : public ::testing::Test {
         EXPECT_CALL(map, currentLocationId())
             .WillRepeatedly(Return(0));
 
+        EXPECT_CALL(map, players())
+            .WillRepeatedly(ReturnRef(players));
+
         EXPECT_CALL(map, allCharacters())
             .WillRepeatedly(ReturnRef(game.allCharacters()));
 
         for (size_t i = 0; i < 2; ++i) {
             location.npc().add(i, enemy, PositionFactory::create({i, i}), map);
         }
-        game.players().add(2, Character(), PositionFactory::create({1, 2}), map, char_class_, std::make_shared<Race>());
+        map.players().add(2, Character(), PositionFactory::create({1, 2}), map, char_class_, std::make_shared<Race>());
 
         expected_turn_order_.reserve(3);
         expected_turn_order_.push_back(2);
@@ -58,9 +63,9 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
     ASSERT_THAT(queue, SizeIs(3));
 
     location.npc().each([&] (auto& npc) { npc.addBuff(buff); });
-    game.players().each([&] (auto& player) { player.addBuff(buff); });
+    map.players().each([&] (auto& player) { player.addBuff(buff); });
 
-    PlayerCharacter& player = game.players().get(2);
+    PlayerCharacter& player = map.players().get(2);
 
     location.npc().each([&] (auto& npc) {
         ASSERT_THAT(npc.buffs(), SizeIs(1));
@@ -94,7 +99,7 @@ TEST_F(TurnOrderSuite, BuffsDissapear) {  // cppcheck-suppress [syntaxError]
 }
 
 TEST_F(TurnOrderSuite, SkillsColldown) {
-    PlayerCharacter& player = game.players().get(2);
+    PlayerCharacter& player = map.players().get(2);
 
     queue.pushFront(player.id());
     auto skill = std::make_shared<Skill>(0, "", 0, std::vector<Action>{}, 2, 3);

@@ -25,7 +25,8 @@ namespace DnD {
     XX(15, NO_SUCH_CHARACTER) \
     XX(16, INVALID_SETTER) \
     XX(17, WOULD_ERASE_CHARACTERS) \
-    XX(18, TILE_OCCUPIED)
+    XX(18, TILE_OCCUPIED) \
+    XX(19, NO_FREE_TILES)
 
 #define XX(error_code, error_message) \
     error_message = error_code,
