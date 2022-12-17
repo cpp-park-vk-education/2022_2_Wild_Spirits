@@ -99,7 +99,7 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
         return was_updated_;
     }
 
-    ErrorStatus moveTo(const Tile& tile) override;
+    ErrorStatus moveToWithAP(const Tile& tile);
     
     void addBuff(const Buff& buff);
     const std::list<Buff>& buffs() const;

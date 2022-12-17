@@ -17,7 +17,7 @@ class Position {
     virtual std::vector<Tile> occupiedTiles() const = 0;
 
     virtual ErrorStatus moveTo(const Tile& tile) = 0;
-    virtual void moveBy(int x, int y) = 0;
+    virtual ErrorStatus moveBy(int x, int y) = 0;
 
     virtual std::unique_ptr<Position> clone() const = 0;
 
@@ -57,8 +57,9 @@ class TilePos : public Position {
         return ErrorStatus::OK;
     }
 
-    void moveBy(int x, int y) override {
+    ErrorStatus moveBy(int x, int y) override {
         pos_ += Offset{x, y};
+        return ErrorStatus::OK;
     }
 };
 
@@ -114,10 +115,11 @@ class RectangularPos : public Position {
         return ErrorStatus::OK;
     }
 
-    void moveBy(int x, int y) override {
+    ErrorStatus moveBy(int x, int y) override {
         Offset offset{x, y};
         bottom_left_ += offset;
         upper_right_ += offset;
+        return ErrorStatus::OK;
     }
 };
 

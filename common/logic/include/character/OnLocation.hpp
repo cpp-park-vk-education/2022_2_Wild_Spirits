@@ -63,10 +63,7 @@ class OnLocation : public Position {
     }
 
     ErrorStatus moveTo(const Tile& tile) override;
-
-    void moveBy(int x, int y) override {
-        return pos_->moveBy(x, y);
-    }
+    ErrorStatus moveBy(int x, int y) override;
 
     GameMap& map() const {
         return map_;

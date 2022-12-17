@@ -51,8 +51,6 @@ namespace DnD {
             return std::make_tuple(Result{}, ErrorStatus::NO_USES_LEFT);
         }
 
-        const_cast<Consumable*>(this)->uses_ -= 1;
-
         auto result = original_->use(actor, targets, dice_roll_res);
         std::get<Result>(result).resource_spent = 1;
         return result;

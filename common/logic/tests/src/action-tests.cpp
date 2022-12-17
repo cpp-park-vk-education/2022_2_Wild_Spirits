@@ -159,11 +159,12 @@ TEST_F(ActivatableSuite, PlayerConsumableTest) {
     player.consumables().add(Consumable{base_item, 2});
     auto& item = player.consumables().get(0);
 
-    player.use("consumable", 0, { player.mapPosition()[0] });
-    ASSERT_EQ(item.usesLeft(), 1);
+    auto [_, status] = player.use("consumable", 0, { player.mapPosition()[0] });
+    ASSERT_EQ(status, ErrorStatus::OK);
 
-    player.use("consumable", 0, { player.mapPosition()[0] });
-    ASSERT_TRUE(item.empty());
+    item.setUses(0);
+    std::tie(_, status) = player.use("consumable", 0, { player.mapPosition()[0] });
+    ASSERT_EQ(status, ErrorStatus::NO_USES_LEFT);
 }
 
 TEST(ArmorSuite, ArmorClassDependsOnType) {

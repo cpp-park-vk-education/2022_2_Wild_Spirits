@@ -205,7 +205,7 @@ void CharacterInstance::onTurnEnd() {
     }
 }
 
-ErrorStatus CharacterInstance::moveTo(const Tile& tile) {
+ErrorStatus CharacterInstance::moveToWithAP(const Tile& tile) {
     unsigned int points_spent = centerPos().distance(tile);
     if (points_spent > actionPoints()) {
         return ErrorStatus::NO_ACTION_POINTS;

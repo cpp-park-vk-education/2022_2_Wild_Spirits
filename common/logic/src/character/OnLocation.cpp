@@ -21,4 +21,8 @@ void OnLocation::setLocation(size_t loc_id) {
 ErrorStatus OnLocation::moveTo(const Tile& tile) {
     return location().setPosition(*this, tile);
 }
+
+ErrorStatus OnLocation::moveBy(int x, int y) {
+    return moveTo(mapPosition()[0] + Offset{x, y});
+}
 }  // namespace DnD

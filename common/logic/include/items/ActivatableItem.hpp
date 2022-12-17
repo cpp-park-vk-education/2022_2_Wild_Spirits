@@ -54,6 +54,10 @@ class Consumable : public ActivatableInterface, public DynamiclySettable {
         uses_ += num;
     }
 
+    void reduceUses(unsigned int num) {
+        uses_ = uses_ >= num ? uses_ - num : 0;
+    }
+
     void setUses(unsigned int num) {
         uses_ = num;
     }

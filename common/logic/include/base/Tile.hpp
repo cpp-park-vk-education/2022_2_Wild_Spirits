@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <ostream>
 
 namespace DnD {
 
@@ -91,6 +92,10 @@ struct Tile {
         }
     }
 };
+
+inline std::ostream& operator<<(std::ostream& out, const Tile& tile) {
+    return out << '{' << tile.x << ", " << tile.y << '}';
+}
 
 struct Offset {
     long long x;

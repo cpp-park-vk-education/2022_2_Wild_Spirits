@@ -47,6 +47,7 @@ class Location : public GameEntity {
     TileMatrix matrix_;
 
     std::vector<Tile> getNextTiles(const Tile& tile) const;
+    ErrorStatus transferToOtherLocation(OnLocation* obj, Location* other, Tile pos);
 
  public:
     Location() = default;
@@ -83,6 +84,8 @@ class Location : public GameEntity {
     }
 
     ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
+
+    friend class GameMapImpl;
 };
 
 template <typename ...Args>
@@ -96,6 +99,7 @@ inline ErrorStatus Location::createNPC(size_t id, Args&&... args) {
         npc().remove(character->id());
         return status;
     }
+    character->setLocation(this->id());
     return ErrorStatus::OK;
 }
 }  // namespace DnD

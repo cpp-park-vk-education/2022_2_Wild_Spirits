@@ -47,8 +47,8 @@ ErrorStatus Location::setSize(size_t width, size_t height) {
 
 std::vector<Tile> Location::getNextTiles(const Tile& tile) const {
     std::vector<Tile> res;
-    std::vector<Offset> offsets = {
-        Offset{1, 0}, Offset{-1, 0}, Offset{0, 1}, Offset{0, -1}
+    static std::vector<Offset> offsets = {
+        Offset{0, 1}, Offset{0, -1}, Offset{1, 0}, Offset{-1, 0}
     };
 
     for (const auto& offset : offsets) {
@@ -59,6 +59,30 @@ std::vector<Tile> Location::getNextTiles(const Tile& tile) const {
     }
 
     return res;
+}
+
+ErrorStatus Location::transferToOtherLocation(OnLocation* obj, Location* other, Tile pos) {
+    if (!obj || !other) {
+        return ErrorStatus::INVALID_ARGUMENT;
+    }
+
+    auto [new_pos, error_status] = other->closestFreeTile(*obj, pos);
+    if (error_status != ErrorStatus::OK) {
+        return error_status;
+    }
+
+    for (const auto& tile : obj->occupiedTiles()) {
+        matrix_.freeTile(tile);
+    }
+
+    obj->pos_->moveTo(new_pos);
+
+    for (const auto& tile : obj->occupiedTiles()) {
+        std::cout << tile << "\n";
+        other->matrix_.occupyTile(tile);
+    }
+
+    return ErrorStatus::OK;
 }
 
 bool Location::isInBounds(const Tile& tile) const {
@@ -162,7 +186,7 @@ ErrorStatus Location::setPosition(OnLocation& obj, const Tile& pos) {
 Location::TileMatrix::TileMatrix(size_t x, size_t y) : tiles_(x * y, TileStatus::Free), width_(x), height_(y) {}
 
 Location::TileStatus& Location::TileMatrix::get(size_t x, size_t y) {
-    return tiles_[x * height_ + y];
+    return tiles_[y * width_ + x];
 }
 
 const Location::TileStatus& Location::TileMatrix::get(size_t x, size_t y) const {
@@ -240,15 +264,15 @@ ErrorStatus Location::TileMatrix::resize(size_t width, size_t height) {
     std::vector<TileStatus> old_data(width * height, TileStatus::Free);
     std::swap(tiles_, old_data);
 
-    for (size_t i = 0; i < min(width_, width); ++i) {
-        for (size_t j = 0; j < min(height_, height); ++j)
-        if (old_data[i * height_ + j] == TileStatus::Occupied) {
-            get(i, j) = TileStatus::Occupied;
+    std::swap(width_, width);
+    std::swap(height_, height);
+
+    for (size_t y = 0; y < min(height_, height); ++y) {
+        for (size_t x = 0; x < min(width_, width); ++x)
+        if (old_data[y * width + x] == TileStatus::Occupied) {
+            get(x, y) = TileStatus::Occupied;
         }
     }
-
-    width_ = width;
-    height_ = height;
 
     return ErrorStatus::OK;
 }
