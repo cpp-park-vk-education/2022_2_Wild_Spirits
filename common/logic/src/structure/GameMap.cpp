@@ -18,7 +18,7 @@ ErrorStatus GameMapImpl::switchLocation(size_t id) {
         auto error_status = currentLocation().transferToOtherLocation(player.get(), &location, old_positions.back());
 
         if (error_status != ErrorStatus::OK) {
-            auto player_it = players().begin(); 
+            auto player_it = players().begin();
             for (auto pos = old_positions.begin(); pos != old_positions.end(); ++pos) {
                 location.transferToOtherLocation(player_it->second.get(), &currentLocation(), *pos);
                 ++player_it;

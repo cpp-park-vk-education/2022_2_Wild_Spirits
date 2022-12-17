@@ -129,7 +129,7 @@ TEST_F(LocationSuite, CharacterMovement) {
 
     status = location.npc().get(2).moveTo(Tile{location.width(), 1});
     ASSERT_EQ(status, ErrorStatus::OUT_OF_LOCATION_BOUNDS);
-    
+
     status = location.npc().get(2).moveTo(Tile{0, 1});
     ASSERT_EQ(status, ErrorStatus::OK);
 
@@ -153,7 +153,7 @@ TEST_F(LocationSuite, ChangeLocations) {
     ASSERT_EQ(status, ErrorStatus::OK);
 
     status = createDefaultPlayer(1, PositionFactory::create(Tile{2, 0}, Tile{3, 2}));
-    ASSERT_EQ(status, ErrorStatus::OK);    
+    ASSERT_EQ(status, ErrorStatus::OK);
 
     status = second_location.createNPC(2, enemy, PositionFactory::create(Tile{0, 1}, Tile{2, 1}), map);
     ASSERT_EQ(status, ErrorStatus::OK);
