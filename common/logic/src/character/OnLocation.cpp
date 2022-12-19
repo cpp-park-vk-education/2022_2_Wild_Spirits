@@ -25,4 +25,13 @@ ErrorStatus OnLocation::moveTo(const Tile& tile) {
 ErrorStatus OnLocation::moveBy(int x, int y) {
     return moveTo(mapPosition()[0] + Offset{x, y});
 }
+
+ErrorStatus OnLocation::moveToApproximately(const Tile& tile) {
+    auto [res_tile, status] = location().closestFreeTile(*this, tile);
+    if (status != ErrorStatus::OK) {
+        return status;
+    }
+    moveTo(res_tile);
+    return ErrorStatus::OK;
+}
 }  // namespace DnD

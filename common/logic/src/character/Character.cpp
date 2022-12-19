@@ -3,7 +3,7 @@
 #include <utility>
 
 namespace DnD {
-    Character::Character(size_t id, std::string_view name, int image_id, unsigned int max_hp,
+    Character::Character(size_t id, std::string_view name, size_t image_id, unsigned int max_hp,
               int exp, unsigned int ap, unsigned int ac, const Stats& stats, const Info& info) :
         GameEntity(id, name, image_id, info),
         Resistible(),

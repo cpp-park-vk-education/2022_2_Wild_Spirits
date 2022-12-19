@@ -46,6 +46,9 @@ class Storage {
  private:
     std::unordered_map<size_t, T> data_;
 
+ protected:
+    static constexpr size_t kMaxSize = 64;
+
  public:
     using size_type = size_t;
     using iterator = typename decltype(data_)::iterator;
@@ -78,18 +81,30 @@ class Storage {
 
     template <typename... Args>
     std::tuple<T*, ErrorStatus> add(size_t id, Args&&... args) requires IdentifiableObj<T> {
+        if (size() >= kMaxSize) {
+            return std::make_tuple(nullptr, ErrorStatus::STORAGE_FULL);
+        }
+
         auto [it, inserted] = data_.try_emplace(id, id, std::forward<Args>(args)...);
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
     std::tuple<T*, ErrorStatus> add(const T& object) requires IdentifiableObj<T> {
+        if (size() >= kMaxSize) {
+            return std::make_tuple(nullptr, ErrorStatus::STORAGE_FULL);
+        }
+
         auto [it, inserted] = data_.emplace(object.id(), object);
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
     }
 
     std::tuple<T*, ErrorStatus> add(T&& object) requires IdentifiableObj<T> {
+        if (size() >= kMaxSize) {
+            return std::make_tuple(nullptr, ErrorStatus::STORAGE_FULL);
+        }
+
         auto [it, inserted] = data_.emplace(object.id(), std::move(object));
         return inserted ? std::make_tuple(&it->second, ErrorStatus::OK) :
                           std::make_tuple(nullptr, ErrorStatus::ALREADY_EXISTS);
@@ -148,6 +163,10 @@ class Storage {
 
     size_t size() const {
         return data_.size();
+    }
+
+    static constexpr size_t maxsize() {
+        return kMaxSize;
     }
 
     iterator begin() {
@@ -210,12 +229,20 @@ class SharedStorage : public Storage<std::shared_ptr<T>> {
     }
 
     std::tuple<T*, ErrorStatus> add(const T& object) {
+        if (this->size() >= this->kMaxSize) {
+            return std::make_tuple(nullptr, ErrorStatus::STORAGE_FULL);
+        }
+
         auto [shared, status] = add(std::make_shared<T>(object));
         return shared ? std::make_tuple(shared.get(), status) :
                         std::make_tuple(nullptr, status);
     }
 
     std::tuple<T*, ErrorStatus> add(T&& object) {
+        if (this->size() >= this->kMaxSize) {
+            return std::make_tuple(nullptr, ErrorStatus::STORAGE_FULL);
+        }
+
         auto [shared, status] = add(std::make_shared<T>(std::move(object)));
         return shared ? std::make_tuple(shared.get(), status) :
                         std::make_tuple(nullptr, status);

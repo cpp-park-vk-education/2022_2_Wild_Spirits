@@ -65,6 +65,8 @@ class OnLocation : public Position {
     ErrorStatus moveTo(const Tile& tile) override;
     ErrorStatus moveBy(int x, int y) override;
 
+    ErrorStatus moveToApproximately(const Tile& tile);
+
     GameMap& map() const {
         return map_;
     }

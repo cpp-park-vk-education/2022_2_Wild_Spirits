@@ -7,7 +7,7 @@
 #include <queue>
 
 namespace DnD {
-Location::Location(size_t id, std::string_view name, int image_id,
+Location::Location(size_t id, std::string_view name, size_t image_id,
                    size_t height, size_t width, const Info& info) :
         GameEntity(id, name, image_id, info), matrix_(width, height) {}
 

@@ -20,7 +20,7 @@ class Armor : public Item {
 
  public:
     Armor() = default;
-    Armor(size_t id, std::string_view name, int image_id, int cost,
+    Armor(size_t id, std::string_view name, size_t image_id, int cost,
           unsigned int defense, Type type, const Info& info = {}) :
         Item(id, name, image_id, cost, info), defense_(defense), type_(type) {}
 

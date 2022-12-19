@@ -17,6 +17,7 @@ const GameEntity::Info& GameEntity::info() const {
 const std::string& GameEntity::name() const {
     return name_;
 }
+
 void GameEntity::setName(std::string_view name) {
     name_ = name;
 }

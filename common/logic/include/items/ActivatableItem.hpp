@@ -8,14 +8,14 @@ class ActivatableItem : public Item, public Activatable {
  public:
     ActivatableItem() = default;
 
-    ActivatableItem(size_t id, std::string_view name, int image_id,
+    ActivatableItem(size_t id, std::string_view name, size_t image_id,
                     const std::vector<Action>& actions, unsigned int action_cost = 0, 
                     unsigned int cost = 0, std::string_view scaling = "",
                     Cast cast_type = Cast::Tile, const Info& info = {}) :
         Item(id, name, image_id, cost, info),
         Activatable(actions, action_cost, scaling, cast_type) {}
 
-    ActivatableItem(size_t id, std::string_view name, int image_id,
+    ActivatableItem(size_t id, std::string_view name, size_t image_id,
                     std::vector<Action>&& actions, unsigned int action_cost = 0, 
                     unsigned int cost = 0, std::string_view scaling = "",
                     Cast cast_type = Cast::Tile, const Info& info = {}) :
@@ -29,12 +29,12 @@ class Weapon : public ActivatableItem {
  public:
     Weapon() = default;
 
-    Weapon(size_t id, std::string_view name, int image_id, const std::vector<Action>& actions,
+    Weapon(size_t id, std::string_view name, size_t image_id, const std::vector<Action>& actions,
            unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",
            Cast cast_type = Cast::Tile, const Info& info = {}) :
         ActivatableItem(id, name, image_id, actions, action_cost, cost, scaling, cast_type, info) {}
 
-    Weapon(size_t id, std::string_view name, int image_id, std::vector<Action>&& actions,
+    Weapon(size_t id, std::string_view name, size_t image_id, std::vector<Action>&& actions,
            unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",
            Cast cast_type = Cast::Tile, const Info& info = {}) :
         ActivatableItem(id, name, image_id, std::move(actions), action_cost, cost, scaling, cast_type, info) {}

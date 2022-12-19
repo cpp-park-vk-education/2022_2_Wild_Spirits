@@ -12,7 +12,7 @@ class Skill : public GameEntity, public Activatable {
  public:
     Skill() = default;
 
-    Skill(size_t id, std::string_view name, int image_id,
+    Skill(size_t id, std::string_view name, size_t image_id,
           const std::vector<Action>& actions, unsigned int action_cost,
           unsigned int cooldown, std::string_view scaling = "",
           Cast cast_type = Cast::Tile, const Info& info = {}) :
@@ -20,7 +20,7 @@ class Skill : public GameEntity, public Activatable {
         Activatable(actions, action_cost, scaling, cast_type),
         cooldown_(cooldown) {}
 
-    Skill(size_t id, std::string_view name, int image_id,
+    Skill(size_t id, std::string_view name, size_t image_id,
           std::vector<Action>&& actions, unsigned int action_cost,
           unsigned int cooldown, std::string_view scaling = "",
           Cast cast_type = Cast::Tile, const Info& info = {}) :
