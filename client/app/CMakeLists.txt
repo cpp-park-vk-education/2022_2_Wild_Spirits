@@ -13,8 +13,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ClientEngine)
 add_subdirectory(vendor/mathlib)
 add_subdirectory(tests)
 
-file(CREATE_LINK ${CMAKE_SOURCE_DIR}/ClientRes ${CMAKE_CURRENT_BINARY_DIR}/ClientRes SYMBOLIC)
-
 if(MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Client/App")
 endif()

@@ -5,20 +5,23 @@
 namespace LM {
 
     void LayerStack::pushLayer(Ref<Layer> layer) {
-        m_Layers.emplace_back(layer);
+        m_LayersToAdd.emplace_back(layer);
+        //m_Layers.emplace_back(layer);
     }
 
     void LayerStack::popLayer(Ref<Layer> layer) {
-        if (auto it = std::find(m_Layers.begin(), m_Layers.end(), layer); it != m_Layers.end()) {
-            m_Layers.erase(it);
-        }
+        //if (auto it = std::find(m_Layers.begin(), m_Layers.end(), layer); it != m_Layers.end()) {
+        //    m_Layers.erase(it);
+        //}
+        m_LayersToRemove.emplace_back(layer.get());
     }
 
     void LayerStack::popLayer(Layer* layer) {
-        if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&](Ref<Layer> stackLayer) {
-            return stackLayer.get() == layer; }); it != m_Layers.end()) {
-            m_Layers.erase(it);
-        }
+        //if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&](Ref<Layer> stackLayer) {
+        //    return stackLayer.get() == layer; }); it != m_Layers.end()) {
+        //    m_Layers.erase(it);
+        //}
+        m_LayersToRemove.emplace_back(layer);
     }
 
     void LayerStack::render() {
@@ -44,5 +47,23 @@ namespace LM {
             layer->onEvent(event);
         }
     }
+
+    void LayerStack::updateLayersState() {
+        for (const auto& layer : m_LayersToAdd) {
+            m_Layers.emplace_back(layer);
+            LOGW("Add");
+        }
+        m_LayersToAdd.clear();
+
+        for (auto layer : m_LayersToRemove) {
+            if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&](Ref<Layer> stackLayer) {
+                return stackLayer.get() == layer; }); it != m_Layers.end()) {
+                m_Layers.erase(it);
+                LOGW("Erase");
+            }
+        }
+        m_LayersToRemove.clear();
+    }
+
 
 }    // namespace LM

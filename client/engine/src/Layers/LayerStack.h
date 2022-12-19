@@ -18,8 +18,11 @@ namespace LM {
         void renderImGui();
         void onUpdate(Tick tick);
         void onEvent(Ref<Event> event);
+        void updateLayersState();
     protected:
         std::vector<Ref<Layer>> m_Layers;
+        std::vector<Ref<Layer>> m_LayersToAdd;
+        std::vector<Layer*> m_LayersToRemove;
     };
 
 }    // namespace LM

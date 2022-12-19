@@ -122,8 +122,6 @@ namespace LM {
         glShaderSource(res, 1, &charSource, NULL);
         glCompileShader(res);
 
-        LOGI(name, " shader code: \n", sourceString);
-
         int compileRes;
         glGetShaderiv(res, GL_COMPILE_STATUS, &compileRes);
         if (compileRes == GL_FALSE) {

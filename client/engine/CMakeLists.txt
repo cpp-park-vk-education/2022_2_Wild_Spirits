@@ -97,7 +97,8 @@ if (${BUILD_LOGIC})
     target_link_libraries(${PROJECT_NAME} request-processor dnd-logic)
 endif()
 
-add_definitions(-DGLEW_STATIC -D_LIB)
+add_compile_definitions(GLEW_STATIC _LIB)
+add_compile_definitions(RES_FOLDER="${CMAKE_SOURCE_DIR}/ClientRes/")
 
 include(FetchContent)
 

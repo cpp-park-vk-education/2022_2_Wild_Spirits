@@ -105,7 +105,7 @@ namespace LM {
 
         friend Rotation operator*(float left, Rotation right) {
 
-            return Rotation(left / right.m_Angle);
+            return Rotation(left * right.m_Angle);
         }
 
         operator float() const { return m_Angle; }

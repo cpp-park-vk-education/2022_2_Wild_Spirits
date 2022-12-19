@@ -8,11 +8,13 @@
 
 //#define USE_LOG
 
-#ifdef _DEBUG
-#define LOG_ON
+#if defined(_DEBUG) || defined(USE_LOG)
+#ifndef LOG_ON
+#define LOG_ON true
+#endif
 #else
-#ifdef USE_LOG
-#define LOG_ON
+#ifndef LOG_ON
+#define LOG_ON false
 #endif
 #endif
 
@@ -63,7 +65,7 @@ namespace LM {
         static void Init() {
             s_Instance = Ref<ConsoleLog>(new ConsoleLog());
             std::unique_lock Lock(s_Instance->m_Mtx);
-            std::system("cls");
+            //std::system("cls");
         }
 
         static inline Ref<ConsoleLog> Get() { return s_Instance; }
@@ -115,7 +117,7 @@ namespace LM {
 
 }    // namespace LM
 
-#ifdef LOG_ON
+#if LOG_ON
 
 #define LOG_INIT() ::LM::ConsoleLog::Get()->Init()
 

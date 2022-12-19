@@ -16,31 +16,30 @@ namespace LM {
         Application::get()->removeLayer(this);
     }
 
-    void LayerAvailRooms::goToRoom() {
+    void LayerAvailRooms::goToRoom(size_t roomId) {
 #ifdef BUILD_LOGIC
-        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[m_RoomId].getId())) {
-            Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[m_RoomId]));
+        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[roomId].getId())) {
+            Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[roomId]));
             Application::get()->removeLayer(this);
             return;
         }
-        m_NeedGoToRoom = false;
         getRooms();
 #else
-        Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[m_RoomId]));
+        Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[roomId]));
         Application::get()->removeLayer(this);
 #endif
     }
 
     void LayerAvailRooms::onUpdate(Tick tick) {
         (void)tick;
-        if (m_NeedGoBack) {
-            goToMainMenu();
-            return;
-        }
-        if (m_NeedGoToRoom) {
-            goToRoom();
-            return;
-        }
+        //if (m_NeedGoBack) {
+        //    goToMainMenu();
+        //    return;
+        //}
+        //if (m_NeedGoToRoom) {
+        //    goToRoom();
+        //    return;
+        //}
     }
 
     void LayerAvailRooms::renderImGui() {
@@ -50,14 +49,14 @@ namespace LM {
                 ImGui::Text("RoomId: %10lu", m_Rooms[i].getId());
                 ImGui::SameLine();
                 if (ImGui::Button("Connect")) {
-                    m_RoomId = i;
-                    m_NeedGoToRoom = true;
+                    goToRoom(i);
                 }
                 ImGui::PopID();
             }
             ImGui::Separator();
             if (ImGui::Button("Go to main menu")) {
-                m_NeedGoBack = true;
+                //m_NeedGoBack = true;
+                goToMainMenu();
             }
         }
         ImGui::End();

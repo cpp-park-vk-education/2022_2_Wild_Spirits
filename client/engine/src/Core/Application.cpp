@@ -32,6 +32,7 @@ namespace LM {
         m_ImGuiController = CreateRef<ImGuiController>();
 
         while (m_IsRun) {
+            m_LayerStack->updateLayersState();
             while (!m_EventQueue->empty()) {
                 Ref<Event> event = m_EventQueue->pop();
                 onEvent(event);

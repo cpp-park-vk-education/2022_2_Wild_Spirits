@@ -1,5 +1,7 @@
 #include <gmock/gmock.h>
 
+#include <fstream>
+
 #include <Core/Application.h>
 
 #include <Textures/TextureLoader.h>
@@ -7,26 +9,28 @@
 #include <Transform/Transform.h>
 
 TEST(Texture, LoadTexture) {
-    LM::TextureLoader tl1(LM::FromFile{ "test.png" });
+    LOG_INIT();
+    LM::TextureLoader tl1(LM::FromFile{ std::string(RES_FOLDER_TEST) + "Textures/Stone.png" });
     EXPECT_TRUE(tl1.isOk());
-    EXPECT_EQ(tl1.getWidht(), 32);
-    EXPECT_EQ(tl1.getHeight(), 32);
+    EXPECT_EQ(tl1.getWidht(), 16);
+    EXPECT_EQ(tl1.getHeight(), 16);
 
-    std::string someGoodImgSource = "";
-    LM::TextureLoader tl2(LM::FromSource{ someGoodImgSource });
+
+    std::ifstream input(std::string(RES_FOLDER_TEST) + "Textures/Stone.png", std::ios::binary);
+    LM::TextureLoader tl2(LM::FromSource{ std::string(std::istreambuf_iterator<char>(input), {}) });
     EXPECT_TRUE(tl2.isOk());
-    EXPECT_EQ(tl2.getWidht(), 32);
-    EXPECT_EQ(tl2.getHeight(), 32);
+    EXPECT_EQ(tl2.getWidht(), 16);
+    EXPECT_EQ(tl2.getHeight(), 16);
 
     LM::TextureLoader tl3(LM::FromFile{ "fileWithWrongName.png" });
     EXPECT_FALSE(tl3.isOk());
 
-    std::string someBadImgSource = "";
-    LM::TextureLoader tl4(LM::FromSource{ someBadImgSource });
-    EXPECT_TRUE(tl4.isOk());
+    LM::TextureLoader tl4(LM::FromSource{  });
+    EXPECT_FALSE(tl4.isOk());
 }
 
 TEST(Transform, TransformRotationPlus) {
+    LOG_INIT();
     LM::Transform transform;
     EXPECT_EQ(static_cast<float>(transform.rotation), 0.0f);
 
@@ -44,9 +48,10 @@ TEST(Transform, TransformRotationPlus) {
 }
 
 TEST(Transform, TransformRotationMinus) {
+    LOG_INIT();
     LM::Transform transform;
     transform.rotation = 100.0f;
-    EXPECT_EQ(static_cast<float>(transform.rotation), 0.0f);
+    EXPECT_EQ(static_cast<float>(transform.rotation), 100.0f);
 
     transform.rotation -= 10.0f;
     EXPECT_EQ(static_cast<float>(transform.rotation), 90.0f);
@@ -93,7 +98,7 @@ TEST(Transform, TransformRotationMulti) {
     transform.rotation = 2.0f * transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 64.0f);
 
-    transform.rotation = LM::Rotation(2) * transform.rotation;
+    transform.rotation = LM::Rotation(2.0f) * transform.rotation;
     EXPECT_EQ(static_cast<float>(transform.rotation), 128.0f);
 }
 

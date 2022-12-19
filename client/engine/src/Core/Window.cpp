@@ -49,7 +49,9 @@ namespace LM {
             return "OTHER";
         }();
         LOGE(src_str, ":", type_str, ":", severity_str, ":", id, ":", message);
-        DEBUGBREAK();
+        if (severity == GL_DEBUG_SEVERITY_HIGH) {
+            DEBUGBREAK();
+        }
     }
 #endif
 
@@ -94,19 +96,6 @@ namespace LM {
         glfwSetWindowUserPointer(m_Window, &m_Data);
 
         setCallbacks();
-        // glfwSetErrorCallback(glfw_error_callback);
-        // glfwSetFramebufferSizeCallback(m_Window, window_resize);
-        // glfwSetWindowSizeCallback(m_Window, window_resize);
-        // glfwSetKeyCallback(m_Window, key_callback);
-        // glfwSetMouseButtonCallback(m_Window, mouse_button_callback);
-        // glfwSetCursorPosCallback(m_Window, cursor_position_callback);
-        // glfwSetScrollCallback(m_Window, scroll_callback);
-        // glfwSetCharCallback(m_Window, character_input);
-        // glfwSetDropCallback(m_Window, droping_paths);
-
-        // glfwSetErrorCallback
-        // glfwSetFramebufferSizeCallback
-        // glfwSetDropCallback
 
         glfwSwapInterval(0);
 
