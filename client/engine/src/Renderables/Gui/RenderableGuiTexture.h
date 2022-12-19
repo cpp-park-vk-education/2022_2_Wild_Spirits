@@ -1,15 +1,16 @@
 #pragma once
 
 #include "RenderableGui.h"
+#include <Buffers/VertexArray.h>
 #include <Renderables/RenderableTexture.h>
 #include <Textures/Texture2D.h>
-#include <Buffers/VertexArray.h>
 
 namespace LM {
 
-    class RenderableGuiTexture: public RenderableGui {
+    class RenderableGuiTexture : public RenderableGui {
     public:
-        explicit RenderableGuiTexture(const RenderableTextureProps& propsTexture, const RenderableGuiProps& propsGui = {});
+        explicit RenderableGuiTexture(const RenderableTextureProps& propsTexture,
+                                      const RenderableGuiProps& propsGui = {});
         virtual ~RenderableGuiTexture() = default;
 
         void setTransform(const Transform& transform) { m_Renderable->setTransform(transform); }
@@ -23,6 +24,7 @@ namespace LM {
             return glm::vec2(renderableSize.x * texSize.x, renderableSize.y * texSize.y);
         }
         virtual void draw(RendererInterface* renderer) override;
+
     protected:
         Scope<RenderableTexture> m_Renderable;
     };

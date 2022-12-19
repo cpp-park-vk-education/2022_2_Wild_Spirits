@@ -1,7 +1,7 @@
 #include "Application.h"
 
-#include "Utils/ConsoleLog.h"
 #include "Layers/LayerMainMenu.h"
+#include "Utils/ConsoleLog.h"
 
 namespace LM {
 
@@ -54,9 +54,8 @@ namespace LM {
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<WindowCloseEvent>([&](Ref<WindowCloseEvent> event) {
             m_IsRun = false;
-        return false;
+            return false;
         });
     }
-
 
 }    // namespace LM

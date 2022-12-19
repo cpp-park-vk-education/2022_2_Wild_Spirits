@@ -25,14 +25,17 @@ namespace LM {
         void setUniform3f(const std::string_view& name, const glm::vec3& vector) const;
         void setUniform4f(const std::string_view& name, const glm::vec4& vector) const;
         void setUniformMat4(const std::string_view& name, const glm::mat4& matrix) const;
+
     protected:
         static uint32_t load(const ShaderLayout& layout);
         static uint32_t getType(ShaderSource::Type type);
         static std::string getName(ShaderSource::Type type);
         static uint32_t loadShader(const ShaderLayout& layout, uint32_t sourceId);
         static std::string loadFile(std::string_view filepath);
+
     protected:
         int getUniformLocation(const std::string_view& name) const;
+
     protected:
         uint32_t m_ShaderId;
         mutable std::unordered_map<std::string, int> m_UniformLocationCache;

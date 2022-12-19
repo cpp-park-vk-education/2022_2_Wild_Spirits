@@ -1,21 +1,21 @@
 #pragma once
 
 #include <iostream>
-#include <utility>
 #include <mutex>
+#include <utility>
 
 #include <Core/Base.h>
 
-//#define USE_LOG
+// #define USE_LOG
 
 #if defined(_DEBUG) || defined(USE_LOG)
-#ifndef LOG_ON
-#define LOG_ON true
-#endif
+    #ifndef LOG_ON
+        #define LOG_ON true
+    #endif
 #else
-#ifndef LOG_ON
-#define LOG_ON false
-#endif
+    #ifndef LOG_ON
+        #define LOG_ON false
+    #endif
 #endif
 
 namespace LM {
@@ -41,7 +41,7 @@ namespace LM {
             White = 15
         };
 #else
-        enum class ConsoleColorType: int16_t {
+        enum class ConsoleColorType : int16_t {
             Black = 30,
             Blue = 34,
             Green = 32,
@@ -65,15 +65,16 @@ namespace LM {
         static void Init() {
             s_Instance = Ref<ConsoleLog>(new ConsoleLog());
             std::unique_lock Lock(s_Instance->m_Mtx);
-            //std::system("cls");
+            // std::system("cls");
         }
 
         static inline Ref<ConsoleLog> Get() { return s_Instance; }
 
-        void SetColor(ConsoleColorType _TXT = ConsoleTxtColor::White, ConsoleColorType _BG = ConsoleBgColor::Black);
+        void SetColor(ConsoleColorType _TXT = ConsoleTxtColor::White,
+                      ConsoleColorType _BG = ConsoleBgColor::Black);
 
-        template<typename ...Args>
-        void LogInfo(Args && ..._Args) {
+        template <typename... Args>
+        void LogInfo(Args&&... _Args) {
             std::unique_lock Lock(m_Mtx);
             SetColor(ConsoleTxtColor::Green);
             std::cerr << "[ INFO ]: ";
@@ -82,8 +83,8 @@ namespace LM {
             SetColor();
         }
 
-        template<typename ...Args>
-        void LogWarning(Args && ..._Args) {
+        template <typename... Args>
+        void LogWarning(Args&&... _Args) {
             std::unique_lock Lock(m_Mtx);
             SetColor(ConsoleTxtColor::Yellow);
             std::cerr << "[ WARNING ]: ";
@@ -92,8 +93,8 @@ namespace LM {
             SetColor();
         }
 
-        template<typename ...Args>
-        void LogError(Args && ..._Args) {
+        template <typename... Args>
+        void LogError(Args&&... _Args) {
             std::unique_lock Lock(m_Mtx);
             SetColor(ConsoleTxtColor::Red);
             std::cerr << "[ ERROR ]: ";
@@ -108,8 +109,10 @@ namespace LM {
             printf("========================================\n");
             SetColor();
         }
+
     protected:
         ConsoleLog() = default;
+
     protected:
         static inline Ref<ConsoleLog> s_Instance = nullptr;
         std::mutex m_Mtx;
@@ -119,21 +122,20 @@ namespace LM {
 
 #if LOG_ON
 
-#define LOG_INIT() ::LM::ConsoleLog::Get()->Init()
+    #define LOG_INIT() ::LM::ConsoleLog::Get()->Init()
 
-#define LOGI(...)  ::LM::ConsoleLog::Get()->LogInfo(__VA_ARGS__)
+    #define LOGI(...)  ::LM::ConsoleLog::Get()->LogInfo(__VA_ARGS__)
 
-#define LOGW(...)  ::LM::ConsoleLog::Get()->LogWarning(__VA_ARGS__)
+    #define LOGW(...)  ::LM::ConsoleLog::Get()->LogWarning(__VA_ARGS__)
 
-#define LOGE(...)  ::LM::ConsoleLog::Get()->LogError(__VA_ARGS__)
+    #define LOGE(...)  ::LM::ConsoleLog::Get()->LogError(__VA_ARGS__)
 
-#define LOGD()     ::LM::ConsoleLog::Get()->LogDecorate();
+    #define LOGD()     ::LM::ConsoleLog::Get()->LogDecorate();
 
 #else
-#define LOG_INIT() 
-#define LOGI(...)
-#define LOGW(...)
-#define LOGE(...)
-#define LOGD()
-
-#endif // DEBUG
+    #define LOG_INIT()
+    #define LOGI(...)
+    #define LOGW(...)
+    #define LOGE(...)
+    #define LOGD()
+#endif    // DEBUG

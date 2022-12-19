@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Renderables/Gui/RenderableGuiTexture.h>
 #include <Actions/UseActions.h>
+#include <Renderables/Gui/RenderableGuiTexture.h>
 
 namespace LM {
 
-    class RenderableBottomAction: public RenderableGuiTexture {
+    class RenderableBottomAction : public RenderableGuiTexture {
     public:
         RenderableBottomAction(const RenderableTextureProps& props, DnD::Weapon& item);
         RenderableBottomAction(const RenderableTextureProps& props, DnD::Spell& item);
@@ -19,6 +19,7 @@ namespace LM {
 
         void setFocus(bool focus) { m_IsFocused = focus; }
         bool isFocused() const { return m_IsFocused; }
+
     protected:
         DnD::Activatable& m_Activatable;
         const Action::Type m_Type;

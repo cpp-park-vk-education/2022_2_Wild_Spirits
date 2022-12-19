@@ -5,8 +5,7 @@
 
 namespace LM {
 
-    class VertexArray
-    {
+    class VertexArray {
     public:
         VertexArray();
         ~VertexArray();
@@ -19,8 +18,10 @@ namespace LM {
 
         const Vector<Ref<VertexBuffer>>& getVertexBuffers() const { return m_VertexBuffers; }
         const Ref<IndexBuffer>& getIndexBuffer() const { return m_IndexBuffer; }
+
     private:
         void processVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) const;
+
     private:
         uint32_t m_BufferId;
         mutable uint32_t m_VertexBufferIndex = 0;

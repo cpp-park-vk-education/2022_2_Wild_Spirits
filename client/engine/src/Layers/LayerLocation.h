@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Layer.h"
-#include <Renderables/Gui/RenderableBottomAction/RenderableBottomActionGroup.h>
-#include <Renderables/Scene/RenderableTileGroup.h>
 #include <Actions/MoveAction.h>
 #include <Actions/UseActions.h>
+#include <Renderables/Gui/RenderableBottomAction/RenderableBottomActionGroup.h>
+#include <Renderables/Scene/RenderableTileGroup.h>
 #include <Textures/TextureManager.h>
 
 namespace LM {
 
-    class LayerLocation: public Layer {
+    class LayerLocation : public Layer {
     public:
         LayerLocation(bool isUserCreator = false);
         ~LayerLocation();
@@ -17,6 +17,7 @@ namespace LM {
         virtual void onEvent(Ref<Event> event) override;
         virtual void onUpdate(Tick tick) override;
         virtual void renderImGui() override;
+
     protected:
         bool hasActions() const;
         void clearActions();
@@ -26,12 +27,13 @@ namespace LM {
 #ifdef BUILD_LOGIC
         void tryLoadImage(size_t id);
 
-        template<typename T>
+        template <typename T>
         void loadActivatable(T storage);
 #endif
     protected:
         static inline const glm::vec2 s_BottomActionSize = glm::vec2(48.0f, 48.0f);
         static inline const float s_BottomActionSpace = 5.0f;
+
     protected:
 #ifndef BUILD_LOGIC
         Vector<DnD::Weapon> m_Weapons;

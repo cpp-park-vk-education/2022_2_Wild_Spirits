@@ -2,9 +2,9 @@
 
 #include <glm/gtx/transform.hpp>
 
+#include "RenderableGuiAlign.h"
 #include <Events/Events.h>
 #include <Utils/Timer.h>
-#include "RenderableGuiAlign.h"
 
 namespace LM {
 
@@ -38,8 +38,10 @@ namespace LM {
 
         bool isHovered() const { return m_IsHovered; }
         void setHovered(bool isHovered) { m_IsHovered = isHovered; }
+
     public:
         static float calcAlign(GuiAlign align, glm::uint winSize, float size);
+
     protected:
         RenderableGuiAlign m_Align;
         glm::vec2 m_AlignPosition;

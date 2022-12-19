@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Core/Base.h>
 #include "Layer.h"
+#include <Core/Base.h>
 
 namespace LM {
 
@@ -19,6 +19,7 @@ namespace LM {
         void onUpdate(Tick tick);
         void onEvent(Ref<Event> event);
         void updateLayersState();
+
     protected:
         std::vector<Ref<Layer>> m_Layers;
         std::vector<Ref<Layer>> m_LayersToAdd;

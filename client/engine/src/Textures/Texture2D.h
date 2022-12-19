@@ -9,7 +9,7 @@ namespace LM {
 
     class Texture2D {
     public:
-        enum MASK: uint32_t {
+        enum MASK : uint32_t {
             NONE = 0,
 
             SRGB = 0,
@@ -48,7 +48,12 @@ namespace LM {
             MIN_NEAREST_MIPMAP_LINEAR = BIT(15),
             MIN_NEAREST_MIPMAP_NEAREST = BIT(16),
         };
-        struct FromData { uint8_t* data; uint32_t width; uint32_t height; };
+        struct FromData {
+            uint8_t* data;
+            uint32_t width;
+            uint32_t height;
+        };
+
     public:
         explicit Texture2D(FromFile file, MASK mask = MASK::NONE);
         explicit Texture2D(FromSource source, MASK mask = MASK::NONE);
@@ -60,9 +65,11 @@ namespace LM {
 
         void bind(uint32_t slotId) const;
         void unbind() const;
+
     private:
         void load(const uint8_t* const data, uint32_t width, uint32_t height);
         void loadOnError();
+
     private:
         MASK m_Mask;
         uint32_t m_Width;

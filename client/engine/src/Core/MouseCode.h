@@ -25,6 +25,6 @@ namespace LM {
             ButtonMiddle = Button2
         };
 
-    }
+    }    // namespace Mouse
 
 }    // namespace LM

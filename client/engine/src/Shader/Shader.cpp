@@ -8,24 +8,15 @@
 
 namespace LM {
 
-    Shader::Shader(const ShaderLayout& layout)
-        : m_Layout(layout) {
-        m_ShaderId = load(layout);
-    }
+    Shader::Shader(const ShaderLayout& layout) : m_Layout(layout) { m_ShaderId = load(layout); }
 
-    Shader::~Shader() {
-        glDeleteProgram(m_ShaderId);
-    }
+    Shader::~Shader() { glDeleteProgram(m_ShaderId); }
 
-    void Shader::enable() const {
-        glUseProgram(m_ShaderId);
-    }
+    void Shader::enable() const { glUseProgram(m_ShaderId); }
 
-    void Shader::disable() {
-        glUseProgram(0);
-    }
+    void Shader::disable() { glUseProgram(0); }
 
-    void Shader::setUniform1f(const std::string_view& name, float value)  const {
+    void Shader::setUniform1f(const std::string_view& name, float value) const {
         glUniform1f(getUniformLocation(name), value);
     }
 
@@ -92,7 +83,7 @@ namespace LM {
 
     uint32_t Shader::getType(ShaderSource::Type type) {
         switch (type) {
-            case ShaderSource::Type::kVertex:   return GL_VERTEX_SHADER;
+            case ShaderSource::Type::kVertex: return GL_VERTEX_SHADER;
             case ShaderSource::Type::kFragment: return GL_FRAGMENT_SHADER;
             case ShaderSource::Type::kGeometry: return GL_GEOMETRY_SHADER;
         }
@@ -101,7 +92,7 @@ namespace LM {
 
     std::string Shader::getName(ShaderSource::Type type) {
         switch (type) {
-            case ShaderSource::Type::kVertex:   return "Vertex";
+            case ShaderSource::Type::kVertex: return "Vertex";
             case ShaderSource::Type::kFragment: return "Fragment";
             case ShaderSource::Type::kGeometry: return "Geometry";
         }
@@ -113,10 +104,9 @@ namespace LM {
         uint32_t type = getType(source.getType());
         std::string name = getName(source.getType());
 
-        std::string sourceString =
-            source.getLoadType() == ShaderSource::LoadType::kFilepath ?
-            loadFile(source.getSource()) :
-            source.getSource();
+        std::string sourceString = source.getLoadType() == ShaderSource::LoadType::kFilepath
+                                     ? loadFile(source.getSource())
+                                     : source.getSource();
         const char* charSource = sourceString.c_str();
         uint32_t res = glCreateShader(type);
         glShaderSource(res, 1, &charSource, NULL);
@@ -139,8 +129,9 @@ namespace LM {
 
     std::string Shader::loadFile(std::string_view filepath) {
         std::ifstream ifStream(filepath.data());
-        if (!ifStream.is_open())
+        if (!ifStream.is_open()) {
             LOGE("Can't Open Shader file: ", filepath);
+        }
         std::string line;
         std::string shader;
 
@@ -152,8 +143,9 @@ namespace LM {
     }
 
     int Shader::getUniformLocation(const std::string_view& name) const {
-        if (m_UniformLocationCache.find(name.data()) != m_UniformLocationCache.end())
+        if (m_UniformLocationCache.find(name.data()) != m_UniformLocationCache.end()) {
             return m_UniformLocationCache[name.data()];
+        }
 
         GLint location = glGetUniformLocation(m_ShaderId, name.data());
         m_UniformLocationCache[name.data()] = location;

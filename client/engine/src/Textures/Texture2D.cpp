@@ -2,14 +2,13 @@
 
 #include <GL/glew.h>
 
-#include "TextureLoader.h"
 #include "CalcTextureParameters.h"
+#include "TextureLoader.h"
 
 namespace LM {
 
-    Texture2D::Texture2D(FromFile file, Texture2D::MASK mask)
-        : m_Mask(mask) {
-        TextureLoader textureLoader(FromFile{ file.filename });
+    Texture2D::Texture2D(FromFile file, Texture2D::MASK mask) : m_Mask(mask) {
+        TextureLoader textureLoader(FromFile { file.filename });
         if (!textureLoader.isOk()) {
             loadOnError();
         } else {
@@ -17,9 +16,8 @@ namespace LM {
         }
     }
 
-    Texture2D::Texture2D(FromSource source, Texture2D::MASK mask)
-        : m_Mask(mask) {
-        TextureLoader textureLoader(FromSource{ source.source });
+    Texture2D::Texture2D(FromSource source, Texture2D::MASK mask) : m_Mask(mask) {
+        TextureLoader textureLoader(FromSource { source.source });
         if (!textureLoader.isOk()) {
             loadOnError();
         } else {
@@ -27,13 +25,11 @@ namespace LM {
         }
     }
 
-    Texture2D::Texture2D(FromData data, MASK mask)
-        : m_Mask(mask) {
+    Texture2D::Texture2D(FromData data, MASK mask) : m_Mask(mask) {
         load(data.data, data.width, data.height);
     }
 
-    Texture2D::~Texture2D() {
-    }
+    Texture2D::~Texture2D() { }
 
     void Texture2D::bind(uint32_t slotId) const {
         m_BindSlotId = slotId;

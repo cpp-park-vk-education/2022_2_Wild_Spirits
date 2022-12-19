@@ -17,6 +17,7 @@ namespace LM {
 
         const BufferLayout& getLayout() const { return m_Layout; }
         void setLayout(const BufferLayout& layout) { m_Layout = layout; }
+
     private:
         uint32_t m_BufferId;
         BufferLayout m_Layout;

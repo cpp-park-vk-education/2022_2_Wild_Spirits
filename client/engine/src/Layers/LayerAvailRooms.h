@@ -6,16 +6,18 @@
 
 namespace LM {
 
-    class LayerAvailRooms: public Layer {
+    class LayerAvailRooms : public Layer {
     public:
         LayerAvailRooms();
         virtual void onUpdate(Tick tick) override;
         virtual void renderImGui() override;
+
     protected:
         void goToMainMenu();
         void goToRoom(size_t roomId);
 
         void getRooms();
+
     protected:
         std::vector<Room> m_Rooms;
     };

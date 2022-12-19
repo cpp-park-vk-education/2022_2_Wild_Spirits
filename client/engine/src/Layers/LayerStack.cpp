@@ -4,17 +4,11 @@
 
 namespace LM {
 
-    void LayerStack::pushLayer(Ref<Layer> layer) {
-        m_LayersToAdd.emplace_back(layer);
-    }
+    void LayerStack::pushLayer(Ref<Layer> layer) { m_LayersToAdd.emplace_back(layer); }
 
-    void LayerStack::popLayer(Ref<Layer> layer) {
-        m_LayersToRemove.emplace_back(layer.get());
-    }
+    void LayerStack::popLayer(Ref<Layer> layer) { m_LayersToRemove.emplace_back(layer.get()); }
 
-    void LayerStack::popLayer(Layer* layer) {
-        m_LayersToRemove.emplace_back(layer);
-    }
+    void LayerStack::popLayer(Layer* layer) { m_LayersToRemove.emplace_back(layer); }
 
     void LayerStack::render() {
         for (auto& layer : m_Layers) {
@@ -48,8 +42,9 @@ namespace LM {
         m_LayersToAdd.clear();
 
         for (auto layer : m_LayersToRemove) {
-            if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&](Ref<Layer> stackLayer) {
-                return stackLayer.get() == layer; }); it != m_Layers.end()) {
+            if (auto it = std::find_if(m_Layers.begin(), m_Layers.end(),
+                                       [&](Ref<Layer> stackLayer) { return stackLayer.get() == layer; });
+                it != m_Layers.end()) {
                 m_Layers.erase(it);
                 LOGW("Erase");
             }

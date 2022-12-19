@@ -7,8 +7,8 @@
 namespace LM {
 
     RenderableBottomActionGroup::RenderableBottomActionGroup(float space, const RenderableGuiProps& propsGui)
-        : RenderableGuiGroup({ }, propsGui), m_Space(space) {
-    }
+        : RenderableGuiGroup({}, propsGui),
+          m_Space(space) { }
 
     void RenderableBottomActionGroup::add(Ref<RenderableBottomAction> renderable) {
         m_Items.push_back(renderable);
@@ -49,13 +49,9 @@ namespace LM {
     }
 
     glm::vec2 RenderableBottomActionGroup::getSize() const {
-        return glm::vec2(std::accumulate(
-            m_Renderables.begin(),
-            m_Renderables.end(),
-            (m_Renderables.size() - 1) * m_Space,
-            [](float left, const auto& right) {
-                return left + right->getSize().x;
-            }),
+        return glm::vec2(
+            std::accumulate(m_Renderables.begin(), m_Renderables.end(), (m_Renderables.size() - 1) * m_Space,
+                            [](float left, const auto& right) { return left + right->getSize().x; }),
             0.0f);
     }
 

@@ -8,10 +8,11 @@ namespace LM {
 
     class Timer {
     public:
-        Timer() {}
-        ~Timer() {}
+        Timer() { }
+        ~Timer() { }
 
         Tick getElapsed() { return 0.0f; }
+
     private:
         std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
         std::chrono::time_point<std::chrono::steady_clock> m_EndTimepoint;

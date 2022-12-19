@@ -2,15 +2,15 @@
 
 #include "Base.h"
 #include "Window.h"
-#include <Layers/LayerStack.h>
 #include <Events/EventQueue.h>
 #include <ImGui/ImGuiController.h>
+#include <Layers/LayerStack.h>
 
 #ifdef BUILD_LOGIC
-#include <ClientRequestProcessor.hpp>
-#include <GameState.hpp>
-#include <GameMap.hpp>
-#include <TurnOrder.hpp>
+    #include <ClientRequestProcessor.hpp>
+    #include <GameMap.hpp>
+    #include <GameState.hpp>
+    #include <TurnOrder.hpp>
 #endif
 
 namespace LM {
@@ -34,11 +34,14 @@ namespace LM {
 
         void addLayer(Ref<Layer> layer) { m_LayerStack->pushLayer(layer); }
         void removeLayer(Layer* layer) { m_LayerStack->popLayer(layer); }
+
     private:
         void init();
         void onEvent(Ref<Event> event);
+
     private:
         static inline Application* s_Instance;
+
     private:
         Ref<Window> m_Window;
         Ref<LayerStack> m_LayerStack;

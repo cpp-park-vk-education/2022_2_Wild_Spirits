@@ -16,6 +16,7 @@ namespace LM {
         inline const uint8_t* const getData() const { return m_Data; }
 
         bool isOk() const { return m_Data; }
+
     protected:
         int m_Width;
         int m_Height;

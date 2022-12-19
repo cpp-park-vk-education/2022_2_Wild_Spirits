@@ -4,7 +4,12 @@
 
 namespace LM {
 
-    struct FromFile { std::string filename; };
-    struct FromSource { std::string source; };
+    struct FromFile {
+        std::string filename;
+    };
+
+    struct FromSource {
+        std::string source;
+    };
 
 }    // namespace LM

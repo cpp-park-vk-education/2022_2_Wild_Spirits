@@ -21,6 +21,7 @@ namespace LM {
 
         virtual void draw(RenderableTexture* renderable) = 0;
         virtual void draw(RenderableGroupInterface* renderable) = 0;
+
     protected:
         Vector<glm::mat4> m_Transforms;
         Scope<Shader> m_Shader;

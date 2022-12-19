@@ -9,14 +9,23 @@ namespace LM {
 
     enum class EventType {
         None = 0,
-        WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-        KeyPressed, KeyReleased, KeyTyped,
-        MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+        WindowClose,
+        WindowResize,
+        WindowFocus,
+        WindowLostFocus,
+        WindowMoved,
+        KeyPressed,
+        KeyReleased,
+        KeyTyped,
+        MouseButtonPressed,
+        MouseButtonReleased,
+        MouseMoved,
+        MouseScrolled
     };
 
-#define EVENT_CLASS_TYPE(type) \
-    static EventType getStaticType() { return EventType::type; }\
-    virtual EventType getEventType() const override { return getStaticType(); }\
+#define EVENT_CLASS_TYPE(type)                                                                               \
+    static EventType getStaticType() { return EventType::type; }                                             \
+    virtual EventType getEventType() const override { return getStaticType(); }                              \
     virtual const char* getName() const override { return #type; }
 
     class Event {
@@ -30,8 +39,6 @@ namespace LM {
         bool Handled = false;
     };
 
-    inline std::ostream& operator<<(std::ostream& out, const Event& event) {
-        return out << event.toString();
-    }
+    inline std::ostream& operator<<(std::ostream& out, const Event& event) { return out << event.toString(); }
 
 }    // namespace LM

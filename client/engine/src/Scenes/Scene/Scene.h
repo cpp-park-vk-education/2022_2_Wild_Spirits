@@ -1,13 +1,13 @@
 #pragma once
 
 #include <Core/Base.h>
-#include <Scenes/SceneInterface.h>
 #include <Renderables/RenderableInterface.h>
 #include <Renderers/Renderer.h>
+#include <Scenes/SceneInterface.h>
 
 namespace LM {
 
-    class Scene: public SceneInterface {
+    class Scene : public SceneInterface {
     public:
         Scene();
         virtual ~Scene();
@@ -17,6 +17,7 @@ namespace LM {
         virtual void onEvent(Ref<Event> event) override;
         virtual void onUpdate(Tick tick) override;
         virtual void render() override;
+
     protected:
         Vector<Ref<RenderableInterface>> m_Renderables;
         Scope<Renderer> m_Renderer;

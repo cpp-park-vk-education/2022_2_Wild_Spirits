@@ -1,13 +1,13 @@
 #pragma once
 
-#include "RenderableGroupInterface.h"
 #include "Renderable.h"
+#include "RenderableGroupInterface.h"
 
 namespace LM {
 
-    class RenderableGroup: public RenderableGroupInterface {
+    class RenderableGroup : public RenderableGroupInterface {
     public:
-        RenderableGroup(const Transform& transform = Transform()): RenderableGroupInterface(transform) {}
+        RenderableGroup(const Transform& transform = Transform()) : RenderableGroupInterface(transform) { }
         virtual ~RenderableGroup() = default;
 
         void add(Ref<RenderableInterface> renderable);
@@ -16,8 +16,10 @@ namespace LM {
 
         virtual Ref<RenderableInterface> getRenderable(size_t id) const override { return m_Renderables[id]; }
         virtual size_t getRenderablesCount() const override { return m_Renderables.size(); }
+
     protected:
         virtual Vector<Ref<RenderableInterface>> getRenderables() override { return m_Renderables; }
+
     protected:
         Vector<Ref<RenderableInterface>> m_Renderables;
     };

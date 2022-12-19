@@ -10,19 +10,16 @@ namespace LM {
     public:
         EventQueue() = default;
 
-        void add(const Ref<Event>& event) {
-            m_Events.push(event);
-        }
+        void add(const Ref<Event>& event) { m_Events.push(event); }
 
-        bool empty() const {
-            return m_Events.empty();
-        }
+        bool empty() const { return m_Events.empty(); }
 
         Ref<Event> pop() {
             Ref<Event> res = m_Events.front();
             m_Events.pop();
             return res;
         }
+
     protected:
         std::queue<Ref<Event>> m_Events;
     };

@@ -4,7 +4,7 @@ namespace LM {
 
     class Rotation {
     public:
-        explicit Rotation(float angle): m_Angle(angle) {}
+        explicit Rotation(float angle) : m_Angle(angle) { }
         Rotation& operator=(float angle) {
             m_Angle = angle;
             return *this;
@@ -30,9 +30,7 @@ namespace LM {
             return left;
         }
 
-        friend Rotation operator+(float left, Rotation right) {
-            return Rotation(left + right.m_Angle);
-        }
+        friend Rotation operator+(float left, Rotation right) { return Rotation(left + right.m_Angle); }
 
         Rotation& operator-=(const Rotation& other) {
             m_Angle -= other.m_Angle;
@@ -54,9 +52,7 @@ namespace LM {
             return left;
         }
 
-        friend Rotation operator-(float left, Rotation right) {
-            return Rotation(left - right.m_Angle);
-        }
+        friend Rotation operator-(float left, Rotation right) { return Rotation(left - right.m_Angle); }
 
         Rotation& operator/=(const Rotation& other) {
             m_Angle /= other.m_Angle;
@@ -78,10 +74,7 @@ namespace LM {
             return left;
         }
 
-        friend Rotation operator/(float left, Rotation right) {
-
-            return Rotation(left / right.m_Angle);
-        }
+        friend Rotation operator/(float left, Rotation right) { return Rotation(left / right.m_Angle); }
 
         Rotation& operator*=(const Rotation& other) {
             m_Angle *= other.m_Angle;
@@ -103,14 +96,12 @@ namespace LM {
             return left;
         }
 
-        friend Rotation operator*(float left, Rotation right) {
-
-            return Rotation(left * right.m_Angle);
-        }
+        friend Rotation operator*(float left, Rotation right) { return Rotation(left * right.m_Angle); }
 
         operator float() const { return m_Angle; }
 
         float operator()() const { return m_Angle; }
+
     private:
         float m_Angle;
     };

@@ -1,14 +1,15 @@
 #pragma once
 
 #include "RenderableGui.h"
-#include <Renderables/RenderableGroupInterface.h>
 #include <Core/Base.h>
+#include <Renderables/RenderableGroupInterface.h>
 
 namespace LM {
 
-    class RenderableGuiGroup: public RenderableGui {
+    class RenderableGuiGroup : public RenderableGui {
     public:
-        RenderableGuiGroup(Vector<Ref<RenderableGui>> renderables = {}, const RenderableGuiProps& propsGui = {});
+        RenderableGuiGroup(Vector<Ref<RenderableGui>> renderables = {},
+                           const RenderableGuiProps& propsGui = {});
         virtual ~RenderableGuiGroup() = default;
 
         virtual void add(Ref<RenderableGui> renderable) { m_Renderables.emplace_back(renderable); }
@@ -21,6 +22,7 @@ namespace LM {
         virtual void rebuid(glm::uvec2 size) override;
         virtual glm::vec2 getSize() const override;
         virtual void draw(RendererInterface* renderer) override;
+
     protected:
         Vector<Ref<RenderableGui>> m_Renderables;
     };

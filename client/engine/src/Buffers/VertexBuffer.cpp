@@ -16,17 +16,11 @@ namespace LM {
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
     }
 
-    VertexBuffer::~VertexBuffer() {
-        glDeleteBuffers(1, &m_BufferId);
-    }
+    VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &m_BufferId); }
 
-    void VertexBuffer::bind() const {
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-    }
+    void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, m_BufferId); }
 
-    void VertexBuffer::unbind() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+    void VertexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
     void VertexBuffer::setData(const void* data, uint32_t size) {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);

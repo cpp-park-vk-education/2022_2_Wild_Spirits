@@ -4,8 +4,8 @@
 
 #include <misc/cpp/imgui_stdlib.h>
 
-#include <Core/Application.h>
 #include "LayerMainMenu.h"
+#include <Core/Application.h>
 
 namespace LM {
 
@@ -30,8 +30,6 @@ namespace LM {
         ImGui::End();
     }
 
-    void LayerRegister::handleBtn() {
-        m_NeedRemove = true;
-    }
+    void LayerRegister::handleBtn() { m_NeedRemove = true; }
 
 }    // namespace LM

@@ -4,15 +4,13 @@
 
 #include <imgui.h>
 
-#include <Core/Application.h>
-#include "LayerMainMenu.h"
 #include "LayerLocation.h"
+#include "LayerMainMenu.h"
+#include <Core/Application.h>
 
 namespace LM {
 
-    LayerRoom::LayerRoom(Room room, bool isUserCreator)
-        : m_Room(room), m_IsUserCreator(isUserCreator) {
-    }
+    LayerRoom::LayerRoom(Room room, bool isUserCreator) : m_Room(room), m_IsUserCreator(isUserCreator) { }
 
     void LayerRoom::goToMainMenu() {
         Application::get()->addLayer(CreateRef<LayerMainMenu>());
@@ -27,7 +25,7 @@ namespace LM {
                 Application::get()->removeLayer(this);
             }
             return;
-}
+        }
 #endif
         Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
         Application::get()->removeLayer(this);
@@ -54,7 +52,7 @@ namespace LM {
                 ImGui::Text("Wait for GM to start the game");
                 ImGui::Separator();
             }
-            for (auto& userName : std::vector<std::string>{ "LENIA", "MIHAIL", "MAKS", "NIKITA" }) {
+            for (auto& userName : std::vector<std::string> { "LENIA", "MIHAIL", "MAKS", "NIKITA" }) {
                 ImGui::Text("%s", userName.data());
             }
             ImGui::Separator();

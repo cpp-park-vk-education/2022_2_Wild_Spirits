@@ -1,15 +1,13 @@
 #include "LayerAvailRooms.h"
 
-#include <Core/Application.h>
-#include <ImGui/ImGuiFuncs.h>
 #include "LayerMainMenu.h"
 #include "LayerRoom.h"
+#include <Core/Application.h>
+#include <ImGui/ImGuiFuncs.h>
 
 namespace LM {
 
-    LayerAvailRooms::LayerAvailRooms() {
-        getRooms();
-    }
+    LayerAvailRooms::LayerAvailRooms() { getRooms(); }
 
     void LayerAvailRooms::goToMainMenu() {
         Application::get()->addLayer(CreateRef<LayerMainMenu>());
@@ -30,9 +28,7 @@ namespace LM {
 #endif
     }
 
-    void LayerAvailRooms::onUpdate(Tick tick) {
-        (void)tick;
-    }
+    void LayerAvailRooms::onUpdate(Tick tick) { (void)tick; }
 
     void LayerAvailRooms::renderImGui() {
         if (ImGui::Begin("Rooms", 0, ImGuiFuncs::SetNextWindowCenterAutoResize())) {
@@ -61,10 +57,10 @@ namespace LM {
 #else
     void LayerAvailRooms::getRooms() {
         m_Rooms.clear();
-        m_Rooms.emplace_back(RoomProps{ 0 });
-        m_Rooms.emplace_back(RoomProps{ 1 });
-        m_Rooms.emplace_back(RoomProps{ 2 });
-        m_Rooms.emplace_back(RoomProps{ 3 });
+        m_Rooms.emplace_back(RoomProps { 0 });
+        m_Rooms.emplace_back(RoomProps { 1 });
+        m_Rooms.emplace_back(RoomProps { 2 });
+        m_Rooms.emplace_back(RoomProps { 3 });
     }
 #endif
 

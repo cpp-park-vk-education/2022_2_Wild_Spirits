@@ -9,8 +9,8 @@ namespace LM {
 
         static void begin();
         static void end();
-    protected:
 
+    protected:
     };
 
 }    // namespace LM

@@ -4,28 +4,27 @@
 
 #include <Core/Application.h>
 
-#include <Textures/TextureLoader.h>
 #include <Buffers/BufferLayout.h>
+#include <Textures/TextureLoader.h>
 #include <Transform/Transform.h>
 
 TEST(Texture, LoadTexture) {
     LOG_INIT();
-    LM::TextureLoader tl1(LM::FromFile{ std::string(RES_FOLDER_TEST) + "Textures/Stone.png" });
+    LM::TextureLoader tl1(LM::FromFile { std::string(RES_FOLDER_TEST) + "Textures/Stone.png" });
     EXPECT_TRUE(tl1.isOk());
     EXPECT_EQ(tl1.getWidht(), 16);
     EXPECT_EQ(tl1.getHeight(), 16);
 
-
     std::ifstream input(std::string(RES_FOLDER_TEST) + "Textures/Stone.png", std::ios::binary);
-    LM::TextureLoader tl2(LM::FromSource{ std::string(std::istreambuf_iterator<char>(input), {}) });
+    LM::TextureLoader tl2(LM::FromSource { std::string(std::istreambuf_iterator<char>(input), {}) });
     EXPECT_TRUE(tl2.isOk());
     EXPECT_EQ(tl2.getWidht(), 16);
     EXPECT_EQ(tl2.getHeight(), 16);
 
-    LM::TextureLoader tl3(LM::FromFile{ "fileWithWrongName.png" });
+    LM::TextureLoader tl3(LM::FromFile { "fileWithWrongName.png" });
     EXPECT_FALSE(tl3.isOk());
 
-    LM::TextureLoader tl4(LM::FromSource{  });
+    LM::TextureLoader tl4(LM::FromSource {});
     EXPECT_FALSE(tl4.isOk());
 }
 
@@ -104,10 +103,11 @@ TEST(Transform, TransformRotationMulti) {
 
 TEST(BufferLayout, TypeTest) {
     LM::BufferLayout layout({
-            { LM::ShaderDataType::Float3, "a_Position" },
-            { LM::ShaderDataType::Float2, "a_TexCoord" },
-            { LM::ShaderDataType::Float3, "a_Normal" },
-            { LM::ShaderDataType::Float3, "a_Tangent" } });
+        {LM::ShaderDataType::Float3, "a_Position"},
+        {LM::ShaderDataType::Float2, "a_TexCoord"},
+        {LM::ShaderDataType::Float3,   "a_Normal"},
+        {LM::ShaderDataType::Float3,  "a_Tangent"}
+    });
 
     EXPECT_EQ(layout.getStride(), 44);
     EXPECT_EQ(layout.getElements()[0].offset, 0);

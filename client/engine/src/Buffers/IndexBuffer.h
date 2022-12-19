@@ -16,6 +16,7 @@ namespace LM {
         void setIndices(const uint32_t* data, uint32_t count);
 
         inline uint32_t getCount() const { return m_Count; }
+
     private:
         uint32_t m_BufferId;
         uint32_t m_Count;

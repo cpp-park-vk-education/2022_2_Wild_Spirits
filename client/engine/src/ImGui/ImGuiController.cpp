@@ -1,9 +1,9 @@
 #include "ImGuiController.h"
 
 #include <GLFW/glfw3.h>
-#include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <imgui.h>
 
 #include <Core/Application.h>
 
@@ -46,9 +46,8 @@ namespace LM {
 
     void ImGuiController::end() {
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2(
-            static_cast<float>(Application::get()->getWindow()->getWidth()),
-            static_cast<float>(Application::get()->getWindow()->getHeight()));
+        io.DisplaySize = ImVec2(static_cast<float>(Application::get()->getWindow()->getWidth()),
+                                static_cast<float>(Application::get()->getWindow()->getHeight()));
 
         ImGui::Render();
 
