@@ -27,6 +27,7 @@ namespace LM {
                 Application::get()->removeLayer(this);
                 return false;
             }
+        return false;
         });
         dispatcher.dispatch<MouseButtonPressedEvent>([&](Ref<MouseButtonPressedEvent> event) {
             if (m_BtnCancel->isHovered()) {
@@ -35,47 +36,49 @@ namespace LM {
                 LOGI("Cancel");
                 return false;
             }
-            if (m_BtnTurn->isHovered()) {
-                LOGI("SEND MESSAGE TO SERVER");
-                clearActions();
-                m_Field->clearFocused();
-                return false;
-            }
-            if (auto action = m_BottomActions->getAction(); action) {
-                clearActions();
-                m_Field->clearFocused();
-                addToGui(m_BtnCancel);
-                m_BottomActions->setFocus();
-                m_ActionUse = action;
-                LOGI("Use Action Created!");
-                return false;
-            }
-            if (m_Field->hasHovered()) {
-                LOGI("Hovered tile: ", m_Field->getHoveredX(), " ", m_Field->getHoveredY());
-                m_Field->setHoveredInFocus();
-                if (m_ActionUse) {
-                    LOGI("UseAction setTarget");
-                    if (m_ActionUse->isFirstSet()) {
-                        addToGui(m_BtnTurn);
-                    }
-                    m_ActionUse->setTarget(m_Field->getHoveredX(), m_Field->getHoveredY());
-                    return false;
-                }
-                LOGI("MoveAction setTarget");
-                clearActions();
-                addToGui(m_BtnCancel);
-                addToGui(m_BtnTurn);
-                m_ActionMove = CreateRef<MoveAction>(m_Field->getHoveredX(), m_Field->getHoveredY());
-                return false;
-            }
-
+        if (m_BtnTurn->isHovered()) {
+            LOGI("SEND MESSAGE TO SERVER");
+            clearActions();
+            m_Field->clearFocused();
             return false;
+        }
+        if (auto action = m_BottomActions->getAction(); action) {
+            clearActions();
+            m_Field->clearFocused();
+            addToGui(m_BtnCancel);
+            m_BottomActions->setFocus();
+            m_ActionUse = action;
+            LOGI("Use Action Created!");
+            return false;
+        }
+        if (m_Field->hasHovered()) {
+            LOGI("Hovered tile: ", m_Field->getHoveredX(), " ", m_Field->getHoveredY());
+            m_Field->setHoveredInFocus();
+            if (m_ActionUse) {
+                LOGI("UseAction setTarget");
+                if (m_ActionUse->isFirstSet()) {
+                    addToGui(m_BtnTurn);
+                }
+                m_ActionUse->setTarget(m_Field->getHoveredX(), m_Field->getHoveredY());
+                return false;
+            }
+            LOGI("MoveAction setTarget");
+            clearActions();
+            addToGui(m_BtnCancel);
+            addToGui(m_BtnTurn);
+            m_ActionMove = CreateRef<MoveAction>(m_Field->getHoveredX(), m_Field->getHoveredY());
+            return false;
+        }
+
+        return false;
         });
     }
 
     void LayerLocation::init() {
-        Ref<Texture2D> textureCancel = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/BtnCancel.png" });
-        Ref<Texture2D> textureTurn = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/BtnTurn.png" });
+        Ref<Texture2D> textureCancel = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/BtnCancel.png" });
+        Ref<Texture2D> textureTurn = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/BtnTurn.png" });
         m_BtnCancel = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureCancel },
             RenderableGuiProps{ {GuiAlign::kEnd}, glm::vec2(-16.0f, 16.0f) });
         m_BtnTurn = CreateRef<RenderableGuiTexture>(RenderableTextureProps{ textureTurn },
@@ -90,9 +93,9 @@ namespace LM {
 #ifdef BUILD_LOGIC
         if (Application::get()->getClientSideProcessor()->checkUnappliedChanges()) {
             load();
-        }
+    }
 #endif
-        }
+}
 
     void LayerLocation::renderImGui() {
 #ifdef BUILD_LOGIC
@@ -104,7 +107,7 @@ namespace LM {
                 }
             }
             ImGui::End();
-        }
+    }
 
 #else
         if (ImGui::Begin("New Changes")) {
@@ -113,7 +116,7 @@ namespace LM {
         }
         ImGui::End();
 #endif
-        }
+    }
 
     bool LayerLocation::hasActions() const {
         if (m_ActionMove) { return true; }
@@ -201,10 +204,14 @@ namespace LM {
         m_Consumables.push_back(DnD::Consumable(0, DnD::Activatable::Cast::Tile));
         m_Consumables.push_back(DnD::Consumable(1, DnD::Activatable::Cast::Self));
 
-        Ref<Texture2D> textureWeapon = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill1.png" });
-        Ref<Texture2D> textureSpell = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill2.png" });
-        Ref<Texture2D> textureSkill = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill3.png" });
-        Ref<Texture2D> textureConsum = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill4.png" });
+        Ref<Texture2D> textureWeapon = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill1.png" });
+        Ref<Texture2D> textureSpell = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill2.png" });
+        Ref<Texture2D> textureSkill = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill3.png" });
+        Ref<Texture2D> textureConsum = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Skill4.png" });
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
         for (auto& item : m_Weapons) {
@@ -229,8 +236,10 @@ namespace LM {
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
 
-        Ref<Texture2D> texturePlayer = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Character.png" });
-        Ref<Texture2D> textureEnemy = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/Location/Enemy.png" });
+        Ref<Texture2D> texturePlayer = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Character.png" });
+        Ref<Texture2D> textureEnemy = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/Location/Enemy.png" });
         for (uint32_t i = 0, j = 2; i < fieldSize.x && j < fieldSize.y; i += 4, j += 2) {
             Ref<RenderableCharacter> character = CreateRef<RenderableCharacter>(
                 texturePlayer,
@@ -248,4 +257,4 @@ namespace LM {
     }
 #endif
 
-    }    // namespace LM
+}    // namespace LM

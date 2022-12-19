@@ -32,14 +32,6 @@ namespace LM {
 
     void LayerAvailRooms::onUpdate(Tick tick) {
         (void)tick;
-        //if (m_NeedGoBack) {
-        //    goToMainMenu();
-        //    return;
-        //}
-        //if (m_NeedGoToRoom) {
-        //    goToRoom();
-        //    return;
-        //}
     }
 
     void LayerAvailRooms::renderImGui() {
@@ -55,7 +47,6 @@ namespace LM {
             }
             ImGui::Separator();
             if (ImGui::Button("Go to main menu")) {
-                //m_NeedGoBack = true;
                 goToMainMenu();
             }
         }
@@ -77,5 +68,4 @@ namespace LM {
     }
 #endif
 
-
-    }    // namespace LM
+}    // namespace LM

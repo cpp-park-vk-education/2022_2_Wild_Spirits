@@ -13,7 +13,8 @@ namespace LM {
         m_Transforms.push_back(glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)));
         m_Shader = CreateScope<Shader>(ShaderLayout({
             { ShaderSource::Type::kVertex, ShaderSource::fromFile(std::string(RES_FOLDER) + "Shaders/Simple.vert") },
-            { ShaderSource::Type::kFragment, ShaderSource::fromFile(std::string(RES_FOLDER) + "Shaders/Simple.frag") } }));
+            { ShaderSource::Type::kFragment, ShaderSource::fromFile(std::string(RES_FOLDER) + "Shaders/Simple.frag") }
+            }));
     }
 
     void Renderer::start(glm::uvec2 windowSize, glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {

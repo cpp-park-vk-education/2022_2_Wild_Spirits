@@ -16,10 +16,14 @@ namespace LM {
 
     LayerMainMenu::LayerMainMenu() {
         LOGI("LayerMainMenu");
-        Ref<Texture2D> textureStart = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Start.png" });
-        Ref<Texture2D> textureStartDm = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/StartGM.png" });
-        Ref<Texture2D> textureLogin = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Login.png" });
-        Ref<Texture2D> textureReg = CreateRef<Texture2D>(FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Register.png" });
+        Ref<Texture2D> textureStart = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Start.png" });
+        Ref<Texture2D> textureStartDm = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/StartGM.png" });
+        Ref<Texture2D> textureLogin = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Login.png" });
+        Ref<Texture2D> textureReg = CreateRef<Texture2D>(
+            FromFile{ std::string(RES_FOLDER) + "Textures/MainMenu/Register.png" });
 
         m_BtnStart = CreateRef<RenderableGuiTexture>(
             RenderableTextureProps{ textureStart },
@@ -91,7 +95,7 @@ namespace LM {
         Room room = Application::get()->getClientSideProcessor()->CreateRoom();
         Application::get()->addLayer(CreateRef<LayerRoom>(room, true));
         Application::get()->removeLayer(this);
-    }
+}
 #else
     void LayerMainMenu::handleStartDM() {
         Application::get()->addLayer(CreateRef<LayerRoom>(Room({ 0 }), true));
