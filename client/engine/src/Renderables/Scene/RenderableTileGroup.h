@@ -21,6 +21,7 @@ namespace LM {
 
         virtual void onEvent(Ref<Event> event) override;
         virtual void onUpdate(Tick tick) override;
+        virtual void drawAdditionalImGuiWidgets();
 
     protected:
         uint32_t getTileIndex(uint32_t x, uint32_t y) const;

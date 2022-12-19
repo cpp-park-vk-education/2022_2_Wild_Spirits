@@ -10,8 +10,9 @@ namespace LM {
     RenderableTileGroup::RenderableTileGroup(Ref<Texture2D> texture, glm::uvec2 size)
         : m_TextureTile(texture),
           m_Size(size) {
-        const float winCover = 0.85f;
-        const glm::vec2 availSize = winSize * winCover;
+        const float winCoverX = 0.7f;
+        const float winCoverY = 0.85f;
+        const glm::vec2 availSize = glm::vec2(winSize.x * winCoverX, winSize.y * winCoverY);
 
         m_Tiles.reserve(m_Size.x * m_Size.y);
         m_Renderables.reserve(m_Size.x * m_Size.y);
@@ -94,6 +95,19 @@ namespace LM {
     }
 
     void RenderableTileGroup::onUpdate(Tick tick) { (void)tick; }
+
+    void RenderableTileGroup::drawAdditionalImGuiWidgets() {
+        if (m_HoveredId >= m_Tiles.size()) {
+            return;
+        }
+
+        for (auto& character : m_Characters) {
+            if (character->getPosition() == glm::uvec2(getHoveredX(), getHoveredY())) {
+                character->drawImGuiTooltip();
+                break;
+            }
+        }
+    }
 
     uint32_t RenderableTileGroup::getTileIndex(uint32_t x, uint32_t y) const { return y * m_Size.x + x; }
 

@@ -6,7 +6,9 @@
 #include "Action.h"
 
 #ifdef BUILD_LOGIC
-    #include <GS files>
+    #include <ActivatableItem.hpp>
+    #include <Skill.hpp>
+    #include <Spell.hpp>
 #else
 namespace DnD {
 

@@ -110,11 +110,14 @@ namespace LM {
         }
 
 #else
-        if (ImGui::Begin("New Changes")) {
+        if (m_IsUserCreator && ImGui::Begin("New Changes")) {
             static size_t testScalar = 0;
             ImGui::DragScalar("changename", ImGuiDataType_U64, &testScalar);
         }
         ImGui::End();
+
+        m_Field->drawAdditionalImGuiWidgets();
+        drawCurrentPlayerInfo();
 #endif
     }
 
@@ -258,5 +261,29 @@ namespace LM {
         }
     }
 #endif
+
+    void LayerLocation::drawCurrentPlayerInfo() {
+        ImGuiIO& io = ImGui::GetIO();
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking |
+                                       ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                                       ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
+                                       ImGuiWindowFlags_NoMove;
+        const float PAD = 10.0f;
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImVec2 workPos = viewport->WorkPos;    // Use work area to avoid menu-bar/task-bar, if any!
+        ImVec2 windowPos;
+        ImVec2 windowPosPivot { 0.0f, 1.0f };
+        ImVec2 workSize = viewport->WorkSize;
+        windowPos.x = workPos.x + PAD;
+        windowPos.y = workPos.y + workSize.y - PAD;
+        ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, windowPosPivot);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::SetNextWindowBgAlpha(0.35f);    // Transparent background
+        if (ImGui::Begin("My stats", nullptr, windowFlags)) {
+            ImGui::Text("HP %lu", 100);
+            ImGui::Text("MP %lu", 20);
+        }
+        ImGui::End();
+    }
 
 }    // namespace LM
