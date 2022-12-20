@@ -9,8 +9,7 @@ namespace LM {
         : RenderableTexture({ texture, glm::vec2(1.0f), { glm::vec2(position.x, position.y) }, color }),
           m_Position(position) { }
 
-    void RenderableCharacter::drawImGuiTooltip()
-    {
+    void RenderableCharacter::drawImGuiTooltip() {
         ImGui::BeginTooltip();
         ImGui::TextUnformatted("Character Info:");
         ImGui::EndTooltip();

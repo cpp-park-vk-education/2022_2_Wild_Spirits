@@ -263,7 +263,6 @@ namespace LM {
 #endif
 
     void LayerLocation::drawCurrentPlayerInfo() {
-        ImGuiIO& io = ImGui::GetIO();
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking |
                                        ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
                                        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
@@ -280,8 +279,8 @@ namespace LM {
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::SetNextWindowBgAlpha(0.35f);    // Transparent background
         if (ImGui::Begin("My stats", nullptr, windowFlags)) {
-            ImGui::Text("HP %lu", 100);
-            ImGui::Text("MP %lu", 20);
+            ImGui::Text("HP %u", 100u);
+            ImGui::Text("MP %u", 20u);
         }
         ImGui::End();
     }

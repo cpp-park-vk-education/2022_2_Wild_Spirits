@@ -24,7 +24,7 @@ namespace LM {
         void init();
         void load();
 
-        void drawCurrentPlayerInfo();
+        static void drawCurrentPlayerInfo();
 
 #ifdef BUILD_LOGIC
         void tryLoadImage(size_t id);
