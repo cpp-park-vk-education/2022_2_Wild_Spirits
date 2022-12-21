@@ -3,7 +3,6 @@
 #include <string>
 #include <stdexcept>
 #include <unordered_map>
-#include "client_interfaces.hpp"
 
 
 class HeaderException : public std::runtime_error{
@@ -52,32 +51,32 @@ public:
             throw HeaderException("Invalid Header description");
         }
     }
-    Client::ActionType getHeader(const std::string& action_header_string){
+    LM::ActionType getHeader(const std::string& action_header_string){
         if (action_header_string == "UseWeapon"){
-            return Client::kUseWeapon;
+            return LM::kUseWeapon;
         }
         else if(action_header_string == "UseConsumable"){
-            return Client::kUseConsumable;
+            return LM::kUseConsumable;
         }
         else if(action_header_string == "UseSkill"){
-            return Client::kUseSkill;
+            return LM::kUseSkill;
         }
         else if(action_header_string == "UseSpell"){
-            return Client::kUseSpell;
+            return LM::kUseSpell;
         }
         else{
             throw HeaderException("Invalid Header description");
         }
     }
-    std::string operator() (Client::ActionType type){
+    std::string operator() (LM::ActionType type){
         switch (type) {
-            case Client::kUseWeapon:
+            case LM::kUseWeapon:
                 return "UseWeapon";
-            case Client::kUseConsumable:
+            case LM::kUseConsumable:
                 return "UseConsumable";
-            case Client::kUseSkill:
+            case LM::kUseSkill:
                 return "UseSkill";
-            case Client::kUseSpell:
+            case LM::kUseSpell:
                 return "UseSpell";
         }
         return {};

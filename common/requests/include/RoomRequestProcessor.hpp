@@ -3,7 +3,6 @@
 #include <memory>
 #include "RoomProcessorEngine.hpp"
 #include "sendaccept.hpp"
-#include "gateway_interfaces.hpp"
 
 
 
@@ -22,15 +21,15 @@ public:
 
 class RoomSideProcessor : public RequestAcceptor{
 private:
-    std::shared_ptr<Gateway::Room> room_connection;
+    std::shared_ptr<Room> room_connection;
     RoomProcessorEngine engine;
     PlayerCharacters players;
-    Room::GameLogicProcessor& room;
+    DnD::LogicProcessor& room;
 
     bool sendDM(string request_string);
     bool sendInstance(unsigned int user_id);
     bool broadcast(string request_string);
 public:
     bool acceptRequest(std::string request_string) override;
-    RoomSideProcessor(Room::GameLogicProcessor &room);
+    RoomSideProcessor(DnD::LogicProcessor &room);
 };

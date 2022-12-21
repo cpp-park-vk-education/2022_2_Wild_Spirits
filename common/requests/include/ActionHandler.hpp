@@ -1,17 +1,16 @@
 #pragma once
-#include "client_interfaces.hpp"
 #include <deque>
 #include <string>
 #include "ActionCollector.hpp"
 #include "nlohmann/json.hpp"
 #include "Headers.hpp"
-#include "Actions/Actions.h"
+#include "Actions/Action.h"
 #include "Actions/MoveAction.h"
 #include "Actions/UseActions.h"
 #include "Effect.hpp"
 
 
-typedef std::deque<Client::Action> action_queue;
+typedef std::deque<LM::Action> action_queue;
 typedef std::string string;
 
 struct TypeHandler;
@@ -24,7 +23,7 @@ public:
     ActionHandler();
     string actionString(LM::Action& action);
 
-    Client::ActionType actionHeader(Client::Action action);
+    LM::ActionType actionHeader(LM::Action action);
 
     string actionString(DnD::Action action);
 

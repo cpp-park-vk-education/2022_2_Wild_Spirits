@@ -1,14 +1,8 @@
 #include "GameStateChanger.hpp"
+#include <memory>
 
 
 
-bool GameStateChanger::makechange(std::tuple<std::size_t, std::string, std::string> setter_params){
-    bool state = true;
-    
-
-
-    return state;
-}
 
 GameStateChanger::GameStateChanger(DnD::GameState &gamestate) : gamestate(gamestate), handlers() {
     handlers.push_back(std::make_unique<ImageHandler>());
@@ -30,4 +24,13 @@ GameStateChanger::GameStateChanger(DnD::GameState &gamestate) : gamestate(gamest
     handlers.push_back(std::make_unique<XPHandler>());
     handlers.push_back(std::make_unique<CastCostHandler>());
     handlers.push_back(std::make_unique<UsesHandler>());
+}
+
+
+bool GameStateChanger::makechange(nlohmann::json request_part) {
+    for(std::unique_ptr<ChangeHandler>& handler : handlers){
+        if(handler ->CanHandle(request_part)){
+            handler ->SetField(request_part, gamestate);
+        }
+    }
 }

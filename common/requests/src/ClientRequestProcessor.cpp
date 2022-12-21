@@ -23,7 +23,7 @@ bool ClientSideProcessor::acceptRequest(string request_string){
     return state;
 }
 
-bool ClientSideProcessor::sendRequest(Client::Action action){
+bool ClientSideProcessor::sendRequest(LM::Action action){
     return false;
 }
 
