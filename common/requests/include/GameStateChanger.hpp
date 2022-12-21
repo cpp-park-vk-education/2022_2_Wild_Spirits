@@ -48,6 +48,7 @@ public:
     bool makechange(std::tuple<std::size_t ,std::string, std::string> setter_params);
     bool makechange(std::tuple<std::string, std::string> setter_params);
     bool makechange(std::string request_part);
+    bool makechange(nlohmann::json request_part);
 };
 
 struct ChangeHandler{

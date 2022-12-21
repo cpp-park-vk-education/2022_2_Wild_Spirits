@@ -10,9 +10,11 @@
 
 typedef std::deque<std::tuple<string, string>> change_queue;
 
+struct ChangeHandler;
 
 class ChangeGetter{
 private:
+    std::vector<std::unique_ptr<ChangeHandler>> handlers;
     Room::GameLogicProcessor& game_state;
     ChangeCollector& collector;
     change_queue changes_queue;
@@ -20,7 +22,8 @@ private:
 
 public:
     ChangeGetter(ChangeCollector &collector, Room::GameLogicProcessor &gameState);
-    nlohmann::json getChangedFields(nlohmann::json);
+    explicit ChangeGetter(Room::GameLogicProcessor &gameState);
+    std::string getChangedFields(nlohmann::json);
     void load_collector(string change);
 };
 

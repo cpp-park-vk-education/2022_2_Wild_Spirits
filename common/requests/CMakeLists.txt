@@ -17,7 +17,7 @@ set(SOURCES
     src/StringRequestParser.cpp
         ../../client/requestor/Actions/MoveAction.cpp
         ../../client/requestor/Actions/UseActions.cpp
-    ../../client/requestor/Actions/Actions.h
+    ../../client/requestor/Actions/Action.h
 )
 
 find_package(nlohmann_json 3.11.1 REQUIRED)
