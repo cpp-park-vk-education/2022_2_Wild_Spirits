@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.24)
+project(request-processor-test VERSION 1.0)
+
+enable_testing()
+
+add_executable(${PROJECT_NAME} request_processor_test.cpp
+        requestStringGenerator_test.cpp)
+
+target_link_libraries(${PROJECT_NAME} GTest::gmock_main GTest::gtest_main request-processor)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})

@@ -22,13 +22,31 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
+FetchContent_Declare(nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.1
+    FIND_PACKAGE_ARGS NAMES nlohmann_json
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)
 set_target_properties(gmock gmock_main gtest gtest_main PROPERTIES FOLDER "GTest")
 endif()
 
+
+
+
 if (${BUILD_SERVER})
+
+    if(WIN32)
+        set(PostgreSQL_INCLUDE_DIR "C:/Program Files/PostgreSQL/15/include")
+        set(PostgreSQL_LIBRARY C:/Program Files/PostgreSQL/15/lib)
+    endif()
+
+    set(PostgreSQL_ADDITIONAL_SEARCH_PATHS ${PostgreSQL_ADDITIONAL_SEARCH_PATHS} "C:/Program Files/PostgreSQL")
     FetchContent_Declare(
         libpqxx
         GIT_REPOSITORY https://github.com/jtv/libpqxx
@@ -40,16 +58,12 @@ if (${BUILD_SERVER})
     FetchContent_MakeAvailable(libpqxx)
 endif()
 
-# <BOOST>
-
-find_package(Boost 1.80.0) 
+find_package(Boost 1.80.0)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
 endif()
 
-# </BOOST>
-    
 set(SANITIZER_FLAGS "-fsanitize=leak,undefined,address")
 set(ERROR_FLAGS "-Wall")
 if(MSVC)

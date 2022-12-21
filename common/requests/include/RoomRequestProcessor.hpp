@@ -1,0 +1,36 @@
+#pragma once
+#include <unordered_map>
+#include <memory>
+#include "RoomProcessorEngine.hpp"
+#include "sendaccept.hpp"
+#include "gateway_interfaces.hpp"
+
+
+
+class PlayerCharacters{
+private:
+    std::unordered_map<unsigned int, std::string> player_table;
+    std::unordered_map<std::string, std::size_t> id_table;
+public:
+    PlayerCharacters();
+    std::string getPlayerName(unsigned int id);
+    unsigned int getUserId(std::string player_name);
+    
+};
+
+
+
+class RoomSideProcessor : public RequestAcceptor{
+private:
+    std::shared_ptr<Gateway::Room> room_connection;
+    RoomProcessorEngine engine;
+    PlayerCharacters players;
+    Room::GameLogicProcessor& room;
+
+    bool sendDM(string request_string);
+    bool sendInstance(unsigned int user_id);
+    bool broadcast(string request_string);
+public:
+    bool acceptRequest(std::string request_string) override;
+    RoomSideProcessor(Room::GameLogicProcessor &room);
+};
