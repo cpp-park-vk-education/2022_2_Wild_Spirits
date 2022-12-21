@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_CLIENT "Build Client" ON)
 option(BUILD_SERVER "Build Server" ON)
+option(BUILD_LOGIC  "Build_Logic"  ON)
 
 include(FetchContent)
 

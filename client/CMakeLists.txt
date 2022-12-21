@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(Client VERSION 1.0)
 
-option(BUILD_LOGIC "GLFW_BUILD_DOCS" ON)
+option(BUILD_LOGIC "Build_Logic" ON)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
