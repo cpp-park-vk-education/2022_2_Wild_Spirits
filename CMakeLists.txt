@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 option(BUILD_CLIENT "Build Client" ON)
 option(BUILD_SERVER "Build Server" ON)
 
@@ -37,13 +39,23 @@ if (${BUILD_SERVER})
     option(BUILD_TEST OFF)
     FetchContent_MakeAvailable(libpqxx)
 endif()
+
+# <BOOST>
+
+find_package(Boost 1.80.0) 
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+endif()
+
+# </BOOST>
     
 set(SANITIZER_FLAGS "-fsanitize=leak,undefined,address")
 set(ERROR_FLAGS "-Wall")
 if(MSVC)
 	set(ERROR_FLAGS "${ERROR_FLAGS} -W4")
 else()
-	set(ERROR_FLAGS "${ERROR_FLAGS} -Wpedantic -Werror")
+	set(ERROR_FLAGS "${ERROR_FLAGS} -Wpedantic")
 endif()
 
 option(SANITIZE "Enable sanitizers" ON)
