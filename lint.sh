@@ -27,7 +27,7 @@ print_header "RUN cpplint"
 check_log "cpplint --extensions=cpp ${SRC}" "Can't open for reading"
 
 print_header "RUN cppcheck"
-check_log "cppcheck --enable=all --inconclusive --error-exitcode=1 --suppressions-list=../cppcheck.cfg ${SRC}" "\(information\)"
+check_log "cppcheck --enable=all --inconclusive --error-exitcode=1 --inline-suppr --suppressions-list=../cppcheck.cfg ${SRC}" "\(information\)"
 
 print_header "RUN clang-tidy"
 check_log "clang-tidy -p . ${SRC} -warnings-as-errors=*" "Error (?:reading|while processing)"
