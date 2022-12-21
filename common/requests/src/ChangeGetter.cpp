@@ -4,7 +4,7 @@ void ChangeGetter::load_collector(change_queue changes){
 
 }
 
-ChangeGetter::ChangeGetter(ChangeCollector &collector, Room::GameLogicProcessor &gameState): handlers(), game_state(gameState), collector(collector)  {
+ChangeGetter::ChangeGetter(ChangeCollector &collector, DnD::LogicProcessor &gameState): handlers(), game_state(gameState), collector(collector)  {
     handlers.push_back(std::make_unique<MoveHandler>());
     handlers.push_back(std::make_unique<WeaponHandler>());
     handlers.push_back(std::make_unique<ConsumableHandler>());

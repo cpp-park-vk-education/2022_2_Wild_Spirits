@@ -22,7 +22,7 @@ public:
     ClientProcessorEngine();
     std::shared_ptr<ActionHandler> handler;
     setter_queue getSetterQueue(string request);
-    string getRequestString(std::string action_string, Client::ActionType header);
+    string getRequestString(std::string action_string, LM::ActionType header);
     string getRequestString(std::string action_string, LM::Action::Type header);
 
     string getRequestString(std::string request_string, Header header);

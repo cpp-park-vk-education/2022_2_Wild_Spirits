@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include "client_interfaces.hpp"
 
 class RequestAcceptor{
 public:
@@ -13,6 +12,6 @@ public:
 class RequestSender{
 public:
     virtual ~RequestSender();
-    virtual bool sendRequest(Client::Request request);
-    virtual bool sendRequest(Client::Action action);
+    virtual bool sendRequest(LM::Request request);
+    virtual bool sendRequest(LM::Action action);
 };

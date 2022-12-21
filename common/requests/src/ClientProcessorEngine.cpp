@@ -2,7 +2,7 @@
 #include "Headers.hpp"
 
 
-string ClientProcessorEngine::getRequestString(std::string action_string, Client::ActionType header) {
+string ClientProcessorEngine::getRequestString(std::string action_string, LM::ActionType header) {
     std::string final_request;
     HeaderSerial serializer;
     final_request = generator -> makeRequestString(action_string ,serializer(header));

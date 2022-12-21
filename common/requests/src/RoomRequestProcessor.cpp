@@ -33,7 +33,7 @@ bool RoomSideProcessor::broadcast(string request_string){
     return state;
 }
 
-RoomSideProcessor::RoomSideProcessor(Room::GameLogicProcessor &room) : engine(room), room(room) {
+RoomSideProcessor::RoomSideProcessor(DnD::LogicProcessor &room) : engine(room), room(room) {
 
 }
 
