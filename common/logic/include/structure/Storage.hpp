@@ -56,6 +56,12 @@ class Storage {
 
     Storage() = default;
     Storage(const std::unordered_map<size_t, T>& data) : data_(data) {}
+    Storage(std::unordered_map<size_t, T>&& data) : data_(std::move(data)) {}
+
+    Storage(const std::vector<T>& data) : Storage(data.begin(), data.end()) {}
+
+    Storage(std::vector<T>&& data) : Storage(std::make_move_iterator(data.begin()),
+                                             std::make_move_iterator(data.end())) {}
 
     Storage(const Storage& other) : data_(other.data_) {}
     Storage(Storage&& other) : data_(std::move(other.data_)) {}

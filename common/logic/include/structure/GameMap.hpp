@@ -35,6 +35,12 @@ class GameMapImpl : public GameMap {
  public:
     GameMapImpl(GameState& game) : game_(game), current_location_(0) {}
 
+    GameMapImpl(GameState& game, Storage<Location>&& locations,
+                SharedStorage<PlayerCharacter>&& players, size_t current_id) :
+        locations_(locations), game_(game),
+        current_location_(current_id),
+        players_(players) {}
+
     Storage<Location>& locations() override {
         return locations_;
     }

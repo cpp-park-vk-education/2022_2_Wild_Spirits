@@ -121,8 +121,5 @@ TEST_F(TurnOrderSuite, SkillsColldown) {
 
     queue.skipTurns(2);
     ASSERT_EQ(player_skill.turnsLeft(), 0);
-
-    Activatable* a = new Weapon();
-    delete a;
 }
 }  // namespace DnD

@@ -18,9 +18,6 @@ TEST_F(ActionSuite, SingleActionTest) {
     // Add buff to npc's dex, check if it will dodge action
     locations.get(0).npc().get(2).addBuff(Buff({{"dex", 4}}, 1));
 
-    locations.get(0).npc().each([] (auto& c) { std::cout << std::boolalpha << c.isHostile() << '\n'; });
-    std::cout << locations.get(0).npc().size() << '\n';
-
     // Action checks enemies dex by default,
     // they have armor class of 10 by default, which is summed with dex bonus ((14 - 10) / 2 == 2)
     // equaling 12

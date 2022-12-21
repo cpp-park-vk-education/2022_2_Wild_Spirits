@@ -48,6 +48,10 @@ class GameStateImpl : virtual public GameState {
 
  public:
     GameStateImpl() = default;
+    GameStateImpl(SharedStorage<NPC>&& npc, SharedStorage<Item>&& items,
+                  SharedStorage<ActivatableItem>&& activatables, SharedStorage<Weapon>&& weapons,
+                  SharedStorage<Spell>&& spells, SharedStorage<Armor>&& armor,
+                  SharedStorage<Race>&& races, SharedStorage<Class>&& classes, Config&& config = {});
 
     SharedStorage<NPC>& npc() override;
     Storage<CharacterInstance*>& allCharacters() override;
@@ -80,7 +84,7 @@ class LogicProcessor : virtual public GameState {
 
 class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
  public:
-    LogicProcessorImpl() = default;
+    using GameStateImpl::GameStateImpl;
 
     std::tuple<Activatable::Result, ErrorStatus> useActivatable(size_t actor_id, std::string_view type,
                                                         size_t item_id, const std::vector<Tile>& tiles) override;

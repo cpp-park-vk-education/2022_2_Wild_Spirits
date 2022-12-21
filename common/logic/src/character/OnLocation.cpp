@@ -18,6 +18,15 @@ void OnLocation::setLocation(size_t loc_id) {
     current_location_ = loc_id;
 }
 
+std::vector<Tile> OnLocation::occupiedTiles() const {
+    std::vector<Tile> original = pos_->occupiedTiles();
+    std::vector<Tile> res(original.size());
+
+    std::copy_if(original.begin(), original.end(), res.begin(),
+        [this] (const Tile& tile) { return location().isInBounds(tile); });
+    return res;
+}
+
 ErrorStatus OnLocation::moveTo(const Tile& tile) {
     return location().setPosition(*this, tile);
 }
@@ -27,7 +36,7 @@ ErrorStatus OnLocation::moveBy(int x, int y) {
 }
 
 ErrorStatus OnLocation::moveToApproximately(const Tile& tile) {
-    auto [res_tile, status] = location().closestFreeTile(*this, tile);
+    auto [res_tile, status] = location().closestFreeTile(*this, tile, true);
     if (status != ErrorStatus::OK) {
         return status;
     }

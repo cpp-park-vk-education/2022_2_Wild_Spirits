@@ -6,6 +6,8 @@
 #include "Storage.hpp"
 #include "PlayerCharacter.hpp"
 
+using ::testing::SizeIs;
+
 namespace DnD {
 class LocationSuite : public ::testing::Test {
  protected:
@@ -194,5 +196,16 @@ TEST_F(LocationSuite, ChangeLocations) {
 
     ASSERT_EQ(first_location.freeTiles(), expectedFreeTiles(first_location, first_occupied));
     ASSERT_EQ(second_location.freeTiles(), expectedFreeTiles(second_location, occupied_tiles));
+}
+
+TEST_F(LocationSuite, NPCsAreDeletedCorrectly) {
+    auto& location = map.locations().get(0);
+    auto status = location.createNPC(1, enemy, PositionFactory::create(Tile{0, 0}, Tile{0, 2}), map);
+    ASSERT_EQ(status, ErrorStatus::OK);
+
+    status = location.removeNPC(1);
+    ASSERT_EQ(status, ErrorStatus::OK);
+
+    ASSERT_THAT(location.freeTiles(), SizeIs(location.width() * location.height()));
 }
 }  // namespace DnD

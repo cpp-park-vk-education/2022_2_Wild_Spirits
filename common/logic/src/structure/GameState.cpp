@@ -5,6 +5,15 @@
 #include <sstream>
 
 namespace DnD {
+
+GameStateImpl::GameStateImpl(SharedStorage<NPC>&& npc, SharedStorage<Item>&& items,
+                             SharedStorage<ActivatableItem>&& activatables, SharedStorage<Weapon>&& weapons,
+                             SharedStorage<Spell>&& spells, SharedStorage<Armor>&& armor,
+                             SharedStorage<Race>&& races, SharedStorage<Class>&& classes, Config&& config) :
+    npc_(std::move(npc)), items_(std::move(items)), activatables_(std::move(activatables)),
+    weapons_(std::move(weapons)), spells_(std::move(spells)), armor_(std::move(armor)),
+    races_(std::move(races)), classes_(std::move(classes)), config_(std::move(config)) {}
+
 SharedStorage<NPC>& GameStateImpl::npc() {
     return npc_;
 }

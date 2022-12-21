@@ -11,6 +11,10 @@ Location::Location(size_t id, std::string_view name, size_t image_id,
                    size_t height, size_t width, const Info& info) :
         GameEntity(id, name, image_id, info), matrix_(width, height) {}
 
+Location::Location(size_t id, std::string_view name, size_t image_id,
+         size_t height, size_t width, SharedStorage<NPC_Instance>&& npc, const Info& info) :
+    GameEntity(id, name, image_id, info), npc_(std::move(npc)), matrix_(width, height) {}
+
 ErrorStatus Location::setCharacteristic(const std::string& which, const SetterParam& to) {
     auto status = GameEntity::setCharacteristic(which, to);
     if (status != ErrorStatus::INVALID_SETTER) {
@@ -89,8 +93,12 @@ bool Location::isInBounds(const Tile& tile) const {
     return tile.x < width() && tile.y < height();
 }
 
-std::tuple<Tile, ErrorStatus> Location::closestFreeTile(const OnLocation& obj, const Tile& tile) const {
+std::tuple<Tile, ErrorStatus> Location::closestFreeTile(const OnLocation& obj, const Tile& tile, bool same_location) {
     Tile old_pos = obj.mapPosition()[0];
+    if (same_location) {
+        freeTiles(obj.occupiedTiles());
+    }
+
     std::queue<Tile> queue;
 
     queue.push(tile);
@@ -103,6 +111,7 @@ std::tuple<Tile, ErrorStatus> Location::closestFreeTile(const OnLocation& obj, c
         obj.pos_->moveTo(cur);
         if (hasValidPosition(obj) == ErrorStatus::OK) {
             obj.pos_->moveTo(old_pos);
+            if (same_location) { occupyTiles(obj.occupiedTiles()); }
             return std::make_tuple(cur, ErrorStatus::OK);
         }
 
@@ -115,7 +124,20 @@ std::tuple<Tile, ErrorStatus> Location::closestFreeTile(const OnLocation& obj, c
     }
 
     obj.pos_->moveTo(old_pos);
+    if (same_location) { occupyTiles(obj.occupiedTiles()); }
     return std::make_tuple(Tile{}, ErrorStatus::NO_FREE_TILES);
+}
+
+void Location::freeTiles(const std::vector<Tile>& tiles) {
+    for (const auto& tile : tiles) {
+        matrix_.freeTile(tile);
+    }
+}
+
+void Location::occupyTiles(const std::vector<Tile>& tiles) {
+    for (const auto& tile : tiles) {
+        matrix_.occupyTile(tile);
+    }
 }
 
 std::vector<Tile> Location::freeTiles() const {
@@ -153,10 +175,20 @@ ErrorStatus Location::addObject(OnLocation& obj) {
         return status;
     }
 
-    for (const auto& tile : tiles) {
-        matrix_.occupyTile(tile);
+    occupyTiles(tiles);
+
+    return ErrorStatus::OK;
+}
+
+ErrorStatus Location::removeNPC(size_t id) {
+    auto character = npc_.safeGet(id);
+    if (!character) {
+        return ErrorStatus::NO_SUCH_ITEM;
     }
 
+    freeTiles(character->occupiedTiles());
+
+    npc_.remove(id);
     return ErrorStatus::OK;
 }
 
@@ -172,13 +204,8 @@ ErrorStatus Location::setPosition(OnLocation& obj, const Tile& pos) {
         return status;
     }
 
-    for (const auto& tile : old_tiles) {
-        matrix_.freeTile(tile);
-    }
-
-    for (const auto& tile : obj.occupiedTiles()) {
-        matrix_.occupyTile(tile);
-    }
+    freeTiles(old_tiles);
+    occupyTiles(obj.occupiedTiles());
 
     return ErrorStatus::OK;
 }

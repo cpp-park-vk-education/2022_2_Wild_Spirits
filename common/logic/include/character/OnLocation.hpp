@@ -58,9 +58,7 @@ class OnLocation : public Position {
         return pos_->centerPos();
     }
 
-    std::vector<Tile> occupiedTiles() const override {
-        return pos_->occupiedTiles();
-    }
+    std::vector<Tile> occupiedTiles() const override;
 
     ErrorStatus moveTo(const Tile& tile) override;
     ErrorStatus moveBy(int x, int y) override;

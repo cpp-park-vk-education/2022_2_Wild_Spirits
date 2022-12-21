@@ -49,17 +49,23 @@ class Location : public GameEntity {
     std::vector<Tile> getNextTiles(const Tile& tile) const;
     ErrorStatus transferToOtherLocation(OnLocation* obj, Location* other, Tile pos);
 
+    void freeTiles(const std::vector<Tile>& tiles);
+    void occupyTiles(const std::vector<Tile>& tiles);
+
  public:
     Location() = default;
 
     Location(size_t id, std::string_view name, size_t image_id,
              size_t height, size_t width, const Info& info = {});
 
+    Location(size_t id, std::string_view name, size_t image_id,
+             size_t height, size_t width, SharedStorage<NPC_Instance>&& npc, const Info& info = {});
+
     ErrorStatus setHeight(size_t height);
     ErrorStatus setWidth(size_t width);
     ErrorStatus setSize(size_t width, size_t height);
 
-    std::tuple<Tile, ErrorStatus> closestFreeTile(const OnLocation& obj, const Tile& tile) const;
+    std::tuple<Tile, ErrorStatus> closestFreeTile(const OnLocation& obj, const Tile& tile, bool same_location = false);
     ErrorStatus hasValidPosition(const OnLocation& obj) const;
     bool isInBounds(const Tile& tile) const;
 
@@ -78,6 +84,8 @@ class Location : public GameEntity {
 
     template <typename ...Args>
     ErrorStatus createNPC(size_t id, Args&&... args);
+
+    ErrorStatus removeNPC(size_t id);
 
     SharedStorage<NPC_Instance>& npc() {
         return npc_;
