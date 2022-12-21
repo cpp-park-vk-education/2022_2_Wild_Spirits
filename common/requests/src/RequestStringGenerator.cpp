@@ -6,7 +6,6 @@ std::string RequestStringGenerator::makeRequestString(std::unordered_map<std::st
     using nlohmann::json;
     std::string final_request;
 
-
     return final_request;
 }
 
@@ -16,7 +15,7 @@ RequestStringGenerator::RequestStringGenerator() {
 
 std::string RequestStringGenerator::makeRequestString(std::string change, std::string header) {
     using nlohmann::json;
-
-
-    return std::string();
+    json request;
+    request[header] = change;
+    return request.dump();
 }

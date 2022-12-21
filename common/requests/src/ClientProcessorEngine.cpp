@@ -27,3 +27,7 @@ bool ClientProcessorEngine::hasChanges() const {
     return parser -> has_changes();
 }
 
+string ClientProcessorEngine::getRequestString(std::string action_string, LM::Action::Type header) {
+
+}
+

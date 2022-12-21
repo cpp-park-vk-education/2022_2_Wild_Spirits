@@ -12,3 +12,12 @@ void ChangeGetter::load_collector(string change) {
 
 }
 
+nlohmann::json ChangeGetter::getChangedFields(nlohmann::json) {
+    nlohmann::json fields;
+    return fields;
+}
+
+
+
+
+

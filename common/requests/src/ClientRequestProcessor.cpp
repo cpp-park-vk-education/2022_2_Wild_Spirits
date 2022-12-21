@@ -24,20 +24,20 @@ bool ClientSideProcessor::acceptRequest(string request_string){
 }
 
 bool ClientSideProcessor::sendRequest(Client::Action action){
-
-    return SendChangesRequest(action);
-
+    return false;
 }
 
 std::string ClientSideProcessor::sendRequest(std::string request){
     bool state = true;
-    std::string buffer;
+    std::string response_buffer;
     std::function<void(bool)> handler = [&state](bool answer){
         state = answer;
     };
     connection ->SendReqeuest(request, handler);
-    return buffer;
+    return response_buffer;
 }
+
+
 
 bool ClientSideProcessor::sendRequest(Client::Request request) {
     bool state = true;
@@ -52,10 +52,6 @@ bool ClientSideProcessor::sendRequest(Client::Request request) {
     return state;
 }
 
-ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, unsigned int client_id) : _client_id(client_id), gamestate(gamestate),
-                                                                                              changer(*new GameStateChanger(gamestate)) {
-
-}
 
 bool ClientSideProcessor::getImage(std::string_view hash, std::shared_ptr<std::string> image_string_buffer) {
     bool state = true;
@@ -65,14 +61,23 @@ bool ClientSideProcessor::getImage(std::string_view hash, std::shared_ptr<std::s
 }
 
 //Internal methods
-bool ClientSideProcessor::SendChangesRequest(Client::Action action) {
+//bool ClientSideProcessor::SendChangesRequest(Client::Action action) {
+//
+//    bool state = true;
+////
+////    std::string action_string = engine.handler->actionString(action);
+//    Client::ActionType header = action.getType();
+//    std::function<void(bool)> handler = [&state](bool status){state = status;}; //TODO: Сделать коды ответа в handler
+////    connection -> SendReqeuest(engine.getRequestString(action_string, header), handler);
+//    return state;
+//}
+
+bool ClientSideProcessor::SendChangesRequest(LM::Action action) {
 
     bool state = true;
-
     std::string action_string = engine.handler->actionString(action);
-    Client::ActionType header = action.getType();
     std::function<void(bool)> handler = [&state](bool status){state = status;}; //TODO: Сделать коды ответа в handler
-    connection -> SendReqeuest(engine.getRequestString(action_string, header), handler);
+    connection -> SendReqeuest(engine.getRequestString(action_string, Header::action), handler);
     return state;
 }
 
@@ -131,6 +136,27 @@ bool ClientSideProcessor::checkUnappliedChanges() const {
 
 bool ClientSideProcessor::ConnectToRoom(Client::Room room) {
     return false;
+}
+
+bool ClientSideProcessor::isAuthorized() const {
+    return is_authorized;
+}
+
+bool ClientSideProcessor::Login(std::string, std::string password) {
+    return false;
+}
+
+bool ClientSideProcessor::Register(std::string login, std::string password) {
+    return false;
+}
+
+ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap &map, DnD::TurnOrder &order): gamestate(gamestate),
+                                                                                                               changer(gamestate), _map(map), _order(order) {
+
+}
+
+bool ClientSideProcessor::sendRequest(LM::Action action) {
+    return SendChangesRequest(action);
 }
 
 //ClientSideProcessor::ClientSideProcessor(Client::GameState &gamestate): is_connected(false), _client_id(), engine(), connection(), gamestate(gamestate),

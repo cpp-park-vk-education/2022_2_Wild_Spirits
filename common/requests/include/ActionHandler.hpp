@@ -1,28 +1,114 @@
-#include "ActionHandler.hpp"
-#include "Headers.hpp"
-#include "Action.hpp"
+#pragma once
+#include "client_interfaces.hpp"
+#include <deque>
+#include <string>
+#include "ActionCollector.hpp"
 #include "nlohmann/json.hpp"
+#include "Headers.hpp"
+#include "Actions/Actions.h"
+#include "Actions/MoveAction.h"
+#include "Actions/UseActions.h"
+#include "Effect.hpp"
 
 
-using nlohmann::json;
-string ActionHandler::actionString(Client::Action action){
-    std::string action_view;
-    json action_params;
+typedef std::deque<Client::Action> action_queue;
+typedef std::string string;
 
-    action_params["type"] = action.getType();
-    return action_params.dump();
-}
+struct TypeHandler;
 
-string ActionHandler::actionString(DnD::Action action){
+class ActionHandler{
+private:
+    action_queue actions;
+    std::vector<std::unique_ptr<TypeHandler>> handlers;
+public:
+    ActionHandler();
+    string actionString(LM::Action& action);
 
-    json action_params;
-    return action_params.dump();
-}
+    Client::ActionType actionHeader(Client::Action action);
 
-Client::ActionType ActionHandler::actionHeader(Client::Action action){
-    return action.getType();
-}
+    string actionString(DnD::Action action);
 
-ActionHandler::ActionHandler(): actions() {
+};
 
-}
+
+struct TypeHandler{
+    virtual bool CanHandle(LM::Action& action) = 0;
+    virtual std::string Handle(LM::Action& action) = 0;
+    virtual ~TypeHandler() {}
+};
+
+struct MoveHandler : TypeHandler{
+    bool CanHandle(LM::Action& action) override{
+        return action.getType() == LM::Action::Type::kMove;
+    }
+
+    std::string Handle(LM::Action& action) override{
+        nlohmann::json action_view;
+        action_view["type"] = "move";
+        action_view["X"] = dynamic_cast<LM::MoveAction&>(action).getTargetX();
+        action_view["Y"] = dynamic_cast<LM::MoveAction&>(action).getTargetY();
+        return action_view.dump();
+    }
+
+};
+
+struct WeaponHandler : TypeHandler{
+    bool CanHandle(LM::Action& action) override{
+        return action.getType() == LM::Action::Type::kUseWeapon;
+    }
+
+    std::string Handle(LM::Action& action) override{
+        nlohmann::json action_view;
+        action_view["type"] = "weapon";
+        action_view["id"] = 0; //ВСТАВИТЬ СЮДА get_id, когда появится этот метод в gamestate
+        action_view["target_x"] = dynamic_cast<LM::UseAction&>(action).getTargetX();
+        action_view["target_y"] = dynamic_cast<LM::UseAction&>(action).getTargetY();
+        return action_view.dump();
+    }
+
+};
+
+struct ConsumableHandler : TypeHandler{
+    bool CanHandle(LM::Action& action) override{
+        return action.getType() == LM::Action::Type::kUseConsumable;
+    }
+
+    std::string Handle(LM::Action& action) override{
+        nlohmann::json action_view;
+        action_view["type"] = "consumable";
+        action_view["id"] = 0;
+        action_view["target_x"] = dynamic_cast<LM::UseAction&>(action).getTargetX();
+        action_view["target_y"] = dynamic_cast<LM::UseAction&>(action).getTargetY();
+        return action_view.dump();
+    }
+};
+
+struct SkillHandler : TypeHandler{
+    bool CanHandle(LM::Action& action) override{
+        return action.getType() == LM::Action::Type::kUseSkill;
+    }
+
+    std::string Handle(LM::Action& action) override{
+        nlohmann::json action_view;
+        action_view["type"] = "skill";
+//        action_view["id"] = dynamic_cast<LM::UseAction&>(action).getActivatable().get_id();
+        action_view["target_x"] = dynamic_cast<LM::UseAction&>(action).getTargetX();
+        action_view["target_y"] = dynamic_cast<LM::UseAction&>(action).getTargetY();
+        return action_view.dump();
+    }
+};
+
+struct SpellHandler : TypeHandler{
+    bool CanHandle(LM::Action& action) override{
+        return action.getType() == LM::Action::Type::kUseSpell;
+    }
+
+    std::string Handle(LM::Action& action) override{
+        nlohmann::json action_view;
+        action_view["type"] = "spell";
+//        action_view["id"] = dynamic_cast<LM::UseAction&>(action).getActivatable().get_id();
+        action_view["target_x"] = dynamic_cast<LM::UseAction&>(action).getTargetX();
+        action_view["target_y"] = dynamic_cast<LM::UseAction&>(action).getTargetY();
+        return action_view.dump();
+    }
+};

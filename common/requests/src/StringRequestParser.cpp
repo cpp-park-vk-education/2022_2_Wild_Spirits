@@ -2,6 +2,8 @@
 #include "nlohmann/json.hpp"
 
 
+using nlohmann::json;
+
 std::string ClientRequestStringParser::get_next_change(){
     std::string final_request;
 
@@ -10,7 +12,7 @@ std::string ClientRequestStringParser::get_next_change(){
 
 queue ClientRequestStringParser::make_queue(std::string request_string){
     queue changes;
-
+    
 
     return changes;
 }

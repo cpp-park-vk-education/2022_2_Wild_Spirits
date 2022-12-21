@@ -1,6 +1,11 @@
 #pragma once
 #include <unordered_map>
+#include <memory>
 #include "RoomProcessorEngine.hpp"
+#include "sendaccept.hpp"
+#include "gateway_interfaces.hpp"
+
+
 
 class PlayerCharacters{
 private:
@@ -15,8 +20,9 @@ public:
 
 
 
-class RoomSideProcessor{
+class RoomSideProcessor : public RequestAcceptor{
 private:
+    std::shared_ptr<Gateway::Room> room_connection;
     RoomProcessorEngine engine;
     PlayerCharacters players;
     Room::GameLogicProcessor& room;
@@ -25,5 +31,6 @@ private:
     bool sendInstance(unsigned int user_id);
     bool broadcast(string request_string);
 public:
+    bool acceptRequest(std::string request_string) override;
     RoomSideProcessor(Room::GameLogicProcessor &room);
 };

@@ -4,6 +4,7 @@
 #include <tuple>
 #include <string>
 #include "nlohmann/json.hpp"
+#include <vector>
 
 #include "GameState.hpp"
 #include "Activatable.hpp"
@@ -25,58 +26,211 @@ using nlohmann::json;
 //PlayerCharacter(gainXP)
 //Skill (castCost)
 //Consumable (uses)
+
+struct ChangeHandler;
+
 class GameStateChanger{
 private:
     DnD::GameState &gamestate;
-    template <typename T>
+
+    std::vector<std::unique_ptr<ChangeHandler>> handlers;
+
     bool set_field(json changes){
-        bool state = true;
-        if (std::is_same_v<T, DnD::GameEntityInterface>() && changes.contains("name")\
-        && changes.contains("image")\
-        && changes.contains("info")){
 
-        }
-        else if (std::is_same_v<T, DnD::Activatable>() && changes.contains("cast_type")\
-        && changes.contains("scaling")\
-        && changes.contains("activation_cost")){
-
-        }
-        else if (std::is_same_v<T, DnD::Character>() && changes.contains("hp_max")\
-        && changes.contains("max_action_points")\
-        && changes.contains("base_armor_class")){
-
-        }
-        else if (std::is_same_v<T, DnD::CharacterInstance>() && changes.contains("action_points")\
-        && changes.contains("hp")\
-        && changes.contains("armor_class")\
-        && changes.contains("position")){
-
-        }
-        else if (std::is_same_v<T, DnD::NPC_Instance>() && changes.contains("hostile")){
-
-        }
-        else if (std::is_same_v<T, DnD::PlayerCharacter>() && changes.contains("XP")){
-
-        }
-        else if (std::is_same_v<T, DnD::Consumable>() && changes.contains("uses")){
-
-        }
-        else{
-            return state;
-        }
     }
+protected:
+
+
+//    friend ChangeHandler;
 public:
+
     GameStateChanger(DnD::GameState &gamestate);
     bool makechange(std::tuple<std::size_t ,std::string, std::string> setter_params);
     bool makechange(std::tuple<std::string, std::string> setter_params);
+    bool makechange(std::string request_part);
 };
 
-//std::unordered_map<std::string, > storage_table {
-//
-//};
-//
-//std::unordered_map<std::string, std::function<void(std::size_t, std::string)>> setters_table{
-//        {""}
-//};
+struct ChangeHandler{
+    virtual bool CanHandle(json changes) = 0;
+    virtual void SetField(json changes, DnD::GameState &changing_gamestate) = 0;
+    virtual ~ChangeHandler() {
+    }
+};
 
 
+//For GameEntityInterface setters
+struct ImageHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("image");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct NameHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("name");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct InfoHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("info");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+//For Activatable setters
+struct CastTypeHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("cast_type");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct ScalingHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("scaling");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct ActivationCostHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("activation_cost");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+//For Character setters
+struct HpMaxHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("hp_max");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct ApMaxHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("ap_max");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct BaseArmorHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("base_armor");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct StatsHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("stats");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+//For NPC setters
+struct SkillsHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("skills");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+//For CharacterInstance setters
+struct ApHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("ap");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct HpHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("hp");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct ArmorHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("armor");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+struct PositionHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("position");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+//For NPC_instance setters
+
+struct HostileHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("hostile");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+//For PlayerCharacter setters
+struct XPHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("gain_XP");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+//For Skill setters
+struct CastCostHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("cast_cost");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};
+
+//For Consumable setters
+
+struct UsesHandler : ChangeHandler{
+    bool CanHandle(json changes) override{
+        return changes.contains("uses");
+    }
+    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+
+    }
+};

@@ -1,10 +1,10 @@
 #pragma once
-
-
+#include <iostream>
+#include "Activatable.hpp"
 
 
 namespace Client{
-
+    class Room{};
     enum ActionType{
         kUseWeapon,
         kUseConsumable,
@@ -27,8 +27,13 @@ namespace Client{
 
 
     class Action{
+        std::size_t getX(); // useAction moveAction
+        std::size_t getY(); // useAction moveAction
+        DnD::Activatable& getActivatable(); //Activatable
+        
         ActionType _type;
     public:
+
         ActionType getType(){
             return  _type;
         }

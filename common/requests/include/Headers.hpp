@@ -8,7 +8,7 @@
 
 class HeaderException : public std::runtime_error{
 public:
-    HeaderException(const std::string& error): std::runtime_error(error.c_str()){
+    explicit HeaderException(const std::string& error): std::runtime_error(error.c_str()){
 
     }
 };
@@ -33,6 +33,7 @@ public:
             case apply_request:
                 return "RequestApply";
         }
+        return {};
     }
     Header operator() (const std::string& header_string){
         if(header_string == "Action"){
@@ -51,7 +52,7 @@ public:
             throw HeaderException("Invalid Header description");
         }
     }
-    Client::ActionType operator() (const std::string& action_header_string){
+    Client::ActionType getHeader(const std::string& action_header_string){
         if (action_header_string == "UseWeapon"){
             return Client::kUseWeapon;
         }
@@ -79,6 +80,7 @@ public:
             case Client::kUseSpell:
                 return "UseSpell";
         }
+        return {};
     }
 };
 
