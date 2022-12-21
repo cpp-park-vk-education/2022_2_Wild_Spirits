@@ -10,6 +10,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 option(BUILD_CLIENT "Build Client" ON)
 option(BUILD_SERVER "Build Server" ON)
+option(BUILD_LOGIC  "Build_Logic"  ON)
 
 include(FetchContent)
 
