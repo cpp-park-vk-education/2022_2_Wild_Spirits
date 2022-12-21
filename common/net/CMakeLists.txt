@@ -6,6 +6,7 @@ set(SOURCES src/Buffer.cpp
             src/WebSocketConnection.cpp
             src/EventLoop.cpp
             src/ClientConnection.cpp
+            src/Encoder.cpp
             )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

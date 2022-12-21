@@ -17,5 +17,5 @@ void UserConnectionImpl::on_recieve(std::string message) {
 }
 
 void UserConnectionImpl::processRequest(std::string request) {
-    user.getRoom()->broadcast(request);
+    user.getRoom()->processRequest(user.id(), request);
 }

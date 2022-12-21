@@ -1,5 +1,7 @@
 #include <Encoder.hpp>
 
+#include <iostream>
+
 std::string Base64Encoder::encode(const std::string& in) {
     std::string out;
 
@@ -32,12 +34,13 @@ std::string Base64Encoder::decode(const std::string& in) {
     int valb = -8;
     for (unsigned char c : in) {
         if (T[c] == -1) break;
-        val = (val << 6) + T[c];
+        val = (val << 6u) + T[c];
         valb += 6;
         if (valb >= 0) {
             out.push_back(static_cast<char>((val >> valb) & 0xFF));
             valb -= 8;
         }
     }
+
     return out;
 }

@@ -8,7 +8,7 @@ private:
     User* DM;
 
 public:
-    RoomImpl (User*, std::size_t);
+    RoomImpl (User*, std::size_t, Gateway&);
 
     virtual void addUser(User*) override;
 

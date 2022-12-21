@@ -17,6 +17,8 @@ public:
     BoostBuffer() = default;
     explicit BoostBuffer (const std::string&);
 
+    virtual ~BoostBuffer() {}
+
     virtual std::string data() override;
     virtual void setData(const std::string &) override;
 

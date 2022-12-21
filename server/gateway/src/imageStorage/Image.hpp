@@ -26,6 +26,8 @@ private:
 public:
     explicit LazyImage (const fs::path &path);
 
+    virtual ~LazyImage() {}
+
     static image_ptr_t saveImage(const fs::path &path, const std::string &data);
 
     virtual fs::path getPath() override;

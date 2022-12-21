@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+class Gateway;
+
 class User;
 
 class RequestProcessor {};
@@ -12,9 +14,10 @@ class Room {
 protected:
     std::size_t _id;
     RequestProcessor processor;
+    Gateway &gateway;
 
 public:
-    Room(std::size_t id): _id(id) {}
+    Room(std::size_t id, Gateway &gateway): _id(id), gateway(gateway) {}
 
     virtual void addUser(User*) = 0;
 

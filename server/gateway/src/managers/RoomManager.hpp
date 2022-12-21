@@ -4,6 +4,8 @@
 #include <RoomImpl.hpp>
 #include <Manager.hpp>
 
+class Gateway;
+
 class RoomManager: virtual public Manager<RoomImpl> {
 public:
     virtual Room &createRoom(User *dm) = 0;
@@ -11,10 +13,15 @@ public:
 };
 
 class RoomManagerImpl: public RoomManager, ManagerImpl<RoomImpl> {
+private:
+    Gateway &gateway;
+
 public:
+    RoomManagerImpl (Gateway &gateway): gateway(gateway) {}
+
     virtual Room &createRoom(User *dm) override {
         std::size_t id = id_assigner.assignId();
-        entities.emplace(id, RoomImpl(dm, id));
+        entities.emplace(id, RoomImpl(dm, id, gateway));
 
         return get(id);
     }

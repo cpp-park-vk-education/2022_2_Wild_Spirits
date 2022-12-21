@@ -1,5 +1,7 @@
 #include <ImageStorage.hpp>
 
+#include <iostream>
+
 ImageStorage::ImageStorage(const fs::path &dir_path): dir_path(dir_path) {
     if (!fs::exists(dir_path)) {
         fs::create_directory(dir_path);
@@ -20,6 +22,8 @@ std::string ImageStorage::saveImage(const std::string &data, const std::string &
     std::string hash = std::to_string(t) + "." + extension;
 
     fs::path path = dir_path / fs::path(hash);
+
+    std::cout << path.string() << std::endl;
 
     LazyImage::saveImage(path, data);
 

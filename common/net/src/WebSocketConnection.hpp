@@ -30,6 +30,8 @@ private:
 public:
     BoostWebSocketConnection(ws_ptr_t ws, buffer_ptr_t read_buffer, buffer_ptr_t write_buffer);
 
+    virtual ~BoostWebSocketConnection() {}
+
     virtual void async_read(read_handler_t) override;
     virtual void async_write(std::string, write_handler_t) override;
 

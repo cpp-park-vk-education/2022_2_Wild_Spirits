@@ -21,12 +21,6 @@ protected:
 public:
     ClientConnection(connection_ptr_t connection, recieve_handler_t handler):
         RecievingConnection(std::move(connection)), recieve_handler(handler) {}
-
-
-    // virtual void on_
-
-    // virtual void sendRequest (std::string request, handler_t handler) = 0;
-    // virtual void getImage (std::string path, handler_t handler) = 0;
 };
 
 class ClientConnectionImpl: public ClientConnection {
@@ -36,11 +30,10 @@ public:
     ClientConnectionImpl(connection_ptr_t connection, recieve_handler_t handler):
         ClientConnection(std::move(connection), handler) {}
 
+    virtual ~ClientConnectionImpl() {}
+
      static std::shared_ptr<ClientConnection> createConnection(const std::string &address_str,
                                                                u_int16_t port,
                                                                BoostEventLoop&,
                                                                recieve_handler_t);
-
-    // virtual void sendRequest (std::string request, handler_t handler) override;
-    // virtual void getImage (std::string path, handler_t handler) override;
 };

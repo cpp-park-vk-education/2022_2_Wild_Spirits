@@ -29,6 +29,9 @@ private:
     tcp::acceptor acceptor;
 public:
     AsioAcceptor(UserAuthorizer &authorizer, BoostEventLoop&, tcp::acceptor&&);
+    ~AsioAcceptor() {
+        acceptor.close();
+    }
 
     virtual void accept(acceptor_handler) override;
     void on_accept(beast::error_code, tcp::socket, acceptor_handler);

@@ -33,6 +33,8 @@ public:
     explicit BoostWebSocketStream (tcp::socket &&);
     explicit BoostWebSocketStream (BoostEventLoop&);
 
+    virtual ~BoostWebSocketStream() {}
+
     void async_read(BoostBuffer &, handler_t);
     void async_write(buffer_ptr_t, handler_t);
     void async_accept_handshake(handshake_handler_t);

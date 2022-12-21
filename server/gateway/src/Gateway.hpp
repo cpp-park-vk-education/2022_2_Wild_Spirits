@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <filesystem>
 
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
@@ -19,6 +20,7 @@
 namespace beast = boost::beast;
 namespace net = boost::asio;
 using tcp = boost::asio::ip::tcp;
+namespace fs = std::filesystem;
 
 struct Gateway {
     using connection_ptr_t = std::shared_ptr<UserConnection>;
@@ -35,7 +37,7 @@ struct Gateway {
     tcp::endpoint endpoint;
 
     Gateway(const std::string &ip, std::size_t port_num):
-        image_storage("media"), authorizer(user_manager), room_connector(room_manager) {
+        image_storage(fs::path("media")), authorizer(user_manager), room_manager(*this), room_connector(room_manager) {
         auto const address = net::ip::make_address(ip);
         auto const port = static_cast<u_int16_t>(port_num);
 

@@ -7,7 +7,6 @@ set(SOURCES src/user/UserConnectionImpl.cpp
             src/user/User.cpp
             src/room/RoomImpl.cpp
             src/room/RoomConnector.cpp
-            src/imageStorage/Encoder.cpp
             src/imageStorage/Image.cpp
             src/imageStorage/ImageStorage.cpp)
 
