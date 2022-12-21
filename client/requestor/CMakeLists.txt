@@ -11,7 +11,7 @@ set(SOURCES
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
 if (${BUILD_LOGIC})
-    add_compile_definitions(-DBUILD_LOGIC)
+    add_compile_definitions(BUILD_LOGIC)
 endif()
 
 add_library(${PROJECT_NAME} STATIC)
