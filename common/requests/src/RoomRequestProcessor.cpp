@@ -23,13 +23,19 @@ bool RoomSideProcessor::sendDM(string request_string){
 
 bool RoomSideProcessor::sendInstance(unsigned int user_id){
     bool state = true;
-
+    room_connection -> sendUser(user_id, )
     return state;
 }
 
 bool RoomSideProcessor::broadcast(string request_string){
     bool state = true;
     room_connection ->broadcast(request_string);
+    return state;
+}
+
+bool RoomSideProcessor::broadcast() {
+    bool state = true;
+    room_connection -> broadcast()
     return state;
 }
 
@@ -42,6 +48,7 @@ bool RoomSideProcessor::acceptRequest(std::string request_string){
     HeaderSerial deserializer;
     json request = engine.parse(request_string);
     if(deserializer(std::string(request["header"])) == Header::action){
-        sendDM(engine.getChanges(request).dump());
+        sendDM(engine.Gen().makeRequestString(engine.getChanges(request).dump(), deserializer(Header::room_changes)));
     }
+    if(deserializer(std::string(request["header"])))
 }

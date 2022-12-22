@@ -24,7 +24,7 @@ bool ClientSideProcessor::acceptRequest(string request_string){
 }
 
 bool ClientSideProcessor::sendRequest(LM::Action action){
-    return false;
+    return SendChangesRequest(action);
 }
 
 std::string ClientSideProcessor::sendRequest(std::string request){
@@ -39,18 +39,6 @@ std::string ClientSideProcessor::sendRequest(std::string request){
 
 
 
-bool ClientSideProcessor::sendRequest(Client::Request request) {
-    bool state = true;
-    switch(request.getType()){
-        case Client::Connect:
-
-            break;
-        case Client::LoadGameState:
-
-            break;
-    }
-    return state;
-}
 
 
 bool ClientSideProcessor::getImage(std::string_view hash, std::shared_ptr<std::string> image_string_buffer) {
@@ -61,16 +49,6 @@ bool ClientSideProcessor::getImage(std::string_view hash, std::shared_ptr<std::s
 }
 
 //Internal methods
-//bool ClientSideProcessor::SendChangesRequest(Client::Action action) {
-//
-//    bool state = true;
-////
-////    std::string action_string = engine.handler->actionString(action);
-//    Client::ActionType header = action.getType();
-//    std::function<void(bool)> handler = [&state](bool status){state = status;}; //TODO: Сделать коды ответа в handler
-////    connection -> SendReqeuest(engine.getRequestString(action_string, header), handler);
-//    return state;
-//}
 
 bool ClientSideProcessor::SendChangesRequest(LM::Action action) {
 

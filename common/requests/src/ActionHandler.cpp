@@ -15,12 +15,6 @@ string ActionHandler::actionString(LM::Action& action){
     throw std::runtime_error("Invalid Action");
 }
 
-string ActionHandler::actionString(DnD::Action action){
-
-    json action_params;
-
-    return action_params.dump();
-}
 
 Client::ActionType ActionHandler::actionHeader(Client::Action action){
     return action.getType();
