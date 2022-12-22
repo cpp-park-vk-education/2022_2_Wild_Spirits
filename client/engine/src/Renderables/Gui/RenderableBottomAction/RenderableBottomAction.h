@@ -21,7 +21,7 @@ namespace LM {
         bool isFocused() const { return m_IsFocused; }
 
     protected:
-        DnD::Activatable& m_Activatable;
+        DnD::ActivatableInterface& m_Activatable;
         const Action::Type m_Type;
 
         bool m_IsFocused = false;

@@ -6,6 +6,7 @@
 #include "nlohmann/json.hpp"
 #include "Tile.hpp"
 
+#include <GameState.hpp>
 
 typedef std::deque<std::tuple<string, string>> change_queue;
 
@@ -27,9 +28,9 @@ private:
 
 
 public:
-    ChangeGetter(ChangeCollector &collector, DnD::LogicProcessor &gameState);
+    ChangeGetter(ChangeCollector &collector, DnD::LogicProcessor &gameState, DnD::GameMap &gameMap);
     explicit ChangeGetter(DnD::LogicProcessor &gameState);
-    ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap &game_map);
+    // ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap &game_map);
     std::string getChangedFields(nlohmann::json);
     void load_collector(string change);
     std::string getInstance();
@@ -53,7 +54,7 @@ struct NPCLoader : InstanceLoader{
             single_instance["max_hp"] = npc_instance.maxHP();
             single_instance["exp"] = npc_instance.exp();
             single_instance["ap"] = npc_instance.maxActionPoints();
-            npc_instance.push_back(single_instance);
+            npcInstance.push_back(single_instance);
         };
         game_state.npc().each(load_handler);
         instance_object["npc"] = npcInstance;
@@ -70,7 +71,7 @@ struct allCharactersLoader : InstanceLoader{
             single_instance["name"] = character_instance ->name();
             single_instance["image"] = character_instance ->getImageId();
             single_instance["max_hp"] = character_instance ->maxHP();
-            single_instance["exp"] = character_instance ->exp();
+            // single_instance["exp"] = character_instance ->exp();
             single_instance["ap"] = character_instance ->maxActionPoints();
             allCharactersInstance.push_back(single_instance);
         };
@@ -106,12 +107,12 @@ struct activatableItemsLoader : InstanceLoader{
             single_instance["id"] = item_instance.id();
             single_instance["name"] = item_instance.name();
             single_instance["image"] = item_instance.getImageId();
-            std::vector<DnD::Action> item_actions = item_instance.actions();
-            for(DnD::Action& action : item_actions){
-                std::stringstream ss;
-                ss << action;
-                single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
-            }
+            // std::vector<DnD::Action> item_actions = item_instance.actions();
+            // for(DnD::Action& action : item_actions){
+            //     std::stringstream ss;
+            //     ss << action;
+            //     single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
+            // }
             single_instance["action_cost"] = item_instance.activateCost();
             single_instance["cost"] = item_instance.cost();
             activatableItemsInstance.push_back(single_instance);
@@ -129,17 +130,15 @@ struct weaponsLoader : InstanceLoader{
             single_instance["id"] = item_instance.id();
             single_instance["name"] = item_instance.name();
             single_instance["image"] = item_instance.getImageId();
-            std::vector<DnD::Action> item_actions = item_instance.actions();
-            for(DnD::Action& action : item_actions){
-                std::stringstream ss;
-                ss << action;
-                single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
-            }
+            // std::vector<DnD::Action> item_actions = item_instance.actions();
+            // for(DnD::Action& action : item_actions){
+            //     single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
+            // }
             single_instance["action_cost"] = item_instance.activateCost();
             single_instance["scaling"] = item_instance.scalesBy();
             weaponsInstance.push_back(single_instance);
         };
-        game_state.activatableItems().each(load_handler);
+        game_state.weapons().each(load_handler);
         instance_object["weapons"] = weaponsInstance;
     }
 };
@@ -153,18 +152,18 @@ struct spellsLoader : InstanceLoader{
             single_instance["id"] = spell_instance.id();
             single_instance["name"] = spell_instance.name();
             single_instance["image"] = spell_instance.getImageId();
-            std::vector<DnD::Action> item_actions = spell_instance.actions();
-            for(DnD::Action& action : item_actions){
-                std::stringstream ss;
-                ss << action;
-                single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
-            }
+            // std::vector<DnD::Action> item_actions = spell_instance.actions();
+            // for(DnD::Action& action : item_actions){
+            //     std::stringstream ss;
+            //     ss << action;
+            //     single_instance["actions"].push_back(nlohmann::json::parse(ss.str()));
+            // }
             single_instance["spell_cost"] = spell_instance.cost();
             single_instance["action_cost"] = spell_instance.activateCost();
             single_instance["scaling"] = spell_instance.scalesBy();
             spellsInstance.push_back(single_instance);
         };
-        game_state.activatableItems().each(load_handler);
+        game_state.spells().each(load_handler);
         instance_object["spells"] = spellsInstance;
     }
 };
@@ -182,7 +181,7 @@ struct armorLoader : InstanceLoader{
             single_instance["cost"] = armor_instance.cost();
             armorInstance.push_back(single_instance);
         };
-        game_state.activatableItems().each(load_handler);
+        game_state.armor().each(load_handler);
         instance_object["armor"] = armorInstance;
     }
 };
@@ -222,7 +221,7 @@ struct WeaponHandler : ChangeHandler{
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
         DnD::Tile target_tile(request["target_x"], request["target_y"]);
-        ss << logic_processor.useActivatable(request["player_id"], request["type"], request["id"], std::vector<DnD::Tile>());
+        ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }
 
@@ -236,7 +235,7 @@ struct ConsumableHandler : ChangeHandler{
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
         DnD::Tile target_tile(request["target_x"], request["target_y"]);
-        ss << logic_processor.useActivatable(request["player_id"], request["type"], request["id"], std::vector<DnD::Tile>());
+        ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }
 };
@@ -249,7 +248,7 @@ struct SkillHandler : ChangeHandler{
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
         DnD::Tile target_tile(request["target_x"], request["target_y"]);
-        ss << logic_processor.useActivatable(request["player_id"], request["type"], request["id"], std::vector<DnD::Tile>());
+        ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }
 };

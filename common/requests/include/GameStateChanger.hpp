@@ -43,7 +43,7 @@ protected:
 //    friend ChangeHandler;
 public:
 
-    GameStateChanger(DnD::GameState &gamestate);
+    GameStateChanger(DnD::GameState &gamestate, DnD::GameMap &game_map);
     bool makechange(std::tuple<std::size_t ,std::string, std::string> setter_params);
     bool makechange(std::tuple<std::string, std::string> setter_params);
     bool makechange(std::string request_part);
@@ -192,7 +192,7 @@ struct PositionHandler : ChangeHandler{
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
         DnD::Tile new_position(changes["x"], changes["y"]);
-        game_map.allCharacters().get(changes["id"]).moveTo(new_position);
+        game_map.allCharacters().get(changes["id"])->moveTo(new_position);
     }
 };
 //For NPC_instance setters

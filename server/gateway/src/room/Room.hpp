@@ -8,39 +8,9 @@ class Gateway;
 
 class User;
 
-#ifdef BUILD_LOGIC
-    #include <GameState.hpp>
-    #include <RoomRequestProcessor.hpp>
-#else
-namespace DnD {
-    class LogicProcessor {
-
-    };
-
-    class DemoLogicProcessor: public LogicProcessor {
-
-    };
-
-    class GameMap {
-
-    };
-
-    class DemoGameMap: public GameMap {
-    public:
-        DemoGameMap(LogicProcessor &p) {}
-    };
-};
-
-class Room;
-
-class RoomSideProcessor {
-public:
-    RoomSideProcessor(Room &room, DnD::LogicProcessor &p) {}
-    bool acceptRequest(std::string request_string) {
-        
-    }
-};
-#endif
+// #include <GameState.hpp>
+#include <RoomRequestProcessor.hpp>
+#include <Demo.hpp>
 
 class Room {
 protected:

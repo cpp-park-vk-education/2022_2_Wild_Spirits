@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <unordered_map>
 
+#include <Actions/Action.h>
 
 class HeaderException : public std::runtime_error{
 public:
@@ -51,32 +52,32 @@ public:
             throw HeaderException("Invalid Header description");
         }
     }
-    LM::ActionType getHeader(const std::string& action_header_string){
+    LM::Action::Type getHeader(const std::string& action_header_string){
         if (action_header_string == "UseWeapon"){
-            return LM::kUseWeapon;
+            return LM::Action::Type::kUseWeapon;
         }
         else if(action_header_string == "UseConsumable"){
-            return LM::kUseConsumable;
+            return LM::Action::Type::kUseConsumable;
         }
         else if(action_header_string == "UseSkill"){
-            return LM::kUseSkill;
+            return LM::Action::Type::kUseSkill;
         }
         else if(action_header_string == "UseSpell"){
-            return LM::kUseSpell;
+            return LM::Action::Type::kUseSpell;
         }
         else{
             throw HeaderException("Invalid Header description");
         }
     }
-    std::string operator() (LM::ActionType type){
+    std::string operator() (LM::Action::Type type){
         switch (type) {
-            case LM::kUseWeapon:
+            case LM::Action::Type::kUseWeapon:
                 return "UseWeapon";
-            case LM::kUseConsumable:
+            case LM::Action::Type::kUseConsumable:
                 return "UseConsumable";
-            case LM::kUseSkill:
+            case LM::Action::Type::kUseSkill:
                 return "UseSkill";
-            case LM::kUseSpell:
+            case LM::Action::Type::kUseSpell:
                 return "UseSpell";
         }
         return {};

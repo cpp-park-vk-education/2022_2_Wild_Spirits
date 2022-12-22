@@ -11,6 +11,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE dnd-gateway)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE pqxx)
 target_link_libraries(${PROJECT_NAME} PRIVATE dnd-net)
-target_link_libraries(${PROJECT_NAME} PRIVATE dnd-db)
+target_link_libraries(${PROJECT_NAME} PRIVATE dnd-db dnd-logic request-processor)
 
 add_subdirectory(tests)

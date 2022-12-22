@@ -19,4 +19,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src
                                                   ${PROJECT_SOURCE_DIR}/src/managers
                                                   ${PROJECT_SOURCE_DIR}/src/imageStorage)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dnd-net dnd-db dnd-room)
+target_link_libraries(${PROJECT_NAME} PRIVATE dnd-net dnd-db dnd-room dnd-logic request-processor)

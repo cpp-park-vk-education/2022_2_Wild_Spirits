@@ -6,6 +6,10 @@
 #include "GameStateChanger.hpp"
 #include "ClientInterLayer.hpp"
 #include "TurnOrder.hpp"
+
+#include <EventLoop.hpp>
+#include <ClientConnection.hpp>
+#include <Classes/Room.h>
 //TODO: При создании комнаты установить на сервере id клиента как DM
 //TODO: Connection должен возвращать id комнаты, как и getROoms
 
@@ -26,8 +30,7 @@ public:
     ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap& map, DnD::TurnOrder& order);
     ClientSideProcessor(DnD::GameState &gamestate, unsigned int client_id);
 
-    bool sendRequest(LM::Action action) override;
-    bool sendRequest(LM::Action action);
+    bool sendRequest(LM::Action &action);
     std::string sendRequest(std::string request);
     bool getImage(std::string_view hash, std::shared_ptr<std::string>);
     bool acceptRequest(string request_string) override;
@@ -53,7 +56,7 @@ private:
     InterlayerBuffer buffer;
     DnD::GameMap& _map;
     DnD::TurnOrder& _order;
-    bool SendChangesRequest(LM::Action action);
+    bool SendChangesRequest(LM::Action &action);
     bool ApplyChanges(string changes);
     std::string_view ImageRequest(std::string_view image_hash);
     Header getHeader(std::string request);

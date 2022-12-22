@@ -23,7 +23,7 @@ public:
     ActionHandler();
     string actionString(LM::Action& action);
 
-    LM::ActionType actionHeader(LM::Action action);
+    LM::Action::Type actionHeader(LM::Action &action);
 
     string actionString(DnD::Action action);
 

@@ -16,11 +16,11 @@ namespace LM {
         m_Window->setEventCallback(m_EventQueue);
 
 #ifdef BUILD_LOGIC
-        m_GameState = CreateRef<GameStateImpl>();
-        m_GameMap = CreateRef<GameMapImpl>(*m_GameState);
-        m_TurnOrder = CreateRef<TurnOrder>(*m_GameState, m_GameMap);
+        m_GameState = CreateRef<DnD::GameStateImpl>();
+        m_GameMap = CreateRef<DnD::GameMapImpl>(*m_GameState);
+        m_TurnOrder = CreateRef<DnD::TurnOrder>(*m_GameState, m_GameMap);
         m_ClientSideProcessor = CreateRef<ClientSideProcessor>(*m_GameState, m_GameMap, m_TurnOrder);
-        m_ClientSideProcessor->connect("ip", "port");
+        m_ClientSideProcessor->Connection("ip", "port");
 #endif
 
         s_Instance = this;

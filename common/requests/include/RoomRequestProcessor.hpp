@@ -4,6 +4,9 @@
 #include "RoomProcessorEngine.hpp"
 #include "sendaccept.hpp"
 
+// #include <Room.hpp>
+
+class Room;
 
 
 class PlayerCharacters{
@@ -17,11 +20,9 @@ public:
     
 };
 
-
-
 class RoomSideProcessor : public RequestAcceptor{
 private:
-    Room& room_connection;
+    Room &room_connection;
     RoomProcessorEngine engine;
     PlayerCharacters players;
     DnD::LogicProcessor& room;
@@ -32,5 +33,5 @@ private:
     bool broadcast();
 public:
     bool acceptRequest(std::string request_string) override;
-    RoomSideProcessor(DnD::LogicProcessor &room);
+    RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room);
 };

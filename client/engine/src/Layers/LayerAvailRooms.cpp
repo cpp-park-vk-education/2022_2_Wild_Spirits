@@ -16,7 +16,7 @@ namespace LM {
 
     void LayerAvailRooms::goToRoom(size_t roomId) {
 #ifdef BUILD_LOGIC
-        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[roomId].getId())) {
+        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[roomId])) {
             Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[roomId]));
             Application::get()->removeLayer(this);
             return;

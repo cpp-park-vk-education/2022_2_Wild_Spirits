@@ -1,7 +1,7 @@
 #include "ActionHandler.hpp"
 #include "Headers.hpp"
 #include "Action.hpp"
-#include "Actions/Action.h"
+#include <Actions/Action.h>
 #include "nlohmann/json.hpp"
 
 
@@ -16,7 +16,7 @@ string ActionHandler::actionString(LM::Action& action){
 }
 
 
-Client::ActionType ActionHandler::actionHeader(Client::Action action){
+LM::Action::Type ActionHandler::actionHeader(LM::Action &action){
     return action.getType();
 }
 

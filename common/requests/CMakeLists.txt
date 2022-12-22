@@ -21,7 +21,7 @@ find_package(nlohmann_json 3.11.1 REQUIRED)
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} GTest::gmock_main nlohmann_json::nlohmann_json
-        dnd-logic ClientRequestor)
+        dnd-logic ClientRequestor dnd-net dnd-gateway)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/include
@@ -31,7 +31,3 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_SOURCE_DIR}/logic/activatable
 )
 
-
-
-
-add_subdirectory(tests)

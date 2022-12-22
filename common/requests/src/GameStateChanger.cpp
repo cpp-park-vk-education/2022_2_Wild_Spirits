@@ -1,10 +1,9 @@
 #include "GameStateChanger.hpp"
 #include <memory>
 
+#include <Demo.hpp>
 
-
-
-GameStateChanger::GameStateChanger(DnD::GameState &gamestate) : gamestate(gamestate), handlers() {
+GameStateChanger::GameStateChanger(DnD::GameState &_gamestate, DnD::GameMap &game_map) : gamestate(_gamestate), handlers(), game_map(game_map) {
     handlers.push_back(std::make_unique<ImageHandler>());
     handlers.push_back(std::make_unique<NameHandler>());
     handlers.push_back(std::make_unique<InfoHandler>());
@@ -30,7 +29,7 @@ GameStateChanger::GameStateChanger(DnD::GameState &gamestate) : gamestate(gamest
 bool GameStateChanger::makechange(nlohmann::json request_part) {
     for(std::unique_ptr<ChangeHandler>& handler : handlers){
         if(handler ->CanHandle(request_part)){
-            handler ->SetField(request_part, gamestate);
+            handler ->SetField(request_part, gamestate, game_map);
         }
     }
 }

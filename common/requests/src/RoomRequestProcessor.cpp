@@ -2,6 +2,8 @@
 #include "nlohmann/json.hpp"
 #include "Headers.hpp"
 
+#include <Room.hpp>
+
 
 std::string PlayerCharacters::getPlayerName(unsigned int id){
     return player_table[id];
@@ -17,31 +19,29 @@ PlayerCharacters::PlayerCharacters(): player_table(), id_table() {
 
 bool RoomSideProcessor::sendDM(string request_string){
     bool state = true;
-    room_connection ->sendDM(request_string);
+    room_connection.sendDM(request_string);
     return state;
 }
 
 bool RoomSideProcessor::sendInstance(unsigned int user_id){
     bool state = true;
-    room_connection -> sendUser(user_id, )
+    room_connection.sendUser(user_id, engine.getInstance());
     return state;
 }
 
 bool RoomSideProcessor::broadcast(string request_string){
     bool state = true;
-    room_connection ->broadcast(request_string);
+    room_connection.broadcast(request_string);
     return state;
 }
 
 bool RoomSideProcessor::broadcast() {
     bool state = true;
-    room_connection -> broadcast()
+    room_connection.broadcast(engine.getInstance());
     return state;
 }
 
-RoomSideProcessor::RoomSideProcessor(DnD::LogicProcessor &room) : engine(room), room(room) {
-
-}
+RoomSideProcessor::RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room): room_connection(room_connection), room(room), engine(room) {}
 
 bool RoomSideProcessor::acceptRequest(std::string request_string){
     using nlohmann::json;
@@ -50,5 +50,4 @@ bool RoomSideProcessor::acceptRequest(std::string request_string){
     if(deserializer(std::string(request["header"])) == Header::action){
         sendDM(engine.Gen().makeRequestString(engine.getChanges(request).dump(), deserializer(Header::room_changes)));
     }
-    if(deserializer(std::string(request["header"])))
 }

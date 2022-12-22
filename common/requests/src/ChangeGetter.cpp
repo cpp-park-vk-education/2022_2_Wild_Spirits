@@ -37,30 +37,22 @@ std::string ChangeGetter::getChangedFields(nlohmann::json request_part) {
     }
 }
 
-
-
 std::string ChangeGetter::getInstance(){
     using nlohmann::json;
     json instance_object;
     NPCLoader npc_loader;
-    npc_loader(game_state, instance_object);
+    npc_loader.Load(game_state, instance_object);
     activatableItemsLoader ai_loader;
-    ai_loader(game_state, instance_object);
+    ai_loader.Load(game_state, instance_object);
     allCharactersLoader char_loader;
-    char_loader(game_state, instance_object);
+    char_loader.Load(game_state, instance_object);
     itemsLoader items_loader;
-    items_loader(game_state, instance_object);
+    items_loader.Load(game_state, instance_object);
     weaponsLoader weapons_Loader;
-    weapons_Loader(game_state, instance_object);
+    weapons_Loader.Load(game_state, instance_object);
     spellsLoader spells_loader;
-    spells_Loader(game_state, instance_object);
+    spells_loader.Load(game_state, instance_object);
     armorLoader armor_loader;
-    armor_loader(game_state, instance_object);
+    armor_loader.Load(game_state, instance_object);
     return instance_object.dump();
 }
-
-ChangeGetter::ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap &game_map): game_state(gameState), game_map(game_map) {
-
-}
-
-

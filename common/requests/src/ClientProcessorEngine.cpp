@@ -2,7 +2,7 @@
 #include "Headers.hpp"
 
 
-string ClientProcessorEngine::getRequestString(std::string action_string, LM::ActionType header) {
+string ClientProcessorEngine::getRequestString(std::string action_string, LM::Action::Type header) {
     std::string final_request;
     HeaderSerial serializer;
     final_request = generator -> makeRequestString(action_string ,serializer(header));
@@ -25,9 +25,5 @@ string ClientProcessorEngine::getRequestString(std::string request_string, Heade
 
 bool ClientProcessorEngine::hasChanges() const {
     return parser -> has_changes();
-}
-
-string ClientProcessorEngine::getRequestString(std::string action_string, LM::Action::Type header) {
-
 }
 

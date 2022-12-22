@@ -99,15 +99,15 @@ namespace LM {
 
     void LayerLocation::renderImGui() {
 #ifdef BUILD_LOGIC
-        if (m_IsUserCreator && Application::get()->getClientSideProcessor()->checkUnappliedChangesOfDM()) {
-            if (ImGui::Begin("New Changes")) {
-                auto& changes = Application::get()->getClientSideProcessor()->getChangesDM();
-                for (auto& change : changes) {
-                    ImGui::DragScalar(change.name.data(), ImGuiDataType_U64, &change.value);
-                }
-            }
-            ImGui::End();
-        }
+        // if (m_IsUserCreator && Application::get()->getClientSideProcessor()->checkUnappliedChanges()) {
+        //     if (ImGui::Begin("New Changes")) {
+        //         auto& changes = Application::get()->getClientSideProcessor()->getChanges();
+        //         for (auto& change : changes) {
+        //             ImGui::DragScalar(change.name.data(), ImGuiDataType_U64, &change.value);
+        //         }
+        //     }
+        //     ImGui::End();
+        // }
 
 #else
         if (m_IsUserCreator && ImGui::Begin("New Changes")) {
@@ -146,7 +146,7 @@ namespace LM {
     void LayerLocation::tryLoadImage(size_t id) {
         if (!m_TextureManager->has(id)) {
             std::shared_ptr<std::string> imgSource = std::make_shared<std::string>();
-            if (Application::get()->getClientSideProcessor()->getImage(id, imgSource)) {
+            if (Application::get()->getClientSideProcessor()->getImage(std::to_string(id), imgSource)) {
                 m_TextureManager->add(id, CreateRef<Texture2D>(FromSource { *imgSource }));
             }
         }
@@ -167,14 +167,14 @@ namespace LM {
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
         Ref<DnD::PlayerCharacter> player = Application::get()->getClientSideProcessor()->getCurrentPlayer();
         loadActivatable(player->weapons());
-        loadActivatable(player->spels());
+        loadActivatable(player->spells());
         loadActivatable(player->skills());
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
 
         Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
 
-        DnD::Loation& location = gameMap->currentLocation();
+        DnD::Location& location = gameMap->currentLocation();
         glm::uvec2 fieldSize = glm::uvec2(location.width(), location.height());
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
@@ -188,8 +188,8 @@ namespace LM {
             m_Field->addCharacter(renderable);
         }
         auto& characters = gameMap->players();
-        for (auto& character : characters) {
-            tryLoadImage(character->getImageId());
+        for (auto &[_, character] : characters) {
+            tryLoadImage(character->original().getImageId());
             Ref<RenderableCharacter> renderable =
                 CreateRef<RenderableCharacter>(m_TextureManager->get(character->getImageId()), Color(),
                                                glm::uvec2(character.posX(), character.posY()));
