@@ -45,7 +45,7 @@ void RoomConnector::createRoom(connection_t connection, connection_handler_t han
     Room &room = room_manager.createRoom(&connection->get_user());
     connection->get_user().setRoom(&room);
 
-    connection->async_write("room_id:" + std::to_string(room.id()), [connection, handler](){
+    connection->async_write("room_id:" + std::to_string(room.id()), [connection, handler](bool status){
         handler(connection);
     });
 }
@@ -62,21 +62,21 @@ void RoomConnector::connectToRoom(std::size_t room_id,
     connection->get_user().connectToRoom(&room);
 
     connection->async_write("connected to room with id:" + std::to_string(room_id),
-                            [connection, handler](){
+                            [connection, handler](bool status){
                                 handler(connection);
                             });
 }
 
 void RoomConnector::onWrongFormat(connection_t connection, connection_handler_t handler) {
     connection->async_write("Room connection error: wrong format",
-        [this, connection, handler](){
+        [this, connection, handler](bool status){
             processRequest(connection, handler);
     });
 }
 
 void RoomConnector::onWrongRoomId(std::size_t room_id, connection_t connection, connection_handler_t handler) {
     connection->async_write("Room with id " + std::to_string(room_id) + " does not exist",
-        [this, connection, handler](){
+        [this, connection, handler](bool status){
             processRequest(connection, handler);
     });
 }

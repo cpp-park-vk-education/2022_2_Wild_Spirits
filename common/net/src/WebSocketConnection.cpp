@@ -8,13 +8,16 @@ void BoostWebSocketConnection::clearBuffer() {
     write_buffer->clear();
 }
 
+#include <iostream>
+
 void BoostWebSocketConnection::async_read(read_handler_t handler) {
     ws->async_read(*read_buffer, [handler, this](beast::error_code ec, std::size_t bytes_read) {
-        if (ec == beast::websocket::error::closed) {
+        if (ec == beast::websocket::error::closed || ec == boost::asio::error::eof) {
             return;
         }
         std::string message = read_buffer->data();
         read_buffer->clear();
+
         handler(message);
     });
 }
@@ -23,12 +26,12 @@ void BoostWebSocketConnection::async_write(std::string message, write_handler_t 
     write_buffer->setData(message);
     ws->async_write(write_buffer, [this, handler](beast::error_code ec, std::size_t bytes) {
         if (ec == beast::websocket::error::closed) {
+            handler(false);
             return;
         }
 
         write_buffer->clear();
-
-        handler();
+        handler(true);
     });
 }
 
@@ -52,8 +55,8 @@ void RecievingConnection::async_read(read_handler_t handler) {
 }
 
 void RecievingConnection::async_write(std::string message, write_handler_t handler) {
-    connection->async_write(message, [handler](){
-        handler();
+    connection->async_write(message, [handler](bool status){
+        handler(status);
     });
 }
 

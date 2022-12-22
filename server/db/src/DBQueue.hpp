@@ -1,54 +1,75 @@
 #pragma once
 
-#include <boost/asio.hpp>
 #include <pqxx/pqxx>
-#include <functional>
-#include <string>
 
-using get_db_handler = std::function<void(pqxx::result)>;
-using create_db_handler = std::function<void(std::size_t)>;
+#include <string>
+#include <functional>
+
+#include <Table.hpp>
+
+class ImagesTable: public Table<"images", Column<"path", std::string>> {};
+
+class CharactersTable: public Table<"Characters",
+                               Column<"name", std::string>,
+                               Column<"max_hp", int>,
+                               Column<"image_id", int>,
+                               Column<"meta_information", std::string>> {};
+
+class CharacterInstancesTable: public Table<"characterinstances", 
+                                            Column<"character_id", int>,
+                                            Column<"hp", int>,
+                                            Column<"location_id", int>,
+                                            Column<"pos_x", int>,
+                                            Column<"pos_y", int>> {};
+
+class CampaginsTable: public Table<"campaigns",
+                                   Column<"name", std::string>,
+                                   Column<"description", std::optional<std::string>>> {};
+
+
+class RoomsTable: public Table<"rooms",
+                                Column<"DM_id", int>,
+                                Column<"capaign_id", int>> {};
+
+class UserRoomMapTable: public Table<"userroommap",
+                                Column<"user_id", int>,
+                                Column<"room_id", int>> {};
+
+class LocationsTable: public Table<"locations",
+                                    Column<"campaign_id", int>,
+                                    Column<"name", std::string>,
+                                    Column<"background_image_id", int>,
+                                    Column<"size_x", int>,
+                                    Column<"size_y", int>> {};
+
+class PlayersTable: public Table<"players",
+                                Column<"character_instance_id", int>,
+                                Column<"campaign_id", int>,
+                                Column<"race", std::string>,
+                                Column<"class", std::string>> {};
+
+class ItemsTable: public Table<"items",
+                                Column<"name", std::string>,
+                                Column<"type", std::string>,
+                                Column<"effect", std::string>> {};
+
+class ItemStatesTable: public Table<"itemstates", Column<"json", std::string>> {};
+
+class InventoriesTable: public Table<"inventories",
+                                    Column<"character_instance_id", int>,
+                                    Column<"item_id", int>> {};
+
+class UsersTable: public Table<"users",
+                                Column<"nickname", std::string>,
+                                Column<"password_hash", std::string>> {};
 
 class DBQueue {
-public:
-    virtual void getUser (std::string name, get_db_handler) = 0;
-    virtual void createUser (std::string name, std::string password, create_db_handler) = 0;
-
-    virtual void getCharacter (std::size_t id, get_db_handler) = 0;
-    virtual void createCharacter (create_db_handler) = 0;
-
-    virtual void getCharacterInstance (std::size_t id, get_db_handler) = 0;
-    virtual void createCharacterInstance (create_db_handler) = 0;
-
-    virtual void getLocation (std::size_t id, get_db_handler) = 0;
-    virtual void createLocation (create_db_handler) = 0;
-
-    virtual void getCampaign (std::size_t id, get_db_handler) = 0;
-    virtual void createCampaign (create_db_handler) = 0;
-
-    virtual void loadCampaign (std::size_t id, get_db_handler) = 0;
-};
-
-class AsioDBQueue: public DBQueue {
 private:
-    boost::asio::thread_pool pool;
+    using execute_handler_t = std::function<void(pqxx::work &)>;
+    pqxx::connection connection;
 
 public:
-    AsioDBQueue(std::size_t threads);
+    explicit DBQueue(const std::string &connection_params_str): connection(connection_params_str) {}
 
-    virtual void getUser (std::string name, get_db_handler) override;
-    virtual void createUser (std::string name, std::string password, create_db_handler) override;
-
-    virtual void getCharacter (std::size_t id, get_db_handler) override;
-    virtual void createCharacter (create_db_handler) override;
-
-    virtual void getCharacterInstance (std::size_t id, get_db_handler) override;
-    virtual void createCharacterInstance (create_db_handler) override;
-
-    virtual void getLocation (std::size_t id, get_db_handler) override;
-    virtual void createLocation (create_db_handler) override;
-
-    virtual void getCampaign (std::size_t id, get_db_handler) override;
-    virtual void createCampaign (create_db_handler) override;
-
-    virtual void loadCampaign (std::size_t id, get_db_handler) override;
+    void execute_query(execute_handler_t handler);
 };
