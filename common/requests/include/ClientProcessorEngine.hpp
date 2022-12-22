@@ -13,6 +13,17 @@
 typedef std::deque<std::tuple<std::string, std::string>> setter_queue;
 typedef std::string string;
 
+class PlayerCharacters{
+private:
+    std::unordered_map<unsigned int, std::string> player_table;
+    std::unordered_map<std::string, std::size_t> id_table;
+public:
+    PlayerCharacters();
+    std::string getPlayerName(unsigned int id);
+    unsigned int getUserId(std::string player_name);
+
+};
+
 class ClientProcessorEngine{
 public:
     std::shared_ptr<RequestStringGenerator> generator;

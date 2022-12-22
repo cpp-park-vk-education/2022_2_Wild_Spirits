@@ -13,20 +13,22 @@
 //TODO: При создании комнаты установить на сервере id клиента как DM
 //TODO: Connection должен возвращать id комнаты, как и getROoms
 
-class PlayerCharacters{
+class PlayersID{
 private:
-    std::unordered_map<unsigned int, std::string> player_table;
-    std::unordered_map<std::string, std::size_t> id_table;
+    std::unordered_map<std::size_t, std::size_t> client_table;
+    std::unordered_map<std::size_t, std::size_t> id_table;
 public:
-    PlayerCharacters();
-    std::string getPlayerName(unsigned int id);
-    unsigned int getUserId(std::string player_name);
+    PlayersID(): client_table(1), id_table(1){client_table.insert(std::make_pair(1, 1)), client_table.insert(std::make_pair(1, 1));}
+    std::size_t getPlayerId(std::size_t id){return id_table[id];}
+    std::size_t getClientId(std::size_t player_name){return client_table[player_name];}
 
 };
 
 
 class ClientSideProcessor: public RequestAcceptor, public RequestSender{
 public:
+    PlayersID playersId;
+    std::size_t getPlayerId(std::size_t id){return playersId.getPlayerId(id);}
     ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap& map, DnD::TurnOrder& order);
     ClientSideProcessor(DnD::GameState &gamestate, unsigned int client_id);
 
