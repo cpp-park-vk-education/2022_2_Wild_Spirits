@@ -17,6 +17,8 @@
 #include <RoomConnector.hpp>
 #include <ImageStorage.hpp>
 
+#include <DBQueue.hpp>
+
 namespace beast = boost::beast;
 namespace net = boost::asio;
 using tcp = boost::asio::ip::tcp;

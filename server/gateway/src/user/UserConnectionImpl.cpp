@@ -6,7 +6,7 @@
 #include <Encoder.hpp>
 
 void UserConnectionImpl::sendMessage(std::string message) {
-    connection->async_write(message, [](){
+    connection->async_write(message, [](bool status){
         return;
     });
 }

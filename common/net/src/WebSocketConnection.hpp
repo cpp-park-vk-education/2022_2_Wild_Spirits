@@ -8,7 +8,7 @@
 class WebSocketConnection {
 protected:
     using read_handler_t = std::function<void(std::string)>;
-    using write_handler_t = std::function<void()>;
+    using write_handler_t = std::function<void(bool)>;
     using close_handler_t = std::function<void()>;
 public:
     virtual void async_read (read_handler_t) = 0;
@@ -45,7 +45,7 @@ public:
 class RecievingConnection: public std::enable_shared_from_this<RecievingConnection> {
 protected:
     using read_handler_t = std::function<void(std::string)>;
-    using write_handler_t = std::function<void()>;
+    using write_handler_t = std::function<void(bool)>;
     using connection_ptr_t = std::shared_ptr<WebSocketConnection>;
     using close_handler_t = std::function<void()>;
 
