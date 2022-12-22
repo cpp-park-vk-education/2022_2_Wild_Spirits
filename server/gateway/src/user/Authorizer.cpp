@@ -20,7 +20,7 @@ void UserAuthorizer::on_authorize_error(const std::string &error_message,
                                         ws_connection_t connection,
                                         authorize_handler handler) {
     connection->async_write(error_message,
-    [this, connection, handler](){
+    [this, connection, handler](bool status){
         authorize_user(connection, handler);
     });
 }

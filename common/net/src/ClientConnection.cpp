@@ -25,3 +25,7 @@ std::shared_ptr<ClientConnection> ClientConnectionImpl::createConnection(
 
     return std::make_shared<ClientConnectionImpl>(connection, recieve_handler);
 }
+
+void ClientConnectionImpl::sendMessage(std::string message, write_handler_t handler) {
+    async_write(message, handler);
+}

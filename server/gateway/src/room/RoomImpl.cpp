@@ -10,6 +10,15 @@ void RoomImpl::addUser(User *player) {
     players.push_back(player);
 }
 
+void RoomImpl::sendUser(std::size_t user_id, const std::string &message) {
+    for (User *user : players) {
+        if (user->id() == user_id) {
+            user->sendMessage(message);
+            break;
+        }
+    }
+}
+
 void RoomImpl::sendDM(const std::string &message) {
     DM->sendMessage(message);
 }
@@ -39,7 +48,3 @@ void RoomImpl::processRequest(std::size_t user_id, const std::string &request) {
         broadcast(hash);
     }
 }
-
-// void RoomImpl::sendImageTo(const std::string& path, std::size_t user_id) {
-
-// }

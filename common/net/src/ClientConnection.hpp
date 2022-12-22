@@ -21,6 +21,8 @@ protected:
 public:
     ClientConnection(connection_ptr_t connection, recieve_handler_t handler):
         RecievingConnection(std::move(connection)), recieve_handler(handler) {}
+
+    virtual void sendMessage(std::string message, write_handler_t handler) = 0;
 };
 
 class ClientConnectionImpl: public ClientConnection {
@@ -36,4 +38,5 @@ public:
                                                                u_int16_t port,
                                                                BoostEventLoop&,
                                                                recieve_handler_t);
+    virtual void sendMessage(std::string message, write_handler_t handler) override;
 };
