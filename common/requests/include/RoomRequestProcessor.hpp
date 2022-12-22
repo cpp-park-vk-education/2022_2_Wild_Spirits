@@ -29,6 +29,7 @@ private:
     bool sendDM(string request_string);
     bool sendInstance(unsigned int user_id);
     bool broadcast(string request_string);
+    bool broadcast();
 public:
     bool acceptRequest(std::string request_string) override;
     RoomSideProcessor(DnD::LogicProcessor &room);

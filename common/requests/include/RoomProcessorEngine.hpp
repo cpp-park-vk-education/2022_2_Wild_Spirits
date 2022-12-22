@@ -16,6 +16,8 @@ private:
     ChangeCollector collector;
     ChangeGetter change_getter;
 public:
+    std::string getInstance();
+    RequestStringGenerator& Gen(){return generator;}
     RoomProcessorEngine(DnD::LogicProcessor &gameState);
     nlohmann::json parse(string request);
     nlohmann::json getChanges(nlohmann::json request_object);

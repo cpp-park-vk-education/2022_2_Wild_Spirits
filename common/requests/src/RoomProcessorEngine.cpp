@@ -16,3 +16,7 @@ nlohmann::json RoomProcessorEngine::getChanges(nlohmann::json request_object) {
     return nlohmann::json::parse(change_getter.getChangedFields(request_object));
 }
 
+std::string RoomProcessorEngine::getInstance() {
+    return change_getter.getInstance();
+}
+

@@ -29,7 +29,6 @@ public:
     bool sendRequest(LM::Action action) override;
     bool sendRequest(LM::Action action);
     std::string sendRequest(std::string request);
-    bool sendRequest(LM::Request request) override;
     bool getImage(std::string_view hash, std::shared_ptr<std::string>);
     bool acceptRequest(string request_string) override;
     bool Connection(std::string ip, std::string port);

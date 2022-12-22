@@ -12,7 +12,8 @@ std::string ClientRequestStringParser::get_next_change(){
 
 queue ClientRequestStringParser::make_queue(std::string request_string){
     queue changes;
-    
+    /////////////////////////////////////////////////////////
+    json request_obj = json::parse(request_string);
 
     return changes;
 }

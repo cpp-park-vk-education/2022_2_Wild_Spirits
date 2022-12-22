@@ -31,7 +31,7 @@ struct ChangeHandler;
 class GameStateChanger{
 private:
     DnD::GameState &gamestate;
-
+    DnD::GameMap &game_map;
     std::vector<std::unique_ptr<ChangeHandler>> handlers;
 
     bool set_field(json changes){
@@ -52,7 +52,7 @@ public:
 
 struct ChangeHandler{
     virtual bool CanHandle(json changes) = 0;
-    virtual void SetField(json changes, DnD::GameState &changing_gamestate) = 0;
+    virtual void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) = 0;
     virtual ~ChangeHandler() {
     }
 };
@@ -63,7 +63,7 @@ struct ImageHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("image");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override {
 
     }
 };
@@ -72,7 +72,7 @@ struct NameHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("name");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -81,7 +81,7 @@ struct InfoHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("info");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -91,8 +91,8 @@ struct CastTypeHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("cast_type");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.activatableItems().get(changes["id"]).setCastType((changes["cast_type"] == "tile")? DnD::Activatable::Cast::Tile : DnD::Activatable::Cast::Self);
     }
 };
 
@@ -100,8 +100,8 @@ struct ScalingHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("scaling");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.activatableItems().get(changes["id"]).setScaling(changes["scaling"]);
     }
 };
 
@@ -109,8 +109,8 @@ struct ActivationCostHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("activation_cost");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.activatableItems().get(changes["id"]).setActivateCost(changes["activation_cost"]);
     }
 };
 //For Character setters
@@ -118,7 +118,7 @@ struct HpMaxHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("hp_max");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -127,7 +127,7 @@ struct ApMaxHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("ap_max");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -136,7 +136,7 @@ struct BaseArmorHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("base_armor");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -145,7 +145,7 @@ struct StatsHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("stats");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -154,7 +154,7 @@ struct SkillsHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("skills");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -163,8 +163,8 @@ struct ApHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("ap");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.allCharacters().get(changes["id"]) -> setActionPoints(changes["ap"]);
     }
 };
 
@@ -172,8 +172,8 @@ struct HpHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("hp");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.allCharacters().get(changes["id"]) -> setHP(changes["hp"]);
     }
 };
 
@@ -181,7 +181,7 @@ struct ArmorHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("armor");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -190,8 +190,9 @@ struct PositionHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("position");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
-
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        DnD::Tile new_position(changes["x"], changes["y"]);
+        game_map.allCharacters().get(changes["id"]).moveTo(new_position);
     }
 };
 //For NPC_instance setters
@@ -200,7 +201,7 @@ struct HostileHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("hostile");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -210,7 +211,7 @@ struct XPHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("gain_XP");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -219,7 +220,7 @@ struct CastCostHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("cast_cost");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
@@ -230,7 +231,7 @@ struct UsesHandler : ChangeHandler{
     bool CanHandle(json changes) override{
         return changes.contains("uses");
     }
-    void SetField(json changes, DnD::GameState &changing_gamestate) override{
+    void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
 
     }
 };
