@@ -14,6 +14,15 @@ GameStateImpl::GameStateImpl(SharedStorage<NPC>&& npc, SharedStorage<Item>&& ite
     weapons_(std::move(weapons)), spells_(std::move(spells)), armor_(std::move(armor)),
     races_(std::move(races)), classes_(std::move(classes)), config_(std::move(config)) {}
 
+
+GameStateImpl::GameStateImpl(const SharedStorage<NPC>& npc, const SharedStorage<Item>& items,
+                             const SharedStorage<ActivatableItem>& activatables, const SharedStorage<Weapon>& weapons,
+                             const SharedStorage<Spell>& spells, const SharedStorage<Armor>& armor,
+                             const SharedStorage<Race>&& races, const SharedStorage<Class>& classes, Config&& config) :
+    npc_(npc), items_(items), activatables_(activatables),
+    weapons_(weapons), spells_(spells), armor_(armor),
+    races_(races), classes_(classes), config_(config) {}
+
 SharedStorage<NPC>& GameStateImpl::npc() {
     return npc_;
 }

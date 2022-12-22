@@ -44,6 +44,9 @@ class GameStateImpl : virtual public GameState {
     SharedStorage<Race> races_;
     SharedStorage<Class> classes_;
 
+ protected:
+    DamageTypeStorage damage_types;
+
     Config config_;
 
  public:
@@ -52,6 +55,11 @@ class GameStateImpl : virtual public GameState {
                   SharedStorage<ActivatableItem>&& activatables, SharedStorage<Weapon>&& weapons,
                   SharedStorage<Spell>&& spells, SharedStorage<Armor>&& armor,
                   SharedStorage<Race>&& races, SharedStorage<Class>&& classes, Config&& config = {});
+
+    GameStateImpl(const SharedStorage<NPC>& npc, const SharedStorage<Item>& items,
+                  const SharedStorage<ActivatableItem>& activatables, const SharedStorage<Weapon>& weapons,
+                  const SharedStorage<Spell>& spells, const SharedStorage<Armor>& armor,
+                  const SharedStorage<Race>&& races, const SharedStorage<Class>& classes, Config&& config = {});
 
     SharedStorage<NPC>& npc() override;
     Storage<CharacterInstance*>& allCharacters() override;
@@ -82,7 +90,7 @@ class LogicProcessor : virtual public GameState {
     virtual void setUpdated(GameEntityInterface& object) = 0;
 };
 
-class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
+class LogicProcessorImpl : virtual public LogicProcessor, public GameStateImpl {
  public:
     using GameStateImpl::GameStateImpl;
 
@@ -96,6 +104,6 @@ class LogicProcessorImpl : public LogicProcessor, public GameStateImpl {
     ErrorStatus trade(size_t first_char, size_t second_char, size_t first_item, size_t second_item) override;
     SaleResult buy(size_t first_char, size_t second_char, size_t item, size_t num = 1) override;
 
-   inline void setUpdated(GameEntityInterface& object) override;
+   void setUpdated(GameEntityInterface& object) override;
 };
 } // namespace DnD

@@ -33,7 +33,7 @@ class GameMapImpl : public GameMap {
     SharedStorage<PlayerCharacter> players_;
 
  public:
-    GameMapImpl(GameState& game) : game_(game), current_location_(0) {}
+    GameMapImpl(GameState& game, size_t current_id = 0) : game_(game), current_location_(current_id) {}
 
     GameMapImpl(GameState& game, Storage<Location>&& locations,
                 SharedStorage<PlayerCharacter>&& players, size_t current_id) :

@@ -35,6 +35,14 @@ std::tuple<uint8_t, ErrorStatus> DamageTypeStorage::addDamageType(const std::str
     return std::make_tuple(id, ErrorStatus::OK);
 }
 
+int8_t DamageTypeStorage::typeId(const std::string& dmg_type) {
+    auto it = std::find(types_.begin(), types_.end(), dmg_type);
+    if (it == types_.end()) {
+        return -1;
+    }
+    return it - types_.begin();
+}
+
 ErrorStatus DamageTypeStorage::removeDamageType(uint8_t id) {
     if (id > types_.size()) {
         return ErrorStatus::OUT_OF_RANGE;

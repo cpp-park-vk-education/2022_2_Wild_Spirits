@@ -42,6 +42,8 @@ class DamageTypeStorage {
         return std::make_tuple(DamageType{id, name}, status);
     }
 
+    int8_t typeId(const std::string& dmg_type);
+
     static constexpr uint8_t maxNum() {
         return kMaxTypesNum;
     }

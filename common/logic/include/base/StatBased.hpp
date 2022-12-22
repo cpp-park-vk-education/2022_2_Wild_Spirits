@@ -25,6 +25,8 @@ class StatBased {
     StatBased() : stats_() {}
     StatBased(const Stats& stats) : stats_(stats) {}
 
+    static Stats defaultStats();
+
     const Stats& stats() const {
         return stats_;
     }

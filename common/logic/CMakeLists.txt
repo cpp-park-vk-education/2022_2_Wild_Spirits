@@ -7,6 +7,7 @@ set(SOURCES
      src/activatable/Effect.cpp
      src/base/Dice.cpp
      src/base/GameEntity.cpp
+     src/base/StatBased.cpp
      src/items/Armor.cpp
      src/items/Item.cpp
      src/items/Spell.cpp
@@ -20,6 +21,7 @@ set(SOURCES
      src/structure/GameState.cpp
      src/structure/GameMap.cpp
      src/structure/DamageTypeStorage.cpp
+     src/structure/Demo.cpp
      src/structure/TurnOrder.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

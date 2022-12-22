@@ -15,7 +15,7 @@ namespace DnD {
 class Race : public GameEntity, public StatBased {
  public:
     Race() = default;
-    Race(size_t id, std::string_view name, int image_id, const Info& info, const Stats& stats) : 
+    Race(size_t id, std::string_view name, int image_id, const Stats& stats = {}, const Info& info = {}) : 
         GameEntity(id, name, image_id, info), StatBased(stats){}
 };
 
@@ -25,8 +25,8 @@ class Class : public GameEntity {
 
  public:
     Class() = default;
-    Class(size_t id, std::string_view name, int image_id, const Info& info,
-                    const std::vector<std::shared_ptr<Skill>> skills) :
+    Class(size_t id, std::string_view name, int image_id, const Info& info = {},
+                    const std::vector<std::shared_ptr<Skill>> skills = {}) :
         GameEntity(id, name, image_id, info), skills_(skills) {}
 
     auto& skills() const {

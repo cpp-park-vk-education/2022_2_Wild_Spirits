@@ -24,7 +24,7 @@ public:
 
     Character(size_t id, std::string_view name, size_t image_id, unsigned int max_hp,
               int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
-              unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{},
+              unsigned int ac = kDefaultArmorClass, const Stats& stats = defaultStats(),
               const Info& info = {});
     
     Character(const Character& other);
