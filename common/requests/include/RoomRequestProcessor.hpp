@@ -21,7 +21,7 @@ public:
 
 class RoomSideProcessor : public RequestAcceptor{
 private:
-    std::shared_ptr<Room> room_connection;
+    Room& room_connection;
     RoomProcessorEngine engine;
     PlayerCharacters players;
     DnD::LogicProcessor& room;
