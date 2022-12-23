@@ -31,7 +31,7 @@ namespace DnD {
         if (turnsLeft() != 0) {
             return std::make_tuple(Result{}, ErrorStatus::SKILL_ON_COOLDOWN);
         }
-        const_cast<Skill_Instance*>(this)->reset(original_->cooldown());
-        return original_->use(actor, tiles, dice_roll_res);
+        const_cast<Skill_Instance*>(this)->reset(original().cooldown());
+        return original().use(actor, tiles, dice_roll_res);
     }
 }  // namespace DnD

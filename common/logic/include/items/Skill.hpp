@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Activatable.hpp"
+#include "ActivatableProxy.hpp"
 #include "GameEntity.hpp"
 #include "TurnBased.hpp"
 
@@ -39,31 +40,14 @@ class Skill : public GameEntity, public Activatable {
     ErrorStatus setCharacteristic(const std::string& which, const SetterParam& to) override;
 };
 
-class Skill_Instance : public ActivatableInterface, public Temporal<TurnStart> {
- private:
-    const std::shared_ptr<const Skill> original_;
-
+class Skill_Instance : public ActivatableProxy<Skill>, public Temporal<TurnStart> {
  public:
-    Skill_Instance(const std::shared_ptr<const Skill>& skill) : Temporal<TurnStart>(0), original_(skill) {}
-
-    const Skill& original() const {
-        return *original_;
-    }
-
-    size_t id() const {
-        return original_->id();
-    }
-
-    unsigned int activateCost() const override {
-        return original_->activateCost();
-    }
-
-    const std::string& scalesBy() const override {
-        return original_->scalesBy();
-    }
+    Skill_Instance(const std::shared_ptr<Skill>& skill) :
+        ActivatableProxy<Skill>(skill),
+        Temporal<TurnStart>(0) {}
 
     unsigned int cooldown() const {
-        return original_->cooldown();
+        return original().cooldown();
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& tiles,

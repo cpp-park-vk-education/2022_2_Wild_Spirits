@@ -34,7 +34,7 @@ class GameEntityInterface : virtual public Identifiable, virtual public Dynamicl
     friend class LogicProcessorImpl;
 };
 
-class GameEntity : public GameEntityInterface {
+class GameEntity : virtual public GameEntityInterface {
  private:
     size_t id_;
     std::string name_;

@@ -8,7 +8,7 @@
 #include "Buff.hpp"
 
 namespace DnD {
-class ActivatableInterface : virtual public Identifiable {
+class ActivatableInterface : virtual public GameEntityInterface, virtual public Identifiable {
  public:
     struct Result {
      private:
@@ -31,21 +31,24 @@ class ActivatableInterface : virtual public Identifiable {
         friend std::ostream& operator<<(std::ostream& out, const Result& other);
     };
 
-    virtual unsigned int activateCost() const = 0;
-
-    virtual const std::string& scalesBy() const = 0;
-
-    virtual std::tuple<Result, ErrorStatus> use(CharacterInstance*, const std::vector<Tile>&,
-                                                uint8_t dice_roll_res = 0) const = 0;
-};
-
-class Activatable : public ActivatableInterface, virtual public DynamiclySettable  {
- public:
     enum class Cast {
         Tile,
         Self
     };
 
+    virtual unsigned int activateCost() const = 0;
+    virtual const std::string& scalesBy() const = 0;
+    virtual Cast castType() const = 0;
+    virtual bool canMiss() const = 0;
+
+    virtual const std::vector<Action>& actions() const = 0;
+
+    virtual std::tuple<Result, ErrorStatus> use(CharacterInstance*,
+                                                const std::vector<Tile>&,
+                                                uint8_t dice_roll_res = 0) const = 0;
+};
+
+class Activatable : public ActivatableInterface, virtual public DynamiclySettable {
  private:
     std::vector<Action> actions_;
     unsigned int action_cost_;
@@ -65,7 +68,7 @@ class Activatable : public ActivatableInterface, virtual public DynamiclySettabl
         actions_(std::move(actions)), action_cost_(action_cost), scaling_(scaling), cast_type_(cast_type) {}
 
     void setCastType(Cast cast_type);
-    Cast castType() const;
+    Cast castType() const override;
 
     void addEffect(size_t action, std::unique_ptr<Effect>&& effect) {
         actions_[action].addEffect(std::move(effect));
@@ -91,6 +94,10 @@ class Activatable : public ActivatableInterface, virtual public DynamiclySettabl
         return actions_;
     }
 
+    const std::vector<Action>& actions() const override {
+        return actions_;
+    }
+
     Action& action(size_t action) {
         return actions_[action];
     }
@@ -111,7 +118,7 @@ class Activatable : public ActivatableInterface, virtual public DynamiclySettabl
         scaling_ = scaling;
     }
 
-    bool canMiss() const;
+    bool canMiss() const override;
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>&,
                                                 uint8_t dice_roll_res = 0) const override;
