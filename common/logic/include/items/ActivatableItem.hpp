@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Activatable.hpp"
+#include "ActivatableProxy.hpp"
 #include "Item.hpp"
 
 namespace DnD {
@@ -40,15 +41,15 @@ class Weapon : public ActivatableItem {
         ActivatableItem(id, name, image_id, std::move(actions), action_cost, cost, scaling, cast_type, info) {}
 };
 
-class Consumable : public ActivatableInterface, public DynamiclySettable {
+class Consumable : public ActivatableProxy<ActivatableItem>, virtual public DynamiclySettable {
  private:
-    const std::shared_ptr<const ActivatableItem> original_;
     unsigned int uses_;
 
  public:
     Consumable() = default;
 
-    Consumable(const std::shared_ptr<ActivatableItem>& item, unsigned int uses) : original_(item), uses_(uses) {}
+    Consumable(const std::shared_ptr<ActivatableItem>& item, unsigned int uses) :
+        ActivatableProxy<ActivatableItem>(item), uses_(uses) {}
     
     void addUses(unsigned int num) {
         uses_ += num;
@@ -62,28 +63,12 @@ class Consumable : public ActivatableInterface, public DynamiclySettable {
         uses_ = num;
     }
 
-    size_t id() const {
-        return original_->id();
-    }
-
-    const ActivatableItem& original() const {
-        return *original_;
-    }
-
     unsigned int usesLeft() const {
         return uses_;
     }
 
     bool empty() const {
         return uses_ == 0;
-    }
-
-    unsigned int activateCost() const override {
-        return original_->activateCost();
-    }
-
-    const std::string& scalesBy() const override {
-        return original_->scalesBy();
     }
 
     std::tuple<Result, ErrorStatus> use(CharacterInstance* actor, const std::vector<Tile>& targets,

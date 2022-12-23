@@ -19,6 +19,10 @@ void OnLocation::setLocation(size_t loc_id) {
 }
 
 std::vector<Tile> OnLocation::occupiedTiles() const {
+    return pos_->occupiedTiles();
+}
+
+std::vector<Tile> OnLocation::actualOccupied() const {
     std::vector<Tile> original = pos_->occupiedTiles();
     std::vector<Tile> res(original.size());
 
