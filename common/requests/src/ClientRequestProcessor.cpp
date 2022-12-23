@@ -134,7 +134,7 @@ ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap
 
 }
 
-std::vector<LM::Room> GetRooms(){
+std::vector<LM::Room> ClientSideProcessor::GetRooms(){
     return std::vector<LM::Room>();
 }
 
