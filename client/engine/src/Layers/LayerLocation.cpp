@@ -167,7 +167,7 @@ namespace LM {
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
-        std::shared_ptr<DnD::PlayerCharacter> player = gameMap->player().safeGet(playerId);
+        std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
 
         loadActivatable(player->weapons());
         loadActivatable(player->spells());
