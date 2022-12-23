@@ -154,7 +154,7 @@ namespace LM {
 
     template <typename T>
     void LayerLocation::loadActivatable(T storage) {
-        for (auto& item : storage) {
+        for (auto& [id, item] : storage) {
             tryLoadImage(item->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
                 RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, item));
@@ -189,11 +189,11 @@ namespace LM {
             m_Field->addCharacter(renderable);
         }
         auto& characters = gameMap->players();
-        for (auto &[_, character] : characters) {
-            tryLoadImage(character->original().getImageId());
-            Ref<RenderableCharacter> renderable =
-                CreateRef<RenderableCharacter>(m_TextureManager->get(character->getImageId()), Color(),
-                                               glm::uvec2(character->centerPos().x, character.centerPos().y));
+        for (auto& [id, character] : characters) {
+            tryLoadImage(character->getImageId());
+            Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
+                m_TextureManager->get(character->getImageId()), Color(),
+                glm::uvec2(character->centerPos().x, character->centerPos().y));
             m_Field->addCharacter(renderable);
         }
     }
