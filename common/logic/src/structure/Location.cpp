@@ -90,6 +90,8 @@ ErrorStatus Location::transferToOtherLocation(OnLocation* obj, Location* other, 
 }
 
 bool Location::isInBounds(const Tile& tile) const {
+    // std::cout << "Tile " << tile << " is checked to be in " << Tile{width(), height()};
+    // std::cout << std::boolalpha << " (" << (tile.x < width() && tile.y < height()) << ")\n";
     return tile.x < width() && tile.y < height();
 }
 
@@ -156,6 +158,7 @@ std::vector<Tile> Location::freeTiles() const {
 ErrorStatus Location::hasValidPosition(const OnLocation& obj) const {
     for (const auto& tile : obj.occupiedTiles()) {
         if (!isInBounds(tile)) {
+            // std::cout << "Returning location out of bounds\n";
             return ErrorStatus::OUT_OF_LOCATION_BOUNDS;
         }
 

@@ -60,6 +60,8 @@ class OnLocation : public Position {
 
     std::vector<Tile> occupiedTiles() const override;
 
+    std::vector<Tile> actualOccupied() const;
+
     ErrorStatus moveTo(const Tile& tile) override;
     ErrorStatus moveBy(int x, int y) override;
 
