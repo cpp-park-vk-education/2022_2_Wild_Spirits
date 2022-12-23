@@ -163,24 +163,25 @@ namespace LM {
 
     void LayerLocation::load() {
         // clearScenes();
+        Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
-        Ref<DnD::PlayerCharacter> player = Application::get()->getClientSideProcessor()->getCurrentPlayer();
+        size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
+        std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
+
         loadActivatable(player->weapons());
         loadActivatable(player->spells());
         loadActivatable(player->skills());
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
 
-        Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
-
-        DnD::Location& location = gameMap->currentLocation();
+        DnD::Loation& location = gameMap->currentLocation();
         glm::uvec2 fieldSize = glm::uvec2(location.width(), location.height());
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
 
         auto& npcs = location.npc();
-        for (auto& npc : npcs) {
+        for (auto& [id, npc] : npcs) {
             tryLoadImage(npc->getImageId());
             Ref<RenderableCharacter> renderable =
                 CreateRef<RenderableCharacter>(m_TextureManager->get(npc->getImageId()), Color(),
