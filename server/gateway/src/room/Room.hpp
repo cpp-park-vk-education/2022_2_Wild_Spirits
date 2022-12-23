@@ -27,17 +27,19 @@ namespace DnD {
 
     class DemoGameMap: public GameMap {
     public:
-        DemoGameMap(LogicProcessor &p) {}
+        explicit DemoGameMap(LogicProcessor &p) {}
     };
 };
 
 class Room;
 
 class RoomSideProcessor {
+private:
+    int a = -1;
 public:
-    RoomSideProcessor(Room &room, DnD::LogicProcessor &p) {}
-    bool acceptRequest(std::string request_string) {
-        
+    RoomSideProcessor(Room &room, DnD::LogicProcessor &p, DnD::GameMap &g) {}
+    bool acceptRequest(const std::string &request_string) {
+        return a++ == 0;
     }
 };
 #endif
@@ -55,8 +57,8 @@ public:
     Gateway &gateway;
 
     Room(std::size_t id, Gateway &gateway):
-        _id(id), gateway(gateway), logic_processor(std::make_unique<DnD::DemoLogicProcessor>()),
-        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), processor(*this, *logic_processor) {}
+        _id(id), logic_processor(std::make_unique<DnD::DemoLogicProcessor>()),
+        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), processor(*this, *logic_processor, *game_map), gateway(gateway) {}
 
     virtual void addUser(User*) = 0;
 
