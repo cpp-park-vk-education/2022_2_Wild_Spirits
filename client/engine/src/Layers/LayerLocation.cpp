@@ -153,11 +153,20 @@ namespace LM {
     }
 
     template <typename T>
-    void LayerLocation::loadActivatable(T storage) {
-        for (auto& item : storage) {
+    void LayerLocation::loadActivatableShared(T storage) {
+        for (auto& [id, item] : storage) {
             tryLoadImage(item->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, item));
+                RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, *item));
+        }
+    }
+
+    template <typename T>
+    void LayerLocation::loadActivatable(T storage) {
+        for (auto& [id, item] : storage) {
+            tryLoadImage(item.getImageId());
+            m_BottomActions->add(CreateRef<RenderableBottomAction>(
+                RenderableTextureProps { m_TextureManager->get(item.etImageId()) }, item));
         }
     }
 
@@ -169,8 +178,8 @@ namespace LM {
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
         std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
 
-        loadActivatable(player->weapons());
-        loadActivatable(player->spells());
+        loadActivatableShader(player->weapons());
+        loadActivatableShader(player->spells());
         loadActivatable(player->skills());
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
@@ -189,11 +198,11 @@ namespace LM {
             m_Field->addCharacter(renderable);
         }
         auto& characters = gameMap->players();
-        for (auto &[_, character] : characters) {
-            tryLoadImage(character->original().getImageId());
-            Ref<RenderableCharacter> renderable =
-                CreateRef<RenderableCharacter>(m_TextureManager->get(character->getImageId()), Color(),
-                                               glm::uvec2(character->centerPos().x, character.centerPos().y));
+        for (auto& [id, character] : characters) {
+            tryLoadImage(character->getImageId());
+            Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
+                m_TextureManager->get(character->getImageId()), Color(),
+                glm::uvec2(character->centerPos().x, character->centerPos().y));
             m_Field->addCharacter(renderable);
         }
     }
