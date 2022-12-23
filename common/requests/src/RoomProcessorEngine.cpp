@@ -8,7 +8,7 @@ nlohmann::json RoomProcessorEngine::parse(string request){
     return request_object;
 }
 
-RoomProcessorEngine::RoomProcessorEngine(DnD::LogicProcessor &gameState) : game_state(gameState), change_getter(game_state) {
+RoomProcessorEngine::RoomProcessorEngine(DnD::LogicProcessor &gameState, DnD::GameMap& game_map) : game_state(gameState), change_getter(game_state, game_map) {
 
 }
 

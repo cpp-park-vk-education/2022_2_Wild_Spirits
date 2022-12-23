@@ -41,7 +41,7 @@ bool RoomSideProcessor::broadcast() {
     return state;
 }
 
-RoomSideProcessor::RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room): room_connection(room_connection), room(room), engine(room) {}
+RoomSideProcessor::RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room, DnD::GameMap& game_map): room_connection(room_connection), room(room), engine(room, game_map) {}
 
 bool RoomSideProcessor::acceptRequest(std::string request_string){
     using nlohmann::json;
