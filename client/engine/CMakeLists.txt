@@ -93,12 +93,21 @@ else()
 endif()
 
 if (${BUILD_LOGIC})
-    add_definitions(-DBUILD_LOGIC) 
+    add_definitions(-DBUILD_LOGIC)
     target_link_libraries(${PROJECT_NAME} request-processor dnd-logic)
+else()
+    target_sources(${PROJECT_NAME} PRIVATE
+        src/NoIntegration/GameState.cpp src/NoIntegration/GameState.hpp
+        src/NoIntegration/GameMap.cpp src/NoIntegration/GameMap.hpp
+        src/NoIntegration/ClientRequestProcessor.cpp src/NoIntegration/ClientRequestProcessor.hpp
+        src/NoIntegration/TurnOrder.cpp src/NoIntegration/TurnOrder.hpp)
+
+    target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/NoIntegration)
 endif()
 
 add_compile_definitions(GLEW_STATIC _LIB)
 add_compile_definitions(RES_FOLDER="${CMAKE_SOURCE_DIR}/ClientRes/")
+option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 
 include(FetchContent)
 
@@ -137,7 +146,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(stb)
 
-option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 add_subdirectory(tests)
 
 if(MSVC)

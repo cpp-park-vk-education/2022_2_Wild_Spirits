@@ -2,7 +2,7 @@
 
 namespace LM {
 
-    UseAction::UseAction(DnD::Activatable& activatable, Type type)
+    UseAction::UseAction(DnD::ActivatableInterface& activatable, Type type)
         : m_Activatable(activatable),
           m_Type(type) { }
 
@@ -20,12 +20,12 @@ namespace LM {
 
     bool UseAction::isFirstSet() const { return m_IsFirstSet; }
 
-    DnD::Activatable& UseAction::getActivatable() { return m_Activatable; }
+    DnD::ActivatableInterface& UseAction::getActivatable() { return m_Activatable; }
 
     std::vector<DnD::Action::Target> UseAction::getTargetTypes() const {
         return std::vector<DnD::Action::Target>();
     }
 
-    DnD::Activatable::Cast UseAction::getCastType() const { return m_Activatable.castType(); }
+    DnD::ActivatableInterface::Cast UseAction::getCastType() const { return m_Activatable.castType(); }
 
 }    // namespace LM

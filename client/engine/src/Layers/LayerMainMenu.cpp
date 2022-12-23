@@ -96,17 +96,10 @@ namespace LM {
         Application::get()->removeLayer(this);
     }
 
-#ifdef BUILD_LOGIC
     void LayerMainMenu::handleStartDM() {
         Room room = Application::get()->getClientSideProcessor()->CreateRoom();
         Application::get()->addLayer(CreateRef<LayerRoom>(room, true));
         Application::get()->removeLayer(this);
     }
-#else
-    void LayerMainMenu::handleStartDM() {
-        Application::get()->addLayer(CreateRef<LayerRoom>(Room({ 0 }), true));
-        Application::get()->removeLayer(this);
-    }
-#endif
 
 }    // namespace LM

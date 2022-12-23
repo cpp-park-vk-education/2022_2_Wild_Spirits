@@ -25,12 +25,12 @@ namespace DnD {
         Target m_Target;
     };
 
-    class Activatable {
+    class ActivatableInterface {
     public:
         enum class Cast { Tile, Self };
 
     public:
-        Activatable(size_t id, Cast cast) : m_Id(id), m_Cast(cast) { }
+        ActivatableInterface(size_t id, Cast cast) : m_Id(id), m_Cast(cast) { }
 
         Cast castType() const { return m_Cast; }
         std::vector<Action>& actions() { return m_Actions; }
@@ -41,24 +41,24 @@ namespace DnD {
         std::vector<Action> m_Actions;
     };
 
-    class Weapon : public Activatable {
+    class Weapon : public ActivatableInterface {
     public:
-        Weapon(size_t id, Cast cast) : Activatable(id, cast) { }
+        Weapon(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
-    class Spell : public Activatable {
+    class Spell : public ActivatableInterface {
     public:
-        Spell(size_t id, Cast cast) : Activatable(id, cast) { }
+        Spell(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
-    class Skill : public Activatable {
+    class Skill : public ActivatableInterface {
     public:
-        Skill(size_t id, Cast cast) : Activatable(id, cast) { }
+        Skill(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
-    class Consumable : public Activatable {
+    class Consumable : public ActivatableInterface {
     public:
-        Consumable(size_t id, Cast cast) : Activatable(id, cast) { }
+        Consumable(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
 }    // namespace DnD
@@ -68,7 +68,7 @@ namespace LM {
 
     class UseAction : public Action {
     public:
-        UseAction(DnD::Activatable& activatable, Type type);
+        UseAction(DnD::ActivatableInterface& activatable, Type type);
 
         virtual Type getType() const override;
 
@@ -78,12 +78,12 @@ namespace LM {
         void setTarget(size_t x, size_t y);
         bool isFirstSet() const;
 
-        DnD::Activatable& getActivatable();
+        DnD::ActivatableInterface& getActivatable();
         std::vector<DnD::Action::Target> getTargetTypes() const;
-        DnD::Activatable::Cast getCastType() const;
+        DnD::ActivatableInterface::Cast getCastType() const;
 
     protected:
-        DnD::Activatable& m_Activatable;
+        DnD::ActivatableInterface& m_Activatable;
         Type m_Type;
 
         size_t m_TargetX = 0;

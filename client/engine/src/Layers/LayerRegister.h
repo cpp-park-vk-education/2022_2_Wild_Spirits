@@ -13,7 +13,7 @@ namespace LM {
     protected:
         std::string m_Login;
         std::string m_Password;
-        bool m_NeedRemove = false;
+        bool m_ShowWrongData = false;
     };
 
 }    // namespace LM
