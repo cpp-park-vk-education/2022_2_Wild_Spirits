@@ -13,12 +13,11 @@ private:
     RequestStringGenerator generator;
     RoomRequestStringParser parser;
     DnD::LogicProcessor &game_state;
-    ChangeCollector collector;
     ChangeGetter change_getter;
 public:
     std::string getInstance();
     RequestStringGenerator& Gen(){return generator;}
-    RoomProcessorEngine(DnD::LogicProcessor &gameState);
+    RoomProcessorEngine(DnD::LogicProcessor &gameState, DnD::GameMap& game_map);
     nlohmann::json parse(string request);
     nlohmann::json getChanges(nlohmann::json request_object);
     RoomProcessorEngine() = delete;

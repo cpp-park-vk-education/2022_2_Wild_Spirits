@@ -33,5 +33,5 @@ private:
     bool broadcast();
 public:
     bool acceptRequest(std::string request_string) override;
-    RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room);
+    RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room, DnD::GameMap& game_map);
 };
