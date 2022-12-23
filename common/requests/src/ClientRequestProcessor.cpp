@@ -87,11 +87,11 @@ bool ClientSideProcessor::Connection(std::string ip, std::string port) {
     return state;
 }
 
-// LM::Room ClientSideProcessor::CreateRoom() {
-//     std::string creating_request = "create_room";
-//     sendRequest(creating_request);
-//     return LM::Room();
-// }
+LM::Room ClientSideProcessor::CreateRoom() {
+    std::string creating_request = "create_room";
+    sendRequest(creating_request);
+    return LM::Room();
+}
 
 bool ClientSideProcessor::StartGame() {
     return false;
