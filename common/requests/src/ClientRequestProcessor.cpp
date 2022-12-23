@@ -59,7 +59,8 @@ bool ClientSideProcessor::ApplyChanges(string changes) {
     bool state = true;
     queue setters = engine.getSetterQueue(changes);
     while(!setters.empty()){
-        state &= changer.makechange(setters.front());
+        json temp;
+        state &= changer.makechange(temp[std::get<0>(setters.front())] = std::get<1>(setters.front()));
         setters.pop_front();
     }
     return state;
