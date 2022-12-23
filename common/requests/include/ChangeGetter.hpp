@@ -17,7 +17,6 @@ private:
     std::vector<std::unique_ptr<ChangeHandler>> handlers;
     DnD::LogicProcessor& game_state;
     DnD::GameMap& game_map;
-    ChangeCollector& collector;
     change_queue changes_queue;
 
 
@@ -28,7 +27,7 @@ private:
 
 
 public:
-    ChangeGetter(ChangeCollector &collector, DnD::LogicProcessor &gameState, DnD::GameMap &gameMap);
+    ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap &gameMap);
     explicit ChangeGetter(DnD::LogicProcessor &gameState);
     // ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap &game_map);
     std::string getChangedFields(nlohmann::json);

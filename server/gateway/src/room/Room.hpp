@@ -26,7 +26,7 @@ public:
 
     Room(std::size_t id, Gateway &gateway):
         _id(id), gateway(gateway), logic_processor(std::make_unique<DnD::DemoLogicProcessor>()),
-        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), processor(*this, *logic_processor) {}
+        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), processor(*this, *logic_processor, *game_map) {}
 
     virtual void addUser(User*) = 0;
 

@@ -4,7 +4,7 @@ void ChangeGetter::load_collector(change_queue changes){
 
 }
 
-ChangeGetter::ChangeGetter(ChangeCollector &collector, DnD::LogicProcessor &gameState, DnD::GameMap& gameMap): handlers(), game_state(gameState),game_map(gameMap), collector(collector) , loading_instances() {
+ChangeGetter::ChangeGetter(DnD::LogicProcessor &gameState, DnD::GameMap& gameMap): handlers(), game_state(gameState),game_map(gameMap) , loading_instances() {
     handlers.push_back(std::make_unique<MoveHandler>());
     handlers.push_back(std::make_unique<WeaponHandler>());
     handlers.push_back(std::make_unique<ConsumableHandler>());
