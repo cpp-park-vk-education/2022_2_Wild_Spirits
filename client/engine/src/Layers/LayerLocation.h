@@ -30,7 +30,9 @@ namespace LM {
         void tryLoadImage(size_t id);
 
         template <typename T>
+        void loadActivatableShared(T storage);
         void loadActivatable(T storage);
+
 #endif
     protected:
         static inline const glm::vec2 s_BottomActionSize = glm::vec2(48.0f, 48.0f);

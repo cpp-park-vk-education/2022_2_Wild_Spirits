@@ -153,11 +153,20 @@ namespace LM {
     }
 
     template <typename T>
-    void LayerLocation::loadActivatable(T storage) {
+    void LayerLocation::loadActivatableShared(T storage) {
         for (auto& [id, item] : storage) {
             tryLoadImage(item->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, item));
+                RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, *item));
+        }
+    }
+
+    template <typename T>
+    void LayerLocation::loadActivatable(T storage) {
+        for (auto& [id, item] : storage) {
+            tryLoadImage(item.getImageId());
+            m_BottomActions->add(CreateRef<RenderableBottomAction>(
+                RenderableTextureProps { m_TextureManager->get(item.etImageId()) }, item));
         }
     }
 
@@ -169,8 +178,8 @@ namespace LM {
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
         std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
 
-        loadActivatable(player->weapons());
-        loadActivatable(player->spells());
+        loadActivatableShader(player->weapons());
+        loadActivatableShader(player->spells());
         loadActivatable(player->skills());
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
