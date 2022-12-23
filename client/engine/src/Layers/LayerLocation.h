@@ -31,6 +31,8 @@ namespace LM {
 
         template <typename T>
         void loadActivatableShared(T storage);
+
+        template <typename T>
         void loadActivatable(T storage);
 
 #endif
