@@ -44,7 +44,7 @@ namespace LM {
 #ifndef BUILD_LOGIC
         Vector<DnD::Weapon> m_Weapons;
         Vector<DnD::Spell> m_Spells;
-        Vector<DnD::Skill> m_Skills;
+        Vector<DnD::Skill_Instance> m_Skills;
         Vector<DnD::Consumable> m_Consumables;
 #endif
         bool m_IsUserCreator;

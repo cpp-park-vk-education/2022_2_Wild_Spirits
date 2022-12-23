@@ -214,8 +214,8 @@ namespace LM {
         m_Weapons.push_back(DnD::Weapon(1, DnD::ActivatableInterface::Cast::Tile));
         m_Spells.push_back(DnD::Spell(0, DnD::ActivatableInterface::Cast::Tile));
         m_Spells.push_back(DnD::Spell(1, DnD::ActivatableInterface::Cast::Tile));
-        m_Skills.push_back(DnD::Skill(0, DnD::ActivatableInterface::Cast::Tile));
-        m_Skills.push_back(DnD::Skill(1, DnD::ActivatableInterface::Cast::Tile));
+        m_Skills.push_back(DnD::Skill_Instance(0, DnD::ActivatableInterface::Cast::Tile));
+        m_Skills.push_back(DnD::Skill_Instance(1, DnD::ActivatableInterface::Cast::Tile));
         m_Consumables.push_back(DnD::Consumable(0, DnD::ActivatableInterface::Cast::Tile));
         m_Consumables.push_back(DnD::Consumable(1, DnD::ActivatableInterface::Cast::Self));
 
