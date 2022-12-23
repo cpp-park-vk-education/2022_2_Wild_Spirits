@@ -166,7 +166,7 @@ namespace LM {
         for (auto& [id, item] : storage) {
             tryLoadImage(item.getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item.etImageId()) }, item));
+                RenderableTextureProps { m_TextureManager->get(item.getImageId()) }, item));
         }
     }
 
@@ -178,8 +178,8 @@ namespace LM {
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
         std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
 
-        loadActivatableShader(player->weapons());
-        loadActivatableShader(player->spells());
+        loadActivatableShared(player->weapons());
+        loadActivatableShared(player->spells());
         loadActivatable(player->skills());
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
