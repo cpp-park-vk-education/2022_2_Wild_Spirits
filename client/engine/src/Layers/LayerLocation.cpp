@@ -175,7 +175,7 @@ namespace LM {
         loadActivatable(player->consumables());
         addToGui(m_BottomActions);
 
-        DnD::Loation& location = gameMap->currentLocation();
+        DnD::Location& location = gameMap->currentLocation();
         glm::uvec2 fieldSize = glm::uvec2(location.width(), location.height());
         m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
         addToScene(m_Field);
@@ -193,7 +193,7 @@ namespace LM {
             tryLoadImage(character->getImageId());
             Ref<RenderableCharacter> renderable =
                 CreateRef<RenderableCharacter>(m_TextureManager->get(character->getImageId()), Color(),
-                                               glm::uvec2(character.posX(), character.posY()));
+                                               glm::uvec2(character->centerPos().x, character.centerPos().y));
             m_Field->addCharacter(renderable);
         }
     }
