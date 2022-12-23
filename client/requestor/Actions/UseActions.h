@@ -51,9 +51,9 @@ namespace DnD {
         Spell(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
-    class Skill : public ActivatableInterface {
+    class Skill_Instance : public ActivatableInterface {
     public:
-        Skill(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
+        Skill_Instance(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
     };
 
     class Consumable : public ActivatableInterface {
@@ -68,7 +68,7 @@ namespace LM {
 
     class UseAction : public Action {
     public:
-        UseAction(DnD::ActivatableInterface& activatable, Type type);
+        UseAction(const DnD::ActivatableInterface& activatable, Type type);
 
         virtual Type getType() const override;
 
@@ -78,12 +78,12 @@ namespace LM {
         void setTarget(size_t x, size_t y);
         bool isFirstSet() const;
 
-        DnD::ActivatableInterface& getActivatable();
+        const DnD::ActivatableInterface& getActivatable() const;
         std::vector<DnD::Action::Target> getTargetTypes() const;
         DnD::ActivatableInterface::Cast getCastType() const;
 
     protected:
-        DnD::ActivatableInterface& m_Activatable;
+        const DnD::ActivatableInterface& m_Activatable;
         Type m_Type;
 
         size_t m_TargetX = 0;

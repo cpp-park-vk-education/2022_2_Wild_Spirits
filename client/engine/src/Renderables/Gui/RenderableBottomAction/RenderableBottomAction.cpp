@@ -2,22 +2,26 @@
 
 namespace LM {
 
-    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props, DnD::Weapon& item)
+    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props,
+                                                   const DnD::Weapon& item)
         : RenderableGuiTexture(props),
           m_Activatable(item),
           m_Type(Action::Type::kUseWeapon) { }
 
-    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props, DnD::Spell& item)
+    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props,
+                                                   const DnD::Spell& item)
         : RenderableGuiTexture(props),
           m_Activatable(item),
           m_Type(Action::Type::kUseSpell) { }
 
-    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props, DnD::Skill& item)
+    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props,
+                                                   const DnD::Skill_Instance& item)
         : RenderableGuiTexture(props),
           m_Activatable(item),
           m_Type(Action::Type::kUseSkill) { }
 
-    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props, DnD::Consumable& item)
+    RenderableBottomAction::RenderableBottomAction(const RenderableTextureProps& props,
+                                                   const DnD::Consumable& item)
         : RenderableGuiTexture(props),
           m_Activatable(item),
           m_Type(Action::Type::kUseConsumable) { }

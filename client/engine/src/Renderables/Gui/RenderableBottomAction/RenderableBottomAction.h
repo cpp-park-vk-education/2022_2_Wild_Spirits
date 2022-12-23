@@ -7,10 +7,10 @@ namespace LM {
 
     class RenderableBottomAction : public RenderableGuiTexture {
     public:
-        RenderableBottomAction(const RenderableTextureProps& props, DnD::Weapon& item);
-        RenderableBottomAction(const RenderableTextureProps& props, DnD::Spell& item);
-        RenderableBottomAction(const RenderableTextureProps& props, DnD::Skill& item);
-        RenderableBottomAction(const RenderableTextureProps& props, DnD::Consumable& item);
+        RenderableBottomAction(const RenderableTextureProps& props, const DnD::Weapon& item);
+        RenderableBottomAction(const RenderableTextureProps& props, const DnD::Spell& item);
+        RenderableBottomAction(const RenderableTextureProps& props, const DnD::Skill_Instance& item);
+        RenderableBottomAction(const RenderableTextureProps& props, const DnD::Consumable& item);
 
         virtual Ref<UseAction> createUseAction() const;
 
@@ -21,7 +21,7 @@ namespace LM {
         bool isFocused() const { return m_IsFocused; }
 
     protected:
-        DnD::ActivatableInterface& m_Activatable;
+        const DnD::ActivatableInterface& m_Activatable;
         const Action::Type m_Type;
 
         bool m_IsFocused = false;
