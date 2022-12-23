@@ -4,8 +4,6 @@
 
 RoomImpl::RoomImpl(User *user, std::size_t id, Gateway &gateway): Room(id, gateway), DM(user) {
     players.push_back(user);
-
-
 }
 
 void RoomImpl::addUser(User *player) {
@@ -32,7 +30,5 @@ void RoomImpl::broadcast(const std::string &message) {
 }
 
 void RoomImpl::processRequest(std::size_t user_id, const std::string &request) {
-    // broadcast(request);
-
     processor.acceptRequest(request);
 }
