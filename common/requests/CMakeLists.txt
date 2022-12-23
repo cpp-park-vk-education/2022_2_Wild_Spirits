@@ -20,6 +20,10 @@ find_package(nlohmann_json 3.11.1 REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
+if(${BUILD_LOGIC})
+        add_compile_definitions(BUILD_LOGIC)
+endif()
+
 target_link_libraries(${PROJECT_NAME} GTest::gmock_main nlohmann_json::nlohmann_json
         dnd-logic ClientRequestor dnd-net dnd-gateway)
 
