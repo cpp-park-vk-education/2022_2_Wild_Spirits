@@ -12,6 +12,10 @@ option(BUILD_CLIENT "Build Client" ON)
 option(BUILD_SERVER "Build Server" ON)
 option(BUILD_LOGIC  "Build_Logic"  ON)
 
+if (${BUILD_LOGIC})
+    add_compile_definitions(BUILD_LOGIC)
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(

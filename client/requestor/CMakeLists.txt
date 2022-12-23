@@ -10,11 +10,12 @@ set(SOURCES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
+add_library(${PROJECT_NAME} STATIC)
+
 if (${BUILD_LOGIC})
     add_compile_definitions(BUILD_LOGIC)
 endif()
 
-add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
