@@ -200,14 +200,14 @@ namespace LM {
     void LayerLocation::load() {
         // clearScenes();
 
-        m_Weapons.push_back(DnD::Weapon(0, DnD::Activatable::Cast::Tile));
-        m_Weapons.push_back(DnD::Weapon(1, DnD::Activatable::Cast::Tile));
-        m_Spells.push_back(DnD::Spell(0, DnD::Activatable::Cast::Tile));
-        m_Spells.push_back(DnD::Spell(1, DnD::Activatable::Cast::Tile));
-        m_Skills.push_back(DnD::Skill(0, DnD::Activatable::Cast::Tile));
-        m_Skills.push_back(DnD::Skill(1, DnD::Activatable::Cast::Tile));
-        m_Consumables.push_back(DnD::Consumable(0, DnD::Activatable::Cast::Tile));
-        m_Consumables.push_back(DnD::Consumable(1, DnD::Activatable::Cast::Self));
+        m_Weapons.push_back(DnD::Weapon(0, DnD::ActivatableInterface::Cast::Tile));
+        m_Weapons.push_back(DnD::Weapon(1, DnD::ActivatableInterface::Cast::Tile));
+        m_Spells.push_back(DnD::Spell(0, DnD::ActivatableInterface::Cast::Tile));
+        m_Spells.push_back(DnD::Spell(1, DnD::ActivatableInterface::Cast::Tile));
+        m_Skills.push_back(DnD::Skill(0, DnD::ActivatableInterface::Cast::Tile));
+        m_Skills.push_back(DnD::Skill(1, DnD::ActivatableInterface::Cast::Tile));
+        m_Consumables.push_back(DnD::Consumable(0, DnD::ActivatableInterface::Cast::Tile));
+        m_Consumables.push_back(DnD::Consumable(1, DnD::ActivatableInterface::Cast::Self));
 
         Ref<Texture2D> textureWeapon =
             CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Skill1.png" });

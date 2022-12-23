@@ -9,14 +9,7 @@
 
 namespace LM {
 
-    void LayerLogin::onUpdate(Tick tick) {
-        (void)tick;
-        if (m_NeedRemove) {
-            Application::get()->addLayer(CreateRef<LayerMainMenu>());
-            Application::get()->removeLayer(this);
-            return;
-        }
-    }
+    void LayerLogin::onUpdate(Tick tick) { (void)tick; }
 
     void LayerLogin::renderImGui() {
         if (ImGui::Begin("Login", 0, ImGuiFuncs::SetNextWindowCenterAutoResize())) {
@@ -26,10 +19,20 @@ namespace LM {
             if (ImGui::Button("Login")) {
                 handleBtn();
             }
+            if (m_ShowWrongData) {
+                ImGui::TextUnformatted("Wrong username or password!");
+            }
         }
         ImGui::End();
     }
 
-    void LayerLogin::handleBtn() { m_NeedRemove = true; }
+    void LayerLogin::handleBtn() {
+        if (Application::get()->getClientSideProcessor()->Login(m_Login, m_Password)) {
+            Application::get()->addLayer(CreateRef<LayerMainMenu>());
+            Application::get()->removeLayer(this);
+            return;
+        }
+        m_ShowWrongData = true;
+    }
 
 }    // namespace LM

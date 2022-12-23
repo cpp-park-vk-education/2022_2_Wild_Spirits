@@ -26,6 +26,6 @@ namespace LM {
         return std::vector<DnD::Action::Target>();
     }
 
-    // DnD::Activatable::Cast UseAction::getCastType() const { return m_Activatable.castType(); }
+    DnD::ActivatableInterface::Cast UseAction::getCastType() const { return m_Activatable.castType(); }
 
 }    // namespace LM
