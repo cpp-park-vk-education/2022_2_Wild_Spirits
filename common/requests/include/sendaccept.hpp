@@ -6,13 +6,13 @@
 
 class RequestAcceptor{
 public:
-    virtual ~RequestAcceptor();
+    virtual ~RequestAcceptor(){}
     virtual bool acceptRequest(std::string request_string);
     
 };
 
 class RequestSender{
 public:
-    virtual ~RequestSender();
+    virtual ~RequestSender(){}
     virtual bool sendRequest(LM::Action& action);
 };
