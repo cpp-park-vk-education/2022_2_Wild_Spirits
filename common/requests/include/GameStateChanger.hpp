@@ -82,6 +82,7 @@ struct InfoHandler : ChangeHandler{
         return changes.contains("info");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        changing_gamestate.activatableItems().get(changes["id"]).setName(std::string(changes["cast_type"]));
 
     }
 };
@@ -191,7 +192,7 @@ struct PositionHandler : ChangeHandler{
         return changes.contains("position");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-        DnD::Tile new_position(changes["x"], changes["y"]);
+        DnD::Tile new_position{changes["x"], changes["y"]};
         game_map.allCharacters().get(changes["id"])->moveTo(new_position);
     }
 };

@@ -220,7 +220,7 @@ struct WeaponHandler : ChangeHandler{
 
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
-        DnD::Tile target_tile(request["target_x"], request["target_y"]);
+//        DnD::Tile target_tile(request["target_x"], request["target_y"]);
         ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }
@@ -234,7 +234,7 @@ struct ConsumableHandler : ChangeHandler{
 
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
-        DnD::Tile target_tile(request["target_x"], request["target_y"]);
+        DnD::Tile target_tile{request["target_x"], request["target_y"]};
         ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }
@@ -247,7 +247,7 @@ struct SkillHandler : ChangeHandler{
 
     std::string Handle(nlohmann::json request, DnD::LogicProcessor& logic_processor) override{
         std::stringstream ss;
-        DnD::Tile target_tile(request["target_x"], request["target_y"]);
+        DnD::Tile target_tile{request["target_x"], request["target_y"]};
         ss << std::get<0>(logic_processor.useActivatable(request["player_id"], std::string(request["type"]), request["id"], std::vector<DnD::Tile>()));
         return ss.str();
     }

@@ -14,5 +14,5 @@ public:
 class RequestSender{
 public:
     virtual ~RequestSender();
-    virtual bool sendRequest(LM::Action action);
+    virtual bool sendRequest(LM::Action& action);
 };

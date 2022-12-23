@@ -28,11 +28,12 @@ public:
 class ClientSideProcessor: public RequestAcceptor, public RequestSender{
 public:
     PlayersID playersId;
-    std::size_t getPlayerId(std::size_t id){return playersId.getPlayerId(id);}
+    std::size_t getPlayerId(){return playersId.getPlayerId(_client_id);}
+    std::size_t getClientId(){return _client_id;}
     ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap& map, DnD::TurnOrder& order);
     ClientSideProcessor(DnD::GameState &gamestate, unsigned int client_id);
 
-    bool sendRequest(LM::Action &action);
+    bool sendRequest(LM::Action &action) override;
     std::string sendRequest(std::string request);
     bool getImage(std::string_view hash, std::shared_ptr<std::string>);
     bool acceptRequest(string request_string) override;
