@@ -6,7 +6,7 @@ namespace DnD {
 template <std::derived_from<Activatable> T>
 class ActivatableProxy : public ActivatableInterface {
  private:
-    bool was_updated_;
+    bool was_updated_ = false;
     const std::shared_ptr<T> original_;
 
     void toggleUpdated() {

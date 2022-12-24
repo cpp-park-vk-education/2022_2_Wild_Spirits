@@ -74,10 +74,10 @@ ErrorStatus GameMapImpl::createPlayer(std::shared_ptr<PlayerCharacter> player) {
     }
 
     status = currentLocation().addObject(*player);
-    if (status != ErrorStatus::OK) {
-        players().remove(player->id());
-        return status;
-    }
+    // if (status != ErrorStatus::OK) {
+    //     players().remove(player->id());
+    //     return status;
+    // }
 
     return ErrorStatus::OK;
 }
