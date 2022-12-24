@@ -41,7 +41,6 @@ public:
         changes_flag = false;
     }
 private:
-
     std::deque<std::pair<std::string, long long>> changes_buffer;
     //Flags for client check
     bool changes_flag;

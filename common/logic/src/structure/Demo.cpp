@@ -73,6 +73,9 @@ namespace DnD {
         Character demo_character1(0, "Player1", 0, 12);
         Character demo_character2(0, "Player2", 0, 10);
 
+        locations().add(0, "Start Location", 0, 10, 10);
+        locations().add(1, "Second Location", 0, 10, 10);
+
         createPlayer(std::make_shared<PlayerCharacter>(
             0, std::move(demo_character1), PositionFactory::create(Tile{0, 0}), *this,
             game.classes().safeGet(1), game.races().safeGet(0)
@@ -83,9 +86,6 @@ namespace DnD {
             game.classes().safeGet(0), game.races().safeGet(1)
         ));
 
-        locations().add(0, "Start Location", 0, 10, 10);
-        locations().add(1, "Second Location", 0, 10, 10);
-
         locations().get(0).createNPC(2, game.npc().safeGet(0),
                                      PositionFactory::create(Tile{4, 4}),
                                      *this, true);
@@ -93,5 +93,7 @@ namespace DnD {
         locations().get(0).createNPC(3, game.npc().safeGet(0),
                                      PositionFactory::create(Tile{6, 3}),
                                      *this, true);
+
+        players().get(0).consumables().add(Consumable(game.activatableItems().safeGet(0), 2));
     }
 }  // namespace DnD

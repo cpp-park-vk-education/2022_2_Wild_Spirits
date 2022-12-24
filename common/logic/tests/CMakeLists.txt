@@ -8,6 +8,7 @@ add_executable(${PROJECT_NAME}
     src/effects-tests.cpp
     src/single-tests.cpp
     src/action-tests.cpp
+    src/demo-tests.cpp
     src/turn-order-tests.cpp
     src/location-tests.cpp)
 

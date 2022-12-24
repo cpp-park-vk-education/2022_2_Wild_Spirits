@@ -57,6 +57,7 @@ private:
     bool is_connected;
     bool is_authorized;
     unsigned int _client_id;
+    std::size_t _room_id;
     ClientProcessorEngine engine;
     std::shared_ptr<ClientConnection> connection;
     DnD::GameState& gamestate;
