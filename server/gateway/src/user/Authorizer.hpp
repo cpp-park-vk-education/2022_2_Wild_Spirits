@@ -27,6 +27,10 @@ public:
     explicit UserAuthorizer(UserManager &manager): user_manager(manager) {}
 
     virtual void authorize_user(ws_connection_t, authorize_handler);
+    virtual void register_user(const std::string &nickname,
+                const std::string &password,
+                ws_connection_t,
+                authorize_handler) = 0;
 };
 
 struct UserRecord {
@@ -49,8 +53,8 @@ public:
                        ws_connection_t,
                        authorize_handler) override;
 
-    void registerUser(const std::string &nickname,
+    virtual void register_user(const std::string &nickname,
                   const std::string &password,
                   ws_connection_t,
-                  authorize_handler);
+                  authorize_handler) override;
 };
