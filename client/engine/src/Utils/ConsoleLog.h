@@ -121,21 +121,15 @@ namespace LM {
 }    // namespace LM
 
 #if LOG_ON
-
     #define LOG_INIT() ::LM::ConsoleLog::Get()->Init()
-
     #define LOGI(...)  ::LM::ConsoleLog::Get()->LogInfo(__VA_ARGS__)
-
     #define LOGW(...)  ::LM::ConsoleLog::Get()->LogWarning(__VA_ARGS__)
-
     #define LOGE(...)  ::LM::ConsoleLog::Get()->LogError(__VA_ARGS__)
-
     #define LOGD()     ::LM::ConsoleLog::Get()->LogDecorate();
-
 #else
     #define LOG_INIT()
     #define LOGI(...)
     #define LOGW(...)
     #define LOGE(...)
     #define LOGD()
-#endif    // DEBUG
+#endif    // LOG_ON

@@ -18,7 +18,6 @@ namespace LM {
     }
 
     void LayerRoom::startGame() {
-#ifdef BUILD_LOGIC
         if (m_IsUserCreator) {
             if (Application::get()->getClientSideProcessor()->StartGame()) {
                 Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
@@ -26,24 +25,12 @@ namespace LM {
             }
             return;
         }
-#endif
-        Application::get()->addLayer(CreateRef<LayerLocation>(m_IsUserCreator));
-        Application::get()->removeLayer(this);
     }
 
     void LayerRoom::onUpdate(Tick tick) {
         (void)tick;
-#ifdef BUILD_LOGIC
-        // Some Check for users(not GM) that GM start the game
-#endif
-        if (m_NeedGoBack) {
-            goToMainMenu();
-            return;
-        }
-        if (m_NeedStart) {
-            startGame();
-            return;
-        }
+
+        // TOOD Some Check for users(not GM) that GM start the game
     }
 
     void LayerRoom::renderImGui() {
@@ -57,11 +44,11 @@ namespace LM {
             }
             ImGui::Separator();
             if (m_IsUserCreator && ImGui::Button("Start Game")) {
-                m_NeedStart = true;
+                startGame();
             }
             ImGui::SameLine();
             if (ImGui::Button("Go to main menu")) {
-                m_NeedGoBack = true;
+                goToMainMenu();
             }
         }
         ImGui::End();
