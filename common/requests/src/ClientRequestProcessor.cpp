@@ -2,6 +2,7 @@
 #include "GameState.hpp"
 #include "boost/asio.hpp"
 #include "nlohmann/json.hpp"
+#include "sstream"
 
 #include <iostream>
 
@@ -12,6 +13,14 @@ bool ClientSideProcessor::acceptRequest(string request_string){
     std::cout << "request_string: " << request_string << std::endl;
     if(request_string.starts_with("room_id")){
         _room_id = stoi(request_string.substr(request_string.find(":") + 1));
+        return true;
+    }
+    if(request_string == "Registered successfully"){
+        setAuthorized();
+        return true;
+    }
+    if(request_string == "Logined successfully"){
+        setAuthorized();
         return true;
     }
     switch(getHeader(request_string)){
@@ -130,12 +139,18 @@ bool ClientSideProcessor::isAuthorized() const {
     return is_authorized;
 }
 
-bool ClientSideProcessor::Login(std::string, std::string password) {
-    return false;
+bool ClientSideProcessor::Login(std::string login, std::string password) {
+    std::stringstream ss;
+    ss << "login:" << login << ":" << password;
+    sendRequest(ss.str());
+    return true;
 }
 
 bool ClientSideProcessor::Register(std::string login, std::string password) {
-    return false;
+    std::stringstream ss;
+    ss << "register:" << login << ":" << password;
+    sendRequest(ss.str());
+    return true;
 }
 
 ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap &map, DnD::TurnOrder &order): gamestate(gamestate),
@@ -146,6 +161,14 @@ ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap
 
 std::vector<LM::Room> ClientSideProcessor::GetRooms() {
     return std::vector<LM::Room>();
+}
+
+void ClientSideProcessor::setAuthorized(){
+    is_authorized = true;
+}
+
+void ClientSideProcessor::setUnAuthorized(){
+    is_authorized = false;
 }
 
 // bool ClientSideProcessor::sendRequest(LM::Action &action) {

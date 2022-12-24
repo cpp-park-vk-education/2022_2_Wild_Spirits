@@ -56,6 +56,10 @@ private:
     BoostEventLoop loop;
     bool is_connected;
     bool is_authorized;
+    void setAuthorized();
+    void setConnected();
+    void setUnAuthorized();
+    void setDisconnected();
     unsigned int _client_id;
     std::size_t _room_id;
     ClientProcessorEngine engine;
