@@ -53,7 +53,7 @@ struct Table {
 
         std::string column_names = "";
 
-        for (int i = 0; i < field_names.size() - 1; ++i) {
+        for (unsigned int i = 0; i < field_names.size() - 1; ++i) {
             column_names += field_names[i] + ",";
         }
         column_names += field_names[field_names.size() - 1];

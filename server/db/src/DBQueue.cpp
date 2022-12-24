@@ -1,7 +1,7 @@
 #include <DBQueue.hpp>
 
-void DBQueue::execute_query(execute_handler_t handler) {
+void DBQueue::execute_query(execute_handler_t exec_handler) {
     pqxx::work transaction(connection);
-    handler(transaction);
+    exec_handler(transaction);
     transaction.commit();
 }

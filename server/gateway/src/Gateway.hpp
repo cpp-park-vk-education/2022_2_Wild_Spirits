@@ -13,6 +13,7 @@
 #include <UserManager.hpp>
 #include <Acceptor.hpp>
 #include <Authorizer.hpp>
+#include <DBAuthorizer.hpp>
 #include <EventLoop.hpp>
 #include <RoomConnector.hpp>
 #include <ImageStorage.hpp>
@@ -30,16 +31,22 @@ struct Gateway {
     BoostEventLoop loop;
     UserManagerImpl user_manager;
     ImageStorage image_storage;
-    InMemoryAuthorizer authorizer;
+    // InMemoryAuthorizer authorizer;
+    DBAuthorizer authorizer;
     RoomManagerImpl room_manager;
     RoomConnector room_connector;
+    DBQueue db;
 
     std::shared_ptr<UserAcceptor> acceptor;
 
     tcp::endpoint endpoint;
 
     Gateway(const std::string &ip, std::size_t port_num):
-        image_storage(fs::path("media")), authorizer(user_manager), room_manager(*this), room_connector(room_manager) {
+        db("user=postgres "
+            "host=localhost "
+            "port=5432 "
+            "dbname=dnd"),
+        image_storage(fs::path("media")), authorizer(user_manager, db), room_manager(*this), room_connector(room_manager) {
         auto const address = net::ip::make_address(ip);
         auto const port = static_cast<u_int16_t>(port_num);
 

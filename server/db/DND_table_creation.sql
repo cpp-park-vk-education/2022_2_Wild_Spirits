@@ -4,7 +4,7 @@ create schema public;
 create table if not exists Users (
 	id int primary key generated always as identity,
 	nickname varchar unique not null,
-	password_hash char(256) not null
+	password_hash char(64) not null
 );
 
 create table if not exists Campaigns (
@@ -21,7 +21,7 @@ create table if not exists Campaigns (
 create table if not exists Rooms (
 	id int primary key generated always as identity,
 	DM_id int references Users(id) not null,
-	campaign_id int references Campaigns(id) not null,
+	campaign_id int references Campaigns(id) not null
 --	config_id int references Configs(id)
 );
 
