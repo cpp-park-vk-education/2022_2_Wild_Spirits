@@ -8,9 +8,12 @@
 //Interface methods
 bool ClientSideProcessor::acceptRequest(string request_string){
     bool state = true;
-
+    
     std::cout << "request_string: " << request_string << std::endl;
-
+    if(request_string.starts_with("room_id")){
+        _room_id = stoi(request_string.substr(request_string.find(":") + 1));
+        return true;
+    }
     switch(getHeader(request_string)){
 
         case action:
@@ -96,7 +99,7 @@ bool ClientSideProcessor::Connection(std::string ip, std::string port) {
 LM::Room ClientSideProcessor::CreateRoom() {
     std::string creating_request = "create";
     sendRequest(creating_request);
-    return LM::Room({0});
+    return LM::Room({_room_id});
 }
 
 bool ClientSideProcessor::StartGame() {
@@ -136,7 +139,8 @@ bool ClientSideProcessor::Register(std::string login, std::string password) {
 }
 
 ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap &map, DnD::TurnOrder &order): gamestate(gamestate),
-                                                                                                               changer(gamestate, map), _map(map), _order(order) {
+                                                                                                               changer(gamestate, map), _map(map), _order(order)\
+                                                                                                               , _room_id(0) {
 
 }
 
