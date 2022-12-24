@@ -1,4 +1,6 @@
 #include "ChangeGetter.hpp"
+#include "Headers.hpp"
+
 
 void ChangeGetter::load_collector(change_queue changes){
 
