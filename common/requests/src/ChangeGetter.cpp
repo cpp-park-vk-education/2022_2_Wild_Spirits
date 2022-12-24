@@ -54,5 +54,7 @@ std::string ChangeGetter::getInstance(){
     spells_loader.Load(game_state, instance_object);
     armorLoader armor_loader;
     armor_loader.Load(game_state, instance_object);
+    HeaderSerial serializer;
+    instance_object["header"] = serializer(Header::apply_request);
     return instance_object.dump();
 }

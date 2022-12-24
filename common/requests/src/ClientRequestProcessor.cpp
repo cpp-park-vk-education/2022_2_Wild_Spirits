@@ -23,6 +23,10 @@ bool ClientSideProcessor::acceptRequest(string request_string){
         setAuthorized();
         return true;
     }
+    if(request_string.starts_with("Authorization error")){
+        setUnAuthorized();
+        return false;
+    }
     switch(getHeader(request_string)){
 
         case action:
@@ -112,7 +116,8 @@ LM::Room ClientSideProcessor::CreateRoom() {
 }
 
 bool ClientSideProcessor::StartGame() {
-    return false;
+    sendRequest("!startsame");
+    return true;
 }
 
 bool ClientSideProcessor::ApplicationRequest(queue changes) {

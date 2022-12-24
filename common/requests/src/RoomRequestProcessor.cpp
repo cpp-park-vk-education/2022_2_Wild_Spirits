@@ -47,7 +47,12 @@ bool RoomSideProcessor::acceptRequest(std::string request_string){
     using nlohmann::json;
     HeaderSerial deserializer;
     json request = engine.parse(request_string);
+    if(request_string == "!startgame"){
+        broadcast();
+        return true;
+    }
     if(deserializer(std::string(request["header"])) == Header::action){
         sendDM(engine.Gen().makeRequestString(engine.getChanges(request).dump(), deserializer(Header::room_changes)));
     }
+    return true;
 }
