@@ -13,6 +13,8 @@
 //TODO: При создании комнаты установить на сервере id клиента как DM
 //TODO: Connection должен возвращать id комнаты, как и getROoms
 
+#include <thread>
+
 class PlayersID{
 private:
     std::unordered_map<std::size_t, std::size_t> client_table;
@@ -47,6 +49,9 @@ public:
     bool isAuthorized() const;
     //DM Methods
     bool checkUnappliedChanges() const;
+
+    void start();
+    void stop();
 private:
     BoostEventLoop loop;
     bool is_connected;
@@ -64,4 +69,6 @@ private:
     std::string_view ImageRequest(std::string_view image_hash);
     Header getHeader(std::string request);
     bool ApplicationRequest(queue changes);
+
+    std::jthread loop_thread;
 };

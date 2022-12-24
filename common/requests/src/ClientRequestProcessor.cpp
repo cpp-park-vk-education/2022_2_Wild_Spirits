@@ -3,10 +3,14 @@
 #include "boost/asio.hpp"
 #include "nlohmann/json.hpp"
 
+#include <iostream>
 
 //Interface methods
 bool ClientSideProcessor::acceptRequest(string request_string){
     bool state = true;
+
+    std::cout << "request_string: " << request_string << std::endl;
+
     switch(getHeader(request_string)){
 
         case action:
@@ -27,13 +31,15 @@ bool ClientSideProcessor::sendRequest(LM::Action &action){
     return SendChangesRequest(action);
 }
 
+#include <iostream>
+
 std::string ClientSideProcessor::sendRequest(std::string request){
+    std::cout << "sending: " << request << std::endl;
     bool state = true;
     std::string response_buffer;
-    std::function<void(bool)> handler = [&state](bool answer){
-        state = answer;
-    };
-    connection ->sendMessage(request, handler);
+    connection ->sendMessage(request, [](bool answer){
+        std::cout << "answer: " << answer << std::endl;
+    });
     return response_buffer;
 }
 
@@ -81,14 +87,14 @@ bool ClientSideProcessor::Connection(std::string ip, std::string port) {
     // connection = std::make_shared<ClientConnectionImpl>(ip, port, loop, std::function<void(std::string)>([this, &state](std::string message){
     //     state = acceptRequest(message);
     // }));
-    connection = ClientConnectionImpl::createConnection(ip, std::stoi(port), loop, [this, &state](std::string message){
-        state = acceptRequest(message);
+    connection = ClientConnectionImpl::createConnection(ip, std::stoi(port), loop, [this](std::string message){
+        acceptRequest(message);
     });
     return state;
 }
 
 LM::Room ClientSideProcessor::CreateRoom() {
-    std::string creating_request = "create_room";
+    std::string creating_request = "create";
     sendRequest(creating_request);
     return LM::Room({0});
 }
@@ -134,7 +140,7 @@ ClientSideProcessor::ClientSideProcessor(DnD::GameState &gamestate, DnD::GameMap
 
 }
 
-std::vector<LM::Room> ClientSideProcessor::GetRooms(){
+std::vector<LM::Room> ClientSideProcessor::GetRooms() {
     return std::vector<LM::Room>();
 }
 
@@ -147,4 +153,18 @@ std::vector<LM::Room> ClientSideProcessor::GetRooms(){
 //
 //}
 
+void ClientSideProcessor::start() {
+    connection->recieve();
 
+    loop_thread = std::jthread([this](){
+        loop.start();
+    });
+}
+
+void ClientSideProcessor::stop() {
+    connection->close([this]{
+        loop.stop();
+    });
+
+    loop_thread.join();
+}

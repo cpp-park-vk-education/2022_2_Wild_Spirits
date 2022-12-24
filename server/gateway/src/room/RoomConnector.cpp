@@ -1,5 +1,7 @@
 #include <RoomConnector.hpp>
 
+#include <iostream>
+
 RoomConnector::RoomConnector(RoomManager &room_manager):
     room_manager(room_manager) {}
 
@@ -11,6 +13,8 @@ void RoomConnector::processRequest(connection_t connection, connection_handler_t
     }
 
     connection->async_read([this, connection, handler](std::string message) {
+        std::cout << "room connector recieved: " << message << std::endl;
+
         if (message == "create") {
             createRoom(connection, handler);
             return;

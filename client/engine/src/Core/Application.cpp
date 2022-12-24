@@ -20,6 +20,7 @@ namespace LM {
         m_TurnOrder = CreateRef<DnD::TurnOrder>(*m_GameState, *m_GameMap);
         m_ClientSideProcessor = CreateRef<ClientSideProcessor>(*m_GameState, *m_GameMap, *m_TurnOrder);
         m_ClientSideProcessor->Connection("127.0.0.1", "8000");
+        m_ClientSideProcessor->start();
 
         s_Instance = this;
     }
@@ -46,6 +47,8 @@ namespace LM {
 
             m_Window->onUpdate();
         }
+
+        m_ClientSideProcessor->stop();
     }
 
     void Application::onEvent(Ref<Event> event) {
