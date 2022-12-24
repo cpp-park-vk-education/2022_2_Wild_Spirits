@@ -8,7 +8,7 @@
 
 // #define USE_LOG
 
-#if defined(_DEBUG) || defined(USE_LOG)
+#if defined(_DEBUG) || defined(USE_LOG) || !defined(NDEBUG)
     #ifndef LOG_ON
         #define LOG_ON true
     #endif
