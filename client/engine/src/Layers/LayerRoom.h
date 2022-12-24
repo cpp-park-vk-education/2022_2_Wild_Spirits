@@ -18,7 +18,6 @@ namespace LM {
         void startGame();
 
     protected:
-        bool m_NeedGoBack = false;
         bool m_NeedStart = false;
         Room m_Room;
 

@@ -15,17 +15,13 @@ namespace LM {
     }
 
     void LayerAvailRooms::goToRoom(size_t roomId) {
-#ifdef BUILD_LOGIC
-        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[roomId].getId())) {
+        if (Application::get()->getClientSideProcessor()->ConnectToRoom(m_Rooms[roomId])) {
             Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[roomId]));
             Application::get()->removeLayer(this);
             return;
         }
+        // TODO set error flag
         getRooms();
-#else
-        Application::get()->addLayer(CreateRef<LayerRoom>(m_Rooms[roomId]));
-        Application::get()->removeLayer(this);
-#endif
     }
 
     void LayerAvailRooms::onUpdate(Tick tick) { (void)tick; }
@@ -49,19 +45,9 @@ namespace LM {
         ImGui::End();
     }
 
-#ifdef BUILD_LOGIC
     void LayerAvailRooms::getRooms() {
         m_Rooms.clear();
         m_Rooms = Application::get()->getClientSideProcessor()->GetRooms();
     }
-#else
-    void LayerAvailRooms::getRooms() {
-        m_Rooms.clear();
-        m_Rooms.emplace_back(RoomProps { 0 });
-        m_Rooms.emplace_back(RoomProps { 1 });
-        m_Rooms.emplace_back(RoomProps { 2 });
-        m_Rooms.emplace_back(RoomProps { 3 });
-    }
-#endif
 
 }    // namespace LM

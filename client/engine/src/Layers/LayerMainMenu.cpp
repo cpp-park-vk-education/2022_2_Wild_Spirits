@@ -98,6 +98,7 @@ namespace LM {
 
     void LayerMainMenu::handleStartDM() {
         Room room = Application::get()->getClientSideProcessor()->CreateRoom();
+        // TODO Check room creation status
         Application::get()->addLayer(CreateRef<LayerRoom>(room, true));
         Application::get()->removeLayer(this);
     }

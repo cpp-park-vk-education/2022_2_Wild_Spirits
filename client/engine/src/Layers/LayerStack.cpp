@@ -37,7 +37,6 @@ namespace LM {
     void LayerStack::updateLayersState() {
         for (const auto& layer : m_LayersToAdd) {
             m_Layers.emplace_back(layer);
-            LOGW("Add");
         }
         m_LayersToAdd.clear();
 
@@ -46,7 +45,6 @@ namespace LM {
                                        [&](Ref<Layer> stackLayer) { return stackLayer.get() == layer; });
                 it != m_Layers.end()) {
                 m_Layers.erase(it);
-                LOGW("Erase");
             }
         }
         m_LayersToRemove.clear();

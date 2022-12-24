@@ -90,11 +90,9 @@ namespace LM {
 
     void LayerLocation::onUpdate(Tick tick) {
         Layer::onUpdate(tick);
-#ifdef BUILD_LOGIC
         if (Application::get()->getClientSideProcessor()->checkUnappliedChanges()) {
             load();
         }
-#endif
     }
 
     void LayerLocation::renderImGui() {

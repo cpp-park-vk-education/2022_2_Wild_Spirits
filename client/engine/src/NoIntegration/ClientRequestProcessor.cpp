@@ -41,7 +41,8 @@ bool ClientSideProcessor::StartGame() {
 bool ClientSideProcessor::ConnectToRoom(LM::Room room) { return true; }
 
 std::vector<LM::Room> ClientSideProcessor::GetRooms() {
-    return std::vector({ LM::Room(LM::RoomProps { 0 }) });
+    return std::vector({ LM::Room(LM::RoomProps { 0 }), LM::Room(LM::RoomProps { 1 }),
+                         LM::Room(LM::RoomProps { 2 }), LM::Room(LM::RoomProps { 3 }) });
 }
 
 bool ClientSideProcessor::Register(std::string login, std::string password) { return true; }
