@@ -19,7 +19,7 @@ namespace LM {
         m_GameMap = CreateRef<DnD::GameMapImpl>(*m_GameState);
         m_TurnOrder = CreateRef<DnD::TurnOrder>(*m_GameState, *m_GameMap);
         m_ClientSideProcessor = CreateRef<ClientSideProcessor>(*m_GameState, *m_GameMap, *m_TurnOrder);
-        m_ClientSideProcessor->Connection("ip", "port");
+        m_ClientSideProcessor->Connection("127.0.0.1", "8000");
 
         s_Instance = this;
     }

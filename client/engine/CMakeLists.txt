@@ -93,7 +93,7 @@ else()
 endif()
 
 if (${BUILD_LOGIC})
-    add_definitions(-DBUILD_LOGIC)
+    add_compile_definitions(BUILD_LOGIC)
     target_link_libraries(${PROJECT_NAME} request-processor dnd-logic)
 else()
     target_sources(${PROJECT_NAME} PRIVATE
