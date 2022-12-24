@@ -33,5 +33,5 @@ void RoomImpl::broadcast(const std::string &message) {
 
 void RoomImpl::processRequest(std::size_t user_id, const std::string &request) {
     std::cout << "processing request: " << request << std::endl;
-    // processor.acceptRequest(request);
+    processor->acceptRequest(request);
 }

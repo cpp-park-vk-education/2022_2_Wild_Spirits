@@ -52,14 +52,21 @@ protected:
     std::unique_ptr<DnD::LogicProcessor> logic_processor;
     std::unique_ptr<DnD::GameMap> game_map;
 
-    RoomSideProcessor processor;
+    std::unique_ptr<RoomSideProcessor> processor;
+    // RoomSideProcessor processor;
 
 public:
     Gateway &gateway;
 
     Room(std::size_t id, Gateway &gateway):
         _id(id), logic_processor(std::make_unique<DnD::DemoLogicProcessor>()),
-        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), processor(*this, *logic_processor, *game_map), gateway(gateway) {}
+        game_map(std::make_unique<DnD::DemoGameMap>(*logic_processor)), gateway(gateway) {
+            processor = std::make_unique<RoomSideProcessor>(*logic_processor, *game_map);
+        }
+
+    void get_linked() {
+        processor->link_room_connection(this);
+    }
 
     virtual void addUser(User*) = 0;
 

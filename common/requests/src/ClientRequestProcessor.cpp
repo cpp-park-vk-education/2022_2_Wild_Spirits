@@ -38,14 +38,12 @@ bool ClientSideProcessor::acceptRequest(string request_string) {
         case action: throw HeaderException("Invalid header for accept");
         case img_request: throw HeaderException("Invalid header for accept");
         case room_changes: state = ApplicationRequest(engine.getSetterQueue(request_string)); break;
-        case apply_request: state = ApplyChanges(request_string); break;
+        case apply_request: state = ApplyChanges(request_string); barrier.arrive(); break;
     }
     return state;
 }
 
 bool ClientSideProcessor::sendRequest(LM::Action& action) { return SendChangesRequest(action); }
-
-#include <iostream>
 
 std::string ClientSideProcessor::sendRequest(std::string request) {
     std::cout << "sending: " << request << std::endl;
@@ -116,7 +114,8 @@ LM::Room ClientSideProcessor::CreateRoom() {
 }
 
 bool ClientSideProcessor::StartGame() {
-    sendRequest("!startsame");
+    sendRequest("!startgame");
+    barrier.arrive_and_wait();
     return true;
 }
 
