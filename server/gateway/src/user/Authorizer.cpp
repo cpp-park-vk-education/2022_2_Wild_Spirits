@@ -49,7 +49,7 @@ void UserAuthorizer::on_login(std::size_t user_id, ws_connection_t connection, a
     auto user_connection = std::make_shared<UserConnectionImpl>(connection, user);
     user.linkConnection(user_connection);
 
-    user_connection->sendMessage("Authorized succesfully");
+    user_connection->sendMessage("Authorized successfully");
 
     handler(user_connection);
 }
@@ -58,7 +58,7 @@ void UserAuthorizer::on_register(User &user, ws_connection_t connection, authori
     auto user_connection = std::make_shared<UserConnectionImpl>(connection, user);
     user.linkConnection(user_connection);
 
-    user_connection->sendMessage("Registered succesfully");
+    user_connection->sendMessage("Registered successfully");
 
     handler(user_connection);
 }
@@ -75,7 +75,7 @@ void InMemoryAuthorizer::login(const std::string &nickname,
             on_wrong_credentials(connection, handler);
         }
     } else {
-        register_user(nickname, password, connection, handler);
+        on_wrong_credentials(connection, handler);
     }
 }
 
