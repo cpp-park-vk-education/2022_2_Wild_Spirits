@@ -48,7 +48,7 @@ jobs:
       - name: Run linters
         run: cd build && make check
 
-  client-tests:
+  tests:
     runs-on: ubuntu-latest
     container: reddir666/dnd-pqxx-gtest
     needs: [build]
@@ -64,6 +64,10 @@ jobs:
       
       - name: Unpack build folder
         run: tar -xzf build.tar.gz
+
+      - name: Run logic module tests
+        working-directory: ./build/common/logic/tests
+        run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 
       - name: Run client unit tests
         working-directory: ./build/client/engine/tests
@@ -72,23 +76,6 @@ jobs:
       - name: Run client integration tests
         working-directory: ./build/client/app/tests
         run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
-
-  server-tests:
-    runs-on: ubuntu-latest
-    container: reddir666/dnd-pqxx-gtest
-    needs: [build]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Download build folder
-        uses: actions/download-artifact@v3
-        with:
-          name: build-data
-          path: .
-      
-      - name: Unpack build folder
-        run: tar -xzf build.tar.gz
 
       - name: Run server tests
         working-directory: ./build/server/tests
