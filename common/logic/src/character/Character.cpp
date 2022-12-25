@@ -13,6 +13,9 @@ namespace DnD {
         max_action_points_(ap),
         base_armor_class_(ac) {}
 
+    
+    Character::Character(size_t id) : GameEntity(id), Resistible(), StatBased(defaultStats()) {}
+
     Character::Character(const Character& other) :
         Character(other.id(), other.name(), other.getImageId(), other.max_hp_,
                   other.exp_, other.maxActionPoints(), other.baseArmorClass(),

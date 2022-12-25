@@ -45,6 +45,8 @@ class CharacterInstance : public GameEntityInterface, public OnLocation, public 
     virtual const ActivatableInterface* chooseActivatable(std::string_view action_type, size_t action_id);
 
  public:
+    CharacterInstance(size_t id, Character& original, GameMap& map);
+
     CharacterInstance(size_t id, Character& original, std::unique_ptr<Position>&& pos,
                       GameMap& map, int money = 100, const SharedStorage<Item>& items = {});
     

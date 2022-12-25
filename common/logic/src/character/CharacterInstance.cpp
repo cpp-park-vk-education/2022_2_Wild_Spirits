@@ -17,6 +17,12 @@ CharacterInstance::CharacterInstance(size_t id, Character& original, std::unique
     map.allCharacters().add(this);
 }
 
+CharacterInstance::CharacterInstance(size_t id, Character& original, GameMap& map) :
+        OnLocation(map), id_(id),
+        action_points_(original.maxActionPoints()), hp_(original.maxHP()) {
+    map.allCharacters().add(this);
+}
+
 CharacterInstance::CharacterInstance(CharacterInstance&& other)
     : CharacterInstance(other.id_, other.original(), std::move(other.positionObj()),
                         other.map(), other.money_, std::move(other.items_)) {}

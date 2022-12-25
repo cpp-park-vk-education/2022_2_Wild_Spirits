@@ -29,11 +29,13 @@ class OnLocation : public Position {
     }
 
  public:
+    OnLocation(GameMap& map) : map_(map) {}
+
     OnLocation(std::unique_ptr<Position>&& pos, GameMap& map, size_t location_id = kNoLocationPassed);
 
     OnLocation(const OnLocation& other);
     OnLocation& operator=(OnLocation& other) = delete;
-    
+
     Location& location() const;
 
     size_t locationId() const {

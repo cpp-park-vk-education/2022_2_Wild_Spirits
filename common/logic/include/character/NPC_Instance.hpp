@@ -14,6 +14,8 @@ class NPC_Instance : public CharacterInstance {
                  GameMap& map, bool is_hostile = false, int money = 100,
                  const SharedStorage<Item>& items = {});
 
+    NPC_Instance(size_t id, const std::shared_ptr<NPC>& original, GameMap& map);
+
     NPC_Instance(const NPC_Instance& other) = delete;
     NPC_Instance& operator=(const NPC_Instance& other) = delete;
 

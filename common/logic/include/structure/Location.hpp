@@ -19,14 +19,15 @@ class Location : public GameEntity {
     class TileMatrix {
      private:
         std::vector<TileStatus> tiles_;
-        size_t width_;
-        size_t height_;
+        size_t width_ = 0;
+        size_t height_ = 0;
 
         TileStatus& get(size_t x, size_t y);
         const TileStatus& get(size_t x, size_t y) const;
         bool cannotResize(size_t width, size_t height) const;
 
      public:
+        TileMatrix() = default;
         TileMatrix(size_t x, size_t y);
 
         bool isFree(const Tile& tile) const;
@@ -54,6 +55,8 @@ class Location : public GameEntity {
 
  public:
     Location() = default;
+
+    Location(size_t id);
 
     Location(size_t id, std::string_view name, size_t image_id,
              size_t height, size_t width, const Info& info = {});

@@ -14,6 +14,13 @@ NPC_Instance::NPC_Instance(size_t id, const std::shared_ptr<NPC>& original, std:
     }
 }
 
+NPC_Instance::NPC_Instance(size_t id, const std::shared_ptr<NPC>& original, GameMap& map) :
+        CharacterInstance(id, *original, map) {
+    for (const auto& [_, skill] : original->baseSkills()) {
+        skills_.add(Skill_Instance(skill));
+    }
+}
+
 NPC_Instance::NPC_Instance(NPC_Instance&& other) :
     NPC_Instance(other.id(), other.original_, std::move(other.positionObj()),
                  other.map(), other.is_hostile_, other.money(), std::move(other.items_)) {}

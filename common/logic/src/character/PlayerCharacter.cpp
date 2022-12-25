@@ -9,6 +9,13 @@ PlayerCharacter::PlayerCharacter(size_t id, Character&& original,
         base_(std::move(original)),
         class_list_(),
         race_(race) {
+    addClass(char_class);
+}
+
+PlayerCharacter::PlayerCharacter(size_t id, Character&& original, GameMap& map) :
+    CharacterInstance(id, original, map) {}
+
+void PlayerCharacter::addClass(std::shared_ptr<const Class> char_class) {
     class_list_.add(char_class);
     for (auto& skill : char_class->skills()) {
         skills_.add(Skill_Instance(skill));

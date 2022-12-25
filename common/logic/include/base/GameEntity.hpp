@@ -38,7 +38,7 @@ class GameEntity : virtual public GameEntityInterface {
  private:
     size_t id_;
     std::string name_;
-    size_t image_id_;
+    size_t image_id_ = 0;
     Info info_;
     bool was_updated_ = false;
 
@@ -48,6 +48,7 @@ class GameEntity : virtual public GameEntityInterface {
 
  public:
     GameEntity() = default;
+    GameEntity(size_t id) : id_(id) {}
     GameEntity(size_t id, std::string_view name, size_t image_id, const Info& info);
 
     bool wasUpdated() const override {

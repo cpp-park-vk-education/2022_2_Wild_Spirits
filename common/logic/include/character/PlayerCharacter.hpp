@@ -77,6 +77,8 @@ class PlayerCharacter : public CharacterInstance {
                     std::shared_ptr<const Class> char_class, std::shared_ptr<const Race> race,
                     int money = 100, const SharedStorage<Item>& items = {});
 
+    PlayerCharacter(size_t id, Character&& original, GameMap& map);
+
     PlayerCharacter(const PlayerCharacter& other) = delete;
     PlayerCharacter& operator=(const PlayerCharacter& other) = delete;
 
@@ -127,6 +129,8 @@ class PlayerCharacter : public CharacterInstance {
     auto& classes() {
         return class_list_;
     }
+
+    void addClass(std::shared_ptr<const Class> char_class);
 
     SharedStorage<const Weapon>& weapons() {
         return weapons_;

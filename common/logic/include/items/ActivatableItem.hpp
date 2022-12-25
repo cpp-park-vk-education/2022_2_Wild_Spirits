@@ -9,6 +9,8 @@ class ActivatableItem : public Item, public Activatable {
  public:
     ActivatableItem() = default;
 
+    ActivatableItem(size_t id) : Item(id) {}
+
     ActivatableItem(size_t id, std::string_view name, size_t image_id,
                     const std::vector<Action>& actions, unsigned int action_cost = 0, 
                     unsigned int cost = 0, std::string_view scaling = "",
@@ -29,6 +31,8 @@ class ActivatableItem : public Item, public Activatable {
 class Weapon : public ActivatableItem {
  public:
     Weapon() = default;
+
+    Weapon(size_t id) : ActivatableItem(id) {}
 
     Weapon(size_t id, std::string_view name, size_t image_id, const std::vector<Action>& actions,
            unsigned int action_cost = 0, unsigned int cost = 0, std::string_view scaling = "",

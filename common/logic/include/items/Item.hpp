@@ -10,6 +10,8 @@ class Item : public GameEntity {
  public:
     Item() = default;
 
+    Item(size_t id) : GameEntity(id) {}
+
     Item(size_t id, std::string_view name, size_t image_id, int cost, const Info& info = {}) :
         GameEntity(id, name, image_id, info), cost_(cost) {}
     

@@ -12,6 +12,8 @@ class NPC : public Character {
  public:
     NPC() = default;
 
+    NPC(size_t id) : Character(id) {}
+
     NPC(size_t id, std::string_view name, size_t image_id, unsigned int max_hp,
         int exp = kDefaultExp, unsigned int ap = kDefaultActionPoints,
         unsigned int ac = kDefaultArmorClass, const Stats& stats = Stats{},

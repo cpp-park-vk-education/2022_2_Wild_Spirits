@@ -13,6 +13,8 @@ class Skill : public GameEntity, public Activatable {
  public:
     Skill() = default;
 
+    Skill(size_t id) : GameEntity(id) {}
+
     Skill(size_t id, std::string_view name, size_t image_id,
           const std::vector<Action>& actions, unsigned int action_cost,
           unsigned int cooldown, std::string_view scaling = "",

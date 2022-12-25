@@ -15,11 +15,14 @@ class Armor : public Item {
     };
 
  private:
-    unsigned int defense_;
-    Type type_;
+    unsigned int defense_ = 10;
+    Type type_ = Type::Medium;
 
  public:
     Armor() = default;
+
+    Armor(size_t id) : Item(id) {}
+
     Armor(size_t id, std::string_view name, size_t image_id, int cost,
           unsigned int defense, Type type, const Info& info = {}) :
         Item(id, name, image_id, cost, info), defense_(defense), type_(type) {}
