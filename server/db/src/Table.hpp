@@ -1,14 +1,12 @@
 #pragma once
 
-// #include 
-
 #include "Record.hpp"
 
 template<StringLiteral Name, typename... columns>
 struct Table {
     using id_type = int;
-    using types = typename ColumnTypeResolver<Column<"id", id_type>, columns...>::type;
-    using data_tuple_t = typename TupleCreator<types>::type;
+    using types = ColumnTypeResolver<Column<"id", id_type>, columns...>::type;
+    using data_tuple_t = TupleCreator<types>::type;
 
     using record_t = Record<Column<"id", id_type>, columns...>;
 
@@ -19,8 +17,6 @@ struct Table {
         ss << " WHERE " << tr.esc(key) << " = " << std::quoted(tr.esc(value), '\'') << ";";
 
         pqxx::result res = tr.exec(ss.str());
-
-        std::cout << res.affected_rows() << std::endl;
 
         if (res.affected_rows() == 0) {
             return {};
@@ -47,18 +43,33 @@ struct Table {
     }
 
     template <typename... Ts>
-    static void create(pqxx::work &tr, Ts... args) {
+    static record_t create(pqxx::work &tr, Ts... args) {
         std::vector<std::string> field_names;
         pushColumnNames<columns...>(field_names);
 
         std::string column_names = "";
 
-        for (unsigned int i = 0; i < field_names.size() - 1; ++i) {
+        for (int i = 0; i < field_names.size() - 1; ++i) {
             column_names += field_names[i] + ",";
         }
         column_names += field_names[field_names.size() - 1];
 
         std::string table_name = std::string("\"") + Name.value + "\"";
-        pqxx::stream_to::raw_table(tr, {table_name}, column_names).write_values(args...);
+
+        std::stringstream ss;
+
+        ss << "INSERT INTO " << table_name;
+        ss << " (" << column_names << ") VALUES ('";
+
+        std::vector<std::string> values = to_strings(args...);
+
+        for (int i = 0; i < values.size() - 1; ++i) {
+            ss << tr.esc(values[i]) << "','";
+        }
+        ss << tr.esc(values.back()) << "') returning id";
+
+        int id = std::get<int>(tr.exec1(ss.str()).as<int>());
+
+        return record_t (Name.value, std::tuple(id, args...));
     }
 };

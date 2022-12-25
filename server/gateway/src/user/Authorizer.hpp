@@ -4,20 +4,19 @@
 #include <memory>
 #include <unordered_map>
 
-// #include <Hasher.hpp>
 #include <UserConnection.hpp>
 #include <UserManager.hpp>
 
 class UserAuthorizer {
 protected:
     UserManager &user_manager;
-    // DBQueue &db;
     using authorize_handler = std::function<void(std::shared_ptr<UserConnection>)>;
     using ws_connection_t = std::shared_ptr<WebSocketConnection>;
 
     void on_authorize_error(const std::string&, ws_connection_t, authorize_handler);
     void on_wrong_credentials_format (ws_connection_t, authorize_handler);
     void on_wrong_credentials(ws_connection_t, authorize_handler);
+    void on_repeat_login(ws_connection_t, authorize_handler);
 
     virtual void login(const std::string &nickname, const std::string &password, ws_connection_t, authorize_handler) = 0;
     void on_login(std::size_t user_id, ws_connection_t, authorize_handler);

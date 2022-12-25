@@ -127,3 +127,14 @@ void pushColumnNames(std::vector<std::string> &res) {
     res.push_back(col_1().name);
     pushColumnNames<col_2, cols...>(res);
 }
+
+template< typename ... Args >
+std::vector<std::string> to_strings(Args const& ... args )
+{
+    std::vector<std::string> res;
+    res.reserve(sizeof...(args));
+    using List= int[];
+    (void)List{0, ( (void)(res.push_back(args)), 0 ) ... };
+
+    return res;
+}

@@ -31,12 +31,16 @@ void DBAuthorizer::register_user(const std::string &nickname,
 
     db.execute_query([=, this](pqxx::work &tr) {
         std::string password_hash = Crypto::SHA256_STR(password);
-        UsersTable::create(tr, nickname, password_hash);
-        std::size_t user_id = UsersTable::find_by(tr, "nickname", nickname).id();
+        
 
+        try {
+            auto user_record = UsersTable::create(tr, nickname, password_hash);
 
-        User &user = user_manager.createUser(user_id, nickname);
+            User &user = user_manager.createUser(user_record.id(), nickname);
 
-        on_register(user, connection, handler);
+            on_register(user, connection, handler);
+        } catch(...) {
+            on_repeat_login(connection, handler);
+        }
     });
 }

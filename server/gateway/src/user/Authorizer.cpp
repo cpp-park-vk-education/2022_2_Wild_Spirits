@@ -44,6 +44,10 @@ void UserAuthorizer::on_wrong_credentials(ws_connection_t connection, authorize_
     on_authorize_error("Authorization error: wrong login or password", connection, handler);
 }
 
+void UserAuthorizer::on_repeat_login(ws_connection_t connection, authorize_handler handler) {
+    on_authorize_error("Authorization error: user with that login already exists", connection, handler);
+}
+
 void UserAuthorizer::on_login(std::size_t user_id, ws_connection_t connection, authorize_handler handler) {
     User &user = user_manager.get(user_id);
     auto user_connection = std::make_shared<UserConnectionImpl>(connection, user);
