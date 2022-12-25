@@ -34,7 +34,7 @@ bool ClientSideProcessor::acceptRequest(string request_string) {
         return false;
     }
     switch (getHeader(request_string)) {
-
+        
         case action: throw HeaderException("Invalid header for accept");
         case img_request: throw HeaderException("Invalid header for accept");
         case room_changes: state = ApplicationRequest(engine.getSetterQueue(request_string)); break;
@@ -127,8 +127,10 @@ bool ClientSideProcessor::ApplicationRequest(queue changes) {
 
 Header ClientSideProcessor::getHeader(std::string request) {
     HeaderSerial deserializer;
-    json request_obj = json::parse(request);
-    return deserializer(request_obj.begin().key());
+    nlohmann::json request_obj = nlohmann::json::parse(request);
+    // return deserializer(request_obj.begin().key());
+    std::cout << "getting header by view: " << request_obj["header"] << std::endl;
+    return deserializer(std::string(request_obj["header"]));
 }
 
 bool ClientSideProcessor::checkUnappliedChanges() const { return buffer.hasUnappliedChanges(); }
@@ -188,4 +190,14 @@ void ClientSideProcessor::stop() {
     connection->close([this] { loop.stop(); });
 
     loop_thread.join();
+}
+
+
+void ClientSideProcessor::setUpToDate(){
+    buffer.setUpToDate();
+}
+
+
+const InterlayerBuffer& ClientSideProcessor::getChangesBuffer(){
+    return buffer;
 }

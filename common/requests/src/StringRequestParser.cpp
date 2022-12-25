@@ -14,11 +14,21 @@ std::string ClientRequestStringParser::get_next_change(){
 queue ClientRequestStringParser::make_queue(std::string request_string){
     queue changes;
     /////////////////////////////////////////////////////////
+    std::cout << "trying to parse in make_queue : " << request_string << std::endl;
     json request_obj = json::parse(request_string);
     HeaderSerial ser;
-    json setters_obj = json::parse(std::string(request_obj[ser(Header::apply_request)]));
+    // json setters_obj = json::parse(std::string(request_obj[ser(Header::apply_request)]));
+    json setters_obj = request_obj;
     for(auto& [key, val] : setters_obj.items()){
-        changes.emplace_back(std::string(key), std::string(val));
+        
+        if (val != NULL){
+            std::cout << "val printing:  " << val << std::endl;
+            std::cout << "val items printing:  " << val.items() << std::endl;
+            for (auto& element : val.items()){
+                changes.emplace_back(std::string(key) + std::string(":") + std::string(element.key()), std::string(element.value()));
+            }
+        }
+        
     }
     return changes;
 }

@@ -10,11 +10,11 @@ string ClientProcessorEngine::getRequestString(std::string action_string, LM::Ac
 }
 
 setter_queue ClientProcessorEngine::getSetterQueue(string request){
-    parser->change_queue = parser ->make_queue(request);
-    return parser -> change_queue;
+    
+    return parser -> make_queue(request);
 }
 
-ClientProcessorEngine::ClientProcessorEngine() {
+ClientProcessorEngine::ClientProcessorEngine(): generator(std::make_shared<RequestStringGenerator>()), parser(std::make_shared<ClientRequestStringParser>()) {
 
 }
 

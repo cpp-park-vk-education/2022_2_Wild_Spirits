@@ -37,8 +37,7 @@ bool RoomSideProcessor::broadcast(string request_string){
 
 bool RoomSideProcessor::broadcast() {
     bool state = true;
-    // room_connection->broadcast(engine.getInstance());
-    room_connection->broadcast("smth");
+    room_connection->broadcast(engine.getInstance());
     return state;
 }
 

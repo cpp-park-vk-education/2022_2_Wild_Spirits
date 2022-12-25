@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <unordered_map>
+#include <iostream>
 
 #include <Actions/Action.h>
 
@@ -36,6 +37,7 @@ public:
         return {};
     }
     Header operator() (const std::string& header_string){
+        std::cout << "trying to deserialize header:" << header_string << std::endl;
         if(header_string == "Action"){
             return Header::action;
         }

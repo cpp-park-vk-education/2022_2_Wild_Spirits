@@ -35,7 +35,7 @@ public:
     std::size_t getClientId() { return _client_id; }
     ClientSideProcessor(DnD::GameState& gamestate, DnD::GameMap& map, DnD::TurnOrder& order);
     // ClientSideProcessor(DnD::GameState& gamestate, unsigned int client_id);
-
+    const InterlayerBuffer& getChangesBuffer();
     bool sendRequest(LM::Action& action) override;
     std::string sendRequest(std::string request);
     bool getImage(std::string_view hash, std::shared_ptr<std::string>);
@@ -53,7 +53,7 @@ public:
 
     void start();
     void stop();
-
+    void setUpToDate();
 private:
     BoostEventLoop loop;
     bool is_connected;
