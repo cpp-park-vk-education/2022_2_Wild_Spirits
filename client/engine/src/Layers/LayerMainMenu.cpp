@@ -1,14 +1,11 @@
 #include "LayerMainMenu.h"
 
-#ifdef BUILD_LOGIC
-    // #include <ClientRequestor.h>
-#endif
-
 #include "LayerAvailRooms.h"
 #include "LayerLogin.h"
 #include "LayerRegister.h"
 #include "LayerRoom.h"
 #include <Core/Application.h>
+#include <ImGui/ImGuiFuncs.h>
 #include <Renderables/Gui/RenderableGuiGroup.h>
 #include <Utils/ConsoleLog.h>
 
@@ -59,6 +56,10 @@ namespace LM {
         Layer::onEvent(event);
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<MouseButtonPressedEvent>([&](Ref<MouseButtonPressedEvent> e) {
+            const ImGuiIO& io = ImGui::GetIO();
+            if (io.WantCaptureMouse) {
+                return false;
+            }
             if (m_BtnStart->isHovered()) {
                 handleStart();
                 return false;
@@ -81,22 +82,45 @@ namespace LM {
 
     void LayerMainMenu::onUpdate(Tick tick) { Layer::onUpdate(tick); }
 
-    void LayerMainMenu::handleStart() {
-        Application::get()->addLayer(CreateRef<LayerAvailRooms>());
-        Application::get()->removeLayer(this);
+    void LayerMainMenu::renderImGui() {
+        if (Application::get()->getClientSideProcessor()->isAuthorized()) {
+            if (ImGui::Begin("Auth user info", nullptr, ImGuiFuncs::SetNextWindowOverlayBottomLeft())) {
+                ImGui::Text("Username %s", Application::get()->getUserName().c_str());
+                if (ImGui::Button("Logout")) {
+                }
+            }
+            ImGui::End();
+        }
     }
 
     void LayerMainMenu::handleLogin() {
+        if (Application::get()->getClientSideProcessor()->isAuthorized()) {
+            return;
+        }
         Application::get()->addLayer(CreateRef<LayerLogin>());
         Application::get()->removeLayer(this);
     }
 
     void LayerMainMenu::handleRegister() {
+        if (Application::get()->getClientSideProcessor()->isAuthorized()) {
+            return;
+        }
         Application::get()->addLayer(CreateRef<LayerRegister>());
         Application::get()->removeLayer(this);
     }
 
+    void LayerMainMenu::handleStart() {
+        if (!Application::get()->getClientSideProcessor()->isAuthorized()) {
+            return;
+        }
+        Application::get()->addLayer(CreateRef<LayerAvailRooms>());
+        Application::get()->removeLayer(this);
+    }
+
     void LayerMainMenu::handleStartDM() {
+        if (!Application::get()->getClientSideProcessor()->isAuthorized()) {
+            return;
+        }
         Room room = Application::get()->getClientSideProcessor()->CreateRoom();
         // TODO Check room creation status
         Application::get()->addLayer(CreateRef<LayerRoom>(room, true));

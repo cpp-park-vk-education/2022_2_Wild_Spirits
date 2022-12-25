@@ -73,4 +73,6 @@ namespace LM {
         }
     }
 
+    void SceneGui::clear() { m_Renderables.clear(); }
+
 }    // namespace LM

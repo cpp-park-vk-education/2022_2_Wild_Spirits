@@ -13,6 +13,8 @@ namespace LM {
         virtual void onEvent(Ref<Event> event) override;
         virtual void onUpdate(Tick tick) override;
 
+        virtual void renderImGui() override;
+
     protected:
         void handleStart();
         void handleStartDM();

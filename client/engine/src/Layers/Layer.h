@@ -21,6 +21,7 @@ namespace LM {
         virtual void removeFromScene(Ref<RenderableInterface> renderable) {
             m_SceneScene->remove(renderable);
         }
+        void clearScenes();
 
         virtual void onEvent(Ref<Event> _Event);
         virtual void onUpdate(Tick tick);

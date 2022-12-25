@@ -23,6 +23,9 @@ namespace LM {
 
         Ref<Window> getWindow() { return m_Window; }
 
+        void setUserName(const std::string userName) { m_UserName = userName; }
+        const std::string& getUserName() const { return m_UserName; }
+
         Ref<ClientSideProcessor> getClientSideProcessor() { return m_ClientSideProcessor; }
         Ref<DnD::GameState> getGameState() { return m_GameState; }
         Ref<DnD::GameMap> getGameMap() { return m_GameMap; }
@@ -50,6 +53,7 @@ namespace LM {
         Ref<DnD::GameMap> m_GameMap;
         Ref<DnD::TurnOrder> m_TurnOrder;
         Ref<ClientSideProcessor> m_ClientSideProcessor;
+        std::string m_UserName;
     };
 
 }    // namespace LM
