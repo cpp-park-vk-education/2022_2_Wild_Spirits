@@ -9,6 +9,11 @@ namespace LM {
         m_SceneGui->render();
     }
 
+    void Layer::clearScenes() {
+        m_SceneGui->clear();
+        m_SceneScene->clear();
+    }
+
     void Layer::onEvent(Ref<Event> _Event) {
         m_SceneGui->onEvent(_Event);
         m_SceneScene->onEvent(_Event);

@@ -79,6 +79,7 @@ set(SOURCES
     src/Utils/ConsoleLog.cpp src/Utils/ConsoleLog.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+add_compile_definitions(GLEW_STATIC _LIB RES_FOLDER="${CMAKE_SOURCE_DIR}/ClientRes/")
 
 add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
@@ -100,13 +101,12 @@ else()
         src/NoIntegration/GameState.cpp src/NoIntegration/GameState.hpp
         src/NoIntegration/GameMap.cpp src/NoIntegration/GameMap.hpp
         src/NoIntegration/ClientRequestProcessor.cpp src/NoIntegration/ClientRequestProcessor.hpp
-        src/NoIntegration/TurnOrder.cpp src/NoIntegration/TurnOrder.hpp)
+        src/NoIntegration/TurnOrder.cpp src/NoIntegration/TurnOrder.hpp
+        src/NoIntegration/GameClasses.cpp src/NoIntegration/GameClasses.hpp)
 
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/NoIntegration)
 endif()
 
-add_compile_definitions(GLEW_STATIC _LIB)
-add_compile_definitions(RES_FOLDER="${CMAKE_SOURCE_DIR}/ClientRes/")
 option(GLFW_BUILD_DOCS "GLFW_BUILD_DOCS" OFF)
 
 include(FetchContent)

@@ -14,6 +14,9 @@ class ClientSideProcessor {
 public:
     ClientSideProcessor(DnD::GameState& gamestate, DnD::GameMap& map, DnD::TurnOrder& order);
 
+    std::size_t getPlayerId() { return 0; }
+    std::size_t getClientId() { return _client_id; }
+
     bool sendRequest(LM::Action& action);
     std::string sendRequest(std::string request);
     bool getImage(size_t hash, std::shared_ptr<std::string>);
@@ -27,6 +30,9 @@ public:
     bool Login(std::string, std::string password);
     bool isAuthorized() const;
     bool checkUnappliedChanges() const;
+
+    bool setUpToDate();
+    bool setUnappliedChanges(bool newVal);
 
 private:
     bool is_connected;

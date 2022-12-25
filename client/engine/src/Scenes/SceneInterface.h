@@ -13,6 +13,7 @@ namespace LM {
         virtual void onUpdate(Tick tick) = 0;
 
         virtual void render() = 0;
+        virtual void clear() = 0;
     };
 
 }    // namespace LM
