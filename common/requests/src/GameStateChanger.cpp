@@ -32,4 +32,5 @@ bool GameStateChanger::makechange(nlohmann::json request_part) {
             handler ->SetField(request_part, gamestate, game_map);
         }
     }
+    return true;
 }

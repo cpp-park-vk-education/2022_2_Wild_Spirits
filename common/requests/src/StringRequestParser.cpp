@@ -1,6 +1,7 @@
 #include "StringRequestParser.hpp"
 #include "nlohmann/json.hpp"
 #include "Headers.hpp"
+#include "string"
 
 
 using nlohmann::json;
@@ -24,8 +25,16 @@ queue ClientRequestStringParser::make_queue(std::string request_string){
         if (val != NULL){
             std::cout << "val printing:  " << val << std::endl;
             std::cout << "val items printing:  " << val.items() << std::endl;
-            for (auto& element : val.items()){
-                changes.emplace_back(std::string(key) + std::string(":") + std::string(element.key()), std::string(element.value()));
+            for (auto& obj : val){
+                for (auto& element : obj.items()){
+                    std::cout << "Got change object :  " << element << std::endl;
+                    if(element.value().is_string()){
+                        changes.emplace_back(std::string(key) + std::string(":") + std::string(element.key()), std::string(element.value()));
+                    }
+                    else{
+                        changes.emplace_back(std::string(key) + std::string(":") + std::string(element.key()), std::to_string(std::size_t(element.value())));
+                    }
+                }
             }
         }
         
