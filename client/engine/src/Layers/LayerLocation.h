@@ -26,16 +26,12 @@ namespace LM {
 
         static void drawCurrentPlayerInfo();
 
-#ifdef BUILD_LOGIC
         void tryLoadImage(size_t id);
-
         template <typename T>
         void loadActivatableShared(T storage);
-
         template <typename T>
         void loadActivatable(T storage);
 
-#endif
     protected:
         static inline const glm::vec2 s_BottomActionSize = glm::vec2(48.0f, 48.0f);
         static inline const float s_BottomActionSpace = 5.0f;

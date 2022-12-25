@@ -3,11 +3,7 @@
 #include <memory>
 #include <vector>
 
-template <typename T>
-using SharedStorage = std::vector<std::shared_ptr<T>>;
-
-template <typename T>
-using Storage = std::vector<T>;
+#include "GameClasses.hpp"
 
 namespace DnD {
 
@@ -32,6 +28,8 @@ namespace DnD {
 
     class GameStateImpl : public GameState {
     public:
+        GameStateImpl() { TestImages::init(); }
+
     protected:
     };
 

@@ -36,6 +36,13 @@ namespace LM {
             }
             if (m_BtnTurn->isHovered()) {
                 LOGI("SEND MESSAGE TO SERVER");
+                if (m_ActionMove) {
+                    Application::get()->getClientSideProcessor()->sendRequest(*m_ActionMove);
+                }
+                if (m_ActionUse) {
+                    Application::get()->getClientSideProcessor()->sendRequest(*m_ActionUse);
+                }
+
                 clearActions();
                 m_Field->clearFocused();
                 return false;
@@ -91,7 +98,9 @@ namespace LM {
     void LayerLocation::onUpdate(Tick tick) {
         Layer::onUpdate(tick);
         if (Application::get()->getClientSideProcessor()->checkUnappliedChanges()) {
+            LOGI("UC");
             load();
+            Application::get()->getClientSideProcessor()->setUnappliedChanges(false);
         }
     }
 
@@ -140,7 +149,7 @@ namespace LM {
         m_ActionUse = Ref<UseAction>();
     }
 
-#ifdef BUILD_LOGIC
+#ifndef BUILD_LOGIC
     void LayerLocation::tryLoadImage(size_t id) {
         if (!m_TextureManager->has(id)) {
             std::shared_ptr<std::string> imgSource = std::make_shared<std::string>();
@@ -155,7 +164,8 @@ namespace LM {
         for (auto& [id, item] : storage) {
             tryLoadImage(item->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item->getImageId()) }, *item));
+                RenderableTextureProps { m_TextureManager->get(item->getImageId()), glm::vec2(48.0f, 48.0f) },
+                *item));
         }
     }
 
@@ -164,7 +174,8 @@ namespace LM {
         for (auto& [id, item] : storage) {
             tryLoadImage(item.getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item.getImageId()) }, item));
+                RenderableTextureProps { m_TextureManager->get(item.getImageId()), glm::vec2(48.0f, 48.0f) },
+                item));
         }
     }
 
@@ -190,16 +201,16 @@ namespace LM {
         auto& npcs = location.npc();
         for (auto& [id, npc] : npcs) {
             tryLoadImage(npc->getImageId());
-            Ref<RenderableCharacter> renderable =
-                CreateRef<RenderableCharacter>(m_TextureManager->get(npc->getImageId()), Color(),
-                                               glm::uvec2(npc->centerPos().x, npc->centerPos().y));
+            Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
+                m_TextureManager->get(npc->getImageId()), Color(1.0f, 1.0f, 1.0f, 1.0f),
+                glm::uvec2(npc->centerPos().x, npc->centerPos().y));
             m_Field->addCharacter(renderable);
         }
         auto& characters = gameMap->players();
         for (auto& [id, character] : characters) {
             tryLoadImage(character->getImageId());
             Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
-                m_TextureManager->get(character->getImageId()), Color(),
+                m_TextureManager->get(character->getImageId()), Color(1.0f, 1.0f, 1.0f, 1.0f),
                 glm::uvec2(character->centerPos().x, character->centerPos().y));
             m_Field->addCharacter(renderable);
         }

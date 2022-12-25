@@ -25,12 +25,26 @@ namespace DnD {
         Target m_Target;
     };
 
-    class ActivatableInterface {
+    class ImageGetter {
+    public:
+        ImageGetter(size_t imageId) : m_ImageId(imageId) { }
+        size_t getImageId() const { return m_ImageId; }
+
+    protected:
+        size_t m_ImageId;
+    };
+
+    class ActivatableInterface : public ImageGetter {
     public:
         enum class Cast { Tile, Self };
 
     public:
-        ActivatableInterface(size_t id, Cast cast) : m_Id(id), m_Cast(cast) { }
+        ActivatableInterface(size_t id, Cast cast, size_t imageId)
+            : ImageGetter(imageId),
+              m_Id(id),
+              m_Cast(cast) { }
+
+        size_t getImageId() const { return m_ImageId; }
 
         Cast castType() const { return m_Cast; }
         std::vector<Action>& actions() { return m_Actions; }
@@ -43,22 +57,22 @@ namespace DnD {
 
     class Weapon : public ActivatableInterface {
     public:
-        Weapon(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
+        Weapon(size_t id, Cast cast, size_t imageId) : ActivatableInterface(id, cast, imageId) { }
     };
 
     class Spell : public ActivatableInterface {
     public:
-        Spell(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
+        Spell(size_t id, Cast cast, size_t imageId) : ActivatableInterface(id, cast, imageId) { }
     };
 
     class Skill_Instance : public ActivatableInterface {
     public:
-        Skill_Instance(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
+        Skill_Instance(size_t id, Cast cast, size_t imageId) : ActivatableInterface(id, cast, imageId) { }
     };
 
     class Consumable : public ActivatableInterface {
     public:
-        Consumable(size_t id, Cast cast) : ActivatableInterface(id, cast) { }
+        Consumable(size_t id, Cast cast, size_t imageId) : ActivatableInterface(id, cast, imageId) { }
     };
 
 }    // namespace DnD
