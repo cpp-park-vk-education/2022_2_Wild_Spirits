@@ -38,14 +38,14 @@ public:
 
 //Handlers for instance sending
 struct InstanceLoader{
-    virtual void Load(DnD::GameState& game_state, nlohmann::json& instance_object) = 0;
+    virtual void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) = 0;
 };
 
 
 struct NPCLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json npcInstance;
-        std::function<void(DnD::NPC)> load_handler = [&npcInstance](DnD::NPC npc_instance){
+        std::function<void(DnD::NPC&)> load_handler = [&npcInstance](DnD::NPC& npc_instance){
             nlohmann::json single_instance;
             single_instance["id"] = npc_instance.id();
             single_instance["name"] = npc_instance.name();
@@ -61,16 +61,37 @@ struct NPCLoader : InstanceLoader{
 };
 
 
+struct playersLoader : InstanceLoader{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
+        nlohmann::json playersInstance;
+        const std::function<void(DnD::PlayerCharacter&)> load_handler = [&playersInstance](DnD::PlayerCharacter& player_instance){
+            nlohmann::json single_instance;
+            single_instance["id"] = player_instance.id();
+            single_instance["name"] = player_instance.name();
+            single_instance["image"] = player_instance.getImageId();
+            single_instance["x"] = player_instance.centerPos().x;
+            single_instance["y"] = player_instance.centerPos().y;
+            single_instance["max_hp"] = player_instance.maxHP();
+            single_instance["ap"] = player_instance.maxActionPoints();
+            playersInstance.push_back(single_instance);
+        };
+        game_map.players().each(load_handler);
+        instance_object["players"] = playersInstance;
+    }
+};
+
+
 struct allCharactersLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json allCharactersInstance;
         std::function<void(DnD::CharacterInstance*)> load_handler = [&allCharactersInstance](DnD::CharacterInstance* character_instance){
             nlohmann::json single_instance;
             single_instance["id"] = character_instance ->id();
             single_instance["name"] = character_instance ->name();
+            single_instance["x"] = character_instance -> centerPos().x;
+            single_instance["y"] = character_instance -> centerPos().y;
             single_instance["image"] = character_instance ->getImageId();
             single_instance["max_hp"] = character_instance ->maxHP();
-            // single_instance["exp"] = character_instance ->exp();
             single_instance["ap"] = character_instance ->maxActionPoints();
             allCharactersInstance.push_back(single_instance);
         };
@@ -82,7 +103,7 @@ struct allCharactersLoader : InstanceLoader{
 
 
 struct itemsLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json itemsInstance;
         std::function<void(DnD::Item&)> load_handler = [&itemsInstance](DnD::Item& item_instance){
             nlohmann::json single_instance;
@@ -99,7 +120,7 @@ struct itemsLoader : InstanceLoader{
 
 
 struct activatableItemsLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json activatableItemsInstance;
         std::function<void(DnD::ActivatableItem&)> load_handler = [&activatableItemsInstance](DnD::ActivatableItem& item_instance){
             nlohmann::json single_instance;
@@ -122,7 +143,7 @@ struct activatableItemsLoader : InstanceLoader{
 };
 
 struct weaponsLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json weaponsInstance;
         std::function<void(DnD::Weapon&)> load_handler = [&weaponsInstance](DnD::Weapon& item_instance){
             nlohmann::json single_instance;
@@ -144,7 +165,7 @@ struct weaponsLoader : InstanceLoader{
 
 
 struct spellsLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json spellsInstance;
         std::function<void(DnD::Spell&)> load_handler = [&spellsInstance](DnD::Spell& spell_instance){
             nlohmann::json single_instance;
@@ -169,7 +190,7 @@ struct spellsLoader : InstanceLoader{
 
 
 struct armorLoader : InstanceLoader{
-    void Load(DnD::GameState& game_state, nlohmann::json& instance_object) override{
+    void Load(DnD::GameState& game_state, nlohmann::json& instance_object, DnD::GameMap& game_map) override{
         nlohmann::json armorInstance;
         std::function<void(DnD::Armor&)> load_handler = [&armorInstance](DnD::Armor& armor_instance){
             nlohmann::json single_instance;

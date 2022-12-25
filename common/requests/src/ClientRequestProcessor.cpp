@@ -75,10 +75,11 @@ bool ClientSideProcessor::SendChangesRequest(LM::Action& action) {
 
 bool ClientSideProcessor::ApplyChanges(string changes) {
     bool state = true;
-    queue setters = engine.getSetterQueue(changes);
+    std::deque<nlohmann::json> setters = engine.getAnotherSetterQueue(changes);
     while (!setters.empty()) {
         json temp;
-        state &= changer.makechange(temp[std::get<0>(setters.front())] = std::get<1>(setters.front()));
+        // state &= changer.makechange(temp[std::get<0>(setters.front())] = std::get<1>(setters.front()));
+        state &= changer.makechange(setters.front());
         setters.pop_front();
     }
     return state;
@@ -162,7 +163,7 @@ ClientSideProcessor::ClientSideProcessor(DnD::GameState& gamestate, DnD::GameMap
       changer(gamestate, map),
       _map(map),
       _order(order),
-      _room_id(0) { }
+      _room_id(0){ }
 
 std::vector<LM::Room> ClientSideProcessor::GetRooms() { return std::vector<LM::Room>(); }
 

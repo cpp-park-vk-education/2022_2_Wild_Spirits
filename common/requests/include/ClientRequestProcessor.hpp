@@ -50,14 +50,15 @@ public:
     bool isAuthorized() const;
     // DM Methods
     bool checkUnappliedChanges() const;
+    
 
     void start();
     void stop();
     void setUpToDate();
 private:
     BoostEventLoop loop;
-    bool is_connected;
-    bool is_authorized;
+    bool is_connected = false;
+    bool is_authorized = false;
     void setAuthorized();
     void setConnected();
     void setUnAuthorized();

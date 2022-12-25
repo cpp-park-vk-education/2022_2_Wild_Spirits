@@ -27,10 +27,12 @@ GameStateChanger::GameStateChanger(DnD::GameState &_gamestate, DnD::GameMap &gam
 
 
 bool GameStateChanger::makechange(nlohmann::json request_part) {
+    std::cout << "MAKING CHANGE with the request_part :\t" << request_part << std::endl;
     for(std::unique_ptr<ChangeHandler>& handler : handlers){
         if(handler ->CanHandle(request_part)){
+            std::cout << "=========HANDLING=========" << std::endl;
             handler ->SetField(request_part, gamestate, game_map);
-        }
+        }   
     }
     return true;
 }

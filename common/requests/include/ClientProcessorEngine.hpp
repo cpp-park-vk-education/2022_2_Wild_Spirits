@@ -30,6 +30,7 @@ public:
     std::shared_ptr<ClientRequestStringParser> parser;
 
 public:
+    std::deque<nlohmann::json> getAnotherSetterQueue(string request_string);
     ClientProcessorEngine();
     std::shared_ptr<ActionHandler> handler;
     setter_queue getSetterQueue(string request);

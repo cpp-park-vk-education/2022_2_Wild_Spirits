@@ -156,7 +156,7 @@ class Storage {
     }
 
     const T safeGet(size_t id) const noexcept requires std::is_pointer_v<T> {
-        return const_cast<const T*>(const_cast<Storage*>(this)->safeGet(id));
+        return const_cast<const T>(const_cast<Storage*>(this)->safeGet(id));
     }
 
     const T* safeGet(size_t id) const noexcept {

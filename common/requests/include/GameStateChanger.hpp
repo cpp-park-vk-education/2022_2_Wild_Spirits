@@ -12,6 +12,7 @@
 #include "CharacterInstance.hpp"
 #include "NPC_Instance.hpp"
 #include "PlayerCharacter.hpp"
+#include "ActivatableItem.hpp"
 
 
 using nlohmann::json;
@@ -64,7 +65,7 @@ struct ImageHandler : ChangeHandler{
         return changes.contains("image");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override {
-
+        
     }
 };
 
@@ -73,7 +74,7 @@ struct NameHandler : ChangeHandler{
         return changes.contains("name");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        
     }
 };
 
@@ -82,8 +83,11 @@ struct InfoHandler : ChangeHandler{
         return changes.contains("info");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-        changing_gamestate.activatableItems().get(changes["id"]).setName(std::string(changes["cast_type"]));
-
+        if(changing_gamestate.activatableItems().contains(changes["id"])){
+            changing_gamestate.activatableItems().add(DnD::ActivatableItem());
+            std::cout << "Created Activatable" << std::endl;
+        }
+        changing_gamestate.activatableItems().get(changes["id"]).setName(std::string(changes["info"]));
     }
 };
 
@@ -93,6 +97,10 @@ struct CastTypeHandler : ChangeHandler{
         return changes.contains("cast_type");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!changing_gamestate.activatableItems().contains(changes["id"])){
+            changing_gamestate.activatableItems().add(DnD::ActivatableItem());
+            std::cout << "Created Activatable" << std::endl;
+        }
         changing_gamestate.activatableItems().get(changes["id"]).setCastType((changes["cast_type"] == "tile")? DnD::Activatable::Cast::Tile : DnD::Activatable::Cast::Self);
     }
 };
@@ -102,6 +110,10 @@ struct ScalingHandler : ChangeHandler{
         return changes.contains("scaling");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!changing_gamestate.activatableItems().contains(changes["id"])){
+            changing_gamestate.activatableItems().add(DnD::ActivatableItem());
+            std::cout << "Created Activatable" << std::endl;
+        }
         changing_gamestate.activatableItems().get(changes["id"]).setScaling(changes["scaling"]);
     }
 };
@@ -111,6 +123,10 @@ struct ActivationCostHandler : ChangeHandler{
         return changes.contains("activation_cost");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!changing_gamestate.activatableItems().contains(changes["id"])){
+            changing_gamestate.activatableItems().add(DnD::ActivatableItem());
+            std::cout << "Created Activatable" << std::endl;
+        }
         changing_gamestate.activatableItems().get(changes["id"]).setActivateCost(changes["activation_cost"]);
     }
 };
@@ -120,7 +136,11 @@ struct HpMaxHandler : ChangeHandler{
         return changes.contains("hp_max");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        if(!changing_gamestate.npc().contains(changes["id"])){
+            changing_gamestate.npc().add(DnD::NPC(std::size_t(changes["id"])));   
+            std::cout << "\nCreated Character\n" << std::endl;
+        }
+        changing_gamestate.npc().get(std::size_t(changes["id"])).setMaxHP(std::size_t(changes["hp_max"]));
     }
 };
 
@@ -129,7 +149,11 @@ struct ApMaxHandler : ChangeHandler{
         return changes.contains("ap_max");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        if(!changing_gamestate.npc().contains(changes["id"])){
+            changing_gamestate.npc().add(DnD::NPC(std::size_t(changes["id"])));   
+            std::cout << "\nCreated Character\n" << std::endl;
+        }
+        changing_gamestate.npc().get(std::size_t(changes["id"])).setMaxHP(std::size_t(changes["ap_max"]));
     }
 };
 
@@ -138,7 +162,11 @@ struct BaseArmorHandler : ChangeHandler{
         return changes.contains("base_armor");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        if(!changing_gamestate.npc().contains(changes["id"])){
+            changing_gamestate.npc().add(DnD::NPC(std::size_t(changes["id"])));   
+            std::cout << "\nCreated Character\n" << std::endl;
+        }
+        changing_gamestate.npc().get(std::size_t(changes["id"])).setBaseArmorClass(std::size_t(changes["base_armor"]));
     }
 };
 
@@ -147,7 +175,11 @@ struct StatsHandler : ChangeHandler{
         return changes.contains("stats");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        if(!changing_gamestate.npc().contains(changes["id"])){
+            changing_gamestate.npc().add(DnD::NPC(std::size_t(changes["id"])));   
+            std::cout << "\nCreated Character\n" << std::endl;
+        }
+        // changing_gamestate.npc().get(std::size_t(changes["id"])).setStat(std::string(changes["stats"]));
     }
 };
 //For NPC setters
@@ -156,7 +188,7 @@ struct SkillsHandler : ChangeHandler{
         return changes.contains("skills");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        
     }
 };
 //For CharacterInstance setters
@@ -165,6 +197,11 @@ struct ApHandler : ChangeHandler{
         return changes.contains("ap");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!game_map.allCharacters().contains(changes["id"])){
+            game_map.players().add(std::make_shared<DnD::PlayerCharacter>(std::size_t(changes["id"]), std::move(changing_gamestate.npc().get(changes["id"])), game_map));
+            std::cout << "\nCreated Player with ID:  " << changes["id"] << std::endl;
+            
+        }
         changing_gamestate.allCharacters().get(changes["id"]) -> setActionPoints(changes["ap"]);
     }
 };
@@ -174,6 +211,10 @@ struct HpHandler : ChangeHandler{
         return changes.contains("hp");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!game_map.allCharacters().contains(changes["id"])){
+            game_map.players().add(std::make_shared<DnD::PlayerCharacter>(std::size_t(changes["id"]), std::move(changing_gamestate.npc().get(changes["id"])), game_map));
+            std::cout << "\nCreated Player with ID:  " << changes["id"] << std::endl;
+        }
         changing_gamestate.allCharacters().get(changes["id"]) -> setHP(changes["hp"]);
     }
 };
@@ -183,7 +224,10 @@ struct ArmorHandler : ChangeHandler{
         return changes.contains("armor");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        // if(!game_map.players().contains(changes["id"])){
+        //     game_map.players().add(DnD::PlayerCharacter(std::size_t(changes["id"]), DnD::Character()  game_map));
+        // }
+        // game_map.players().get(changes["id"]).setArmor(std::size_t(changes["armor"]));
     }
 };
 
@@ -192,8 +236,13 @@ struct PositionHandler : ChangeHandler{
         return changes.contains("position");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
+        if(!game_map.allCharacters().contains(changes["id"])){
+            game_map.players().add(std::make_shared<DnD::PlayerCharacter>(std::size_t(changes["id"]), std::move(changing_gamestate.npc().get(changes["id"])), game_map));
+            std::cout << "\nCreated Player with ID:  " << changes["id"] << std::endl;
+        }
         DnD::Tile new_position{changes["x"], changes["y"]};
-        game_map.allCharacters().get(changes["id"])->moveTo(new_position);
+        game_map.allCharacters().get(changes["id"])->setPosition(DnD::PositionFactory::create(new_position));
+    
     }
 };
 //For NPC_instance setters
@@ -203,7 +252,7 @@ struct HostileHandler : ChangeHandler{
         return changes.contains("hostile");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        
     }
 };
 
@@ -213,7 +262,10 @@ struct XPHandler : ChangeHandler{
         return changes.contains("gain_XP");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        // if(!game_map.players().contains(changes["id"])){
+            
+        // }
+        // game_map.players().
     }
 };
 //For Skill setters
@@ -222,7 +274,7 @@ struct CastCostHandler : ChangeHandler{
         return changes.contains("cast_cost");
     }
     void SetField(json changes, DnD::GameState &changing_gamestate, DnD::GameMap& game_map) override{
-
+        
     }
 };
 

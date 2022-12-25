@@ -176,22 +176,26 @@ namespace LM {
 
     template <typename T>
     void LayerLocation::loadActivatableShared(T storage) {
+        LOGI("Started loading activatable");
         for (auto& [id, item] : storage) {
             tryLoadImage(item->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
                 RenderableTextureProps { m_TextureManager->get(item->getImageId()), glm::vec2(48.0f, 48.0f) },
                 *item));
         }
+        LOGI("finished loading actibatable");
     }
 
     template <typename T>
     void LayerLocation::loadActivatable(T storage) {
+        LOGI("started loading actibatable non shared");
         for (auto& [id, item] : storage) {
             tryLoadImage(item.getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
                 RenderableTextureProps { m_TextureManager->get(item.getImageId()), glm::vec2(48.0f, 48.0f) },
                 item));
         }
+        LOGI("finished loading actibatable non shared");
     }
 
     void LayerLocation::load() {
@@ -203,8 +207,9 @@ namespace LM {
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
+        LOGI(playerId);
         std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
-
+        
         loadActivatableShared(player->weapons());
         loadActivatableShared(player->spells());
         loadActivatable(player->skills());
