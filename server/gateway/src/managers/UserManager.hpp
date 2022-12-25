@@ -7,6 +7,7 @@ class UserManager: virtual public Manager<User> {
 public:
     virtual User &createUser(std::string nickname) = 0;
     virtual User &createUser(std::size_t id, std::string nickname) = 0;
+    virtual bool contains(std::size_t id) = 0;
 };
 
 class UserManagerImpl: public UserManager, ManagerImpl<User> {
@@ -20,5 +21,9 @@ public:
         entities.emplace(id, User(nickname, id));
 
         return get(id);
+    }
+
+    virtual bool contains(std::size_t id) override {
+        return entities.contains(id);
     }
 };

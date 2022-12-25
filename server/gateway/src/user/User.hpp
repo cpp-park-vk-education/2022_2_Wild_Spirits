@@ -20,6 +20,7 @@ public:
 
     void setRoom(Room *room);
     void connectToRoom (Room *room);
+    void leaveRoom();
 
     void linkConnection(std::shared_ptr<UserConnection> user_connection);
     std::weak_ptr<UserConnection> getConnection();

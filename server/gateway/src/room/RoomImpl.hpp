@@ -7,6 +7,8 @@ private:
     std::vector<User*> players;
     User* DM;
 
+    User *getUserById(std::size_t id);
+
 public:
     RoomImpl (User*, std::size_t, Gateway&);
 

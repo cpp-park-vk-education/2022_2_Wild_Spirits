@@ -34,7 +34,8 @@ struct Gateway {
     // InMemoryAuthorizer authorizer;
     DBAuthorizer authorizer;
     RoomManagerImpl room_manager;
-    RoomConnector room_connector;
+    // RoomConnector room_connector;
+    InMemoryRoomConnector room_connector;
     DBQueue db;
 
     std::shared_ptr<UserAcceptor> acceptor;

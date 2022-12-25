@@ -2,6 +2,7 @@
 
 #include <User.hpp>
 #include <iostream>
+#include <memory>
 
 #include <WebSocketConnection.hpp>
 #include <EventLoop.hpp>
@@ -26,7 +27,9 @@ public:
     }
 
     virtual void sendMessage(std::string message) = 0;
-    virtual void processRequest(std::string request) = 0;
+    virtual bool processRequest(std::string request) = 0;
 
-    // virtual void connectToRoom(std::string room_name) = 0;
+    std::shared_ptr<UserConnection> shared_from_this() {
+        return std::dynamic_pointer_cast<UserConnection>(RecievingConnection::shared_from_this());
+    }
 };

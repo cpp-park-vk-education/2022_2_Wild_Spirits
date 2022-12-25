@@ -14,6 +14,12 @@ void DBAuthorizer::login(const std::string &nickname,
         if (user.has_value()) {
             std::string password_hash = Crypto::SHA256_STR(password);
             if (user.value().get<2>() == password_hash) {
+                std::size_t user_id = user.value().id();
+
+                if (!user_manager.contains(user_id)) {
+                    user_manager.createUser(user_id, nickname);
+                }
+
                 on_login(user.value().id(), connection, handler);
             } else {
                 on_wrong_credentials(connection, handler);
@@ -32,7 +38,6 @@ void DBAuthorizer::register_user(const std::string &nickname,
     db.execute_query([=, this](pqxx::work &tr) {
         std::string password_hash = Crypto::SHA256_STR(password);
         
-
         try {
             auto user_record = UsersTable::create(tr, nickname, password_hash);
 

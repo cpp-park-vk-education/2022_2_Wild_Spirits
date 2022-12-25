@@ -10,13 +10,17 @@ void RoomImpl::addUser(User *player) {
     players.push_back(player);
 }
 
-void RoomImpl::sendUser(std::size_t user_id, const std::string &message) {
+User *RoomImpl::getUserById(std::size_t user_id) {
     for (User *user : players) {
         if (user->id() == user_id) {
-            user->sendMessage(message);
-            break;
+            return user;
         }
     }
+    return nullptr;
+}
+
+void RoomImpl::sendUser(std::size_t user_id, const std::string &message) {
+    getUserById(user_id)->sendMessage(message);
 }
 
 void RoomImpl::sendDM(const std::string &message) {

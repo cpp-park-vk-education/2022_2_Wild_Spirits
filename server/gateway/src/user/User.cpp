@@ -30,3 +30,7 @@ void User::sendMessage(std::string message) {
     if (!connection.expired())
         connection.lock()->sendMessage(message);
 }
+
+void User::leaveRoom() {
+    room = nullptr;
+}
