@@ -23,6 +23,8 @@ public:
         std::size_t id = id_assigner.assignId();
         entities.emplace(id, RoomImpl(dm, id, gateway));
 
+        get(id).get_linked();
+
         return get(id);
     }
 

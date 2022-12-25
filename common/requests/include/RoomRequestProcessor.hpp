@@ -22,7 +22,7 @@ public:
 
 class RoomSideProcessor : public RequestAcceptor{
 private:
-    Room &room_connection;
+    Room *room_connection;
     RoomProcessorEngine engine;
     PlayerCharacters players;
     DnD::LogicProcessor& room;
@@ -33,5 +33,6 @@ private:
     bool broadcast();
 public:
     bool acceptRequest(std::string request_string) override;
-    RoomSideProcessor(Room &room_connection, DnD::LogicProcessor &room, DnD::GameMap& game_map);
+    void link_room_connection(Room *room_connection);
+    RoomSideProcessor(DnD::LogicProcessor &room, DnD::GameMap& game_map);
 };

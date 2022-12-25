@@ -12,7 +12,7 @@ void UserConnectionImpl::sendMessage(std::string message) {
 }
 
 void UserConnectionImpl::on_recieve(std::string message) {
-    std::cout << "recieved: " << message << std::endl;
+    std::cout << "on recieve: " << message << std::endl;
     processRequest(message);
     recieve();
 }

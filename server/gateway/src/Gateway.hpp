@@ -85,15 +85,15 @@ struct Gateway {
     }
 
     void start(std::size_t threads_cnt=1) {
-        std::vector<std::thread> v;
-        v.reserve(threads_cnt - 1);
-        for(auto i = threads_cnt - 1; i > 0; --i){
-            v.emplace_back(
-            [&loop=this->loop]
-            {
-                loop.start();
-            });
-        }
+        // std::vector<std::thread> v;
+        // v.reserve(threads_cnt - 1);
+        // for(auto i = threads_cnt - 1; i > 0; --i){
+        //     v.emplace_back(
+        //     [&loop=this->loop]
+        //     {
+        //         loop.start();
+        //     });
+        // }
         loop.start();
     }
 
