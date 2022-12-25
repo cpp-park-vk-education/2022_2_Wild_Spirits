@@ -84,6 +84,7 @@ class Location : public GameEntity {
 
     ErrorStatus setPosition(OnLocation& obj, const Tile& pos);
     ErrorStatus addObject(OnLocation& obj);
+    void removeObject(OnLocation& obj);
 
     template <typename ...Args>
     ErrorStatus createNPC(size_t id, Args&&... args);

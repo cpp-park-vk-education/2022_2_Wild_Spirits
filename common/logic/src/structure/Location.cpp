@@ -186,6 +186,10 @@ ErrorStatus Location::addObject(OnLocation& obj) {
     return ErrorStatus::OK;
 }
 
+void Location::removeObject(OnLocation& obj) {
+    freeTiles(obj.occupiedTiles());
+}
+
 ErrorStatus Location::removeNPC(size_t id) {
     auto character = npc_.safeGet(id);
     if (!character) {

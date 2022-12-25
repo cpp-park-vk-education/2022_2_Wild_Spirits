@@ -18,7 +18,19 @@ void OnLocation::setLocation(size_t loc_id) {
     current_location_ = loc_id;
 }
 
+ErrorStatus OnLocation::setPosition(std::unique_ptr<Position>&& pos) {
+    if (pos_) {
+        location().removeObject(*this);
+    }
+
+    pos_ = std::move(pos);
+    location().addObject(*this);
+}
+
 std::vector<Tile> OnLocation::occupiedTiles() const {
+    if (!pos_) {
+        return std::vector<Tile>{};
+    }
     return pos_->occupiedTiles();
 }
 

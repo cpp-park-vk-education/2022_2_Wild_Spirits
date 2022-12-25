@@ -44,9 +44,7 @@ class OnLocation : public Position {
 
     virtual void setLocation(size_t loc_id);
 
-    void setPosition(std::unique_ptr<Position>&& pos) {
-        pos_ = std::move(pos);
-    }
+    ErrorStatus setPosition(std::unique_ptr<Position>&& pos);
 
     bool isInArea(const Area& area) const override {
         return pos_->isInArea(area);
