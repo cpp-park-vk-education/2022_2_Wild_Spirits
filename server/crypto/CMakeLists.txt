@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
-project(dnd-db VERSION 1.0)
+project(dnd-crypto VERSION 1.0)
 
-set(SOURCES src/DBQueue.cpp)
+set(SOURCES src/crypto_impl.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE dnd-crypto pqxx)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
