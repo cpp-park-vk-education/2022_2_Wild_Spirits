@@ -29,7 +29,7 @@ namespace LM {
         load(data.data, data.width, data.height);
     }
 
-    Texture2D::~Texture2D() { }
+    Texture2D::~Texture2D() { glDeleteTextures(1, &m_TextureId); }
 
     void Texture2D::bind(uint32_t slotId) const {
         m_BindSlotId = slotId;

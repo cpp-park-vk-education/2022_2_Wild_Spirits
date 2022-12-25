@@ -32,6 +32,8 @@ namespace LM {
         template <typename T>
         void loadActivatable(T storage);
 
+        void drawDebugWindow();
+
     protected:
         static inline const glm::vec2 s_BottomActionSize = glm::vec2(48.0f, 48.0f);
         static inline const float s_BottomActionSpace = 5.0f;

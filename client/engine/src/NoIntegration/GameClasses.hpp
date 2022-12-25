@@ -62,23 +62,31 @@ namespace DnD {
     private:
     };
 
-    class CharacterInterface : public ImageGetter {
+    class CharacterInstance : public ImageGetter {
     public:
-        CharacterInterface(size_t posX, size_t posY, size_t imageId)
+        CharacterInstance(size_t posX, size_t posY, size_t imageId)
             : ImageGetter(imageId),
               m_PosX(posX),
               m_PosY(posY) { }
 
         glm::uvec2 centerPos() const { return glm::uvec2(m_PosX, m_PosY); }
 
+        int hp() const { return 95; }
+        unsigned int maxHP() const { return 100; }
+
+        int money() const { return 9998; }
+
+        unsigned int actionPoints() const { return 9; }
+        unsigned int maxActionPoints() const { return 10; }
+
     protected:
         size_t m_PosX;
         size_t m_PosY;
     };
 
-    class PlayerCharacter : public CharacterInterface {
+    class PlayerCharacter : public CharacterInstance {
     public:
-        PlayerCharacter(size_t posX, size_t posY, size_t imageId) : CharacterInterface(posX, posY, imageId) {
+        PlayerCharacter(size_t posX, size_t posY, size_t imageId) : CharacterInstance(posX, posY, imageId) {
             m_Weapons.add(0, std::make_shared<Weapon>(0, ActivatableInterface::Cast::Tile,
                                                       TestImages::getRandomBottomId()));
             m_Weapons.add(1, std::make_shared<Weapon>(1, ActivatableInterface::Cast::Tile,
@@ -109,9 +117,9 @@ namespace DnD {
         Storage<Consumable> m_Consumables;
     };
 
-    class NPC_Instance : public CharacterInterface {
+    class NPC_Instance : public CharacterInstance {
     public:
-        NPC_Instance(size_t posX, size_t posY, size_t imageId) : CharacterInterface(posX, posY, imageId) { }
+        NPC_Instance(size_t posX, size_t posY, size_t imageId) : CharacterInstance(posX, posY, imageId) { }
 
     protected:
     };
@@ -120,9 +128,9 @@ namespace DnD {
     public:
         Location(size_t id, size_t width, size_t height) : m_Id(id), m_Widht(width), m_Height(height) {
             m_NPC.add(0, std::make_shared<NPC_Instance>(5, 5, TestImages::getRandomEnemyId()));
-            m_NPC.add(1, std::make_shared<NPC_Instance>(9, 9, TestImages::getRandomEnemyId()));
-            m_NPC.add(2, std::make_shared<NPC_Instance>(3, 8, TestImages::getRandomEnemyId()));
-            m_NPC.add(3, std::make_shared<NPC_Instance>(7, 8, TestImages::getRandomEnemyId()));
+            m_NPC.add(1, std::make_shared<NPC_Instance>(7, 7, TestImages::getRandomEnemyId()));
+            m_NPC.add(2, std::make_shared<NPC_Instance>(3, 7, TestImages::getRandomEnemyId()));
+            m_NPC.add(3, std::make_shared<NPC_Instance>(7, 2, TestImages::getRandomEnemyId()));
         }
 
         size_t id() const { return m_Id; }

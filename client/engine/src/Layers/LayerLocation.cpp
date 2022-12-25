@@ -4,6 +4,7 @@
 
 #include "LayerMainMenu.h"
 #include <Core/Application.h>
+#include <ImGui/ImGuiFuncs.h>
 #include <Utils/ConsoleLog.h>
 
 namespace LM {
@@ -28,6 +29,11 @@ namespace LM {
             return false;
         });
         dispatcher.dispatch<MouseButtonPressedEvent>([&](Ref<MouseButtonPressedEvent> event) {
+            const ImGuiIO& io = ImGui::GetIO();
+            LOGI("io.WantCaptureMouse: ", io.WantCaptureMouse);
+            if (io.WantCaptureMouse) {
+                return false;
+            }
             if (m_BtnCancel->isHovered()) {
                 clearActions();
                 m_Field->clearFocused();
@@ -100,7 +106,7 @@ namespace LM {
         if (Application::get()->getClientSideProcessor()->checkUnappliedChanges()) {
             LOGI("UC");
             load();
-            Application::get()->getClientSideProcessor()->setUnappliedChanges(false);
+            Application::get()->getClientSideProcessor()->setUpToDate();
         }
     }
 
@@ -115,8 +121,7 @@ namespace LM {
             }
             ImGui::End();
         }
-
-#else
+#endif
         if (m_IsUserCreator && ImGui::Begin("New Changes")) {
             static size_t testScalar = 0;
             ImGui::DragScalar("changename", ImGuiDataType_U64, &testScalar);
@@ -125,7 +130,7 @@ namespace LM {
 
         m_Field->drawAdditionalImGuiWidgets();
         drawCurrentPlayerInfo();
-#endif
+        drawDebugWindow();
     }
 
     bool LayerLocation::hasActions() const {
@@ -149,7 +154,6 @@ namespace LM {
         m_ActionUse = Ref<UseAction>();
     }
 
-#ifndef BUILD_LOGIC
     void LayerLocation::tryLoadImage(size_t id) {
         if (!m_TextureManager->has(id)) {
             std::shared_ptr<std::string> imgSource = std::make_shared<std::string>();
@@ -180,7 +184,10 @@ namespace LM {
     }
 
     void LayerLocation::load() {
-        // clearScenes();
+        clearScenes();
+
+        LOGI("Layer Location Reload");
+
         Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
@@ -215,93 +222,34 @@ namespace LM {
             m_Field->addCharacter(renderable);
         }
     }
-#else
-    void LayerLocation::load() {
-        // clearScenes();
-
-        m_Weapons.push_back(DnD::Weapon(0, DnD::ActivatableInterface::Cast::Tile));
-        m_Weapons.push_back(DnD::Weapon(1, DnD::ActivatableInterface::Cast::Tile));
-        m_Spells.push_back(DnD::Spell(0, DnD::ActivatableInterface::Cast::Tile));
-        m_Spells.push_back(DnD::Spell(1, DnD::ActivatableInterface::Cast::Tile));
-        m_Skills.push_back(DnD::Skill_Instance(0, DnD::ActivatableInterface::Cast::Tile));
-        m_Skills.push_back(DnD::Skill_Instance(1, DnD::ActivatableInterface::Cast::Tile));
-        m_Consumables.push_back(DnD::Consumable(0, DnD::ActivatableInterface::Cast::Tile));
-        m_Consumables.push_back(DnD::Consumable(1, DnD::ActivatableInterface::Cast::Self));
-
-        Ref<Texture2D> textureWeapon =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Skill1.png" });
-        Ref<Texture2D> textureSpell =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Skill2.png" });
-        Ref<Texture2D> textureSkill =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Skill3.png" });
-        Ref<Texture2D> textureConsum =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Skill4.png" });
-
-        m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
-        for (auto& item : m_Weapons) {
-            m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { textureWeapon, glm::vec2(48.0f, 48.0f) }, item));
-        }
-        for (auto& item : m_Spells) {
-            m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { textureSpell, glm::vec2(48.0f, 48.0f) }, item));
-        }
-        for (auto& item : m_Skills) {
-            m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { textureSkill, glm::vec2(48.0f, 48.0f) }, item));
-        }
-        for (auto& item : m_Consumables) {
-            m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { textureConsum, glm::vec2(48.0f, 48.0f) }, item));
-        }
-        addToGui(m_BottomActions);
-
-        glm::uvec2 fieldSize = glm::uvec2(16, 16);
-        m_Field = CreateRef<RenderableTileGroup>(m_TileTexture, fieldSize);
-        addToScene(m_Field);
-
-        Ref<Texture2D> texturePlayer =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Character.png" });
-        Ref<Texture2D> textureEnemy =
-            CreateRef<Texture2D>(FromFile { std::string(RES_FOLDER) + "Textures/Location/Enemy.png" });
-        for (uint32_t i = 0, j = 2; i < fieldSize.x && j < fieldSize.y; i += 4, j += 2) {
-            Ref<RenderableCharacter> character = CreateRef<RenderableCharacter>(
-                texturePlayer,
-                Color(static_cast<float>(i) / fieldSize.x, 0.0f, static_cast<float>(j) / fieldSize.y, 1.0f),
-                glm::uvec2(i, j));
-            m_Field->addCharacter(character);
-        }
-        for (uint32_t i = 1, j = 5; i < fieldSize.x && j < fieldSize.y; i += 3, j += 3) {
-            Ref<RenderableCharacter> character = CreateRef<RenderableCharacter>(
-                textureEnemy,
-                Color(static_cast<float>(i) / fieldSize.x, 0.0f, static_cast<float>(j) / fieldSize.y, 1.0f),
-                glm::uvec2(i, j));
-            m_Field->addCharacter(character);
-        }
-    }
-#endif
 
     void LayerLocation::drawCurrentPlayerInfo() {
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking |
-                                       ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
-                                       ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
-                                       ImGuiWindowFlags_NoMove;
-        const float PAD = 10.0f;
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImVec2 workPos = viewport->WorkPos;    // Use work area to avoid menu-bar/task-bar, if any!
-        ImVec2 windowPos;
-        ImVec2 windowPosPivot { 0.0f, 1.0f };
-        ImVec2 workSize = viewport->WorkSize;
-        windowPos.x = workPos.x + PAD;
-        windowPos.y = workPos.y + workSize.y - PAD;
-        ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, windowPosPivot);
-        ImGui::SetNextWindowViewport(viewport->ID);
-        ImGui::SetNextWindowBgAlpha(0.35f);    // Transparent background
-        if (ImGui::Begin("My stats", nullptr, windowFlags)) {
-            ImGui::Text("HP %u", 100u);
-            ImGui::Text("MP %u", 20u);
+        if (ImGui::Begin("My stats", nullptr, ImGuiFuncs::SetNextWindowOverlayBottomLeft())) {
+            Ref<DnD::GameMap> gameMap = Application::get()->getGameMap();
+            size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
+            std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
+
+            ImGui::Text("HP: %d/%u", player->hp(), player->maxHP());
+            ImGui::Text("CP: %u/%u", player->actionPoints(), player->maxActionPoints());
+            ImGui::Separator();
+            ImGui::Text("Money: %d", player->money());
         }
         ImGui::End();
+    }
+
+    void LayerLocation::drawDebugWindow() {
+#ifndef BUILD_LOGIC
+        if (ImGui::Begin("Location Debug")) {
+            ImGui::Text("Current Location: %lu", Application::get()->getGameMap()->currentLocation().id());
+            for (auto loc : Application::get()->getGameMap()->locations()) {
+                if (ImGui::Button(("Go to Location " + std::to_string(loc.second.id())).data())) {
+                    Application::get()->getGameMap()->switchLocation(loc.second.id());
+                    Application::get()->getClientSideProcessor()->setUnappliedChanges(true);
+                }
+            }
+        }
+        ImGui::End();
+#endif
     }
 
 }    // namespace LM

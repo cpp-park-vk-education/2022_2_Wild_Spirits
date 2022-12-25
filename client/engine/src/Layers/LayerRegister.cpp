@@ -13,6 +13,11 @@ namespace LM {
 
     void LayerRegister::renderImGui() {
         if (ImGui::Begin("Register", 0, ImGuiFuncs::SetNextWindowCenterAutoResize())) {
+            if (ImGui::Button("Back")) {
+                Application::get()->addLayer(CreateRef<LayerMainMenu>());
+                Application::get()->removeLayer(this);
+            }
+            ImGui::Separator();
             ImGui::InputText("Login##Field", &m_Login);
             ImGui::InputText("Password##Field", &m_Password, ImGuiInputTextFlags_Password);
 
@@ -28,6 +33,7 @@ namespace LM {
 
     void LayerRegister::handleBtn() {
         if (Application::get()->getClientSideProcessor()->Register(m_Login, m_Password)) {
+            Application::get()->setUserName(m_Login);
             Application::get()->addLayer(CreateRef<LayerMainMenu>());
             Application::get()->removeLayer(this);
             return;

@@ -31,6 +31,7 @@ public:
     bool isAuthorized() const;
     bool checkUnappliedChanges() const;
 
+    bool setUpToDate();
     bool setUnappliedChanges(bool newVal);
 
 private:

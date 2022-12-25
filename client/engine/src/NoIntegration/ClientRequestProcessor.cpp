@@ -47,7 +47,11 @@ std::vector<LM::Room> ClientSideProcessor::GetRooms() {
                          LM::Room(LM::RoomProps { 2 }), LM::Room(LM::RoomProps { 3 }) });
 }
 
-bool ClientSideProcessor::Register(std::string login, std::string password) { return true; }
+bool ClientSideProcessor::Register(std::string login, std::string password) {
+    is_authorized = true;
+
+    return is_authorized;
+}
 
 bool ClientSideProcessor::Login(std::string, std::string password) {
     is_authorized = true;
@@ -59,7 +63,14 @@ bool ClientSideProcessor::isAuthorized() const { return is_authorized; }
 
 bool ClientSideProcessor::checkUnappliedChanges() const { return is_changed; }
 
+bool ClientSideProcessor::setUpToDate() {
+    is_changed = false;
+
+    return is_changed;
+}
+
 bool ClientSideProcessor::setUnappliedChanges(bool newVal) {
     is_changed = newVal;
+
     return is_changed;
 }
