@@ -134,6 +134,11 @@ namespace LM {
             Data->eventQueue->add(CreateRef<WindowCloseEvent>());
         });
 
+        glfwSetDropCallback(m_Window, [](GLFWwindow* _Window, int count, const char* paths[]) {
+            WindowData* Data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(_Window));
+            Data->eventQueue->add(CreateRef<WindowDropEvent>(count, paths));
+        });
+
         glfwSetKeyCallback(
             m_Window, [](GLFWwindow* _Window, int _Key, int _ScanCode, int _Action, int _Mods) {
                 (void)_ScanCode;

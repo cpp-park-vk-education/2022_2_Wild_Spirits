@@ -11,6 +11,7 @@ namespace LM {
         None = 0,
         WindowClose,
         WindowResize,
+        WindowDrop,
         WindowFocus,
         WindowLostFocus,
         WindowMoved,

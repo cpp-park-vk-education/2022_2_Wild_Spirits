@@ -16,7 +16,7 @@ namespace DnD {
 
     class GameMapImpl : public GameMap {
     public:
-        GameMapImpl(GameState& game);
+        explicit GameMapImpl(GameState& game);
         virtual SharedStorage<DnD::PlayerCharacter>& players() override;
 
         virtual void switchLocation(size_t id) override { m_CurrentLocation = id; }

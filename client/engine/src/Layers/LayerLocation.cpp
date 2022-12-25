@@ -28,6 +28,20 @@ namespace LM {
             }
             return false;
         });
+        dispatcher.dispatch<WindowDropEvent>([&](Ref<WindowDropEvent> event) {
+            LOGI(event->toString());
+            for (const auto& path : event->getPaths()) {
+                std::ifstream input(path, std::ios::binary);
+                std::string source(std::istreambuf_iterator<char>(input), {});
+                auto [status, id] = Application::get()->getClientSideProcessor()->sendImage(source);
+                if (status) {
+                    m_TextureManager->add(id, CreateRef<Texture2D>(FromSource { source }));
+                }
+            }
+
+            return true;
+            //
+        });
         dispatcher.dispatch<MouseButtonPressedEvent>([&](Ref<MouseButtonPressedEvent> event) {
             const ImGuiIO& io = ImGui::GetIO();
             LOGI("io.WantCaptureMouse: ", io.WantCaptureMouse);
@@ -111,25 +125,10 @@ namespace LM {
     }
 
     void LayerLocation::renderImGui() {
-#ifdef BUILD_LOGIC
-        if (m_IsUserCreator && Application::get()->getClientSideProcessor()->checkUnappliedChangesOfDM()) {
-            if (ImGui::Begin("New Changes")) {
-                auto& changes = Application::get()->getClientSideProcessor()->getChangesDM();
-                for (auto& change : changes) {
-                    ImGui::DragScalar(change.name.data(), ImGuiDataType_U64, &change.value);
-                }
-            }
-            ImGui::End();
-        }
-#endif
-        if (m_IsUserCreator && ImGui::Begin("New Changes")) {
-            static size_t testScalar = 0;
-            ImGui::DragScalar("changename", ImGuiDataType_U64, &testScalar);
-        }
-        ImGui::End();
-
         m_Field->drawAdditionalImGuiWidgets();
         drawCurrentPlayerInfo();
+        drawChangesDM();
+        drawTextureManager();
         drawDebugWindow();
     }
 
@@ -164,22 +163,24 @@ namespace LM {
     }
 
     template <typename T>
-    void LayerLocation::loadActivatableShared(T storage) {
-        for (auto& [id, item] : storage) {
-            tryLoadImage(item->getImageId());
+    void LayerLocation::loadActivatableShared(DnD::SharedStorage<T> storage) {
+        for (const auto& item : storage) {
+            tryLoadImage(item.second->getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item->getImageId()), glm::vec2(48.0f, 48.0f) },
-                *item));
+                RenderableTextureProps { m_TextureManager->get(item.second->getImageId()),
+                                         glm::vec2(48.0f, 48.0f) },
+                *item.second));
         }
     }
 
     template <typename T>
-    void LayerLocation::loadActivatable(T storage) {
-        for (auto& [id, item] : storage) {
-            tryLoadImage(item.getImageId());
+    void LayerLocation::loadActivatable(DnD::Storage<T> storage) {
+        for (const auto& item : storage) {
+            tryLoadImage(item.second.getImageId());
             m_BottomActions->add(CreateRef<RenderableBottomAction>(
-                RenderableTextureProps { m_TextureManager->get(item.getImageId()), glm::vec2(48.0f, 48.0f) },
-                item));
+                RenderableTextureProps { m_TextureManager->get(item.second.getImageId()),
+                                         glm::vec2(48.0f, 48.0f) },
+                item.second));
         }
     }
 
@@ -192,12 +193,12 @@ namespace LM {
 
         m_BottomActions = CreateRef<RenderableBottomActionGroup>(s_BottomActionSpace);
         size_t playerId = Application::get()->getClientSideProcessor()->getPlayerId();
-        std::shared_ptr<DnD::PlayerCharacter> player = gameMap->players().safeGet(playerId);
+        std::shared_ptr<DnD::PlayerCharacter> userPlayer = gameMap->players().safeGet(playerId);
 
-        loadActivatableShared(player->weapons());
-        loadActivatableShared(player->spells());
-        loadActivatable(player->skills());
-        loadActivatable(player->consumables());
+        loadActivatableShared(userPlayer->weapons());
+        loadActivatableShared(userPlayer->spells());
+        loadActivatable(userPlayer->skills());
+        loadActivatable(userPlayer->consumables());
         addToGui(m_BottomActions);
 
         DnD::Location& location = gameMap->currentLocation();
@@ -206,19 +207,19 @@ namespace LM {
         addToScene(m_Field);
 
         auto& npcs = location.npc();
-        for (auto& [id, npc] : npcs) {
-            tryLoadImage(npc->getImageId());
+        for (auto& npc : npcs) {
+            tryLoadImage(npc.second->getImageId());
             Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
-                m_TextureManager->get(npc->getImageId()), Color(1.0f, 1.0f, 1.0f, 1.0f),
-                glm::uvec2(npc->centerPos().x, npc->centerPos().y));
+                m_TextureManager->get(npc.second->getImageId()),
+                glm::uvec2(npc.second->centerPos().x, npc.second->centerPos().y), npc.second);
             m_Field->addCharacter(renderable);
         }
-        auto& characters = gameMap->players();
-        for (auto& [id, character] : characters) {
-            tryLoadImage(character->getImageId());
+        auto& players = gameMap->players();
+        for (auto& player : players) {
+            tryLoadImage(player.second->getImageId());
             Ref<RenderableCharacter> renderable = CreateRef<RenderableCharacter>(
-                m_TextureManager->get(character->getImageId()), Color(1.0f, 1.0f, 1.0f, 1.0f),
-                glm::uvec2(character->centerPos().x, character->centerPos().y));
+                m_TextureManager->get(player.second->getImageId()),
+                glm::uvec2(player.second->centerPos().x, player.second->centerPos().y), player.second);
             m_Field->addCharacter(renderable);
         }
     }
@@ -233,6 +234,49 @@ namespace LM {
             ImGui::Text("CP: %u/%u", player->actionPoints(), player->maxActionPoints());
             ImGui::Separator();
             ImGui::Text("Money: %d", player->money());
+        }
+        ImGui::End();
+    }
+
+    void LayerLocation::drawChangesDM() {
+        if (m_IsUserCreator && ImGui::Begin("New Changes")) {
+            InterlayerBuffer& inter = Application::get()->getClientSideProcessor()->getChangesBuffer();
+            while (inter.hasUnseenChanges()) {
+                m_ChangesDM.push_back(inter.getNextChange());
+            }
+            for (auto& [name, value] : m_ChangesDM) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_U64, &value);
+            }
+            if (ImGui::Button("Apply changes")) {
+                if (Application::get()->getClientSideProcessor()->applyChanges(m_ChangesDM)) {
+                    m_ChangesDM.clear();
+                }
+            }
+        }
+        ImGui::End();
+    }
+
+    void LayerLocation::drawTextureManager() {
+        if (ImGui::Begin("TextureManager")) {
+            size_t count = 0;
+            const float textureSize = 128.0f;
+            float visible = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+            for (const auto& [id, texture] : m_TextureManager->getData()) {
+                ImGui::PushID(id);
+                ImGui::Image(reinterpret_cast<ImTextureID>(texture->getTextureId()),
+                             ImVec2(textureSize, textureSize), ImVec2(0.0f, 1.0f), ImVec2(1.0, 0.0f));
+                if (ImGui::IsItemHovered()) {
+                    ImGui::BeginTooltip();
+                    ImGui::Text("%lu", id);
+                    ImGui::EndTooltip();
+                }
+                float nextSize = ImGui::GetItemRectMax().x + ImGui::GetStyle().ItemSpacing.x + textureSize;
+                if (count + 1 < m_TextureManager->getData().size() && nextSize < visible) {
+                    ImGui::SameLine();
+                }
+                ++count;
+                ImGui::PopID();
+            }
         }
         ImGui::End();
     }

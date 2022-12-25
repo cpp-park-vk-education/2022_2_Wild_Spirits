@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ctime>
 #include <fstream>
 #include <map>
@@ -21,6 +22,8 @@ namespace DnD {
             return m_BottomImages.size() + m_PlayerImages.size() + rand() % m_EnemyImages.size();
         }
 
+        static size_t addImage(const std::string& source);
+
         static std::string getSourceById(size_t id);
 
     protected:
@@ -30,6 +33,7 @@ namespace DnD {
         static inline std::vector<std::string> m_BottomImages;
         static inline std::vector<std::string> m_PlayerImages;
         static inline std::vector<std::string> m_EnemyImages;
+        static inline std::vector<std::string> m_UserImages;
     };
 
     template <typename T>
@@ -71,8 +75,12 @@ namespace DnD {
 
         glm::uvec2 centerPos() const { return glm::uvec2(m_PosX, m_PosY); }
 
-        int hp() const { return 95; }
-        unsigned int maxHP() const { return 100; }
+        void setPosX(long long x) { m_PosX = x; }
+        void setPosY(long long y) { m_PosY = y; }
+
+        int hp() const { return m_HP; }
+        unsigned int maxHP() const { return m_MaxHP; }
+        void takeDamage(unsigned int damage) { m_HP -= damage; }
 
         int money() const { return 9998; }
 
@@ -82,6 +90,8 @@ namespace DnD {
     protected:
         size_t m_PosX;
         size_t m_PosY;
+        int m_HP = 100;
+        unsigned int m_MaxHP = 100;
     };
 
     class PlayerCharacter : public CharacterInstance {

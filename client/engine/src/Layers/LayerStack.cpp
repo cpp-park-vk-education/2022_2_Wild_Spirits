@@ -35,9 +35,7 @@ namespace LM {
     }
 
     void LayerStack::updateLayersState() {
-        for (const auto& layer : m_LayersToAdd) {
-            m_Layers.emplace_back(layer);
-        }
+        m_Layers.insert(m_Layers.end(), m_LayersToAdd.begin(), m_LayersToAdd.end());
         m_LayersToAdd.clear();
 
         for (auto layer : m_LayersToRemove) {

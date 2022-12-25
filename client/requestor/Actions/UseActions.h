@@ -27,7 +27,7 @@ namespace DnD {
 
     class ImageGetter {
     public:
-        ImageGetter(size_t imageId) : m_ImageId(imageId) { }
+        explicit ImageGetter(size_t imageId) : m_ImageId(imageId) { }
         size_t getImageId() const { return m_ImageId; }
 
     protected:

@@ -12,7 +12,6 @@ namespace LM {
     }
 
     ImGuiWindowFlags ImGuiFuncs::SetNextWindowOverlayBottomLeft() {
-
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImVec2 workPos = viewport->WorkPos;
         ImVec2 windowPos;

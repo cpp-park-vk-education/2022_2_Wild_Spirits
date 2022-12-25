@@ -86,8 +86,6 @@ namespace LM {
         if (Application::get()->getClientSideProcessor()->isAuthorized()) {
             if (ImGui::Begin("Auth user info", nullptr, ImGuiFuncs::SetNextWindowOverlayBottomLeft())) {
                 ImGui::Text("Username %s", Application::get()->getUserName().c_str());
-                if (ImGui::Button("Logout")) {
-                }
             }
             ImGui::End();
         }
@@ -122,7 +120,6 @@ namespace LM {
             return;
         }
         Room room = Application::get()->getClientSideProcessor()->CreateRoom();
-        // TODO Check room creation status
         Application::get()->addLayer(CreateRef<LayerRoom>(room, true));
         Application::get()->removeLayer(this);
     }

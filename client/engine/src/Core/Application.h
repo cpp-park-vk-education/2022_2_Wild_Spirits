@@ -23,7 +23,7 @@ namespace LM {
 
         Ref<Window> getWindow() { return m_Window; }
 
-        void setUserName(const std::string userName) { m_UserName = userName; }
+        void setUserName(const std::string& userName) { m_UserName = userName; }
         const std::string& getUserName() const { return m_UserName; }
 
         Ref<ClientSideProcessor> getClientSideProcessor() { return m_ClientSideProcessor; }

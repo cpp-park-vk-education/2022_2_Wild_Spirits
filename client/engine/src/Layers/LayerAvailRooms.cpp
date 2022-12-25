@@ -20,7 +20,6 @@ namespace LM {
             Application::get()->removeLayer(this);
             return;
         }
-        // TODO set error flag
         getRooms();
     }
 

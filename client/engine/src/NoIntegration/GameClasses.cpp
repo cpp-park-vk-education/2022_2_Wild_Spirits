@@ -1,5 +1,7 @@
 #include "GameClasses.hpp"
 
+#include <iostream>
+
 namespace DnD {
 
     void TestImages::init() {
@@ -23,6 +25,18 @@ namespace DnD {
         m_EnemyImages.push_back(loadImage("Textures/Location/Enemy3.png"));
         m_EnemyImages.push_back(loadImage("Textures/Location/Enemy4.png"));
         m_EnemyImages.push_back(loadImage("Textures/Location/Enemy5.png"));
+        std::cout << "Test textures count: "
+                  << m_BottomImages.size() + m_PlayerImages.size() + m_EnemyImages.size() +
+                         m_UserImages.size()
+                  << std::endl;
+    }
+
+    size_t TestImages::addImage(const std::string& source) {
+        size_t id =
+            m_BottomImages.size() + m_PlayerImages.size() + m_EnemyImages.size() + m_UserImages.size();
+
+        m_UserImages.emplace_back(source);
+        return id;
     }
 
     std::string TestImages::loadImage(const std::string& path) {
@@ -41,7 +55,7 @@ namespace DnD {
             return m_EnemyImages[id - m_BottomImages.size() - m_PlayerImages.size()];
         }
 
-        return "";
+        return m_UserImages[id - m_BottomImages.size() - m_PlayerImages.size() - m_EnemyImages.size()];
     }
 
 }    // namespace DnD

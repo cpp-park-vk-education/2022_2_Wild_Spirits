@@ -24,27 +24,22 @@ namespace LM {
         void init();
         void load();
 
-        static void drawCurrentPlayerInfo();
-
         void tryLoadImage(size_t id);
         template <typename T>
-        void loadActivatableShared(T storage);
+        void loadActivatableShared(DnD::SharedStorage<T> storage);
         template <typename T>
-        void loadActivatable(T storage);
+        void loadActivatable(DnD::Storage<T> storage);
 
+        static void drawCurrentPlayerInfo();
         void drawDebugWindow();
+        void drawChangesDM();
+        void drawTextureManager();
 
     protected:
         static inline const glm::vec2 s_BottomActionSize = glm::vec2(48.0f, 48.0f);
         static inline const float s_BottomActionSpace = 5.0f;
 
     protected:
-#ifndef BUILD_LOGIC
-        Vector<DnD::Weapon> m_Weapons;
-        Vector<DnD::Spell> m_Spells;
-        Vector<DnD::Skill_Instance> m_Skills;
-        Vector<DnD::Consumable> m_Consumables;
-#endif
         bool m_IsUserCreator;
         Ref<TextureManager> m_TextureManager;
 
@@ -58,6 +53,7 @@ namespace LM {
 
         Ref<MoveAction> m_ActionMove;
         Ref<UseAction> m_ActionUse;
+        Vector<std::pair<std::string, int64_t>> m_ChangesDM;
     };
 
 }    // namespace LM

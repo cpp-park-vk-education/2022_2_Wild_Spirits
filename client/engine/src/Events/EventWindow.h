@@ -2,6 +2,8 @@
 
 #include "EventInterface.h"
 
+#include <string>
+
 namespace LM {
 
     class WindowResizeEvent : public Event {
@@ -26,6 +28,29 @@ namespace LM {
         WindowCloseEvent() = default;
 
         EVENT_CLASS_TYPE(WindowClose)
+    };
+
+    class WindowDropEvent : public Event {
+    public:
+        WindowDropEvent(int count, const char* paths[]) {
+            for (int i = 0; i < count; ++i) {
+                m_Paths.emplace_back(paths[i]);
+            }
+        }
+
+        const std::vector<std::string> getPaths() const { return m_Paths; }
+
+        std::string toString() const override {
+            std::string res = "WindowDropEvent: {";
+            for (const auto& str : m_Paths) {
+                res += str + "; ";
+            }
+            return res + "}";
+        }
+
+        EVENT_CLASS_TYPE(WindowDrop)
+    protected:
+        std::vector<std::string> m_Paths;
     };
 
 }    // namespace LM
