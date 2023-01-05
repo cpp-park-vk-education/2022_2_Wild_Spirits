@@ -10,6 +10,8 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} GTest::gtest_main GTest::gmock_main)
 target_link_libraries(${PROJECT_NAME} ClientEngine)
 
+add_compile_definitions(RES_FOLDER_TEST="${CMAKE_SOURCE_DIR}/ClientTestRes/")
+
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
 

@@ -1,10 +1,13 @@
 #include <iostream>
 
-#include <mathlib.h>
+#include <Core/Application.h>
 
 int main() {
-    std::cout << "Hello World!" << std::endl;
+    LM::Application* app = new LM::Application();
 
-    std::cin.get();
+    app->run();
+
+    delete app;
+
     return 0;
 }

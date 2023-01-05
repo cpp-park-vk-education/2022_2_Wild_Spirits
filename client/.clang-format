@@ -1,0 +1,49 @@
+
+ColumnLimit: 110
+
+IndentWidth: 4
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+NamespaceIndentation: All
+
+AccessModifierOffset: -4
+
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Right
+AlignOperands: AlignAfterOperator
+AlignConsecutiveMacros: AcrossEmptyLines
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
+
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortCaseLabelsOnASingleLine: true
+SpacesInContainerLiterals: true
+
+
+#AlwaysBreakAfterReturnType: All
+AlwaysBreakTemplateDeclarations: Yes
+
+InsertBraces: true
+
+BitFieldColonSpacing: Both
+
+PackConstructorInitializers: CurrentLine
+
+SpaceBeforeCpp11BracedList: true
+SpacesBeforeTrailingComments: 4
+SpaceInEmptyBlock: true
+
+FixNamespaceComments: true
+ShortNamespaceLines: 0
+
+BreakInheritanceList: BeforeColon
+Cpp11BracedListStyle: false
+
+QualifierAlignment: Custom
+QualifierOrder: ['static', 'inline', 'const', 'constexpr', 'volatile', 'restrict', 'type']
+
+PointerAlignment: Left

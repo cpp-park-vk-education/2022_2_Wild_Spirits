@@ -1,0 +1,77 @@
+name: ClientOnlyBuild
+
+on:
+    push:
+        branches:
+            - client
+
+env:
+    BUILD_TYPE: Release
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        container: reddir666/dnd-pqxx-gtest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Configure CMake
+              run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TEST=OFF -DBUILD_SERVER=OFF -DBUILD_LOGIC=OFF
+
+            - name: Build
+              run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+            - name: Tar build folder
+              run: tar -czf build.tar.gz build
+
+            - name: Upload build folder
+              uses: actions/upload-artifact@v3
+              with:
+                  name: build-data
+                  path: build.tar.gz
+
+    check:
+        runs-on: ubuntu-latest
+        container: reddir666/dnd-pqxx-gtest
+        needs: [build]
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Download build folder
+              uses: actions/download-artifact@v3
+              with:
+                  name: build-data
+                  path: .
+
+            - name: Unpack build folder
+              run: tar -xzf build.tar.gz
+
+            - name: Run linters
+              run: cd build && make client_check
+
+    client-tests:
+        runs-on: ubuntu-latest
+        container: reddir666/dnd-pqxx-gtest
+        needs: [build]
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Download build folder
+              uses: actions/download-artifact@v3
+              with:
+                  name: build-data
+                  path: .
+
+            - name: Unpack build folder
+              run: tar -xzf build.tar.gz
+
+            - name: Run client unit tests
+              working-directory: ./build/client/engine/tests
+              run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
+            - name: Run client integration tests
+              working-directory: ./build/client/app/tests
+              run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
